@@ -148,6 +148,12 @@ namespace CxjText.views
 
         //登录逻辑处理
         private void GoLogin(Object positionObj) {
+
+
+            //MsgShowForm msgShowForm = new MsgShowForm();
+            //msgShowForm.ShowDialog();
+            //return;
+
             int position = (int)positionObj;
             UserInfo userInfo = (UserInfo)Config.userList[position];
             try

@@ -170,6 +170,12 @@
     <Compile Include="views\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\MsgShowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\MsgShowForm.Designer.cs">
+      <DependentUpon>MsgShowForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\RltForm.cs">
       <SubType>Form</SubType>
     </Compile>
