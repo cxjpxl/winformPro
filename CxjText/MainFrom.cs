@@ -1,0 +1,174 @@
+﻿using System;
+using System.Windows.Forms;
+using CxjText.utlis;
+using CxjText.utils;
+using CxjText.bean;
+using CxjText.views;
+using CxjText.iface;
+using System.Threading;
+
+namespace CxjText
+{
+    public partial class MainFrom : Form, LoginFormInterface
+    {
+
+        private LoginForm loginForm = null; //登录的界面
+        private LeftForm leftForm = null; //左边的界面
+        private bool isFinish = false;
+        private int num = 0;
+        
+        public MainFrom()
+        {
+            InitializeComponent();
+        }
+
+        //窗口加载出来的时候调用
+        private void MainFrom_Load(object sender, EventArgs e)
+        {
+            DataInit(); //读取配置文件
+            if (Config.userList == null || Config.userList.Count == 0) {
+                MessageBox.Show("读取配置文件出错");
+                Application.Exit();
+                return;
+            }
+            ViewInit();
+
+            this.upDateTimer.Start(); //启动定时任务器
+        }
+
+        private void ViewInit()
+        {
+            loginForm = new LoginForm();
+            loginForm.TopLevel = false;    //设置为非顶级窗体
+            loginForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
+            //loginForm.Dock = System.Windows.Forms.DockStyle.Fill;   //设置样式是否填充整个PANEL
+            this.loginPanel.Controls.Add(loginForm);      //添加窗体
+            loginForm.Show();
+            loginForm.setLoginFormInterface(this);
+
+
+            leftForm = new LeftForm();
+            leftForm.TopLevel = false;    //设置为非顶级窗体
+            leftForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
+            //loginForm.Dock = System.Windows.Forms.DockStyle.Fill;   //设置样式是否填充整个PANEL
+            this.leftPanel.Controls.Add(leftForm);      //添加窗体
+            leftForm.Show();
+        }
+
+
+        private void DataInit()
+        {
+            //获取到用户数据
+            FileUtils.ReadUserJObject(@"C:\user.txt");
+        }
+
+     
+        //退出整个应用程序
+        private void MainFrom_close(object sender, FormClosedEventArgs e)
+        {
+            this.upDateTimer.Stop(); //将定时器停止
+            isFinish = true;
+            Application.Exit();
+        }
+
+        //定时器回调   1s一次
+        private void updateTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.loginForm == null) return;
+            //获取当前选中的行
+            int index = this.loginForm.getCurrentSelectRow(); 
+            if (index == -1) return;
+
+            //刷新用户数据界面  A系统1s一次  B系统10s一次  其他未知
+            Config.console("-------"+index+"--------");
+            this.upDateTimer.Stop(); //暂停定时器
+
+            //获取当前系统的时间  毫秒
+            long currentTime = FormUtils.getCurrentTime();
+            UserInfo userInfo = (UserInfo) Config.userList[index];
+            if (userInfo == null) {
+                this.upDateTimer.Start();
+                return;
+            }
+            long userTime = userInfo.updateTime;//获取用户上一次刷新的时间
+            bool canUpdate = FormUtils.canUpdateData(userInfo.tag,userTime,currentTime);
+            if (!canUpdate) {
+                this.upDateTimer.Start();
+                return;
+            }
+
+            //开始更新数据  更新数据后 重新user更新时间 然后打开定时器
+            Thread t = new Thread(new ParameterizedThreadStart(this.GetData));
+            t.Start(index);
+        }
+
+        //获取数据接口 在线程里面
+        private void GetData(object positionObj) {
+            try {
+                int position = (int)positionObj;
+                UserInfo userInfo = (UserInfo)Config.userList[position];
+                if (userInfo == null)
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+                //获取数据请求接口的url
+                String getDataUrl = FormUtils.getDataUrl(userInfo);
+                Config.console("---" + getDataUrl);
+                if (String.IsNullOrEmpty(getDataUrl) || loginForm == null)
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+                //请求获取数据
+                String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+                Config.console("---rlt:" + rlt);
+                if (String.IsNullOrEmpty(rlt))
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+                //解析数据返回
+                rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
+                Config.console("数据:" + rlt);
+                if (String.IsNullOrEmpty(rlt))
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+
+                //判断当前选中和数据返回是否同一个数据 不是直接返回
+                /*if (position != loginForm.getCurrentSelectRow())
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }*/ 
+         
+                //获取到数据  更新UI (传入用户信息和数据               userInfo.updateTime = FormUtils.getCurrentTime();
+                Config.console("END");
+                this.Invoke(new Action(() => {
+                    leftForm.SetCurrentData(rlt,position);
+                    num++;
+                    if (num < 3) {
+                        upDateTimer.Start();
+                    }
+                     upDateTimer.Start();
+                }));
+            }
+            catch (SystemException e) {
+                if (this.isFinish) return;
+                this.Invoke(new Action(() => { upDateTimer.Start(); }));
+            }
+        }
+
+
+        //用户点击选中网址的回调 参数是点击了第几行
+        public void SelectOnClick(int index)
+        {
+            //点击的时候  将当前时间设置下  下个定时时间一到就会立马刷新 
+            UserInfo userInfo = (UserInfo)Config.userList[index];
+            userInfo.updateTime = -1;
+        }
+
+    }
+}
