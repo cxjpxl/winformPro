@@ -149,7 +149,7 @@ using System.Runtime.InteropServices;
                     }
                     #endregion
                     #region 获取上面的行数
-                    for (int i = e.RowIndex; i >= e.RowIndex; i--)
+                    for (int i = e.RowIndex; i >= 0; i--)
                     {
                         if (this.Rows[i].Cells[e.ColumnIndex].Value.ToString().Equals(curValue))
                         {
