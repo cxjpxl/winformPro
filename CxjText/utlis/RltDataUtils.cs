@@ -27,7 +27,7 @@ namespace CxjText.utlis
                         for (int j = i+1; j < jArray.Count; j++)
                         {
                             JObject itemJObject1 = (JObject)jArray[j];
-                            if (!String.IsNullOrEmpty(itemJObject1["a26"].ToString())) {
+                            if (!String.IsNullOrEmpty(itemJObject1["a0"].ToString())) {
                                 break;
                             }
 

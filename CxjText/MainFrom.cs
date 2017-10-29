@@ -15,7 +15,6 @@ namespace CxjText
         private LoginForm loginForm = null; //登录的界面
         private LeftForm leftForm = null; //左边的界面
         private bool isFinish = false;
-        private int num = 0;
         
         public MainFrom()
         {
@@ -148,11 +147,7 @@ namespace CxjText
                 Config.console("END");
                 this.Invoke(new Action(() => {
                     leftForm.SetCurrentData(rlt,position);
-                    num++;
-                    if (num < 3) {
-                        upDateTimer.Start();
-                    }
-                     upDateTimer.Start();
+                    upDateTimer.Start();
                 }));
             }
             catch (SystemException e) {
