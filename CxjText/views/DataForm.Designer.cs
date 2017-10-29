@@ -60,7 +60,7 @@
             this.Column8});
             this.dgvSA.Location = new System.Drawing.Point(0, 0);
             this.dgvSA.MergeColumnHeaderBackColor = System.Drawing.SystemColors.Control;
-            this.dgvSA.MergeColumnNames = ((System.Collections.Generic.List<string>)(resources.GetObject("dgvSA.MergeColumnNames")));
+            // this.dgvSA.MergeRowJObject = ((System.Collections.Generic.List<string>)(resources.GetObject("dgvSA.MergeRowJObject")));
             this.dgvSA.Name = "dgvSA";
             this.dgvSA.RowHeadersVisible = false;
             this.dgvSA.RowTemplate.Height = 23;

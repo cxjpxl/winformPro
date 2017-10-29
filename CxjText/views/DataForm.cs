@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -41,8 +42,9 @@ namespace CxjText.views
             dt.Rows.Add("你把联赛", "10-29 08：00a 走地", "阿拉斯克436", "2.07", "0.5 1.08", "小3 0.89", "双 1.94", "0/0.5 1.17", "小1 1.35");
             dt.Rows.Add("你把联赛", "10-29 08：00a 走地", "和局", "2.07", "", "", "", "", "");
             this.dgvSA.DataSource = dt;
-            this.dgvSA.MergeColumnNames.Add("Column0");
-            this.dgvSA.MergeColumnNames.Add("Column1");
+            // 指定应该合并的列数据
+            this.dgvSA.MergeRowJObject.Add("Column0", "-1");// 要合并的列名"Column0"  要合并的总行数 -1 ：无限制 
+            this.dgvSA.MergeRowJObject.Add("Column1", "3");// 要合并的列名"Column0"  要合并的总行数 3 ：合并三行
             //this.dgvSA.AddSpanHeader(2, 2, "XXXX");
         }
     }

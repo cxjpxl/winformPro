@@ -9,11 +9,13 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
+using CxjText.utils;
 
-    /// <summary>
-    /// DataGridView行合并.请对属性 MergeColumnNames 赋值既可
-    /// </summary>
-    public partial class RowMergeView : DataGridView
+/// <summary>
+/// DataGridView行合并.请对属性 MergeRowJObject 赋值既可
+/// </summary>
+public partial class RowMergeView : DataGridView
     {
         #region 构造函数
         public RowMergeView()
@@ -121,16 +123,39 @@ using System.Runtime.InteropServices;
             int DownRows = 0;
             //总行数
             int count = 0;
-            if (this.MergeColumnNames.Contains(this.Columns[e.ColumnIndex].Name) && e.RowIndex != -1)
+            if (this.MergeRowJObject.Property(this.Columns[e.ColumnIndex].Name) != null && this.MergeRowJObject.Property(this.Columns[e.ColumnIndex].Name).ToString() != "" && e.RowIndex != -1)
             {
+
+                // 应该合并的行数
+                int mergeNum = -1;// 应该合并的行数
+                int UpRowCount = -1;// 往上应该合并几行
+                int DownRowCount = -1;// 往下应该合并几行
+                try
+                { //执行的代码，其中可能有异常。一旦发现异常，则立即跳到catch执行。否则不会执行catch里面的内容
+                    mergeNum = int.Parse(this.MergeRowJObject[this.Columns[e.ColumnIndex].Name].ToString());
+                }
+                catch (ArgumentNullException err)
+                {//除非try里面执行代码发生了异常，否则这里的代码不会执行
+                    Config.console(err.Message);
+                }
+                finally
+                { //不管什么情况都会执行，包括try catch 里面用了return ,可以理解为只要执行了try或者catch，就一定会执行 finally  
+                    if (mergeNum != -1)
+                    {
+                        UpRowCount = e.RowIndex % mergeNum + 1;
+                        DownRowCount = mergeNum - (e.RowIndex % mergeNum);
+                    }
+                }
+                
+
                 cellwidth = e.CellBounds.Width;
                 Pen gridLinePen = new Pen(gridBrush);
                 string curValue = e.Value == null ? "" : e.Value.ToString().Trim();
                 string curSelected = this.CurrentRow.Cells[e.ColumnIndex].Value == null ? "" : this.CurrentRow.Cells[e.ColumnIndex].Value.ToString().Trim();
                 if (!string.IsNullOrEmpty(curValue))
                 {
-                    #region 获取下面的行数
-                    for (int i = e.RowIndex; i < this.Rows.Count; i++)
+                    #region 获取下面的行数 
+                    for (int i = e.RowIndex; i < this.Rows.Count && (mergeNum == -1  || (mergeNum != -1 && DownRowCount > 0)); i++, DownRowCount--)
                     {
                         if (this.Rows[i].Cells[e.ColumnIndex].Value.ToString().Equals(curValue))
                         {
@@ -149,7 +174,7 @@ using System.Runtime.InteropServices;
                     }
                     #endregion
                     #region 获取上面的行数
-                    for (int i = e.RowIndex; i >= 0; i--)
+                    for (int i = e.RowIndex; i >= 0 && (mergeNum == -1 || (mergeNum != -1 && UpRowCount > 0)); i--, UpRowCount--)
                     {
                         if (this.Rows[i].Cells[e.ColumnIndex].Value.ToString().Equals(curValue))
                         {
@@ -258,21 +283,23 @@ using System.Runtime.InteropServices;
         [DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Visible)]
         [Localizable(true)]
         [Description("设置或获取合并列的集合"), Browsable(true), Category("单元格合并")]
-        public List<string> MergeColumnNames
+    
+        // 应该合并的行数
+        public JObject MergeRowJObject
         {
             get
             {
-                return _mergecolumnname;
+                return _mergerowjobject;
             }
             set
             {
-                _mergecolumnname = value;
+                _mergerowjobject = value;
             }
         }
-        private List<string> _mergecolumnname = new List<string>();
-        #endregion
-        #region 二维表头
-        private struct SpanInfo //表头信息
+         private JObject _mergerowjobject = new JObject();
+    #endregion
+    #region 二维表头
+    private struct SpanInfo //表头信息
         {
             public SpanInfo(string Text, int Position, int Left, int Right)
             {
