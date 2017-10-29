@@ -30,21 +30,95 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataForm));
             this.dgvSA = new RowMergeView();
+            this.Column0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSA)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvSA
             // 
+            this.dgvSA.AllowUserToAddRows = false;
             this.dgvSA.AllowUserToResizeColumns = false;
             this.dgvSA.AllowUserToResizeRows = false;
             this.dgvSA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSA.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column0,
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4,
+            this.Column5,
+            this.Column6});
             this.dgvSA.Location = new System.Drawing.Point(0, 0);
             this.dgvSA.MergeColumnHeaderBackColor = System.Drawing.SystemColors.Control;
             this.dgvSA.MergeColumnNames = ((System.Collections.Generic.List<string>)(resources.GetObject("dgvSA.MergeColumnNames")));
             this.dgvSA.Name = "dgvSA";
+            this.dgvSA.RowHeadersVisible = false;
             this.dgvSA.RowTemplate.Height = 23;
             this.dgvSA.Size = new System.Drawing.Size(745, 583);
             this.dgvSA.TabIndex = 0;
+            // 
+            // Column0
+            // 
+            this.Column0.DataPropertyName = "0";
+            this.Column0.HeaderText = "联赛名称";
+            this.Column0.Name = "Column0";
+            this.Column0.ReadOnly = true;
+            this.Column0.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "1";
+            this.Column1.HeaderText = "时间";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 150;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "2";
+            this.Column2.HeaderText = "赛事";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "3";
+            this.Column3.HeaderText = "独赢";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "4";
+            this.Column4.HeaderText = "全场让球";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "5";
+            this.Column5.HeaderText = "全场大小";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column6
+            // 
+            this.Column6.DataPropertyName = "6";
+            this.Column6.HeaderText = "全场单双";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // DataForm
             // 
@@ -64,5 +138,12 @@
         #endregion
 
         private RowMergeView dgvSA;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column0;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
     }
 }
