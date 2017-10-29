@@ -29,40 +29,40 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataForm));
-            this.rowMergeView1 = new RowMergeView();
-            ((System.ComponentModel.ISupportInitialize)(this.rowMergeView1)).BeginInit();
+            this.dgvSA = new RowMergeView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSA)).BeginInit();
             this.SuspendLayout();
             // 
-            // rowMergeView1
+            // dgvSA
             // 
-            this.rowMergeView1.AllowUserToResizeColumns = false;
-            this.rowMergeView1.AllowUserToResizeRows = false;
-            this.rowMergeView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.rowMergeView1.Location = new System.Drawing.Point(0, 0);
-            this.rowMergeView1.MergeColumnHeaderBackColor = System.Drawing.SystemColors.Control;
-            this.rowMergeView1.MergeColumnNames = ((System.Collections.Generic.List<string>)(resources.GetObject("rowMergeView1.MergeColumnNames")));
-            this.rowMergeView1.Name = "rowMergeView1";
-            this.rowMergeView1.RowTemplate.Height = 23;
-            this.rowMergeView1.Size = new System.Drawing.Size(745, 583);
-            this.rowMergeView1.TabIndex = 0;
+            this.dgvSA.AllowUserToResizeColumns = false;
+            this.dgvSA.AllowUserToResizeRows = false;
+            this.dgvSA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSA.Location = new System.Drawing.Point(0, 0);
+            this.dgvSA.MergeColumnHeaderBackColor = System.Drawing.SystemColors.Control;
+            this.dgvSA.MergeColumnNames = ((System.Collections.Generic.List<string>)(resources.GetObject("dgvSA.MergeColumnNames")));
+            this.dgvSA.Name = "dgvSA";
+            this.dgvSA.RowTemplate.Height = 23;
+            this.dgvSA.Size = new System.Drawing.Size(745, 583);
+            this.dgvSA.TabIndex = 0;
             // 
             // DataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(745, 583);
-            this.Controls.Add(this.rowMergeView1);
+            this.Controls.Add(this.dgvSA);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DataForm";
             this.Text = "DataForm";
             this.Load += new System.EventHandler(this.DataForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.rowMergeView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSA)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private RowMergeView rowMergeView1;
+        private RowMergeView dgvSA;
     }
 }
