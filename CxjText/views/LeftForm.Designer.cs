@@ -37,6 +37,8 @@
             // nameShowGridView
             // 
             this.nameShowGridView.AllowUserToAddRows = false;
+            this.nameShowGridView.AllowUserToResizeColumns = false;
+            this.nameShowGridView.AllowUserToResizeRows = false;
             this.nameShowGridView.BackgroundColor = System.Drawing.Color.DarkGoldenrod;
             this.nameShowGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.nameShowGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
