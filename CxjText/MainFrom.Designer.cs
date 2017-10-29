@@ -37,9 +37,9 @@
             // loginPanel
             // 
             this.loginPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.loginPanel.Location = new System.Drawing.Point(761, 1);
+            this.loginPanel.Location = new System.Drawing.Point(917, 12);
             this.loginPanel.Name = "loginPanel";
-            this.loginPanel.Size = new System.Drawing.Size(512, 364);
+            this.loginPanel.Size = new System.Drawing.Size(356, 364);
             this.loginPanel.TabIndex = 1;
             // 
             // upDateTimer
@@ -53,7 +53,7 @@
             this.leftPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.leftPanel.Location = new System.Drawing.Point(12, 12);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(731, 632);
+            this.leftPanel.Size = new System.Drawing.Size(887, 632);
             this.leftPanel.TabIndex = 2;
             // 
             // MainFrom

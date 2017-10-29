@@ -20,7 +20,6 @@ namespace CxjText.views
         public LeftForm()
         {
             InitializeComponent();
-            
         }
         
         //加载的时候

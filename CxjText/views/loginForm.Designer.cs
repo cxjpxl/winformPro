@@ -56,8 +56,9 @@
             this.Column6});
             this.loginDaGridView.Location = new System.Drawing.Point(0, 0);
             this.loginDaGridView.Name = "loginDaGridView";
+            this.loginDaGridView.RowHeadersVisible = false;
             this.loginDaGridView.RowTemplate.Height = 23;
-            this.loginDaGridView.Size = new System.Drawing.Size(512, 364);
+            this.loginDaGridView.Size = new System.Drawing.Size(356, 364);
             this.loginDaGridView.TabIndex = 1;
             this.loginDaGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LoginDaGridView_CellMouseClick);
             this.loginDaGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.LoginDaGridView_CellValueChanged);
@@ -82,7 +83,7 @@
             this.Column1.ReadOnly = true;
             this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 54;
+            this.Column1.Width = 40;
             // 
             // Column2
             // 
@@ -91,7 +92,7 @@
             this.Column2.ReadOnly = true;
             this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 150;
+            this.Column2.Width = 80;
             // 
             // Column3
             // 
@@ -117,7 +118,7 @@
             this.Column5.ReadOnly = true;
             this.Column5.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 70;
+            this.Column5.Width = 50;
             // 
             // Column6
             // 
@@ -126,14 +127,14 @@
             this.Column6.ReadOnly = true;
             this.Column6.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column6.Width = 80;
+            this.Column6.Width = 70;
             // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(512, 364);
+            this.ClientSize = new System.Drawing.Size(356, 364);
             this.Controls.Add(this.loginDaGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LoginForm";

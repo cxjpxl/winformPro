@@ -42,8 +42,9 @@
             this.name});
             this.nameShowGridView.Location = new System.Drawing.Point(-2, 1);
             this.nameShowGridView.Name = "nameShowGridView";
+            this.nameShowGridView.RowHeadersVisible = false;
             this.nameShowGridView.RowTemplate.Height = 23;
-            this.nameShowGridView.Size = new System.Drawing.Size(175, 632);
+            this.nameShowGridView.Size = new System.Drawing.Size(136, 632);
             this.nameShowGridView.TabIndex = 0;
             this.nameShowGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NameShowGridView_CellMouseClick);
             // 
@@ -63,7 +64,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(731, 632);
+            this.ClientSize = new System.Drawing.Size(887, 632);
             this.Controls.Add(this.nameShowGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LeftForm";
