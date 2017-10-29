@@ -293,7 +293,7 @@ namespace CxjText.views
                 Console.WriteLine(e.ToString());
             }
             upDateList.RemoveAt(0);
-            if (upDateList.Count > 1) {
+            if (upDateList.Count >= 1) {
                 upDateRow(); //自己消耗自己的资源  防止线程阻塞
             }
         }
