@@ -30,6 +30,7 @@
         {
             this.nameShowGridView = new System.Windows.Forms.DataGridView();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.datapanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.nameShowGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,12 +60,21 @@
             this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.name.Width = 132;
             // 
+            // datapanel
+            // 
+            this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.datapanel.Location = new System.Drawing.Point(140, 1);
+            this.datapanel.Name = "datapanel";
+            this.datapanel.Size = new System.Drawing.Size(745, 583);
+            this.datapanel.TabIndex = 1;
+            // 
             // LeftForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(887, 632);
+            this.Controls.Add(this.datapanel);
             this.Controls.Add(this.nameShowGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LeftForm";
@@ -79,5 +89,6 @@
 
         private System.Windows.Forms.DataGridView nameShowGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.Panel datapanel;
     }
 }
