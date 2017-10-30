@@ -11,6 +11,25 @@ namespace CxjText.utlis
 {
     class RltDataUtils
     {
+        
+        //获取数据显示列表的jArray数据
+        public static JArray getRltJArray(UserInfo userInfo, JObject jObject) {
+            JArray rltJArray = new JArray();
+            if (userInfo.tag.Equals("A"))
+            {
+                rltJArray = (JArray)jObject["results"];
+                if (rltJArray == null) {
+                    rltJArray = new JArray();
+                }
+            }
+            else
+            {
+
+            }
+
+            return rltJArray;
+        }
+
         public static JArray explandRlt(UserInfo userInfo,JObject jObject) {
             JArray rltJArray = new JArray();
             if (userInfo.tag.Equals("A"))

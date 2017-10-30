@@ -66,9 +66,9 @@ namespace CxjText.views
             if (e.ColumnIndex == 3) { //第三列的情况
                 int rowIndex = e.RowIndex;
                 if (rowIndex == -1) return;
-                String numStr = this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
                 int num = 0;
                 try {
+                    String numStr = this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
                     num = int.Parse(numStr);
                     if (num < 10) num = 0;
                 }

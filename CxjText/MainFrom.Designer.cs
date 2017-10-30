@@ -37,7 +37,7 @@
             // loginPanel
             // 
             this.loginPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.loginPanel.Location = new System.Drawing.Point(917, 12);
+            this.loginPanel.Location = new System.Drawing.Point(994, 12);
             this.loginPanel.Name = "loginPanel";
             this.loginPanel.Size = new System.Drawing.Size(356, 364);
             this.loginPanel.TabIndex = 1;
@@ -53,14 +53,14 @@
             this.leftPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.leftPanel.Location = new System.Drawing.Point(12, 12);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(887, 632);
+            this.leftPanel.Size = new System.Drawing.Size(976, 632);
             this.leftPanel.TabIndex = 2;
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1285, 656);
+            this.ClientSize = new System.Drawing.Size(1362, 683);
             this.Controls.Add(this.leftPanel);
             this.Controls.Add(this.loginPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

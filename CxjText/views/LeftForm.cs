@@ -1,4 +1,5 @@
 ﻿using CxjText.bean;
+using CxjText.iface;
 using CxjText.utils;
 using CxjText.utlis;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CxjText.views
 {
-    public partial class LeftForm : Form
+    public partial class LeftForm : Form,DataClickInface
     {
        
         private int cIndex = -1;//当前显示的索引 决定系统
@@ -43,6 +44,7 @@ namespace CxjText.views
             dataForm.TopLevel = false;    //设置为非顶级窗体
             dataForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
             this.datapanel.Controls.Add(dataForm);      //添加窗体
+            dataForm.setClickListener(this); //接口处理
             dataForm.Show();
         }
 
@@ -68,6 +70,12 @@ namespace CxjText.views
                 }
                 this.cIndex = index;
                 NameGridShow(userInfo,rltJArray);
+                //到时候B系统出来要处理和UI
+                if (userInfo.tag.Equals("A")) {
+                    if (dataForm != null) {
+                        dataForm.setData(userInfo,RltDataUtils.getRltJArray(userInfo, rltJObject));
+                    }
+                }
             }
             catch (SystemException e) {
 
@@ -168,6 +176,24 @@ namespace CxjText.views
                     Config.console("mid:"+this.selectFlag);
                 }
             }
+        }
+
+        //数据点击处理
+        public void OnClickLisenter(String rltStr, UserInfo userInfo)
+        {
+            //获取到下单的参数
+            String tag = userInfo.tag;
+            for (int i = 0; i < Config.userList.Count; i++) {
+                UserInfo user =(UserInfo) Config.userList[i];
+                if (user == null) continue;
+                if (!user.tag.Equals(tag)) continue;
+                if (user.status != 2) continue;
+                if (user.inputMoney < 10) continue;
+                String orderStr = rltStr + "&money="+user.inputMoney;
+                //下单处理
+                Config.console(orderStr);
+            }
+
         }
     }
 }

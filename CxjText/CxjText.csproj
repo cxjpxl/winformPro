@@ -56,6 +56,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="iface\DataClickInface.cs" />
     <Compile Include="iface\LoginFormInterface.cs" />
     <Compile Include="MainFrom.cs">
       <SubType>Form</SubType>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CxjText.bean
 {
-    class UserInfo
+    public class UserInfo
     {
      
         public String tag = ""; //系统分类
