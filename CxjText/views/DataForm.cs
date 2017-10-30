@@ -46,7 +46,7 @@ namespace CxjText.views
             dt.Columns.Add("8");
             this.dgvSA.DataSource = dt;
             this.dgvSA.MergeRowJObject.Add("Column0", "-1");// 要合并的列名"Column0"  要合并的总行数 -1 ：无限制 
-            this.dgvSA.MergeRowJObject.Add("Column1", "3");// 要合并的列名"Column0"  要合并的总行数 3 ：合并三行
+            this.dgvSA.MergeRowJObject.Add("Column1", "3");// 要合并的列名"Column1"  要合并的总行数 3 ：合并三行
     }
 
         //接口的设计
@@ -99,8 +99,8 @@ namespace CxjText.views
                 dt.Rows.Add((String)jObject["a26"], time, "和局", c23.Trim(), "", "", "", "", "");
             }
             this.dgvSA.DataSource = dt;
-            Console.WriteLine("初始化显示行：" + this.cPosition);
-            if (this.cPosition < this.cJArray.Count)
+            Console.WriteLine("初始化显示行：" + this.cPosition+ "  this.cJArray.Count:"+ this.cJArray.Count*3);
+            if (this.cPosition < this.cJArray.Count*3)
             {
                 this.dgvSA.FirstDisplayedScrollingRowIndex = this.cPosition;
             }
