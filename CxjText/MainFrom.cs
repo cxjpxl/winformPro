@@ -164,6 +164,7 @@ namespace CxjText
             //点击的时候  将当前时间设置下  下个定时时间一到就会立马刷新 
             UserInfo userInfo = (UserInfo)Config.userList[index];
             userInfo.updateTime = -1;
+            //this.upDateTimer.Start();
         }
 
     }
