@@ -103,7 +103,7 @@ namespace CxjText.utlis
 
             if (tag.Equals("A"))//A系统
             {
-                if (currentTime - userTime >= 2 * 1000)  //2s刷新Ui一次
+                if (currentTime - userTime >= 1 * 1000)  //1s刷新Ui一次
                 {
                     return true;
                 }
