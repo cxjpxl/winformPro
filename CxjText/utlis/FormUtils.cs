@@ -9,7 +9,7 @@ namespace CxjText.utlis
     class FormUtils
     {
         //多系统处理  获取验证码图片的链接地址 
-        public static String  getCodeUrl(UserInfo userInfo)
+        public static String getCodeUrl(UserInfo userInfo)
         {
             String url = null;
             if (userInfo.tag.Equals("A"))
@@ -23,7 +23,7 @@ namespace CxjText.utlis
         }
 
         //多系统处理   获取不同系统的登录参数
-        public static String getLoginParams(UserInfo userInfo,String codeStr) {
+        public static String getLoginParams(UserInfo userInfo, String codeStr) {
             String paramsStr = null;
             if (userInfo.tag.Equals("A"))
             {
@@ -52,7 +52,7 @@ namespace CxjText.utlis
 
 
         //多系统处理   解析登录返回
-        public static int explandsLoginData(UserInfo userInfo,String dataStr) {
+        public static int explandsLoginData(UserInfo userInfo, String dataStr) {
 
             if (String.IsNullOrEmpty(dataStr)) {
                 return -1;
@@ -89,21 +89,21 @@ namespace CxjText.utlis
                 return -1;
             }
 
-            
+
             return -1;
         }
 
         //获取当前的系统时间  毫秒
         public static long getCurrentTime() {
-            return  (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+            return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
         }
 
         //多系统处理   判断时候能更新数据
-        public static bool canUpdateData(String tag,long userTime,long currentTime) {
+        public static bool canUpdateData(String tag, long userTime, long currentTime) {
 
             if (tag.Equals("A"))//A系统
             {
-                if (currentTime - userTime >= 2* 1000)  //2s刷新Ui一次
+                if (currentTime - userTime >= 2 * 1000)  //2s刷新Ui一次
                 {
                     return true;
                 }
@@ -149,7 +149,7 @@ namespace CxjText.utlis
         }
 
         //获取订单参数
-        public static String getOrderParmas(String parmasStr,UserInfo userInfo) {
+        public static String getOrderParmas(String parmasStr, UserInfo userInfo) {
             if (userInfo.tag.Equals("A"))
             {
                 return parmasStr + "&money=" + userInfo.inputMoney;
@@ -161,7 +161,7 @@ namespace CxjText.utlis
         }
 
 
-        public static int explandOrderRlt(String rlt,UserInfo userInfo) {
+        public static int explandOrderRlt(String rlt, UserInfo userInfo) {
 
             if (userInfo.tag.Equals("A"))
             {
@@ -176,7 +176,7 @@ namespace CxjText.utlis
             else {
                 Console.WriteLine("系统待开发中!");
             }
-            
+
             return -1;
         }
 
@@ -192,6 +192,50 @@ namespace CxjText.utlis
             }
 
             return null;
+        }
+
+
+        public static int explandMoneyData(String dataStr, UserInfo userInfo) {
+
+            if (String.IsNullOrEmpty(dataStr))
+            {
+                return -1;
+            }
+
+            if (userInfo.tag.Equals("A"))
+            {
+                if (dataStr[dataStr.Length - 1] == ')')
+                {
+                    dataStr = dataStr.Substring(1, dataStr.Length - 2);
+                    try
+                    {
+                        JObject jObject = JObject.Parse(dataStr);
+                        String result = (String)jObject.GetValue("result");
+                        if (result.Equals("1"))
+                        {
+                            String money = (String)jObject.GetValue("money");
+                            userInfo.money = money;
+                            return 1;
+                        }
+                    }
+                    catch (SystemException e)
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                Console.WriteLine("系统待开发中!");
+                return -1;
+            }
+
+
+            return -1;
         }
 
 

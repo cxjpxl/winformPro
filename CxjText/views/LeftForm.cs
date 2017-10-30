@@ -225,15 +225,17 @@ namespace CxjText.views
 
         }
 
+        //下单接口
         private void postOrder(object  obj)
         {
             JObject jobject = (JObject)obj;
             String parmsStr =(String) jobject["rlt"];
             int index = (int)jobject["position"];
             UserInfo user =(UserInfo) Config.userList[index];
+            //请求发出前先更新UI 标记http请求已发送
             String rlt = HttpUtils.HttpPost(user.orderUrl,parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
             if (rlt == null) {
-                //请求失败
+                //请求失败处理
                 return;
             }
 
@@ -244,13 +246,23 @@ namespace CxjText.views
             }
             //交易成功 , 更新UI 并更新钱
             Console.WriteLine("交易成功");
-            String getMoneyUrl = FormUtils.getUserMoneyUrl(user);
-            if (String.IsNullOrEmpty(getMoneyUrl)) {
+            String moneyUrl = FormUtils.getUserMoneyUrl(user);
+            if (String.IsNullOrEmpty(moneyUrl)) {
                 return;
             }
-
-
-
+            rlt = HttpUtils.httpGet(moneyUrl, "text/html; charset=utf-8",user.cookie);
+            //获取钱失败
+            if (String.IsNullOrEmpty(rlt))
+            {
+                return;
+            }
+            rltNum = FormUtils.explandMoneyData(rlt, user);
+            //获取钱失败
+            if (rltNum < 0) {
+                return;
+            }
+            //获取钱成功  要更新UI
+            Console.WriteLine("money:" + user.money);
             Console.WriteLine("rlt:"+ rlt);
         }
 
