@@ -58,6 +58,7 @@
             this.Column7,
             this.Column8});
             this.dgvSA.Location = new System.Drawing.Point(0, 0);
+            this.dgvSA.Margin = new System.Windows.Forms.Padding(0);
             this.dgvSA.MergeColumnHeaderBackColor = System.Drawing.SystemColors.Control;
             this.dgvSA.MultiSelect = false;
             this.dgvSA.Name = "dgvSA";
