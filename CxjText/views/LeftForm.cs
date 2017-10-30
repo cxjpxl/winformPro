@@ -93,11 +93,11 @@ namespace CxjText.views
                     }
                     if (selectIndex == -1)
                     {
-                        dataForm.setData(userInfo, this.dataJArray);
+                        dataForm.setData(userInfo, this.dataJArray,this.cIndex,this.selectFlag);
                     }
                     else
                     {
-                        dataForm.setData(userInfo, (JArray)this.cJArray[selectIndex]);
+                        dataForm.setData(userInfo, (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag);
                     }
 
                 }

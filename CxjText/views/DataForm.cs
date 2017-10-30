@@ -18,6 +18,8 @@ namespace CxjText.views
         private JArray cJArray = null; //当前界面数据储存
         private int cPosition = 0;
         private bool isUpdate = false;
+        private int cIndex = -1;//当前显示的索引 决定系统
+        private String selectFlag = null; //记录点击联赛第一个的A->mid
 
         public DataForm()
         {
@@ -55,7 +57,7 @@ namespace CxjText.views
         }
 
         //更新UI
-        public void setData(UserInfo userInfo,JArray jArray) {
+        public void setData(UserInfo userInfo,JArray jArray,int index,string selectFlag) {
             isUpdate = true;
             this.userInfo = userInfo;
             this.cJArray = jArray; //数据的存储
@@ -65,6 +67,14 @@ namespace CxjText.views
                 this.isUpdate = false;
                 return;
             }
+
+            if (this.cIndex==-1 || this.cIndex!=index || this.selectFlag != selectFlag)
+            {
+                this.cPosition = 0;
+            }
+            this.cIndex = index; // 当前是的哪一个网址 index 应该是确定的不变的
+            this.selectFlag = selectFlag; //当前是哪一个联赛 null:当前网站的所有联赛  
+
             this.dt.Clear();
             for (int i = 0; i < jArray.Count; i++) {
                 JObject jObject =(JObject)jArray[i];
