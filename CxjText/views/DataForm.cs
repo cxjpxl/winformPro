@@ -16,10 +16,11 @@ namespace CxjText.views
         private UserInfo userInfo = null;
         private DataClickInface inface = null;
         private JArray cJArray = null; //当前界面数据储存
-        private int cPosition = 0;
         private bool isUpdate = false;
         private int cIndex = -1;//当前显示的索引 决定系统
         private String selectFlag = null; //记录点击联赛第一个的A->mid
+        private String currMid = null; //记录窗口最顶部显示的单元行的所属mid
+        private int cPosition = 0;
 
         public DataForm()
         {
@@ -68,13 +69,17 @@ namespace CxjText.views
                 return;
             }
 
+
+            int sPosition = 0;
+            // 若改变网站或者联赛 则需要将滚动条置零
             if (this.cIndex==-1 || this.cIndex!=index || this.selectFlag != selectFlag)
             {
-                this.cPosition = 0;
+                this.currMid = null;
+                sPosition = 0;
             }
             this.cIndex = index; // 当前是的哪一个网址 index 应该是确定的不变的
             this.selectFlag = selectFlag; //当前是哪一个联赛 null:当前网站的所有联赛  
-
+            
             this.dt.Clear();
             for (int i = 0; i < jArray.Count; i++) {
                 JObject jObject =(JObject)jArray[i];
@@ -107,16 +112,20 @@ namespace CxjText.views
                 dt.Rows.Add((String)jObject["a26"], time, c02.Trim(), c03.Trim(), c04.Trim(), c05.Trim(), c06.Trim(), c07.Trim(), c08.Trim());
                 dt.Rows.Add((String)jObject["a26"], time, c12.Trim(), c13.Trim(), c14.Trim(), c15.Trim(), c16.Trim(), c17.Trim(), c18.Trim());
                 dt.Rows.Add((String)jObject["a26"], time, "和局", c23.Trim(), "", "", "", "", "");
+
+                String mid = (String)jObject["mid"];
+                if (this.currMid != null && mid == this.currMid)
+                {
+                    sPosition = i*3+this.cPosition;
+                }
             }
             this.dgvSA.DataSource = dt;
-            Console.WriteLine("初始化显示行：" + this.cPosition+ "  this.cJArray.Count:"+ this.cJArray.Count*3);
-            if (this.cPosition < this.cJArray.Count*3)
+            Console.WriteLine("初始化显示行：" + sPosition+ "  this.cJArray.Count:"+ this.cJArray.Count*3);
+            if (sPosition >= this.cJArray.Count*3)
             {
-                this.dgvSA.FirstDisplayedScrollingRowIndex = this.cPosition;
+                sPosition=0;
             }
-            else {
-                this.cPosition = 0;
-            }
+            this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition;
             this.isUpdate = false;
         }
 
@@ -220,8 +229,10 @@ namespace CxjText.views
         private void dgvSA_Scroll(object sender, ScrollEventArgs e)
         {
             if (e.ScrollOrientation == ScrollOrientation.VerticalScroll&&!this.isUpdate) {
-                this.cPosition = e.NewValue;
-                Console.WriteLine("当前行："+this.cPosition);
+                int currIndex = e.NewValue;// 当前行
+                this.cPosition = currIndex % 3;
+                this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
+                Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
             }
         }
     }
