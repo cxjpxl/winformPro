@@ -141,9 +141,10 @@ namespace CxjText
                 {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
-                }*/ 
-         
-                //获取到数据  更新UI (传入用户信息和数据               userInfo.updateTime = FormUtils.getCurrentTime();
+                }*/
+
+                //获取到数据  更新UI (传入用户信息和数据               
+                userInfo.updateTime = FormUtils.getCurrentTime();
                 Config.console("END");
                 this.Invoke(new Action(() => {
                     leftForm.SetCurrentData(rlt,position);
