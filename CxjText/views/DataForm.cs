@@ -55,11 +55,12 @@ namespace CxjText.views
         //更新UI
         public void setData(UserInfo userInfo,JArray jArray) {
             this.userInfo = userInfo;
-            //if (this.dgvSA.Rows.Count > 0) return;
             this.cJArray = jArray; //数据的存储
+            if (jArray == null || jArray.Count == 0) {
+                this.dt.Clear();
+                return;
+            }
             this.dt.Clear();
-            if (jArray == null) return;
-            if (jArray.Count == 0) return;
             for (int i = 0; i < jArray.Count; i++) {
                 JObject jObject =(JObject)jArray[i];
                 String time = (String)jObject["a18"]
