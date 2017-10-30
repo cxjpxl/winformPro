@@ -44,6 +44,7 @@ namespace CxjText.utlis
                     String baseUrl = strs[3];//网址
                     String loginUrl = strs[4];//登录的链接地址
                     String dataUrl = strs[5]; //获取数据的接口
+                    String orderUrl = strs[6]; //订单下单接口
 
                     if (list.Contains(baseUrl))
                     { //过滤重复的网址
@@ -76,6 +77,7 @@ namespace CxjText.utlis
                     userInfo.baseUrl = baseUrl;
                     userInfo.loginUrl = loginUrl;
                     userInfo.dataUrl = dataUrl;
+                    userInfo.orderUrl = orderUrl;
 
                     userInfo.status = loginStatus;
                     userList.Add(userInfo);

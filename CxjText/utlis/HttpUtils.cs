@@ -27,9 +27,9 @@ namespace CxjText.utils
         public static string HttpPost(string Url,String paramsStr,String contentType, CookieContainer cookie) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "POST";
-            if (contentType == null)
+            if (String.IsNullOrEmpty(contentType))
             {
-                request.ContentType = "application/json;charset=UTF-8";
+               // request.ContentType = "application/json;charset=UTF-8";
             }
             else {
                 request.ContentType = contentType;
@@ -116,11 +116,14 @@ namespace CxjText.utils
 
 
         //获取验证码 保存在exe文件同个目录下面
-        public static int getImage(String url,String name) {
+        public static int getImage(String url,String name, CookieContainer cookie) {
             ServicePointManager.ServerCertificateValidationCallback =
               new RemoteCertificateValidationCallback(RemoteCertificateValidationCallback);
             Console.WriteLine("codeUrl :" + url);
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            if (cookie != null) {
+                request.CookieContainer = cookie;
+            }
             try {
                 WebResponse response = request.GetResponse();
                 Stream reader = response.GetResponseStream();

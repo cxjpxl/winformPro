@@ -148,6 +148,18 @@ namespace CxjText.utlis
             return str;
         }
 
+        //获取订单参数
+        public static String getOrderParmas(String parmasStr,UserInfo userInfo) {
+            if (userInfo.tag.Equals("A"))
+            {
+                return parmasStr + "&money=" + userInfo.inputMoney;
+            }
+            else {
+                Console.WriteLine("系统待开发中!");
+                return null;
+            }
+        }
+
         public static String changeHtml(String Htmlstring) {
             //删除脚本
 

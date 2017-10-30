@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CxjText.views
@@ -196,6 +197,9 @@ namespace CxjText.views
             setDataFormShow(userInfo);
         }
 
+
+        
+
         //数据点击处理
         public void OnClickLisenter(String rltStr, UserInfo userInfo)
         {
@@ -206,12 +210,30 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-                if (user.inputMoney < 10) continue;
-                String orderStr = rltStr + "&money="+user.inputMoney;
+                if (user.inputMoney >= 10) continue;
+                String orderParmas = FormUtils.getOrderParmas(rltStr,user);
                 //下单处理
-                Config.console(orderStr);
+                if (String.IsNullOrEmpty(orderParmas)) {
+                    continue;
+                }
+                JObject jObject = new JObject();
+                jObject["position"] = i;
+                jObject["rlt"] = rltStr;
+                Thread t = new Thread(new ParameterizedThreadStart(postOrder));
+                t.Start(jObject);
+
             }
 
         }
+
+        private void postOrder(object  obj)
+        {
+            JObject jobject = (JObject)obj;
+            String parmsStr =(String) jobject["rlt"];
+            int index = (int)jobject["position"];
+            Console.WriteLine(parmsStr);
+
+        }
+
     }
 }

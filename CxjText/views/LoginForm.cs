@@ -172,7 +172,12 @@ namespace CxjText.views
                 return;
             }
             //下载图片
-            int codeNum = HttpUtils.getImage(FormUtils.getCodeUrl(userInfo), position + ".jpg"); //这里要分系统获取验证码
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            int codeNum = HttpUtils.getImage(FormUtils.getCodeUrl(userInfo), position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -209,11 +214,10 @@ namespace CxjText.views
                 userInfo.status = preStatus;
                 return;
             }
-            //登录请求
-            if (userInfo.cookie == null) {
-                userInfo.cookie = new System.Net.CookieContainer();
-            }
-            String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie);
+            
+            Console.WriteLine(loginUrlStr);
+            Console.WriteLine(paramsStr);
+            String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
             if (rltStr == null)
             {
                 userInfo.status = 3;
@@ -228,7 +232,7 @@ namespace CxjText.views
                 return;
             }
             userInfo.status = 2; //成功
-            AddToListToUpDate(position);
+            AddToListToUpDate(position);  
         }
 
 
@@ -268,7 +272,7 @@ namespace CxjText.views
                     }
                     else if (status == 1)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "请求中...";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "请求中";
                     }
                     else if (status == 2)
                     {
@@ -276,7 +280,7 @@ namespace CxjText.views
                     }
                     else
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "登录失败";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "失败";
                     }
 
                     if (String.IsNullOrEmpty(userInfo.money) || status != 2)
