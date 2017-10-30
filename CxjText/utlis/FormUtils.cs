@@ -160,6 +160,41 @@ namespace CxjText.utlis
             }
         }
 
+
+        public static int explandOrderRlt(String rlt,UserInfo userInfo) {
+
+            if (userInfo.tag.Equals("A"))
+            {
+                if (rlt.IndexOf("false") >= 0)
+                {
+                    return -1;
+                }
+                else if (rlt.Length == 0 || rlt.Equals("")) {
+                    return 1;
+                }
+            }
+            else {
+                Console.WriteLine("系统待开发中!");
+            }
+            
+            return -1;
+        }
+
+        //获取用户钱的接口
+        public static String getUserMoneyUrl(UserInfo userInfo) {
+
+            if (userInfo.tag.Equals("A"))
+            {
+                return userInfo.loginUrl + "/member/aspx/do.aspx?action=islogin";
+            }
+            else {
+                Console.WriteLine("系统待开发中!");
+            }
+
+            return null;
+        }
+
+
         public static String changeHtml(String Htmlstring) {
             //删除脚本
 

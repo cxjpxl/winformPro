@@ -210,7 +210,7 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-                if (user.inputMoney >= 10) continue;
+                if (user.inputMoney < 10) continue;
                 String orderParmas = FormUtils.getOrderParmas(rltStr,user);
                 //下单处理
                 if (String.IsNullOrEmpty(orderParmas)) {
@@ -218,10 +218,9 @@ namespace CxjText.views
                 }
                 JObject jObject = new JObject();
                 jObject["position"] = i;
-                jObject["rlt"] = rltStr;
+                jObject["rlt"] = orderParmas;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
                 t.Start(jObject);
-
             }
 
         }
@@ -231,8 +230,28 @@ namespace CxjText.views
             JObject jobject = (JObject)obj;
             String parmsStr =(String) jobject["rlt"];
             int index = (int)jobject["position"];
-            Console.WriteLine(parmsStr);
+            UserInfo user =(UserInfo) Config.userList[index];
+            String rlt = HttpUtils.HttpPost(user.orderUrl,parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            if (rlt == null) {
+                //请求失败
+                return;
+            }
 
+            int rltNum = FormUtils.explandOrderRlt(rlt,user);
+            if (rltNum < 0) {
+                //请求失败处理
+                return;
+            }
+            //交易成功 , 更新UI 并更新钱
+            Console.WriteLine("交易成功");
+            String getMoneyUrl = FormUtils.getUserMoneyUrl(user);
+            if (String.IsNullOrEmpty(getMoneyUrl)) {
+                return;
+            }
+
+
+
+            Console.WriteLine("rlt:"+ rlt);
         }
 
     }
