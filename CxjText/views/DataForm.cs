@@ -16,6 +16,8 @@ namespace CxjText.views
         private UserInfo userInfo = null;
         private DataClickInface inface = null;
         private JArray cJArray = null; //当前界面数据储存
+        private int cPosition = 0;
+        private bool isUpdate = false;
 
         public DataForm()
         {
@@ -54,10 +56,13 @@ namespace CxjText.views
 
         //更新UI
         public void setData(UserInfo userInfo,JArray jArray) {
+            isUpdate = true;
             this.userInfo = userInfo;
             this.cJArray = jArray; //数据的存储
             if (jArray == null || jArray.Count == 0) {
                 this.dt.Clear();
+                this.cPosition = 0;
+                this.isUpdate = false;
                 return;
             }
             this.dt.Clear();
@@ -94,7 +99,15 @@ namespace CxjText.views
                 dt.Rows.Add((String)jObject["a26"], time, "和局", c23.Trim(), "", "", "", "", "");
             }
             this.dgvSA.DataSource = dt;
-
+            Console.WriteLine("初始化显示行：" + this.cPosition);
+            if (this.cPosition < this.cJArray.Count)
+            {
+                this.dgvSA.FirstDisplayedScrollingRowIndex = this.cPosition;
+            }
+            else {
+                this.cPosition = 0;
+            }
+            this.isUpdate = false;
         }
 
         //点击事件的处理 参数不要删除  注意注意
@@ -192,6 +205,14 @@ namespace CxjText.views
 
             //rltStr = rltStr + "&money=1";//添加输入金额
             this.inface.OnClickLisenter(rltStr, this.userInfo);
+        }
+        //滑动的时候的数据处理
+        private void dgvSA_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (e.ScrollOrientation == ScrollOrientation.VerticalScroll&&!this.isUpdate) {
+                this.cPosition = e.NewValue;
+                Console.WriteLine("当前行："+this.cPosition);
+            }
         }
     }
 }

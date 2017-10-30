@@ -143,11 +143,9 @@ namespace CxjText.views
             this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
             //判断是否要刷新UI
             bool mustUp = MustRefsNameUi(userInfo, jArray);
-            if (!mustUp) return;  //false 表示不用刷新
-
-            this.cTag = userInfo.tag; //记录当前系统
             this.cJArray = jArray; //保存当前的数据源
-
+            this.cTag = userInfo.tag; //记录当前系统
+            if (!mustUp) return;  //false 表示不用刷新
             nameList.Clear();
             int selectPosition = -1;
             for (int i = 0; i < jArray.Count; i++)

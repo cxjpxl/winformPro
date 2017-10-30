@@ -67,6 +67,7 @@
             this.dgvSA.Size = new System.Drawing.Size(826, 583);
             this.dgvSA.TabIndex = 0;
             this.dgvSA.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSA_CellClick);
+            this.dgvSA.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dgvSA_Scroll);
             // 
             // Column0
             // 
