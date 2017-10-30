@@ -15,7 +15,8 @@ namespace CxjText.views
        
         private int cIndex = -1;//当前显示的索引 决定系统
         private String selectFlag = null; //记录点击联赛第一个的A->mid
-        private JArray cJArray = null; //当前数据元
+        private JArray cJArray = null; //当前数据显示联赛的数据源
+        private JArray dataJArray = null;
         private String cTag = "";
 
         List<NameTy> nameList = new List<NameTy>();
@@ -68,19 +69,40 @@ namespace CxjText.views
                     this.nameShowGridView.Rows.Clear();
                     return;
                 }
-                this.cIndex = index;
+                this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
+                this.cIndex = index; //当前索引
                 NameGridShow(userInfo,rltJArray);
-                //到时候B系统出来要处理和UI
-                if (userInfo.tag.Equals("A")) {
-                    if (dataForm != null) {
-                        dataForm.setData(userInfo,RltDataUtils.getRltJArray(userInfo, rltJObject));
-                    }
-                }
+                setDataFormShow(userInfo);
             }
             catch (SystemException e) {
 
             }
         }
+
+        //渲染数据的UI
+        private void setDataFormShow(UserInfo userInfo) {
+            if (userInfo.tag.Equals("A"))
+            {
+                if (dataForm != null)
+                {
+                    int selectIndex = -1;
+                    if (this.nameShowGridView.CurrentCell != null)
+                    {
+                        selectIndex = this.nameShowGridView.CurrentCell.RowIndex;
+                    }
+                    if (selectIndex == -1)
+                    {
+                        dataForm.setData(userInfo, this.dataJArray);
+                    }
+                    else
+                    {
+                        dataForm.setData(userInfo, (JArray)this.cJArray[selectIndex]);
+                    }
+
+                }
+            }
+        }
+
 
         //判断UI是否要刷新
         private bool MustRefsNameUi(UserInfo userInfo,JArray jArray) {
@@ -155,27 +177,25 @@ namespace CxjText.views
         //球赛联赛名称鼠标点击事件
         private void NameShowGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (this.cJArray == null) return;
             UserInfo userInfo =(UserInfo) Config.userList[cIndex];
-
-            if (this.cJArray == null) {
-                this.nameShowGridView.CurrentCell = null;
-                this.selectFlag = null;
-                return;
-            }
-
             if (e.Button == MouseButtons.Left)
             {
-                int rowIndex = e.RowIndex;
-                if (rowIndex == -1)
-                {
-                    this.nameShowGridView.CurrentCell = null;
-                    this.selectFlag = null;
-                }
-                else {
-                    this.selectFlag = RltDataUtils.getOnlyFlag(rowIndex, this.cJArray, userInfo);
-                    Config.console("mid:"+this.selectFlag);
-                }
+               int rowIndex = e.RowIndex;
+               if (rowIndex == -1)
+               {
+                   this.nameShowGridView.CurrentCell = null;
+                   this.selectFlag = null;
+               }
+               else
+               {
+                  this.selectFlag = RltDataUtils.getOnlyFlag(rowIndex, this.cJArray, userInfo);
+                  Config.console("mid:" + this.selectFlag);
+               }
             }
+           
+
+            setDataFormShow(userInfo);
         }
 
         //数据点击处理

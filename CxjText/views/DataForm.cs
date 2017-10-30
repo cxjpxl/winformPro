@@ -1,5 +1,6 @@
 ﻿using CxjText.bean;
 using CxjText.iface;
+using CxjText.utils;
 using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
@@ -54,7 +55,7 @@ namespace CxjText.views
         //更新UI
         public void setData(UserInfo userInfo,JArray jArray) {
             this.userInfo = userInfo;
-            if (this.dgvSA.Rows.Count > 0) return;
+            //if (this.dgvSA.Rows.Count > 0) return;
             this.cJArray = jArray; //数据的存储
             this.dt.Clear();
             if (jArray == null) return;
@@ -103,6 +104,12 @@ namespace CxjText.views
             }
 
             if (e.ColumnIndex == 0 || e.ColumnIndex == 1) {
+                return;
+            }
+
+            String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            if (String.IsNullOrEmpty(value)) {
+                Config.console("点击空的数据");
                 return;
             }
 
