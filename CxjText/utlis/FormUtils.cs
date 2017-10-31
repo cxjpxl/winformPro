@@ -16,7 +16,10 @@ namespace CxjText.utlis
             {
                 url = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + getCurrentTime();
             }
-            else {
+            else if (userInfo.tag.Equals("B")) {
+                url = userInfo.loginUrl + "/yzm.php?_=" + getCurrentTime();
+            }else
+            {
                 Console.WriteLine("系统待开发中!");
             }
             return url;
@@ -28,6 +31,9 @@ namespace CxjText.utlis
             if (userInfo.tag.Equals("A"))
             {
                 paramsStr = "username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&captcha=" + codeStr;
+            }
+            else if (userInfo.tag.Equals("B")) {
+                paramsStr = "r=" + getCurrentTime() + "&action=login&vlcodes=" + codeStr + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
             }
             else
             {
@@ -42,6 +48,9 @@ namespace CxjText.utlis
             if (userInfo.tag.Equals("A"))
             {
                 return userInfo.loginUrl + "/member/aspx/do.aspx?action=checklogin";
+            }
+            else if (userInfo.tag.Equals("B")) {
+                return userInfo.loginUrl + "/logincheck.php";
             }
             else
             {
@@ -119,8 +128,20 @@ namespace CxjText.utlis
                 {
                     return -1;
                 }
-            }
-            else {
+            } else if (userInfo.tag.Equals("B")) {
+                if (String.IsNullOrEmpty(dataStr)) {
+                    return -1;
+                }
+
+                if (dataStr.Equals("4"))
+                {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+
+            }else {
                 Console.WriteLine("系统待开发中!");
                 return -1;
             }

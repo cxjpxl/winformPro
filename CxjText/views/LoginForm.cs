@@ -164,6 +164,7 @@ namespace CxjText.views
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
             AddToListToUpDate(position);
+            //系统更改1  获取验证码链接地址
             String codeUrl = FormUtils.getCodeUrl(userInfo);
             if (codeUrl == null)
             {
@@ -177,7 +178,7 @@ namespace CxjText.views
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(FormUtils.getCodeUrl(userInfo), position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -198,8 +199,10 @@ namespace CxjText.views
                 return;
             }
 
-            //获取登录的系统参数
+            //获取登录的系统参数 
+            //系统更改2  获取登录参数
             String paramsStr = FormUtils.getLoginParams(userInfo, codeStrBuf.ToString());
+            Console.WriteLine(paramsStr);
             if (paramsStr == null)
             {
                 MessageBox.Show("系统开发中!");
@@ -207,7 +210,9 @@ namespace CxjText.views
                 return;
             }
             //获取登录的链接地址
+            //系统更改3  获取登录url
             String loginUrlStr = FormUtils.getLoginUrl(userInfo);
+            Console.WriteLine(loginUrlStr);
             if (loginUrlStr == null)
             {
                 MessageBox.Show("系统开发中!");
@@ -216,19 +221,50 @@ namespace CxjText.views
             }
             
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+            Console.WriteLine(rltStr);
             if (rltStr == null)
             {
                 userInfo.status = 3;
                 AddToListToUpDate(position);
                 return;
             }
+            //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            Console.WriteLine(rltNum);
             if (rltNum < 0){
                 userInfo.status = 3;
                 AddToListToUpDate(position);
                 return;
             }
-            //获取uid的链接地址
+
+            //B系统这个时候要获取下金额
+            if (userInfo.tag.Equals("B")) {
+                String bMoneyRlt = HttpUtils.HttpPost(userInfo.loginUrl+ "/top_money_data.php", "", "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+                Console.WriteLine(bMoneyRlt);
+                if (String.IsNullOrEmpty(bMoneyRlt)) {
+                    userInfo.status = 3;
+                    AddToListToUpDate(position);
+                    return;
+                }
+                bMoneyRlt = bMoneyRlt.Trim();
+                String[] moneys = bMoneyRlt.Split('|');
+                if (moneys != null && moneys.Length == 0)
+                {
+                    userInfo.status = 3;
+                    AddToListToUpDate(position);
+                    return;
+                }
+                else {
+                    userInfo.money = moneys[0];
+                    userInfo.status = 2; //成功
+                    AddToListToUpDate(position);
+                    return;
+                }
+
+            }
+
+
+            //除B之外的处理 获取uid的链接地址
             String uidUrl = FormUtils.getUidUrl(userInfo);
             if (String.IsNullOrEmpty(uidUrl)) {
                 userInfo.status = 3;

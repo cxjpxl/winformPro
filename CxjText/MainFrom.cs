@@ -33,7 +33,7 @@ namespace CxjText
             }
             ViewInit();
 
-            this.upDateTimer.Start(); //启动定时任务器
+             this.upDateTimer.Start(); //启动定时任务器
         }
 
         private void ViewInit()
@@ -81,6 +81,7 @@ namespace CxjText
         //定时器回调   1s一次
         private void updateTimer_Tick(object sender, EventArgs e)
         {
+           
             if (this.loginForm == null) return;
             //获取当前选中的行
             int index = this.loginForm.getCurrentSelectRow(); 

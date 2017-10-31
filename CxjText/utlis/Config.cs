@@ -14,7 +14,7 @@ namespace CxjText.utils
         public static bool canOrder = true; //是否可以下单  正式版本是true
 
         //软件使用的人(一个软件只能一个账户使用)  直接在登录的地方显示和请求到后台
-        public static String softUserStr = "cxj"; //软件使用人  admin为管理员
+        public static String softUserStr = "admin"; //软件使用人  admin为管理员
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.1046.com"+"\t"+"www.7676100.com"+"\t"+ "www.y39666.com";
         //public static String urls = "";
