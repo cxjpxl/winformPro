@@ -97,5 +97,22 @@ namespace CxjText.utlis
             return mid;
         }
 
+        //判断是否含有搜索的字符创
+        public static bool hasSearchStr(JObject jObject, String str, UserInfo userInfo)
+        {
+            if (userInfo.tag.Equals("A"))
+            {
+                String a2 = (String)jObject["a2"];
+                String a3 = (String)jObject["a3"];
+                if (a2.IndexOf(str) >= 0 || a3.IndexOf(str) >= 0) {
+                    return true;
+                }
+            }
+            else {
+                Config.console("系统开发中！");
+            }
+            return false;
+        }
+
     }
 }

@@ -17,14 +17,16 @@ namespace CxjText.views
         private int cIndex = -1;//当前显示的索引 决定系统
         private String selectFlag = null; //记录点击联赛第一个的A->mid
         private JArray cJArray = null; //当前数据显示联赛的数据源
-        private JArray dataJArray = null;
-        private String cTag = "";
+        private JArray dataJArray = null; //也是当前联赛的列表 一个数组格式显示
+        private String cTag = ""; //当前系统的标识
 
         List<NameTy> nameList = new List<NameTy>();
         private BindingSource customersBindingSource = new BindingSource();
+
         private DataForm dataForm = null;
         private RltForm rltForm = null;
         private LoginForm loginForm = null;
+        private String searchStr = ""; //搜索的字段
 
 
         public LeftForm()
@@ -65,6 +67,50 @@ namespace CxjText.views
             this.nameShowGridView.DataSource = this.customersBindingSource;
         }
 
+        //设置搜索的字段
+        public void SetSeaechStr(String searchStr) {
+            if (searchStr.Equals(this.searchStr)) {
+                return;
+            }
+            this.searchStr = searchStr; //赋值
+            changeStrUi();
+        }
+
+
+        private void changeStrUi() {
+            if (this.cIndex == -1) return;
+            //数据源处理
+            if (this.dataJArray == null || this.dataJArray.Count == 0)
+            {
+                return;
+            }
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            if (String.IsNullOrEmpty(this.searchStr)) {
+                setDataFormShow(userInfo); //更新数据界面
+                return;
+            }
+            if (userInfo == null) return;
+            JArray jArray = new JArray();
+            for (int i = 0; i < this.dataJArray.Count; i++) {
+                JObject jObject = (JObject)this.dataJArray[i];
+                if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo)) {
+                    jArray.Add(jObject);
+                }
+            }
+
+            //有数据
+            if (jArray.Count > 0)
+            {
+                this.selectFlag = "";
+                this.nameShowGridView.CurrentCell = null;
+                dataForm.setData(jArray, this.cIndex, this.selectFlag);
+            }
+            else {
+                setDataFormShow(userInfo); //更新数据界面
+            }
+        }
+
+
         //当前当前获取到的数据和用户索引
         public void SetCurrentData(String rlt,int index) {
 
@@ -72,16 +118,25 @@ namespace CxjText.views
             try {
                 JObject rltJObject = (JObject)JsonConvert.DeserializeObject(rlt);
                 if (rltJObject == null) return ;
-                JArray rltJArray = null;
-                rltJArray = RltDataUtils.explandRlt(userInfo,rltJObject);
+                JArray rltJArray = RltDataUtils.explandRlt(userInfo,rltJObject);
+                this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
                 if (rltJArray == null || rltJArray.Count == 0) {
-                    this.nameShowGridView.Rows.Clear();
+                    this.nameShowGridView.CurrentCell = null;
+                    this.selectFlag = "";
+                    this.cJArray = new JArray();
+                    this.dataJArray = new JArray();
+                    this.cIndex = index; //当前索引
+                    this.cTag = userInfo.tag;
+                    this.nameList.Clear();
+                    customersBindingSource.ResetBindings(true);
+                    setDataFormShow(userInfo);
                     return;
                 }
-                this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
+                NameGridShow(userInfo,rltJArray);//更新当前界面
+                this.cTag = userInfo.tag; //记录当前系统
                 this.cIndex = index; //当前索引
-                NameGridShow(userInfo,rltJArray);
-                setDataFormShow(userInfo);
+                this.cJArray = rltJArray; //保存当前的数据源
+                changeStrUi();  //更新数据界面
             }
             catch (SystemException e) {
 
@@ -101,11 +156,11 @@ namespace CxjText.views
                     }
                     if (selectIndex == -1)
                     {
-                        dataForm.setData(userInfo, this.dataJArray,this.cIndex,this.selectFlag);
+                        dataForm.setData( this.dataJArray,this.cIndex,this.selectFlag);
                     }
                     else
                     {
-                        dataForm.setData(userInfo, (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag);
+                        dataForm.setData( (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag);
                     }
 
                 }
@@ -152,8 +207,6 @@ namespace CxjText.views
             this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
             //判断是否要刷新UI
             bool mustUp = MustRefsNameUi(userInfo, jArray);
-            this.cJArray = jArray; //保存当前的数据源
-            this.cTag = userInfo.tag; //记录当前系统
             if (!mustUp) return;  //false 表示不用刷新
             nameList.Clear();
             int selectPosition = -1;
@@ -184,6 +237,13 @@ namespace CxjText.views
         //球赛联赛名称鼠标点击事件
         private void NameShowGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (!String.IsNullOrEmpty(searchStr)) {
+                this.nameShowGridView.CurrentCell = null;
+                this.selectFlag = null;
+                MessageBox.Show("当前属于搜索状态！");
+                return;
+            }
+
             if (this.cJArray == null) return;
             UserInfo userInfo =(UserInfo) Config.userList[cIndex];
             if (e.Button == MouseButtons.Left)
@@ -218,6 +278,7 @@ namespace CxjText.views
             String inputType = (String) dataJObject["inputType"];
 
             //获取到下单的参数
+            bool hasData = false;
             String tag = userInfo.tag;
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user =(UserInfo) Config.userList[i];
@@ -245,7 +306,7 @@ namespace CxjText.views
                 if (this.rltForm != null) {
                     this.rltForm.AddLineInHead(inputInfo);
                 }
-                
+                hasData = true;
                 JObject jObject = new JObject();
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
@@ -253,6 +314,10 @@ namespace CxjText.views
                 //开线程并发去下注
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
                 t.Start(jObject);
+            }
+
+            if (!hasData) {
+                MessageBox.Show(tag+"系统,账号没有登录或者金额低于10");
             }
 
         }

@@ -156,7 +156,7 @@ namespace CxjText
                 Config.console("END");
                 this.Invoke(new Action(() => {
                     leftForm.SetCurrentData(rlt,position);
-                    upDateTimer.Start();
+                   // upDateTimer.Start();
                 }));
             }
             catch (SystemException e) {
@@ -172,8 +172,16 @@ namespace CxjText
             //点击的时候  将当前时间设置下  下个定时时间一到就会立马刷新 
             UserInfo userInfo = (UserInfo)Config.userList[index];
             userInfo.updateTime = -1;
-            //this.upDateTimer.Start();
+            this.upDateTimer.Start();
         }
 
+        //搜索字体更改处理
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            String str = textBox1.Text.ToString().Trim();
+            if (this.leftForm != null) {
+                this.leftForm.SetSeaechStr(str);
+            }
+        }
     }
 }

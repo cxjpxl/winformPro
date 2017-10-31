@@ -59,12 +59,13 @@
             this.Column7,
             this.Column8});
             this.RltDgv.Location = new System.Drawing.Point(0, 0);
+            this.RltDgv.Margin = new System.Windows.Forms.Padding(0);
             this.RltDgv.MultiSelect = false;
             this.RltDgv.Name = "RltDgv";
             this.RltDgv.ReadOnly = true;
             this.RltDgv.RowHeadersVisible = false;
             this.RltDgv.RowTemplate.Height = 23;
-            this.RltDgv.Size = new System.Drawing.Size(949, 199);
+            this.RltDgv.Size = new System.Drawing.Size(886, 199);
             this.RltDgv.TabIndex = 0;
             // 
             // Column9
@@ -152,7 +153,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 205);
+            this.ClientSize = new System.Drawing.Size(886, 199);
             this.Controls.Add(this.RltDgv);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "RltForm";

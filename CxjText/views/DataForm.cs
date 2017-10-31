@@ -58,12 +58,13 @@ namespace CxjText.views
         }
 
         //更新UI
-        public void setData(UserInfo userInfo,JArray jArray,int index,string selectFlag) {
+        public void setData(JArray jArray,int index,string selectFlag) {
             isUpdate = true;
-            this.userInfo = userInfo;
+            this.userInfo =(UserInfo) Config.userList[index];
             this.cJArray = jArray; //数据的存储
             if (jArray == null || jArray.Count == 0) {
                 this.dt.Clear();
+                this.dgvSA.DataSource = dt;
                 this.cPosition = 0;
                 this.isUpdate = false;
                 return;

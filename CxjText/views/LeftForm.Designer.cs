@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.nameShowGridView = new System.Windows.Forms.DataGridView();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datapanel = new System.Windows.Forms.Panel();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.nameShowGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,12 +44,23 @@
             this.nameShowGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.name});
             this.nameShowGridView.Location = new System.Drawing.Point(0, 0);
+            this.nameShowGridView.Margin = new System.Windows.Forms.Padding(0);
             this.nameShowGridView.Name = "nameShowGridView";
             this.nameShowGridView.RowHeadersVisible = false;
             this.nameShowGridView.RowTemplate.Height = 23;
-            this.nameShowGridView.Size = new System.Drawing.Size(136, 430);
+            this.nameShowGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.nameShowGridView.Size = new System.Drawing.Size(140, 430);
             this.nameShowGridView.TabIndex = 0;
             this.nameShowGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NameShowGridView_CellMouseClick);
+            // 
+            // datapanel
+            // 
+            this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.datapanel.Location = new System.Drawing.Point(152, 0);
+            this.datapanel.Margin = new System.Windows.Forms.Padding(0);
+            this.datapanel.Name = "datapanel";
+            this.datapanel.Size = new System.Drawing.Size(815, 430);
+            this.datapanel.TabIndex = 1;
             // 
             // name
             // 
@@ -60,22 +71,14 @@
             this.name.ReadOnly = true;
             this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.name.Width = 132;
-            // 
-            // datapanel
-            // 
-            this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.datapanel.Location = new System.Drawing.Point(140, 0);
-            this.datapanel.Name = "datapanel";
-            this.datapanel.Size = new System.Drawing.Size(824, 435);
-            this.datapanel.TabIndex = 1;
+            this.name.Width = 140;
             // 
             // LeftForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(976, 435);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(976, 430);
             this.Controls.Add(this.datapanel);
             this.Controls.Add(this.nameShowGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -90,7 +93,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView nameShowGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.Panel datapanel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
     }
 }
