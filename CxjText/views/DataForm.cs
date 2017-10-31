@@ -82,38 +82,93 @@ namespace CxjText.views
             
             this.dt.Clear();
             for (int i = 0; i < jArray.Count; i++) {
-                JObject jObject =(JObject)jArray[i];
-                String time = (String)jObject["a18"]
-                    + "\n" + (String)jObject["a19"]; 
-                String htmlStr = FormUtils.changeHtml((String)jObject["a6"]);
-                if (!String.IsNullOrEmpty(htmlStr)) {
-                    time = time + "\n" + htmlStr;
+                JObject jObject = (JObject)jArray[i];
+                String lianSaiStr = "";
+                String time = "";
+                String mid = "";
+                String c02 = ""; //球队名称
+                String c03 = "";
+                String c04 = "";
+                String c05 = "";
+                String c06 = "";
+                String c07 = "";
+                String c08 = "" ;
+                /*********************************************************************/
+                String c12 = ""; //球队名称
+                String c13 = "";
+                String c14 = "";
+                String c15 = "";
+                String c16 = "";
+                String c17 = "";
+                String c18 = "";
+                /*********************************************************************/
+                String c23 = "";
+                /*********************************************************************/
+                if (userInfo.tag.Equals("A"))
+                {
+                    lianSaiStr = (String)jObject["a26"];
+                    time = (String)jObject["a18"]
+                    + "\n" + (String)jObject["a19"];
+                    String htmlStr = FormUtils.changeHtml((String)jObject["a6"]);
+                    if (!String.IsNullOrEmpty(htmlStr))
+                    {
+                        time = time + "\n" + htmlStr;
+                    }
+
+                    c02 = (String)jObject["a2"]; //球队名称
+                    c03 = (String)jObject["a7"];
+                    c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
+                    c05 = (String)jObject["a22"] + " " + (String)jObject["a14"];
+                    c06 = (String)jObject["odd"] + " " + (String)jObject["a16"];
+                    c07 = (String)jObject["a36"] + " " + (String)jObject["a31"];
+                    c08 = (String)jObject["a38"] + " " + (String)jObject["a34"];
+                    /*********************************************************************/
+                    c12 = (String)jObject["a3"]; //球队名称
+                    c13 = (String)jObject["a8"];
+                    c14 = (String)jObject["a21"] + " " + (String)jObject["a12"];
+                    c15 = (String)jObject["a23"] + " " + (String)jObject["a15"];
+                    c16 = (String)jObject["even"] + " " + (String)jObject["a17"];
+                    c17 = (String)jObject["a37"] + " " + (String)jObject["a32"];
+                    c18 = (String)jObject["a39"] + " " + (String)jObject["a35"]; ;
+                    /*********************************************************************/
+                    c23 = (String)jObject["a9"];
+                    /*********************************************************************/
+                    mid = (String)jObject["mid"];
+                } else if (userInfo.tag.Equals("B"))
+                {
+                    lianSaiStr = (String)jObject["Match_Name"];
+                    time = (String)jObject["Match_Date"]; //时间的显示
+
+                    c02 = (String)jObject["Match_Master"]; //球队名称
+                    c03 = (String)jObject["Match_BzM"];
+                    c04 = "RGG" + " " + (String)jObject["Match_Ho"];
+                    c05 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxDpl"];
+                    c06 = "未处理" + " " + (String)jObject["Match_DsDpl"];
+                    c07 = "";
+                    c08 = "";
+                    /*********************************************************************/
+                    c12 = (String)jObject["Match_Guest"]; //球队名称
+                    c13 = (String)jObject["Match_BzG"];
+                    c14 = "RGG " + (String)jObject["Match_Ao"];
+                    c15 = (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
+                    c16 =  "未处理 " + (String)jObject["Match_DsSpl"];
+                    c17 = "";
+                    c18 ="" ;
+                    /*********************************************************************/
+                    c23 = (String)jObject["Match_BzH"];
+                    /*********************************************************************/
+                    mid = (String)jObject["Match_ID"];
                 }
+                else {
 
-                String c02 = (String)jObject["a2"]; //球队名称
-                String c03 = (String)jObject["a7"];
-                String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
-                String c05 = (String)jObject["a22"] + " " + (String)jObject["a14"];
-                String c06 = (String)jObject["odd"] + " " + (String)jObject["a16"]; 
-                String c07 = (String)jObject["a36"] + " " + (String)jObject["a31"];
-                String c08 = (String)jObject["a38"] + " " + (String)jObject["a34"]; ;
-                /*********************************************************************/
-                String c12 = (String)jObject["a3"]; //球队名称
-                String c13 = (String)jObject["a8"];
-                String c14 = (String)jObject["a21"] + " " + (String)jObject["a12"];
-                String c15 = (String)jObject["a23"] + " " + (String)jObject["a15"];
-                String c16 = (String)jObject["even"] + " " + (String)jObject["a17"];
-                String c17 = (String)jObject["a37"] + " " + (String)jObject["a32"];
-                String c18 = (String)jObject["a39"] + " " + (String)jObject["a35"]; ;
-                /*********************************************************************/
-                String c23 = (String)jObject["a9"];
-                /*********************************************************************/
 
-                dt.Rows.Add((String)jObject["a26"], time, c02.Trim(), c03.Trim(), c04.Trim(), c05.Trim(), c06.Trim(), c07.Trim(), c08.Trim());
-                dt.Rows.Add((String)jObject["a26"], time, c12.Trim(), c13.Trim(), c14.Trim(), c15.Trim(), c16.Trim(), c17.Trim(), c18.Trim());
-                dt.Rows.Add((String)jObject["a26"], time, "和局", c23.Trim(), "", "", "", "", "");
+                }
+                
+                dt.Rows.Add(lianSaiStr, time, c02.Trim(), c03.Trim(), c04.Trim(), c05.Trim(), c06.Trim(), c07.Trim(), c08.Trim());
+                dt.Rows.Add(lianSaiStr, time, c12.Trim(), c13.Trim(), c14.Trim(), c15.Trim(), c16.Trim(), c17.Trim(), c18.Trim());
+                dt.Rows.Add(lianSaiStr, time, "和局", c23.Trim(), "", "", "", "", "");
 
-                String mid = (String)jObject["mid"];
+
                 if (this.currMid != null && mid == this.currMid)
                 {
                     sPosition = i*3+this.cPosition;

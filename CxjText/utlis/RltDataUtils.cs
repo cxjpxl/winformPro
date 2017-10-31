@@ -18,7 +18,15 @@ namespace CxjText.utlis
             if (userInfo.tag.Equals("A"))
             {
                 rltJArray = (JArray)jObject["results"];
-                if (rltJArray == null) {
+                if (rltJArray == null)
+                {
+                    rltJArray = new JArray();
+                }
+            }
+            else if (userInfo.tag.Equals("B")) {
+                rltJArray = (JArray)jObject["db"];
+                if (rltJArray == null)
+                {
                     rltJArray = new JArray();
                 }
             }
@@ -43,7 +51,7 @@ namespace CxjText.utlis
                         String a0 = itemJObject["a0"].ToString();
                         JArray itemJArray = new JArray();
                         itemJArray.Add(itemJObject);
-                        for (int j = i+1; j < jArray.Count; j++)
+                        for (int j = i + 1; j < jArray.Count; j++)
                         {
                             JObject itemJObject1 = (JObject)jArray[j];
                             if (!String.IsNullOrEmpty(itemJObject1["a0"].ToString())) {
@@ -61,8 +69,32 @@ namespace CxjText.utlis
                         }
                     }
                 }
-            }
-            else
+            } else if (userInfo.tag.Equals("B")) {
+                JArray jArray = (JArray)jObject["db"];
+                if (jArray == null || jArray.Count == 0) {
+                    return rltJArray;
+                }
+
+                for (int i = 0; i < jArray.Count; i++) {
+                    JObject itemJObect = (JObject)jArray[i];
+                    JArray itemJArray = new JArray();
+                    itemJArray.Add(itemJObect);
+                    String name = (String)itemJObect["Match_Name"];
+                    int j = i + 1;
+                    for (; j < jArray.Count; j++) {
+                        JObject itemJObject1 =(JObject) jArray[j];
+                        String name1 =(String) itemJObject1["Match_Name"];
+                        if (name.Equals(name1))
+                        {
+                            itemJArray.Add(itemJObject1);
+                        }else {
+                            break;
+                        }
+                    }
+                     i = j;
+                    rltJArray.Add(itemJArray);
+                }
+            }else
             {
                 Console.WriteLine("系统开发中!");
             }
@@ -76,7 +108,11 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["a26"].ToString();
             }
-            else {
+            else if (userInfo.tag.Equals("B")) {
+                title = currentArray[0]["Match_Name"].ToString();
+            }
+            else
+            {
                 title = "系统开发中!";
             }
             return title;
@@ -87,7 +123,10 @@ namespace CxjText.utlis
             if (index == -1) return  mid;
             if (userInfo.tag.Equals("A"))
             {
-                mid = (String)jArray[index][0]["mid"]+""; //唯一标识
+                mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("B")) {
+                mid = (String)jArray[index][0]["Match_ID"] + ""; //唯一标识
             }
             else
             {
@@ -105,6 +144,13 @@ namespace CxjText.utlis
                 String a2 = (String)jObject["a2"];
                 String a3 = (String)jObject["a3"];
                 if (a2.IndexOf(str) >= 0 || a3.IndexOf(str) >= 0) {
+                    return true;
+                }
+            } else if (userInfo.tag.Equals("B")) {
+                String Match_Master = (String)jObject["Match_Master"];
+                String Match_Guest = (String)jObject["Match_Guest"];
+                if (Match_Master.IndexOf(str) >= 0 || Match_Guest.IndexOf(str) >= 0)
+                {
                     return true;
                 }
             }

@@ -93,6 +93,7 @@ namespace CxjText.views
             JArray jArray = new JArray();
             for (int i = 0; i < this.dataJArray.Count; i++) {
                 JObject jObject = (JObject)this.dataJArray[i];
+                //系统更改 修改5
                 if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo)) {
                     jArray.Add(jObject);
                 }
@@ -118,7 +119,9 @@ namespace CxjText.views
             try {
                 JObject rltJObject = (JObject)JsonConvert.DeserializeObject(rlt);
                 if (rltJObject == null) return ;
+                //系统更改 修改1
                 JArray rltJArray = RltDataUtils.explandRlt(userInfo,rltJObject);
+                //系统更改 修改2
                 this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
                 if (rltJArray == null || rltJArray.Count == 0) {
                     this.nameShowGridView.CurrentCell = null;
@@ -145,8 +148,6 @@ namespace CxjText.views
 
         //渲染数据的UI
         private void setDataFormShow(UserInfo userInfo) {
-            if (userInfo.tag.Equals("A"))
-            {
                 if (dataForm != null)
                 {
                     int selectIndex = -1;
@@ -164,7 +165,7 @@ namespace CxjText.views
                     }
 
                 }
-            }
+            
         }
 
 
@@ -214,8 +215,10 @@ namespace CxjText.views
             {
                 JArray itemJAarry = (JArray)jArray[i];
                 NameTy nameTy = new NameTy();
+                //系统更改 修改3
                 nameTy.name = RltDataUtils.getArrayTitle(userInfo, itemJAarry);          
                 nameList.Add(nameTy);
+                //系统更改 修改4
                 String mid = RltDataUtils.getOnlyFlag(i, jArray, userInfo);
                 if (mid!=null && mid.Equals(this.selectFlag)) {
                     selectPosition = i;
