@@ -349,9 +349,11 @@ namespace CxjText.views
             else if (userInfo.tag.Equals("B"))
             {
                 MessageBox.Show("下注暂时未开放");
+                return;
             }
             else {
                 MessageBox.Show("下注暂时未开放");
+                return;
             }
 
 
