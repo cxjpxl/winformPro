@@ -120,7 +120,6 @@ namespace CxjText.views
                 }
             }
             this.dgvSA.DataSource = dt;
-            Console.WriteLine("初始化显示行：" + sPosition+ "  this.cJArray.Count:"+ this.cJArray.Count*3);
             if (sPosition >= this.cJArray.Count*3)
             {
                 sPosition=0;
@@ -142,7 +141,6 @@ namespace CxjText.views
 
             String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             if (String.IsNullOrEmpty(value)) {
-                Config.console("点击空的数据");
                 return;
             }
 

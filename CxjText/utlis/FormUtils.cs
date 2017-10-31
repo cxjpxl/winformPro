@@ -50,6 +50,42 @@ namespace CxjText.utlis
             return url;
         }
 
+        //获取uid的url
+        public static String getUidUrl(UserInfo userInfo)
+        {
+            String url = null;
+            if (userInfo.tag.Equals("A"))
+            {
+                return userInfo.loginUrl + "/sport.aspx";
+            }
+            else
+            {
+                Console.WriteLine("系统待开发中!");
+            }
+            return url;
+        }
+
+
+        //获取uid的url
+        public static String explandUidUrl(UserInfo userInfo,String str)
+        {
+            String uid = null;
+            if (userInfo.tag.Equals("A"))
+            {
+                if (str.IndexOf("uid=") > 0)
+                {
+                    int start = str.IndexOf("uid=");
+                    uid = str.Substring(start + 4, 32);
+                }
+            }
+            else
+            {
+                Console.WriteLine("系统待开发中!");
+            }
+            return uid;
+        }
+
+
 
         //多系统处理   解析登录返回
         public static int explandsLoginData(UserInfo userInfo, String dataStr) {
@@ -147,6 +183,22 @@ namespace CxjText.utlis
             }
             return str;
         }
+
+        //获取下单的地址
+        public static String getOrderUrl(UserInfo userInfo)
+        {
+            if (userInfo.tag.Equals("A"))
+            {
+                return userInfo.orderUrl+"?uid="+userInfo.uid;
+            }
+            else
+            {
+                Console.WriteLine("系统待开发中!");
+                return null;
+            }
+        }
+
+
 
         //获取订单参数
         public static String getOrderParmas(String parmasStr, UserInfo userInfo) {

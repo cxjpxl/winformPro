@@ -257,7 +257,6 @@ namespace CxjText.views
                else
                {
                   this.selectFlag = RltDataUtils.getOnlyFlag(rowIndex, this.cJArray, userInfo);
-                  Config.console("mid:" + this.selectFlag);
                }
             }
            
@@ -312,6 +311,7 @@ namespace CxjText.views
                 jObject["rlt"] = orderParmas;
                 jObject["inputTag"] = inputInfo.tag;
                 //开线程并发去下注
+                if (!Config.canOrder) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
                 t.Start(jObject);
             }
@@ -331,9 +331,21 @@ namespace CxjText.views
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
 
             UserInfo user =(UserInfo) Config.userList[index];
+
             //请求发出前先更新UI 标记http请求已发送
-            String rlt = HttpUtils.HttpPost(user.orderUrl,parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
-            if (rlt == null) {
+            String orderUrl = FormUtils.getOrderUrl(user);
+            if (String.IsNullOrEmpty(orderUrl)) {
+                this.Invoke(new Action(() => {
+                    if (this.rltForm != null)
+                    {
+                        this.rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            
+            String rlt = HttpUtils.HttpPost(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);        
+            if (rlt == null) { //这里不能empty处理
                 //请求失败处理 UI处理
                 this.Invoke(new Action(() => {
                     if (this.rltForm != null) {
@@ -361,7 +373,6 @@ namespace CxjText.views
                     this.rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
-            Console.WriteLine("交易成功");
             String moneyUrl = FormUtils.getUserMoneyUrl(user);
             if (String.IsNullOrEmpty(moneyUrl)) {
                 return;
@@ -381,8 +392,6 @@ namespace CxjText.views
             if (this.loginForm != null) {
                 this.loginForm.AddToListToUpDate(index);
             }
-            Console.WriteLine("money:" + user.money);
-            Console.WriteLine("rlt:"+ rlt);
         }
 
     }

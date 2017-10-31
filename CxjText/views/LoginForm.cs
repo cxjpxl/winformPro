@@ -215,8 +215,6 @@ namespace CxjText.views
                 return;
             }
             
-            Console.WriteLine(loginUrlStr);
-            Console.WriteLine(paramsStr);
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
             if (rltStr == null)
             {
@@ -224,15 +222,38 @@ namespace CxjText.views
                 AddToListToUpDate(position);
                 return;
             }
-            Console.WriteLine(rltStr);    
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0){
                 userInfo.status = 3;
                 AddToListToUpDate(position);
                 return;
             }
+            //获取uid的链接地址
+            String uidUrl = FormUtils.getUidUrl(userInfo);
+            if (String.IsNullOrEmpty(uidUrl)) {
+                userInfo.status = 3;
+                AddToListToUpDate(position);
+                return;
+            }
+
+            String uidRlt = HttpUtils.httpGet(uidUrl, "", userInfo.cookie);
+            if (String.IsNullOrEmpty(uidRlt)) {
+                userInfo.status = 3;
+                AddToListToUpDate(position);
+                return;
+            }
+            //解析
+            uidRlt = FormUtils.explandUidUrl(userInfo,uidRlt);
+            if (String.IsNullOrEmpty(uidRlt))
+            {
+                userInfo.status = 3;
+                AddToListToUpDate(position);
+                return;
+            }
+
+            userInfo.uid = uidRlt; //获取到uid
             userInfo.status = 2; //成功
-            AddToListToUpDate(position);  
+            AddToListToUpDate(position);
         }
 
 
