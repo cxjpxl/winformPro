@@ -255,104 +255,111 @@ namespace CxjText.views
             if (index >= this.cJArray.Count) return;
             JObject jObject =(JObject) cJArray[index];
             if (jObject == null) return;
-
-            String rltStr = "";
-            String mid =(String) jObject["mid"];
-
+       
+            
             JObject dataJObject = new JObject();
+            String rltStr = "";
             String bateStr = "";
             String inputType = "";
-            if (numRow == 0)
+            String gameName = "";
+            String gameTeam = "";
+            if (userInfo.tag.Equals("A"))
             {
-                inputType = "主队";
-                switch (clickNum) {
-                    case 3://03
-                        //bateStr = (String)jObject["a7"];
-                        rltStr = "auto=1&mid="+mid+ "&ltype=1&bet=H&rate="+ (String)jObject["a7"];
-                        break;
-                    case 4:
-                       // bateStr = (String)jObject["a20"] + " " + (String)jObject["a11"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=H&rate=" + (String)jObject["a11"];
-                        break;
-                    case 5:
-                       // bateStr = (String)jObject["a22"] + " " + (String)jObject["a14"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=C&rate=" + (String)jObject["a14"];
-                        break;
-                    case 6:
-                       // bateStr = (String)jObject["odd"] + " " + (String)jObject["a16"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=ODD&rate=" + (String)jObject["a16"];
-                        break;
-                    case 7:
-                       // bateStr = (String)jObject["a36"] + " " + (String)jObject["a31"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=H&rate=" + (String)jObject["a31"];
-                        break;
-                    case 8:
-                       // bateStr = (String)jObject["a38"] + " " + (String)jObject["a34"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=C&rate=" + (String)jObject["a34"];
-                        break;
-                    default:
-                        return;
+                String mid = (String)jObject["mid"];
+                if (numRow == 0)
+                {
+                    inputType = "主队";
+                    switch (clickNum)
+                    {
+                        case 3://03
+                            rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=H&rate=" + (String)jObject["a7"];
+                            break;
+                        case 4:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=H&rate=" + (String)jObject["a11"];
+                            break;
+                        case 5:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=C&rate=" + (String)jObject["a14"];
+                            break;
+                        case 6:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=ODD&rate=" + (String)jObject["a16"];
+                            break;
+                        case 7:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=H&rate=" + (String)jObject["a31"];
+                            break;
+                        case 8:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=C&rate=" + (String)jObject["a34"];
+                            break;
+                        default:
+                            return;
+                    }
                 }
-            }
-            else if (numRow == 1)
-            {
+                else if (numRow == 1)
+                {
 
-                inputType = "客队";
-                switch (clickNum)
-                {
-                    case 3:
-                       // bateStr = (String)jObject["a8"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=C&rate=" + (String)jObject["a8"];
-                        break;
-                    case 4:
-                      //  bateStr = (String)jObject["a21"] + " " + (String)jObject["a12"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=C&rate=" + (String)jObject["a12"];
-                        break;
-                    case 5:
-                       // bateStr = (String)jObject["a23"] + " " + (String)jObject["a15"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=H&rate=" + (String)jObject["a15"];
-                        break;
-                    case 6:
-                       // bateStr = (String)jObject["even"] + " " + (String)jObject["a17"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=EVEN&rate=" + (String)jObject["a17"];
-                        break;
-                    case 7:
-                      //  bateStr = (String)jObject["a37"] + " " + (String)jObject["a32"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=C&rate=" + (String)jObject["a32"];
-                        break;
-                    case 8:
-                       // bateStr = (String)jObject["a39"] + " " + (String)jObject["a35"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=H&rate=" + (String)jObject["a35"];
-                        break;
-                    default:
-                        return;
+                    inputType = "客队";
+                    switch (clickNum)
+                    {
+                        case 3:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=C&rate=" + (String)jObject["a8"];
+                            break;
+                        case 4:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=C&rate=" + (String)jObject["a12"];
+                            break;
+                        case 5:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=H&rate=" + (String)jObject["a15"];
+                            break;
+                        case 6:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=EVEN&rate=" + (String)jObject["a17"];
+                            break;
+                        case 7:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=C&rate=" + (String)jObject["a32"];
+                            break;
+                        case 8:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=H&rate=" + (String)jObject["a35"];
+                            break;
+                        default:
+                            return;
+                    }
                 }
+                else if (numRow == 2)
+                {
+                    inputType = "和局";
+                    switch (clickNum)
+                    {
+                        case 3:
+                            rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=N&rate=" + (String)jObject["a9"];
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+                inputType = inputType + "-" + this.dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
+                bateStr = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                if (String.IsNullOrEmpty(bateStr.Trim()))
+                {
+                    return;
+                }
+                gameName = (String)jObject["a26"]; //获取赛事
+                gameTeam = (String)jObject["a2"] + "-" + (String)jObject["a3"]; //球队名称
             }
-            else if (numRow == 2)
+            else if (userInfo.tag.Equals("B"))
             {
-                inputType = "和局";
-                switch (clickNum)
-                {
-                    case 3:
-                      //  bateStr = (String)jObject["a9"];
-                        rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=N&rate=" + (String)jObject["a9"];
-                        break;
-                    default:
-                        return;
-                }
+                MessageBox.Show("下注暂时未开放");
             }
             else {
-                return;
+                MessageBox.Show("下注暂时未开放");
             }
-            inputType = inputType + "-" + this.dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
-            bateStr = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            if (String.IsNullOrEmpty(bateStr.Trim())) {
-                return;
-            }
-            dataJObject["gameName"] = jObject["a26"]; //获取赛事
-            dataJObject["gameTeam"] = jObject["a2"] + "-" + jObject["a3"]; //球队名称
+
+
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
             dataJObject["bateStr"] = bateStr;
             dataJObject["inputType"] = inputType;
+
             //rltStr = rltStr + "&money=1";//添加输入金额
             this.inface.OnClickLisenter(rltStr, dataJObject,this.userInfo);
         }
