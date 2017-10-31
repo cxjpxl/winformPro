@@ -66,17 +66,19 @@ namespace CxjText.views
             if (e.ColumnIndex == 3) { //第三列的情况
                 int rowIndex = e.RowIndex;
                 if (rowIndex == -1) return;
+                UserInfo userInfo = (UserInfo)Config.userList[rowIndex];
                 int num = 0;
                 try {
                     String numStr = this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
                     num = int.Parse(numStr);
-                    if (num < 10) num = 0;
+                    if (num < userInfo.leastMoney) { //低于最小金额
+                        num = 0;
+                    } 
                 }
                 catch (SystemException e1) {
                     num = 0;
                 }
                 this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value = num;
-                UserInfo userInfo = (UserInfo)Config.userList[rowIndex];
                 userInfo.inputMoney = num;
             }
         }

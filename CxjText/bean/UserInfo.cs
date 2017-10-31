@@ -23,6 +23,7 @@ namespace CxjText.bean
         public int inputMoney = 0; //输入金额
         public String  money = ""; //总金额
         public int status = -1;//登录状态 -1无权 0未登录  1请求中  2成功  3登录失败 和0差不多
+        public int leastMoney = 10; //最少输入金额
 
         public CookieContainer cookie = null; //用于http请求的时候传的cookie
 

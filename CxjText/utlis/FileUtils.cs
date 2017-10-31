@@ -78,6 +78,17 @@ namespace CxjText.utlis
                     userInfo.loginUrl = loginUrl;
                     userInfo.dataUrl = dataUrl;
                     userInfo.orderUrl = orderUrl;
+                    if (tag.Equals("A"))
+                    {
+                        userInfo.leastMoney = 10;
+                    }
+                    else if (tag.Equals("B")) {
+                        userInfo.leastMoney = 50;
+                    }else
+                    {
+                        userInfo.leastMoney = 10;
+                    }
+
 
                     userInfo.status = loginStatus;
                     userList.Add(userInfo);

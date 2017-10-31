@@ -164,6 +164,11 @@ namespace CxjText.utlis
                 {
                     return true;
                 }
+            } else if (tag.Equals("B")) {
+                if (currentTime - userTime >= 10 * 1000)  //1s刷新Ui一次
+                {
+                    return true;
+                }
             }
             else {
                 Console.WriteLine("系统待开发中!");
@@ -178,8 +183,9 @@ namespace CxjText.utlis
             if (userInfo.tag.Equals("A"))
             {
                 url = userInfo.dataUrl + "/sport/football.aspx?data=json&action=r&page=1&keyword=&sort=&uid=&_=" + getCurrentTime();
-            }
-            else {
+            } else if (userInfo.tag.Equals("B")) {
+                url = userInfo.dataUrl + "/show/ft_danshi_data.php?leaguename=&CurrPage=0&_=" + getCurrentTime();
+            }else {
                 Console.WriteLine("系统待开发中!");
             }
 
@@ -195,6 +201,12 @@ namespace CxjText.utlis
                 if (rlt[rlt.Length - 2] == ')')
                 {
                     rlt = rlt.Substring(1, rlt.Length - 3);
+                    return rlt;
+                }
+            }else if (userInfo.tag.Equals("B")) {
+                if (rlt[rlt.Length - 1] == ')')
+                {
+                    rlt = rlt.Substring(1, rlt.Length - 2);
                     return rlt;
                 }
             }

@@ -99,6 +99,7 @@ namespace CxjText
                 return;
             }
             long userTime = userInfo.updateTime;//获取用户上一次刷新的时间
+            //刷新修改 1  时间的处理
             bool canUpdate = FormUtils.canUpdateData(userInfo.tag,userTime,currentTime);
             if (!canUpdate) {
                 this.upDateTimer.Start();
@@ -121,6 +122,7 @@ namespace CxjText
                     return;
                 }
                 //获取数据请求接口的url
+                //刷新修改2   获取刷新的url
                 String getDataUrl = FormUtils.getDataUrl(userInfo);
                 Config.console("---" + getDataUrl);
                 if (String.IsNullOrEmpty(getDataUrl) || loginForm == null)
@@ -128,7 +130,7 @@ namespace CxjText
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
-                //请求获取数据
+                
                 String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
                 Config.console("---rlt:" + rlt);
                 if (String.IsNullOrEmpty(rlt))
@@ -137,8 +139,8 @@ namespace CxjText
                     return;
                 }
                 //解析数据返回
+                //刷新修改3  去掉多余的数据
                 rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-                Config.console("数据:" + rlt);
                 if (String.IsNullOrEmpty(rlt))
                 {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
@@ -156,8 +158,8 @@ namespace CxjText
                 userInfo.updateTime = FormUtils.getCurrentTime();
                 Config.console("END");
                 this.Invoke(new Action(() => {
-                    leftForm.SetCurrentData(rlt,position);
-                   // upDateTimer.Start();
+                     leftForm.SetCurrentData(rlt,position); //将数据传给界面处理
+                     upDateTimer.Start();
                 }));
             }
             catch (SystemException e) {
