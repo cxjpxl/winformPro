@@ -5,7 +5,6 @@ using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace CxjText.views
