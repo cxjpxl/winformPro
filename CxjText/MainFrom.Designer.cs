@@ -53,7 +53,7 @@
             this.leftPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.leftPanel.Location = new System.Drawing.Point(12, 12);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(976, 632);
+            this.leftPanel.Size = new System.Drawing.Size(976, 435);
             this.leftPanel.TabIndex = 2;
             // 
             // MainFrom

@@ -219,6 +219,7 @@ namespace CxjText.views
                 JObject jObject = new JObject();
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
+                //开线程并发去下注
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
                 t.Start(jObject);
             }

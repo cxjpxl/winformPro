@@ -43,11 +43,11 @@
             this.nameShowGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.nameShowGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.name});
-            this.nameShowGridView.Location = new System.Drawing.Point(-2, 1);
+            this.nameShowGridView.Location = new System.Drawing.Point(0, 0);
             this.nameShowGridView.Name = "nameShowGridView";
             this.nameShowGridView.RowHeadersVisible = false;
             this.nameShowGridView.RowTemplate.Height = 23;
-            this.nameShowGridView.Size = new System.Drawing.Size(136, 632);
+            this.nameShowGridView.Size = new System.Drawing.Size(136, 430);
             this.nameShowGridView.TabIndex = 0;
             this.nameShowGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NameShowGridView_CellMouseClick);
             // 
@@ -65,9 +65,9 @@
             // datapanel
             // 
             this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.datapanel.Location = new System.Drawing.Point(140, 12);
+            this.datapanel.Location = new System.Drawing.Point(140, 0);
             this.datapanel.Name = "datapanel";
-            this.datapanel.Size = new System.Drawing.Size(824, 583);
+            this.datapanel.Size = new System.Drawing.Size(824, 435);
             this.datapanel.TabIndex = 1;
             // 
             // LeftForm
@@ -75,7 +75,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(976, 632);
+            this.ClientSize = new System.Drawing.Size(976, 435);
             this.Controls.Add(this.datapanel);
             this.Controls.Add(this.nameShowGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
