@@ -284,7 +284,7 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-                if (user.inputMoney < user.leastMoney) continue; //小于最小金额
+                if (user.inputMoney < user.leastMoney) continue; 
                 String orderParmas = FormUtils.getOrderParmas(rltStr,user);
                 //下单处理
                 if (String.IsNullOrEmpty(orderParmas)) {
