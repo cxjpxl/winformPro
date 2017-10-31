@@ -141,7 +141,15 @@ namespace CxjText.views
 
                     c02 = (String)jObject["Match_Master"]; //球队名称
                     c03 = (String)jObject["Match_BzM"];
-                    c04 = "RGG" + " " + (String)jObject["Match_Ho"];
+
+                    String Match_ShowType = (String)jObject["Match_ShowType"];
+                    String Match_Ho = (String)jObject["Match_Ho"];
+                    String rgg1 = "";
+                    if (Match_ShowType.Equals("H") && !Match_Ho.Equals("0")) {
+                        rgg1 = (String)jObject["Match_RGG"];
+                    }
+
+                    c04 = rgg1 + " " + (String)jObject["Match_Ho"];
                     c05 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxDpl"];
                     c06 = "未处理" + " " + (String)jObject["Match_DsDpl"];
                     c07 = "";
@@ -149,7 +157,12 @@ namespace CxjText.views
                     /*********************************************************************/
                     c12 = (String)jObject["Match_Guest"]; //球队名称
                     c13 = (String)jObject["Match_BzG"];
-                    c14 = "RGG " + (String)jObject["Match_Ao"];
+                    String Match_Ao = (String)jObject["Match_Ao"];
+                    String rgg2 = "";
+                    if (Match_ShowType.Equals("C") && !Match_Ao.Equals("0")) {
+                        rgg2 = (String)jObject["Match_RGG"];
+                    }
+                    c14 = rgg2 +" "+ (String)jObject["Match_Ao"];
                     c15 = (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
                     c16 =  "未处理 " + (String)jObject["Match_DsSpl"];
                     c17 = "";
