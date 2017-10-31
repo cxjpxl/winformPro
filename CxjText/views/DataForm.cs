@@ -138,6 +138,9 @@ namespace CxjText.views
                 {
                     lianSaiStr = (String)jObject["Match_Name"];
                     time = (String)jObject["Match_Date"]; //时间的显示
+                    time = time.Replace("<br>", "\n");
+                    time = time.Replace("<br/>", "\n");
+                    time = FormUtils.changeHtml(time);
 
                     c02 = (String)jObject["Match_Master"]; //球队名称
                     c03 = (String)jObject["Match_BzM"];
