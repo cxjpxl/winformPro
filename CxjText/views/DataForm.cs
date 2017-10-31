@@ -151,9 +151,26 @@ namespace CxjText.views
 
                     c04 = rgg1 + " " + (String)jObject["Match_Ho"];
                     c05 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxDpl"];
-                    c06 = "未处理" + " " + (String)jObject["Match_DsDpl"];
-                    c07 = "";
-                    c08 = "";
+
+
+                    String Match_DsDpl = (String)jObject["Match_DsDpl"];
+                    if (Match_DsDpl == null) Match_DsDpl = "";
+                    if (String.IsNullOrEmpty(Match_DsDpl))
+                    {
+                        c06 = "";
+                    }
+                    else
+                    {
+                        c06 = "单" + " " + Match_DsDpl;
+                    }
+                    String Match_BHo = (String)jObject["Match_BHo"];
+                    if (Match_BHo == null) Match_BHo = "";
+                    String Match_Bdpl = (String)jObject["Match_Bdpl"];
+                    if (Match_Bdpl == null) Match_Bdpl = "";
+                    String Match_Bdxpk1 = (String)jObject["Match_Bdxpk1"];
+                    if (Match_Bdxpk1 == null) Match_Bdxpk1 = "";
+                    c07 = Match_BHo;
+                    c08 = Match_Bdxpk1 + " "+ Match_Bdpl;
                     /*********************************************************************/
                     c12 = (String)jObject["Match_Guest"]; //球队名称
                     c13 = (String)jObject["Match_BzG"];
@@ -164,9 +181,25 @@ namespace CxjText.views
                     }
                     c14 = rgg2 +" "+ (String)jObject["Match_Ao"];
                     c15 = (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
-                    c16 =  "未处理 " + (String)jObject["Match_DsSpl"];
-                    c17 = "";
-                    c18 ="" ;
+                    String Match_DsSpl = (String)jObject["Match_DsSpl"];
+                    if (Match_DsSpl == null) Match_DsSpl = "";
+                    if (String.IsNullOrEmpty(Match_DsSpl))
+                    {
+                        c16 = "";
+                    }
+                    else {
+                        c16 = "双" + " " + Match_DsSpl;
+                    }
+
+                    String Match_BAo = (String)jObject["Match_BAo"];
+                    if (Match_BAo == null) Match_BAo = "";
+                    String Match_Bdxpk2 = (String)jObject["Match_Bdxpk2"];
+                    if (Match_Bdxpk2 == null) Match_Bdxpk2 = "";
+                    String Match_Bxpl = (String)jObject["Match_Bxpl"];
+                    if (Match_Bxpl == null) Match_Bxpl = "";
+                   
+                    c17 = Match_BAo;
+                    c18 = Match_Bdxpk2 + " "+ Match_Bxpl;
                     /*********************************************************************/
                     c23 = (String)jObject["Match_BzH"];
                     /*********************************************************************/
