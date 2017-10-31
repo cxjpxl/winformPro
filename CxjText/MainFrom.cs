@@ -15,6 +15,7 @@ namespace CxjText
         private LoginForm loginForm = null; //登录的界面
         private LeftForm leftForm = null; //左边的界面
         private bool isFinish = false;
+        public RltForm rltForm = null;
         
         public MainFrom()
         {
@@ -40,7 +41,6 @@ namespace CxjText
             loginForm = new LoginForm();
             loginForm.TopLevel = false;    //设置为非顶级窗体
             loginForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
-            //loginForm.Dock = System.Windows.Forms.DockStyle.Fill;   //设置样式是否填充整个PANEL
             this.loginPanel.Controls.Add(loginForm);      //添加窗体
             loginForm.Show();
             loginForm.setLoginFormInterface(this);
@@ -49,9 +49,17 @@ namespace CxjText
             leftForm = new LeftForm();
             leftForm.TopLevel = false;    //设置为非顶级窗体
             leftForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
-            //loginForm.Dock = System.Windows.Forms.DockStyle.Fill;   //设置样式是否填充整个PANEL
             this.leftPanel.Controls.Add(leftForm);      //添加窗体
             leftForm.Show();
+
+
+            rltForm = new RltForm();
+            rltForm.TopLevel = false;    //设置为非顶级窗体
+            rltForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
+            this.rltPanle.Controls.Add(rltForm);      //添加窗体
+            rltForm.Show();
+
+            leftForm.setMainForm(rltForm,loginForm);
         }
 
 

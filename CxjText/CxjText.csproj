@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bean\InputInfo.cs" />
     <Compile Include="bean\NameTy.cs" />
     <Compile Include="bean\UserInfo.cs" />
     <Compile Include="Form1.cs">
@@ -91,6 +92,12 @@
     <Compile Include="views\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\RltForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\RltForm.Designer.cs">
+      <DependentUpon>RltForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\RowMergeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -120,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\RltForm.resx">
+      <DependentUpon>RltForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\RowMergeView.resx">
       <DependentUpon>RowMergeView.cs</DependentUpon>

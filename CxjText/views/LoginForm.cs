@@ -238,7 +238,7 @@ namespace CxjText.views
 
 
         
-        private void AddToListToUpDate(int position) {
+        public void AddToListToUpDate(int position) {
             upDateList.Add(position);
             upDateRow();
         }

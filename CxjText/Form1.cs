@@ -44,8 +44,8 @@ namespace CxjText
                 return;
             }
             //登录打码平台并记录在程序里面  并显示软件使用时间  时间优先级比较高  同时客户端记录软件使用时间
+            loginSysBtn.Text = "登录中，请耐心等待!";
             loginSysBtn.Enabled = false;
-            loginSysBtn.Text = "登录中...";
             int uid = utlis.YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
             Config.console("uid:"+uid);
             if (uid > 0)

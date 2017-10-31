@@ -32,6 +32,7 @@
             this.loginPanel = new System.Windows.Forms.Panel();
             this.upDateTimer = new System.Windows.Forms.Timer(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
+            this.rltPanle = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -56,11 +57,20 @@
             this.leftPanel.Size = new System.Drawing.Size(976, 435);
             this.leftPanel.TabIndex = 2;
             // 
+            // rltPanle
+            // 
+            this.rltPanle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rltPanle.Location = new System.Drawing.Point(12, 478);
+            this.rltPanle.Name = "rltPanle";
+            this.rltPanle.Size = new System.Drawing.Size(976, 205);
+            this.rltPanle.TabIndex = 3;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 683);
+            this.Controls.Add(this.rltPanle);
             this.Controls.Add(this.leftPanel);
             this.Controls.Add(this.loginPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -76,5 +86,6 @@
         private System.Windows.Forms.Panel loginPanel;
         private System.Windows.Forms.Timer upDateTimer;
         private System.Windows.Forms.Panel leftPanel;
+        private System.Windows.Forms.Panel rltPanle;
     }
 }

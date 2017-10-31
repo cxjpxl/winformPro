@@ -1,4 +1,5 @@
 ﻿using CxjText.bean;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace CxjText.iface
 {
     public interface DataClickInface
     {
-         void OnClickLisenter(String rltStr,UserInfo userInfo);
+         void OnClickLisenter(String rltStr,JObject jObject,UserInfo userInfo);
     }
 }

@@ -27,6 +27,8 @@ namespace CxjText.utils
         public static string HttpPost(string Url,String paramsStr,String contentType, CookieContainer cookie) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "POST";
+            request.Timeout = 30 * 1000;
+            request.ReadWriteTimeout = 30 * 1000;
             if (String.IsNullOrEmpty(contentType))
             {
                // request.ContentType = "application/json;charset=UTF-8";
@@ -50,7 +52,6 @@ namespace CxjText.utils
             HttpWebResponse response;
 
             try {
-                request.Timeout = 10 * 1000;
                 response = (HttpWebResponse)request.GetResponse();
                 Stream s;
                 s = response.GetResponseStream();
@@ -78,6 +79,8 @@ namespace CxjText.utils
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
 
             request.Method = "GET";
+            request.Timeout = 30 * 1000;
+            request.ReadWriteTimeout = 30 * 1000;
             if (String.IsNullOrEmpty(contentType))
             {
                 //request.ContentType = "application/json;charset=UTF-8";
@@ -96,7 +99,6 @@ namespace CxjText.utils
 
             try
             {
-                request.Timeout = 10 * 1000;
                 response = (HttpWebResponse)request.GetResponse();
                 Stream s;
                 s = response.GetResponseStream();

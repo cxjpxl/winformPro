@@ -23,12 +23,20 @@ namespace CxjText.views
         List<NameTy> nameList = new List<NameTy>();
         private BindingSource customersBindingSource = new BindingSource();
         private DataForm dataForm = null;
+        private RltForm rltForm = null;
+        private LoginForm loginForm = null;
+
 
         public LeftForm()
         {
             InitializeComponent();
         }
 
+
+        public void setMainForm(RltForm rltForm, LoginForm loginForm) {
+            this.rltForm = rltForm;
+            this.loginForm = loginForm;
+        }
        
         
         //加载的时候
@@ -201,8 +209,14 @@ namespace CxjText.views
         
 
         //数据点击处理
-        public void OnClickLisenter(String rltStr, UserInfo userInfo)
+        public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
+
+            String gameName =(String) dataJObject["gameName"]; //获取赛事
+            String gameTeam = (String) dataJObject["gameTeam"]; //球队名称
+            String bateStr = (String) dataJObject["bateStr"];
+            String inputType = (String) dataJObject["inputType"];
+
             //获取到下单的参数
             String tag = userInfo.tag;
             for (int i = 0; i < Config.userList.Count; i++) {
@@ -216,9 +230,26 @@ namespace CxjText.views
                 if (String.IsNullOrEmpty(orderParmas)) {
                     continue;
                 }
+
+                //添加UI的处理
+                InputInfo inputInfo = new InputInfo();
+                inputInfo.tag = FormUtils.getCurrentTime()+"-"+i; //标注
+                inputInfo.baseUrl = user.baseUrl;
+                inputInfo.userName = user.user;
+                inputInfo.status = "请求中";
+                inputInfo.gameName = gameName;
+                inputInfo.gameTeam= gameTeam;
+                inputInfo.bateStr = bateStr;
+                inputInfo.inputType = inputType;
+                inputInfo.inputMoney = user.inputMoney;
+                if (this.rltForm != null) {
+                    this.rltForm.AddLineInHead(inputInfo);
+                }
+                
                 JObject jObject = new JObject();
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
+                jObject["inputTag"] = inputInfo.tag;
                 //开线程并发去下注
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
                 t.Start(jObject);
@@ -232,20 +263,39 @@ namespace CxjText.views
             JObject jobject = (JObject)obj;
             String parmsStr =(String) jobject["rlt"];
             int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+
             UserInfo user =(UserInfo) Config.userList[index];
             //请求发出前先更新UI 标记http请求已发送
             String rlt = HttpUtils.HttpPost(user.orderUrl,parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
             if (rlt == null) {
-                //请求失败处理
+                //请求失败处理 UI处理
+                this.Invoke(new Action(() => {
+                    if (this.rltForm != null) {
+                        this.rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
                 return;
             }
 
             int rltNum = FormUtils.explandOrderRlt(rlt,user);
             if (rltNum < 0) {
-                //请求失败处理
+                //请求失败处理 UI处理
+                this.Invoke(new Action(() => {
+                    if (this.rltForm != null)
+                    {
+                        this.rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
                 return;
             }
             //交易成功 , 更新UI 并更新钱
+            this.Invoke(new Action(() => {
+                if (this.rltForm != null)
+                {
+                    this.rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
             Console.WriteLine("交易成功");
             String moneyUrl = FormUtils.getUserMoneyUrl(user);
             if (String.IsNullOrEmpty(moneyUrl)) {
@@ -263,6 +313,9 @@ namespace CxjText.views
                 return;
             }
             //获取钱成功  要更新UI
+            if (this.loginForm != null) {
+                this.loginForm.AddToListToUpDate(index);
+            }
             Console.WriteLine("money:" + user.money);
             Console.WriteLine("rlt:"+ rlt);
         }
