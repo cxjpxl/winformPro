@@ -28,7 +28,7 @@ namespace CxjText.utils
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
 
         //用户配置登录数据结构
-        public static int pramsNum = 7; //参数个数
+        public static int pramsNum = 6; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
 
 

@@ -222,7 +222,7 @@ namespace CxjText.utlis
         {
             if (userInfo.tag.Equals("A"))
             {
-                return userInfo.orderUrl+"?uid="+userInfo.uid;
+                return userInfo.dataUrl+ "/sport/order_ft.aspx?uid=" + userInfo.uid;
             }
             else
             {

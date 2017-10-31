@@ -347,7 +347,8 @@ namespace CxjText.views
                 return;
             }
             
-            String rlt = HttpUtils.HttpPost(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);        
+            String rlt = HttpUtils.HttpPost(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            Console.WriteLine("RLT:"+rlt);
             if (rlt == null) { //这里不能empty处理
                 //请求失败处理 UI处理
                 this.Invoke(new Action(() => {
