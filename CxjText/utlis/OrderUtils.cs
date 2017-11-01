@@ -64,7 +64,7 @@ namespace CxjText.utlis
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
-            String parmsStr = (String)jobject["rlt"];
+            String parmsStr = (String)jobject["rlt"];//B系统里面这个没有用
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
