@@ -413,13 +413,29 @@ namespace CxjText.views
                             rltStr = "";
                             break;
                         case 7:
-                            touzhuxiang = "";
-                            firstInputPrams = "";
+                            touzhuxiang = "上半场让球";
+                           firstInputPrams = "ball_sort=足球上半场" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=上半场让球-主让" + (String)jObject["Match_BRpk"] +"-"+ (String)jObject["Match_Master"]+
+                                            "&point_column=Match_BHo" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_Master"] + "-[上半]"+
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
                             rltStr = "";
                             break;
                         case 8:
-                            touzhuxiang = "";
-                            firstInputPrams = "";
+                            touzhuxiang = "上半场大小";
+                            firstInputPrams = "ball_sort=足球上半场" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=上半场大小-" + (String)jObject["Match_Bdxpk1"]+
+                                            "&point_column=Match_Bdpl" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_Bdxpk1"]+
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
                             rltStr = "";
                             break;
                         default:
@@ -485,13 +501,29 @@ namespace CxjText.views
                             rltStr = "";
                             break;
                         case 7:
-                            touzhuxiang = "";
-                            firstInputPrams = "";
+                            touzhuxiang = "上半场让球";
+                            firstInputPrams = "ball_sort=足球上半场" +
+                                             "&match_id=" + mid +
+                                             "&touzhuxiang=上半场让球-主让" + (String)jObject["Match_BRpk"] + "-" + (String)jObject["Match_Guest"] +
+                                             "&point_column=Match_BAo" +
+                                             "&ben_add=1" +
+                                             "&is_lose=0" +
+                                             "&xx=" + (String)jObject["Match_Guest"] + "-[上半]" +
+                                             "&touzhutype=0" +
+                                             "&rand=" + FormUtils.getCurrentTime();
                             rltStr = "";
                             break;
                         case 8:
-                            touzhuxiang = "";
-                            firstInputPrams = "";
+                            touzhuxiang = "上半场大小";
+                            firstInputPrams = "ball_sort=足球上半场" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=上半场大小-" + (String)jObject["Match_Bdxpk2"] +
+                                            "&point_column=Match_Bxpl" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_Bdxpk2"] +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
                             rltStr = "";
                             break;
                         default:
