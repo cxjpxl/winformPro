@@ -119,7 +119,7 @@ public partial class RowMergeView : DataGridView
             SolidBrush backBrush = new SolidBrush(e.CellStyle.BackColor);
             SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
             Pen gridLinePen = new Pen(gridBrush);
-            Pen redLinePen = new Pen(Brushes.Red);
+            Pen redLinePen = new Pen(Brushes.Black);
 
             // 单元格宽度
             int cellwidth;
