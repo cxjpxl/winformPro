@@ -113,9 +113,15 @@ public partial class RowMergeView : DataGridView
             {
                 e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+
+            // 画线相关
             Brush gridBrush = new SolidBrush(this.GridColor);
             SolidBrush backBrush = new SolidBrush(e.CellStyle.BackColor);
             SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
+            Pen gridLinePen = new Pen(gridBrush);
+            Pen redLinePen = new Pen(Brushes.Red);
+
+            // 单元格宽度
             int cellwidth;
             //上面相同的行数
             int UpRows = 0;
@@ -146,10 +152,9 @@ public partial class RowMergeView : DataGridView
                         DownRowCount = mergeNum - (e.RowIndex % mergeNum);
                     }
                 }
-                
 
                 cellwidth = e.CellBounds.Width;
-                Pen gridLinePen = new Pen(gridBrush);
+
                 string curValue = e.Value == null ? "" : e.Value.ToString().Trim();
                 string curSelected = this.CurrentRow.Cells[e.ColumnIndex].Value == null ? "" : this.CurrentRow.Cells[e.ColumnIndex].Value.ToString().Trim();
                 if (!string.IsNullOrEmpty(curValue))
@@ -208,12 +213,32 @@ public partial class RowMergeView : DataGridView
                 PaintingFont(e, cellwidth, UpRows, DownRows, count);
                 if (DownRows == 1)
                 {
-                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+                    e.Graphics.DrawLine(redLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
                     count = 0;
                 }
                 // 画右边线
                 e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom);
 
+                e.Handled = true;
+            }
+            else
+            {
+                //以背景色填充
+                e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                //画字符串
+                cellwidth = e.CellBounds.Width;
+                PaintingFont(e, cellwidth, 1, 1, 1);
+                // 画右边线
+                e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom);
+                // 画底边线
+                if (e.RowIndex%3==2)
+                {
+                    e.Graphics.DrawLine(redLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+                }
+                else
+                {
+                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+                }
                 e.Handled = true;
             }
         }
@@ -226,53 +251,53 @@ public partial class RowMergeView : DataGridView
         /// <param name="DownRows"></param>
         /// <param name="count"></param>
         private void PaintingFont(System.Windows.Forms.DataGridViewCellPaintingEventArgs e, int cellwidth, int UpRows, int DownRows, int count)
-        {
-            SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
-            int fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
-            int fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
-            int cellheight = e.CellBounds.Height;
+            {
+                SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
+                int fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
+                int fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
+                int cellheight = e.CellBounds.Height;
 
-            if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y + cellheight * DownRows - fontheight);
+                if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y + cellheight * DownRows - fontheight);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomLeft)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y + cellheight * DownRows - fontheight);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomRight)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y + cellheight * DownRows - fontheight);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleCenter)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleLeft)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleRight)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopCenter)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1));
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopLeft)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1));
+                }
+                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopRight)
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1));
+                }
+                else
+                {
+                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                }
             }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomLeft)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y + cellheight * DownRows - fontheight);
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomRight)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y + cellheight * DownRows - fontheight);
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleCenter)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleLeft)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleRight)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopCenter)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1));
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopLeft)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1));
-            }
-            else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopRight)
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1));
-            }
-            else
-            {
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-            }
-        }
         #endregion
         #region 属性
         /// <summary>
@@ -296,10 +321,10 @@ public partial class RowMergeView : DataGridView
                 _mergerowjobject = value;
             }
         }
-         private JObject _mergerowjobject = new JObject();
-    #endregion
-    #region 二维表头
-    private struct SpanInfo //表头信息
+            private JObject _mergerowjobject = new JObject();
+        #endregion
+        #region 二维表头
+        private struct SpanInfo //表头信息
         {
             public SpanInfo(string Text, int Position, int Left, int Right)
             {
