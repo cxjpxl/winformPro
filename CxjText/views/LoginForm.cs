@@ -156,10 +156,17 @@ namespace CxjText.views
 
             if (status == 2) //状态是登录状态  要退出登录
             {
-                userInfo.cookie = null;
-                userInfo.cookie = new System.Net.CookieContainer();
                 userInfo.status = 0;
                 AddToListToUpDate(position);
+                if (userInfo.tag.Equals("A"))
+                {
+                    HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
+                }
+                else if (userInfo.tag.Equals("B")) {
+                   HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);
+                }
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
                 return;
             }
 
