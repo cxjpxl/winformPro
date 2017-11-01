@@ -81,7 +81,7 @@ namespace CxjText.utlis
                         userInfo.leastMoney = 10;
                     }
                     else if (tag.Equals("B")) {
-                        userInfo.leastMoney = 50;
+                        userInfo.leastMoney = 10;
                     }else
                     {
                         userInfo.leastMoney = 10;

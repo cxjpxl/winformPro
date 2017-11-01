@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using CxjText.bean;
 using System.Text.RegularExpressions;
+using System.Text;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -222,7 +223,9 @@ namespace CxjText.utlis
         {
             if (userInfo.tag.Equals("A"))
             {
-                return userInfo.dataUrl+ "/sport/order_ft.aspx?uid=" + userInfo.uid;
+                return userInfo.dataUrl + "/sport/order_ft.aspx?uid=" + userInfo.uid;
+            } else if (userInfo.tag.Equals("B")) {
+                return userInfo.dataUrl + "/checkxe.php";
             }
             else
             {
@@ -239,32 +242,18 @@ namespace CxjText.utlis
             {
                 return parmasStr + "&money=" + userInfo.inputMoney;
             }
-            else {
+            else if (userInfo.tag.Equals("B")) {
+                return parmasStr + "&bet_money=" + userInfo.inputMoney;
+            }
+            else
+            {
                 Console.WriteLine("系统待开发中!");
                 return null;
             }
         }
 
 
-        public static int explandOrderRlt(String rlt, UserInfo userInfo) {
-
-            if (userInfo.tag.Equals("A"))
-            {
-                if (rlt.IndexOf("false") >= 0)
-                {
-                    return -1;
-                }
-                else if (rlt.Length == 0 || rlt.Equals("")) {
-                    return 1;
-                }
-            }
-            else {
-                Console.WriteLine("系统待开发中!");
-            }
-
-            return -1;
-        }
-
+       
         //获取用户钱的接口
         public static String getUserMoneyUrl(UserInfo userInfo) {
 
@@ -400,5 +389,18 @@ namespace CxjText.utlis
             return Htmlstring;
         }
 
-     }
+
+        public static string UrlEncode(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            byte[] byStr = System.Text.Encoding.UTF8.GetBytes(str); //默认是System.Text.Encoding.Default.GetBytes(str)
+            for (int i = 0; i < byStr.Length; i++)
+            {
+                sb.Append(@"%" + Convert.ToString(byStr[i], 16));
+            }
+
+            return (sb.ToString());
+        }
+
+    }
 }

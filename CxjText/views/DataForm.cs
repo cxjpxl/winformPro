@@ -243,7 +243,7 @@ namespace CxjText.views
                 return;
             }
 
-            String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             if (String.IsNullOrEmpty(value)) {
                 return;
             }
@@ -263,7 +263,7 @@ namespace CxjText.views
             String inputType = "";
             String gameName = "";
             String gameTeam = "";
-            if (userInfo.tag.Equals("A"))
+            if (userInfo.tag.Equals("A"))//A系统点击事件的处理
             {
                 String mid = (String)jObject["mid"];
                 if (numRow == 0)
@@ -346,21 +346,213 @@ namespace CxjText.views
                 gameName = (String)jObject["a26"]; //获取赛事
                 gameTeam = (String)jObject["a2"] + "-" + (String)jObject["a3"]; //球队名称
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B"))  //B系统点击事件的处理
             {
-                MessageBox.Show("下注暂时未开放");
-                return;
+                String mid = (String)jObject["Match_ID"]; //赛事ID的获取
+                String C_Str = "ball_sort=足球单式&match_id=" + mid+ "touzhuxiang=";
+                String firstInputPrams = ""; //下注前要请求的参数
+                String touzhuxiang = "";
+                if (numRow == 0)
+                {
+                    inputType = "主队";
+                    switch (clickNum)
+                    {
+                        case 3://03
+//                             touzhuxiang:标准盘
+  //                           bet_money:10
+                            touzhuxiang = "标准盘";
+                            firstInputPrams = "ball_sort=足球单式"+
+                                             "&match_id="+mid+ 
+                                             "&touzhuxiang="+ "标准盘-" + (String)jObject["Match_Master"] + "-独赢" +
+                                             "&point_column=Match_BzM"+
+                                             "&ben_add=0"+
+                                             "&is_lose=0"+
+                                             "&xx="+ (String)jObject["Match_Master"]+
+                                             "&touzhutype=0"+
+                                             "&rand="+FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 4:
+                            touzhuxiang = "让球";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=" + "让球-主让"+ (String)jObject["Match_RGG"] + "-" +(String)jObject["Match_Master"]  +
+                                            "&point_column=Match_Ho" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_Master"] +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 5:
+                            touzhuxiang = "大小";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=" + "大小-" + (String)jObject["Match_DxGG1"] +
+                                            "&point_column=Match_DxDpl" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_DxGG1"] +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 6:
+                            touzhuxiang = "单双";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=单双-单" +
+                                            "&point_column=Match_DsDpl" +
+                                            "&ben_add=0" +
+                                            "&is_lose=0" +
+                                            "&xx=单" +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 7:
+                            touzhuxiang = "";
+                            firstInputPrams = "";
+                            rltStr = "";
+                            break;
+                        case 8:
+                            touzhuxiang = "";
+                            firstInputPrams = "";
+                            rltStr = "";
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                else if (numRow == 1)
+                {
+
+                    inputType = "客队";
+                    switch (clickNum)
+                    {
+                        case 3:
+                            touzhuxiang = "标准盘";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang="+ "标准盘-" + (String)jObject["Match_Guest"] + "-独赢" +
+                                            "&point_column=Match_BzG" +
+                                            "&ben_add=0" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_Guest"] +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 4:
+                            touzhuxiang = "让球";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                           "&match_id=" + mid +
+                                           "&touzhuxiang=" + "让球-主让" + (String)jObject["Match_RGG"] + "-" + (String)jObject["Match_Guest"] +
+                                           "&point_column=Match_Ao" +
+                                           "&ben_add=1" +
+                                           "&is_lose=0" +
+                                           "&xx=" + (String)jObject["Match_Guest"] +
+                                           "&touzhutype=0" +
+                                           "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 5:
+                            touzhuxiang = "大小";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=" + "大小-" + (String)jObject["Match_DxGG2"] +
+                                            "&point_column=Match_DxXpl" +
+                                            "&ben_add=1" +
+                                            "&is_lose=0" +
+                                            "&xx=" + (String)jObject["Match_DxGG2"] +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 6:
+                            touzhuxiang = "单双";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                            "&match_id=" + mid +
+                                            "&touzhuxiang=单双-双" +
+                                            "&point_column=Match_DsSpl" +
+                                            "&ben_add=0" +
+                                            "&is_lose=0" +
+                                            "&xx=双" +
+                                            "&touzhutype=0" +
+                                            "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        case 7:
+                            touzhuxiang = "";
+                            firstInputPrams = "";
+                            rltStr = "";
+                            break;
+                        case 8:
+                            touzhuxiang = "";
+                            firstInputPrams = "";
+                            rltStr = "";
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                else if (numRow == 2)
+                {
+                    inputType = "和局";
+                    switch (clickNum)
+                    {
+                        case 3:
+                            touzhuxiang = "标准盘";
+                            firstInputPrams = "ball_sort=足球单式" +
+                                           "&match_id=" + mid +
+                                           "&touzhuxiang=标准盘-和局" +
+                                           "&point_column=Match_BzH" +
+                                           "&ben_add=0" +
+                                           "&is_lose=0" +
+                                           "&xx=和局" +
+                                           "&touzhutype=0" +
+                                           "&rand=" + FormUtils.getCurrentTime();
+                            rltStr = "";
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+
+
+               //下单前要请求的参数不能为空（B要先请求一个接口）
+                if (String.IsNullOrEmpty(firstInputPrams)) {
+                    return;
+                }
+
+
+                dataJObject["B_FIRST"] = firstInputPrams; //将B要下单前的接口参数赋值
+                C_Str = C_Str + touzhuxiang; //下单字符串的拼接
+                dataJObject["C_Str"] = C_Str; //检查的字段
+                inputType = inputType + "-" + this.dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
+                bateStr = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                if (String.IsNullOrEmpty(bateStr.Trim()))
+                {
+                    return;
+                }
+                gameName = (String)jObject["Match_Name"]; //获取赛事
+                gameTeam = (String)jObject["Match_Master"] + "-" + (String)jObject["Match_Guest"]; //球队名称
             }
             else {
                 MessageBox.Show("下注暂时未开放");
                 return;
             }
 
-
+            //统一显示的
             dataJObject["gameName"] = gameName; //获取赛事
             dataJObject["gameTeam"] = gameTeam; //球队名称
-            dataJObject["bateStr"] = bateStr;
-            dataJObject["inputType"] = inputType;
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
 
             //rltStr = rltStr + "&money=1";//添加输入金额
             this.inface.OnClickLisenter(rltStr, dataJObject,this.userInfo);

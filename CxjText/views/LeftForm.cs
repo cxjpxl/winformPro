@@ -288,6 +288,7 @@ namespace CxjText.views
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
                 if (user.inputMoney < user.leastMoney) continue; 
+                //系统修改需要更改 获取下单的参数
                 String orderParmas = FormUtils.getOrderParmas(rltStr,user);
                 //下单处理
                 if (String.IsNullOrEmpty(orderParmas)) {
@@ -313,6 +314,10 @@ namespace CxjText.views
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
                 jObject["inputTag"] = inputInfo.tag;
+                if (user.tag.Equals("B")) { //B系统要先请求这个参数的东西才能下单
+                    jObject["B_FIRST"] = dataJObject["B_FIRST"];
+                    jObject["C_Str"] = dataJObject["C_Str"];
+                }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
@@ -320,81 +325,24 @@ namespace CxjText.views
             }
 
             if (!hasData) {
-                MessageBox.Show(tag+"系统,账号没有登录或者金额低于10");
+                MessageBox.Show(tag+"系统,账号没有登录或者金额低于"+ userInfo.leastMoney);
             }
 
         }
 
         //下单接口
-        private void postOrder(object  obj)
+        private void postOrder(object obj)
         {
             JObject jobject = (JObject)obj;
-            String parmsStr =(String) jobject["rlt"];
             int index = (int)jobject["position"];
-            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
-
-            UserInfo user =(UserInfo) Config.userList[index];
-
-            //请求发出前先更新UI 标记http请求已发送
-            String orderUrl = FormUtils.getOrderUrl(user);
-            if (String.IsNullOrEmpty(orderUrl)) {
-                this.Invoke(new Action(() => {
-                    if (this.rltForm != null)
-                    {
-                        this.rltForm.RefershLineData(inputTag, "失败");
-                    }
-                }));
+            UserInfo user = (UserInfo)Config.userList[index];
+            if (user.tag.Equals("A")) {
+                OrderUtils.OrderA(jobject, this, loginForm, rltForm);
                 return;
             }
-            
-            String rlt = HttpUtils.HttpPost(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
-            Console.WriteLine("RLT:"+rlt);
-            if (rlt == null) { //这里不能empty处理
-                //请求失败处理 UI处理
-                this.Invoke(new Action(() => {
-                    if (this.rltForm != null) {
-                        this.rltForm.RefershLineData(inputTag, "失败");
-                    }
-                }));
+            if (user.tag.Equals("B")) {
+                OrderUtils.OrderB(jobject, this, loginForm, rltForm);
                 return;
-            }
-
-            int rltNum = FormUtils.explandOrderRlt(rlt,user);
-            if (rltNum < 0) {
-                //请求失败处理 UI处理
-                this.Invoke(new Action(() => {
-                    if (this.rltForm != null)
-                    {
-                        this.rltForm.RefershLineData(inputTag, "失败");
-                    }
-                }));
-                return;
-            }
-            //交易成功 , 更新UI 并更新钱
-            this.Invoke(new Action(() => {
-                if (this.rltForm != null)
-                {
-                    this.rltForm.RefershLineData(inputTag, "成功");
-                }
-            }));
-            String moneyUrl = FormUtils.getUserMoneyUrl(user);
-            if (String.IsNullOrEmpty(moneyUrl)) {
-                return;
-            }
-            rlt = HttpUtils.httpGet(moneyUrl, "text/html; charset=utf-8",user.cookie);
-            //获取钱失败
-            if (String.IsNullOrEmpty(rlt))
-            {
-                return;
-            }
-            rltNum = FormUtils.explandMoneyData(rlt, user);
-            //获取钱失败
-            if (rltNum < 0) {
-                return;
-            }
-            //获取钱成功  要更新UI
-            if (this.loginForm != null) {
-                this.loginForm.AddToListToUpDate(index);
             }
         }
 
