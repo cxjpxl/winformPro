@@ -352,6 +352,7 @@ namespace CxjText.views
                 String C_Str = "ball_sort=足球单式&match_id=" + mid+ "touzhuxiang=";
                 String firstInputPrams = ""; //下注前要请求的参数
                 String touzhuxiang = "";
+                bool isDuYing = false;
                 if (numRow == 0)
                 {
                     inputType = "主队";

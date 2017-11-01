@@ -166,7 +166,7 @@ namespace CxjText.utlis
                     return true;
                 }
             } else if (tag.Equals("B")) {
-                if (currentTime - userTime >= 10 * 1000)  //1s刷新Ui一次
+                if (currentTime - userTime >= 15 * 1000)  //1s刷新Ui一次
                 {
                     return true;
                 }

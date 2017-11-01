@@ -83,7 +83,54 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+            //解析列表数据  这些数据是到时候要提交到服务器的
+            String[] strs = bRlt.Split('\n');
+            String orderStr = "";
+            String bet_point = "";
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (str.IndexOf("input") > 0) { //找到input字段
+                    //获取name的值
+                    int nameIndex = str.IndexOf("name=\"");
+                    String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
+                    nameIndex = str1.IndexOf('"');
+                    String nameKey = str1.Substring(0, nameIndex);
+                    str1 = str1.Substring(nameIndex, str1.Length - nameIndex);
 
+                    nameIndex = str1.IndexOf("value=\"");
+                    str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
+                    nameIndex = str1.IndexOf('"');
+                    String valueStr = str1.Substring(0, nameIndex);
+                    if (nameKey.IndexOf("bet_point") >= 0) {
+                        bet_point = valueStr;
+                    }
+                    orderStr = orderStr + nameKey + "=" + valueStr + "&";
+                }
+            }
+            float bet_win = 0;
+            try {
+                if (C_Str.IndexOf("标准盘") >= 0)
+                {
+                    bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
+                }
+                else {
+                    bet_win = float.Parse(bet_point) * user.inputMoney;
+                }
+                
+            }
+            catch (SystemException e)
+            {
+                //请求失败处理 UI处理
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+            orderStr = orderStr + "touzhutype=0&bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
             checkMoneyrUrl = checkMoneyrUrl + "?" + C_Str;
@@ -110,7 +157,7 @@ namespace CxjText.utlis
                 return;
             }
             String result = (String)jObject["result"];
-            if (String.IsNullOrEmpty(result)|| !result.Equals("ok"))
+            if (String.IsNullOrEmpty(result) || !result.Equals("ok"))
             {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -121,9 +168,20 @@ namespace CxjText.utlis
                 return;
             }
 
-            parmsStr = "";
-            Console.WriteLine("B：下单参数未配置");
-            return;
+            //下单接口的请求
+            String orderRlt = HttpUtils.HttpPost(user.dataUrl + "/bet.php", orderStr,
+                "application/x-www-form-urlencoded", user.cookie);
+            Console.WriteLine(orderRlt);
+            if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易成功") < 0) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
 
             //交易成功 , 更新UI 并更新钱
             leftForm.Invoke(new Action(() => {
