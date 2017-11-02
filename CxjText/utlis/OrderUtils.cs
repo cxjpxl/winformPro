@@ -168,6 +168,7 @@ namespace CxjText.utlis
                 return;
             }
 
+            return;
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPost(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user.cookie);
