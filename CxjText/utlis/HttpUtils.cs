@@ -195,7 +195,6 @@ namespace CxjText.utils
         public static int getImage(String url,String name, CookieContainer cookie) {
             ServicePointManager.ServerCertificateValidationCallback =
               new RemoteCertificateValidationCallback(RemoteCertificateValidationCallback);
-            Console.WriteLine("codeUrl :" + url);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (cookie != null) {
                 request.CookieContainer = cookie;

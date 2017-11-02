@@ -134,7 +134,7 @@ namespace CxjText.utlis
                     return -1;
                 }
 
-                if (dataStr.Equals("4"))
+                if (dataStr.Trim().Equals("4"))
                 {
                     return 1;
                 }
