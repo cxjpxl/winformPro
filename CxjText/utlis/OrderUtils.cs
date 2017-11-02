@@ -72,12 +72,10 @@ namespace CxjText.utlis
             //点击处理
             String B_FIRST = (String)jobject["B_FIRST"];//参数
          
-            Console.WriteLine("-------------参数-------------");
-            Console.WriteLine(B_FIRST);
-            Console.WriteLine("--------------------------");
+          
             String C_Str = (String)jobject["C_Str"];
             String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", B_FIRST, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
-            Console.WriteLine(bRlt);
+            
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球单式") < 0)
             {
                 leftForm.Invoke(new Action(() => {
@@ -89,13 +87,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            
-        
-            //Uri uri = new Uri(user.dataUrl);
-           // user.cookie.SetCookies(uri,  "cck_lasttime="+(FormUtils.getCurrentTime()-1000*20));
-            //user.cookie.SetCookies(uri, "cck_count=2");
-          //  CookieCollection cookie = user.cookie.GetCookies(uri);
-         
+           
             //解析列表数据  这些数据是到时候要提交到服务器的
             String[] strs = bRlt.Split('\n');
             String orderStr = "";
@@ -144,7 +136,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            orderStr = "touzhutype =0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
+            orderStr = "touzhutype=0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
             //cck_lasttime=1509618707108; cck_count=2;
@@ -183,15 +175,9 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
-            Console.WriteLine(orderStr);
-           // orderStr = WebUtility.UrlEncode(orderStr);
-         //   Console.WriteLine(orderStr);
-          return;
             //下单接口的请求
-            String orderRlt = HttpUtils.HttpPost(user.dataUrl + "/bet.php", orderStr,
-                "application/x-www-form-urlencoded", user.cookie);
-            Console.WriteLine(orderRlt);
+            String orderRlt = HttpUtils.HttpPostB_Order(user.dataUrl + "/bet.php", orderStr,
+                "application/x-www-form-urlencoded", user);
             if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易成功") < 0) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -215,7 +201,6 @@ namespace CxjText.utlis
             String bMoneyRlt = HttpUtils.HttpPost(user.loginUrl + "/top_money_data.php", "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
             if (String.IsNullOrEmpty(bMoneyRlt)) return;
             bMoneyRlt = bMoneyRlt.Trim();
-            Console.WriteLine(bMoneyRlt);
             String[] moneys = bMoneyRlt.Split('|');
             if (moneys != null && moneys.Length == 0) return;
             user.money = moneys[0];

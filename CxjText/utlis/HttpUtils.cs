@@ -1,7 +1,10 @@
-﻿using System;
+﻿using CxjText.bean;
+using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -14,6 +17,16 @@ namespace CxjText.utils
 
         }
 
+        public static void SetHeaderValue(WebHeaderCollection header, string name, string value)
+        {
+            var property = typeof(WebHeaderCollection).GetProperty("InnerCollection", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (property != null)
+            {
+                var collection = property.GetValue(header, null) as NameValueCollection;
+                collection[name] = value;
+            }
+        }
+
 
         public static bool RemoteCertificateValidationCallback(Object sender,
                                                     X509Certificate certificate,
@@ -21,6 +34,67 @@ namespace CxjText.utils
                                                 SslPolicyErrors sslPolicyErrors){
             return true;
         }
+
+
+
+        public static string HttpPostB_Order(string Url, String paramsStr, String contentType,UserInfo userInfo)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
+            request.Method = "POST";
+            request.Timeout = 30 * 1000;
+            request.ReadWriteTimeout = 30 * 1000;
+            SetHeaderValue(request.Headers, "Host", userInfo.baseUrl);
+            SetHeaderValue(request.Headers, "Origin", userInfo.dataUrl);
+            SetHeaderValue(request.Headers, "Referer", userInfo.dataUrl+ "/left.php");
+            SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests", "1");
+            if (String.IsNullOrEmpty(contentType))
+            {
+                // request.ContentType = "application/json;charset=UTF-8";
+            }
+            else
+            {
+                request.ContentType = contentType;
+            }
+
+            if (userInfo.cookie != null)
+            {
+                request.CookieContainer = userInfo.cookie; //cookie信息由CookieContainer自行维护
+            }
+            
+
+            byte[] payload;
+            payload = Encoding.UTF8.GetBytes(paramsStr);
+            request.ContentLength = payload.Length;
+            Stream writer = request.GetRequestStream();
+            writer.Write(payload, 0, payload.Length);
+            writer.Close();
+
+            HttpWebResponse response;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                Stream s;
+                s = response.GetResponseStream();
+                string strValue = "";
+                StreamReader Reader = new StreamReader(s, Encoding.UTF8);
+                strValue = Reader.ReadToEnd();
+                Reader.Close();
+                response.Close();
+                /* while ((StrDate = Reader.ReadLine()) != null)
+                 {
+                     strValue += StrDate;
+                 }*/
+                return strValue;
+            }
+            catch (SystemException e)
+            {
+                Console.WriteLine("in HttpPost:" + Url);
+                return null;
+            }
+
+        }
+
 
 
         //发送json格式的字符串
