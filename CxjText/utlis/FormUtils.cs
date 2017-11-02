@@ -9,94 +9,7 @@ namespace CxjText.utlis
 {
     class FormUtils
     {
-        //多系统处理  获取验证码图片的链接地址 
-        public static String getCodeUrl(UserInfo userInfo)
-        {
-            String url = null;
-            if (userInfo.tag.Equals("A"))
-            {
-                url = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + getCurrentTime();
-            }
-            else if (userInfo.tag.Equals("B")) {
-                url = userInfo.loginUrl + "/yzm.php?_=" + getCurrentTime();
-            }else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return url;
-        }
-
-        //多系统处理   获取不同系统的登录参数
-        public static String getLoginParams(UserInfo userInfo, String codeStr) {
-            String paramsStr = null;
-            if (userInfo.tag.Equals("A"))
-            {
-                paramsStr = "username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&captcha=" + codeStr;
-            }
-            else if (userInfo.tag.Equals("B")) {
-                paramsStr = "r=" + getCurrentTime() + "&action=login&vlcodes=" + codeStr + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return paramsStr;
-        }
-
-        //多系统处理   获取登录的链接地址
-        public static String getLoginUrl(UserInfo userInfo) {
-            String url = null;
-            if (userInfo.tag.Equals("A"))
-            {
-                return userInfo.loginUrl + "/member/aspx/do.aspx?action=checklogin";
-            }
-            else if (userInfo.tag.Equals("B")) {
-                return userInfo.loginUrl + "/logincheck.php";
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return url;
-        }
-
-        //获取uid的url
-        public static String getUidUrl(UserInfo userInfo)
-        {
-            String url = null;
-            if (userInfo.tag.Equals("A"))
-            {
-                return userInfo.loginUrl + "/sport.aspx";
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return url;
-        }
-
-
-        //获取uid的url
-        public static String explandUidUrl(UserInfo userInfo,String str)
-        {
-            String uid = null;
-            if (userInfo.tag.Equals("A"))
-            {
-                if (str.IndexOf("uid=") > 0)
-                {
-                    int start = str.IndexOf("uid=");
-                    uid = str.Substring(start + 4, 32);
-                }
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return uid;
-        }
-
-
-
+        
         //多系统处理   解析登录返回
         public static int explandsLoginData(UserInfo userInfo, String dataStr) {
 
@@ -218,23 +131,7 @@ namespace CxjText.utlis
             return str;
         }
 
-        //获取下单的地址
-        public static String getOrderUrl(UserInfo userInfo)
-        {
-            if (userInfo.tag.Equals("A"))
-            {
-                return userInfo.dataUrl + "/sport/order_ft.aspx?uid=" + userInfo.uid;
-            } else if (userInfo.tag.Equals("B")) {
-                return userInfo.dataUrl + "/checkxe.php";
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-                return null;
-            }
-        }
-
-
+       
 
         //获取订单参数
         public static String getOrderParmas(String parmasStr, UserInfo userInfo) {
@@ -252,22 +149,7 @@ namespace CxjText.utlis
             }
         }
 
-
-       
-        //获取用户钱的接口
-        public static String getUserMoneyUrl(UserInfo userInfo) {
-
-            if (userInfo.tag.Equals("A"))
-            {
-                return userInfo.loginUrl + "/member/aspx/do.aspx?action=islogin";
-            }
-            else {
-                Console.WriteLine("系统待开发中!");
-            }
-
-            return null;
-        }
-
+        
 
         public static int explandMoneyData(String dataStr, UserInfo userInfo) {
 
@@ -387,19 +269,6 @@ namespace CxjText.utlis
 
 
             return Htmlstring;
-        }
-
-
-        public static string UrlEncode(string str)
-        {
-            StringBuilder sb = new StringBuilder();
-            byte[] byStr = System.Text.Encoding.UTF8.GetBytes(str); //默认是System.Text.Encoding.Default.GetBytes(str)
-            for (int i = 0; i < byStr.Length; i++)
-            {
-                sb.Append(@"%" + Convert.ToString(byStr[i], 16));
-            }
-
-            return (sb.ToString());
         }
 
     }

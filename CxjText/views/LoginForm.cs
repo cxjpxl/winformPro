@@ -5,7 +5,6 @@ using CxjText.utlis;
 using System;
 using System.Collections;
 using System.Drawing;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
