@@ -88,6 +88,14 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+            
+        
+            //Uri uri = new Uri(user.dataUrl);
+           // user.cookie.SetCookies(uri,  "cck_lasttime="+(FormUtils.getCurrentTime()-1000*20));
+            //user.cookie.SetCookies(uri, "cck_count=2");
+          //  CookieCollection cookie = user.cookie.GetCookies(uri);
+         
             //解析列表数据  这些数据是到时候要提交到服务器的
             String[] strs = bRlt.Split('\n');
             String orderStr = "";
@@ -136,9 +144,11 @@ namespace CxjText.utlis
                 return;
             }
 
-            orderStr = orderStr + "touzhutype=0&bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
+            orderStr = "touzhutype =0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
+            //cck_lasttime=1509618707108; cck_count=2;
+            
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
             if (String.IsNullOrEmpty(rlt)) {
@@ -177,7 +187,7 @@ namespace CxjText.utlis
             Console.WriteLine(orderStr);
            // orderStr = WebUtility.UrlEncode(orderStr);
          //   Console.WriteLine(orderStr);
-           return;
+          return;
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPost(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user.cookie);
