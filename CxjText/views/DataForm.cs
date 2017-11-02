@@ -19,8 +19,8 @@ namespace CxjText.views
         private bool isUpdate = false;
         private int cIndex = -1;//当前显示的索引 决定系统
         private String selectFlag = null; //记录点击联赛第一个的A->mid
-        private String currMid = null; //记录窗口最顶部显示的单元行的所属mid
-        private int cPosition = 0;
+        private String currMid = null; //记录窗口最顶部显示的单元行的所属mid 即是其属于那一场球赛
+        private int locationIndex = 0; // 记录当前的最顶部的单元格属于其所在的球赛项目内的第几行（一场球赛项目占三行）
 
         public DataForm()
         {
@@ -65,7 +65,6 @@ namespace CxjText.views
             if (jArray == null || jArray.Count == 0) {
                 this.dt.Clear();
                 this.dgvSA.DataSource = dt;
-                this.cPosition = 0;
                 this.isUpdate = false;
                 return;
             }
@@ -84,164 +83,212 @@ namespace CxjText.views
             this.dt.Clear();
             for (int i = 0; i < jArray.Count; i++) {
                 JObject jObject = (JObject)jArray[i];
-                String lianSaiStr = "";
-                String time = "";
+                JObject rltObj = null;
                 String mid = "";
-                String c02 = ""; //球队名称
-                String c03 = "";
-                String c04 = "";
-                String c05 = "";
-                String c06 = "";
-                String c07 = "";
-                String c08 = "" ;
-                /*********************************************************************/
-                String c12 = ""; //球队名称
-                String c13 = "";
-                String c14 = "";
-                String c15 = "";
-                String c16 = "";
-                String c17 = "";
-                String c18 = "";
-                /*********************************************************************/
-                String c23 = "";
-                /*********************************************************************/
                 if (userInfo.tag.Equals("A"))
                 {
-                    lianSaiStr = (String)jObject["a26"];
-                    time = (String)jObject["a18"]
-                    + "\n" + (String)jObject["a19"];
-                    String htmlStr = FormUtils.changeHtml((String)jObject["a6"]);
-                    if (!String.IsNullOrEmpty(htmlStr))
-                    {
-                        time = time + "\n" + htmlStr;
-                    }
-
-                    c02 = (String)jObject["a2"]; //球队名称
-                    c03 = (String)jObject["a7"];
-                    c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
-                    c05 = (String)jObject["a22"] + " " + (String)jObject["a14"];
-                    c06 = (String)jObject["odd"] + " " + (String)jObject["a16"];
-                    c07 = (String)jObject["a36"] + " " + (String)jObject["a31"];
-                    c08 = (String)jObject["a38"] + " " + (String)jObject["a34"];
-                    /*********************************************************************/
-                    c12 = (String)jObject["a3"]; //球队名称
-                    c13 = (String)jObject["a8"];
-                    c14 = (String)jObject["a21"] + " " + (String)jObject["a12"];
-                    c15 = (String)jObject["a23"] + " " + (String)jObject["a15"];
-                    c16 = (String)jObject["even"] + " " + (String)jObject["a17"];
-                    c17 = (String)jObject["a37"] + " " + (String)jObject["a32"];
-                    c18 = (String)jObject["a39"] + " " + (String)jObject["a35"]; ;
-                    /*********************************************************************/
-                    c23 = (String)jObject["a9"];
-                    /*********************************************************************/
-                    mid = (String)jObject["mid"];
+                    rltObj = this.updateUI_SysA(jObject);
+                    mid = (String)jObject["mid"]; // 获得唯一标示
                 } else if (userInfo.tag.Equals("B"))
                 {
-                    lianSaiStr = (String)jObject["Match_Name"];
-                    time = (String)jObject["Match_Date"]; //时间的显示
-                    time = time.Replace("<br>", "\n");
-                    time = time.Replace("<br/>", "\n");
-                    time = FormUtils.changeHtml(time);
-
-                    c02 = (String)jObject["Match_Master"]; //球队名称
-                    String Match_BzM = (String)jObject["Match_BzM"];
-                    if (Match_BzM.Equals("0")) {
-                        Match_BzM = "";
-                    }
-                    c03 = Match_BzM;
-
-                    String Match_ShowType = (String)jObject["Match_ShowType"];
-                    String Match_Ho = (String)jObject["Match_Ho"];
-                    String rgg1 = "";
-                    if (Match_ShowType.Equals("H") && !Match_Ho.Equals("0")) {
-                        rgg1 = (String)jObject["Match_RGG"];
-                    }
-
-                    c04 = rgg1 + " " + (String)jObject["Match_Ho"];
-                    c05 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxDpl"];
-
-
-                    String Match_DsDpl = (String)jObject["Match_DsDpl"];
-                    if (Match_DsDpl == null) Match_DsDpl = "";
-                    if (String.IsNullOrEmpty(Match_DsDpl))
-                    {
-                        c06 = "";
-                    }
-                    else
-                    {
-                        c06 = "单" + " " + Match_DsDpl;
-                    }
-                    String Match_BHo = (String)jObject["Match_BHo"];
-                    if (Match_BHo == null) Match_BHo = "";
-                    String Match_Bdpl = (String)jObject["Match_Bdpl"];
-                    if (Match_Bdpl == null) Match_Bdpl = "";
-                    String Match_Bdxpk1 = (String)jObject["Match_Bdxpk1"];
-                    if (Match_Bdxpk1 == null) Match_Bdxpk1 = "";
-                    c07 = Match_BHo;
-                    c08 = Match_Bdxpk1 + " "+ Match_Bdpl;
-                    /*********************************************************************/
-                    c12 = (String)jObject["Match_Guest"]; //球队名称
-
-
-                    String Match_BzG = (String)jObject["Match_BzG"];
-                    if (Match_BzG.Equals("0")) {
-                        Match_BzG = "";
-                    }
-                    c13 = Match_BzG;
-                    String Match_Ao = (String)jObject["Match_Ao"];
-                    String rgg2 = "";
-                    if (Match_ShowType.Equals("C") && !Match_Ao.Equals("0")) {
-                        rgg2 = (String)jObject["Match_RGG"];
-                    }
-                    c14 = rgg2 +" "+ (String)jObject["Match_Ao"];
-                    c15 = (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
-                    String Match_DsSpl = (String)jObject["Match_DsSpl"];
-                    if (Match_DsSpl == null) Match_DsSpl = "";
-                    if (String.IsNullOrEmpty(Match_DsSpl))
-                    {
-                        c16 = "";
-                    }
-                    else {
-                        c16 = "双" + " " + Match_DsSpl;
-                    }
-
-                    String Match_BAo = (String)jObject["Match_BAo"];
-                    if (Match_BAo == null) Match_BAo = "";
-                    String Match_Bdxpk2 = (String)jObject["Match_Bdxpk2"];
-                    if (Match_Bdxpk2 == null) Match_Bdxpk2 = "";
-                    String Match_Bxpl = (String)jObject["Match_Bxpl"];
-                    if (Match_Bxpl == null) Match_Bxpl = "";
-                   
-                    c17 = Match_BAo;
-                    c18 = Match_Bdxpk2 + " "+ Match_Bxpl;
-                    /*********************************************************************/
-                    c23 = (String)jObject["Match_BzH"];
-                    /*********************************************************************/
-                    mid = (String)jObject["Match_ID"];
+                    rltObj = this.updateUI_SysB(jObject);
+                    mid = (String)jObject["Match_ID"]; // 获得唯一标示
                 }
                 else {
 
 
                 }
-                
-                dt.Rows.Add(lianSaiStr, time, c02.Trim(), c03.Trim(), c04.Trim(), c05.Trim(), c06.Trim(), c07.Trim(), c08.Trim());
-                dt.Rows.Add(lianSaiStr, time, c12.Trim(), c13.Trim(), c14.Trim(), c15.Trim(), c16.Trim(), c17.Trim(), c18.Trim());
-                dt.Rows.Add(lianSaiStr, time, "和局", c23.Trim(), "", "", "", "", "");
 
+                if(rltObj != null)
+                {
+                    // 渲染UI
+                    dt.Rows.Add(rltObj["c00"].ToString(), rltObj["c01"].ToString(), rltObj["c02"].ToString(), rltObj["c03"].ToString(), rltObj["c04"].ToString(), rltObj["c05"].ToString(), rltObj["c06"].ToString(), rltObj["c07"].ToString(), rltObj["c08"].ToString());
+                    dt.Rows.Add(rltObj["c10"].ToString(), rltObj["c11"].ToString(), rltObj["c12"].ToString(), rltObj["c13"].ToString(), rltObj["c14"].ToString(), rltObj["c15"].ToString(), rltObj["c16"].ToString(), rltObj["c17"].ToString(), rltObj["c18"].ToString());
+                    dt.Rows.Add(rltObj["c20"].ToString(), rltObj["c21"].ToString(), rltObj["c22"].ToString(), rltObj["c23"].ToString(), rltObj["c24"].ToString(), rltObj["c25"].ToString(), rltObj["c26"].ToString(), rltObj["c27"].ToString(), rltObj["c28"].ToString());
 
+                }
+
+                // 判断刷新数据前的当前UI的最顶部的单元格所属于那一场球赛
                 if (this.currMid != null && mid == this.currMid)
                 {
-                    sPosition = i*3+this.cPosition;
+                    sPosition = i*3+this.locationIndex; // 最顶部的单元格应该属于currMid球赛的locationIndex行
                 }
             }
             this.dgvSA.DataSource = dt;
-            if (sPosition >= this.cJArray.Count*3)
+            if (sPosition >= this.cJArray.Count*3) //若是当前单元格的行数小于定位到的单元格行  则回滚到起始位
             {
                 sPosition=0;
             }
-            this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition;
+            this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition; // 滚动到具体的单元格行
             this.isUpdate = false;
         }
+
+        private JObject updateUI_SysA(JObject jObject)
+        {
+
+            JObject returnObj = new JObject();
+
+            String lianSaiStr = (String)jObject["a26"];
+            returnObj.Add("c00", lianSaiStr.Trim());
+
+            String time = (String)jObject["a18"] + "\n" + (String)jObject["a19"];
+            String htmlStr = FormUtils.changeHtml((String)jObject["a6"]);
+            if (!String.IsNullOrEmpty(htmlStr))
+            {
+                time = time + "\n" + htmlStr;
+            }
+            returnObj.Add("c01", time.Trim());
+
+            String c02 = (String)jObject["a2"]; //球队名称
+            returnObj.Add("c02", c02.Trim());//球队名称
+            String c03 = (String)jObject["a7"];
+            returnObj.Add("c03", c03.Trim());
+            String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
+            returnObj.Add("c04", c04.Trim());
+            String c05 = (String)jObject["a22"] + " " + (String)jObject["a14"];
+            returnObj.Add("c05", c05.Trim());
+            String c06 = (String)jObject["odd"] + " " + (String)jObject["a16"];
+            returnObj.Add("c06", c06.Trim());
+            String c07 = (String)jObject["a36"] + " " + (String)jObject["a31"];
+            returnObj.Add("c07", c07.Trim());
+            String c08 = (String)jObject["a38"] + " " + (String)jObject["a34"];
+            returnObj.Add("c08", c08.Trim());
+            /*********************************************************************/
+            returnObj.Add("c10", lianSaiStr.Trim());
+            returnObj.Add("c11", time.Trim());
+            String c12 = (String)jObject["a3"]; //球队名称
+            returnObj.Add("c12", c12.Trim());
+            String c13 = (String)jObject["a8"];
+            returnObj.Add("c13", c13.Trim());
+            String c14 = (String)jObject["a21"] + " " + (String)jObject["a12"];
+            returnObj.Add("c14", c14.Trim());
+            String c15 = (String)jObject["a23"] + " " + (String)jObject["a15"];
+            returnObj.Add("c15", c15.Trim());
+            String c16 = (String)jObject["even"] + " " + (String)jObject["a17"];
+            returnObj.Add("c16", c16.Trim());
+            String c17 = (String)jObject["a37"] + " " + (String)jObject["a32"];
+            returnObj.Add("c17", c17.Trim());
+            String c18 = (String)jObject["a39"] + " " + (String)jObject["a35"];
+            returnObj.Add("c18", c18.Trim());
+            /*********************************************************************/
+            returnObj.Add("c20", lianSaiStr.Trim());
+            returnObj.Add("c21", time.Trim());
+            returnObj.Add("c22", "和局");
+            String c23 = (String)jObject["a9"];
+            returnObj.Add("c23", c23.Trim());
+            returnObj.Add("c24", "");
+            returnObj.Add("c25", "");
+            returnObj.Add("c26", "");
+            returnObj.Add("c27", "");
+            returnObj.Add("c28", "");
+            /*********************************************************************/
+
+            return returnObj;
+        }
+
+        private JObject updateUI_SysB(JObject jObject)
+        {
+            JObject returnObj = new JObject();
+
+            String lianSaiStr = (String)jObject["Match_Name"];
+            returnObj.Add("c00", lianSaiStr.Trim());
+
+            String time = (String)jObject["Match_Date"]; //时间的显示
+            time = time.Replace("<br>", "\n");
+            time = time.Replace("<br/>", "\n");
+            time = FormUtils.changeHtml(time);
+            returnObj.Add("c01", time.Trim());
+
+            String c02 = (String)jObject["Match_Master"]; //球队名称
+            returnObj.Add("c02", c02.Trim());
+
+            String Match_BzM = (String)jObject["Match_BzM"];
+            String c03 = Match_BzM.Equals("0")?"":Match_BzM;
+            returnObj.Add("c03", c03.Trim());
+
+            String Match_ShowType = (String)jObject["Match_ShowType"];
+            String Match_Ho = (String)jObject["Match_Ho"];
+            String rgg1 = "";
+            if (Match_ShowType.Equals("H") && !Match_Ho.Equals("0"))
+            {
+                rgg1 = (String)jObject["Match_RGG"];
+            }
+            String c04 = rgg1 + " " + Match_Ho;
+            returnObj.Add("c04", c04.Trim());
+
+            String c05 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxDpl"];
+            returnObj.Add("c05", c05.Trim());
+
+            String Match_DsDpl = (String)jObject["Match_DsDpl"];
+            if (Match_DsDpl == null) Match_DsDpl = "";
+            String c06 = String.IsNullOrEmpty(Match_DsDpl) || (Match_DsDpl.Equals("0")) ? "": "单" + " " + Match_DsDpl;
+            returnObj.Add("c06", c06.Trim());
+
+            String Match_BHo = (String)jObject["Match_BHo"];
+            String c07 = Match_BHo == null?"": Match_BHo;
+            returnObj.Add("c07", c07.Trim());
+
+            String Match_Bdpl = (String)jObject["Match_Bdpl"];
+            if (Match_Bdpl == null) Match_Bdpl = "";
+            String Match_Bdxpk1 = (String)jObject["Match_Bdxpk1"];
+            if (Match_Bdxpk1 == null) Match_Bdxpk1 = "";
+            String c08 = Match_Bdxpk1 + " " + Match_Bdpl;
+            returnObj.Add("c08", c08.Trim());
+            /*********************************************************************/
+            returnObj.Add("c10", lianSaiStr.Trim());
+            returnObj.Add("c11", time.Trim());
+
+            String c12 = (String)jObject["Match_Guest"]; //球队名称
+            returnObj.Add("c12", c12.Trim());
+
+            String Match_BzG = (String)jObject["Match_BzG"];
+            String c13 = Match_BzG.Equals("0")?"":Match_BzG;
+            returnObj.Add("c13", c13.Trim());
+
+            String Match_Ao = (String)jObject["Match_Ao"];
+            String rgg2 = "";
+            if (Match_ShowType.Equals("C") && !Match_Ao.Equals("0"))
+            {
+                rgg2 = (String)jObject["Match_RGG"];
+            }
+            String c14 = rgg2 + " " + Match_Ao;
+            returnObj.Add("c14", c14.Trim());
+
+            String c15 = (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
+            returnObj.Add("c15", c15.Trim());
+
+            String Match_DsSpl = (String)jObject["Match_DsSpl"];
+            if (Match_DsSpl == null) Match_DsSpl = "";
+            String c16 = String.IsNullOrEmpty(Match_DsSpl)||(Match_DsSpl.Equals("0")) ?"": "双" + " " + Match_DsSpl;
+            returnObj.Add("c16", c16.Trim());
+
+            String Match_BAo = (String)jObject["Match_BAo"];
+            String c17 = (Match_BAo == null)?"":Match_BAo;
+            returnObj.Add("c17", c17.Trim());
+
+            String Match_Bdxpk2 = (String)jObject["Match_Bdxpk2"];
+            if (Match_Bdxpk2 == null) Match_Bdxpk2 = "";
+            String Match_Bxpl = (String)jObject["Match_Bxpl"];
+            if (Match_Bxpl == null) Match_Bxpl = "";
+            String c18 = Match_Bdxpk2 + " " + Match_Bxpl;
+            returnObj.Add("c18", c18.Trim());
+            /*********************************************************************/
+            returnObj.Add("c20", lianSaiStr);
+            returnObj.Add("c21", time);
+            returnObj.Add("c22", "和局");
+            String c23 = (String)jObject["Match_BzH"];
+            returnObj.Add("c23", c23);
+            returnObj.Add("c24", "");
+            returnObj.Add("c25", "");
+            returnObj.Add("c26", "");
+            returnObj.Add("c27", "");
+            returnObj.Add("c28", "");
+            /*********************************************************************/
+
+            return returnObj;
+        }
+
+
 
         //点击事件的处理 参数不要删除  注意注意
         private void dgvSA_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -637,7 +684,7 @@ namespace CxjText.views
         {
             if (e.ScrollOrientation == ScrollOrientation.VerticalScroll&&!this.isUpdate) {
                 int currIndex = e.NewValue;// 当前行
-                this.cPosition = currIndex % 3;
+                this.locationIndex = currIndex % 3;
                 this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
                 Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
             }
