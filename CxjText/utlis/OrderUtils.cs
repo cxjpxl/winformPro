@@ -3,6 +3,7 @@ using CxjText.utils;
 using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 
 namespace CxjText.utlis
 {
@@ -70,9 +71,13 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             //点击处理
             String B_FIRST = (String)jobject["B_FIRST"];//参数
+         
+            Console.WriteLine("-------------参数-------------");
+            Console.WriteLine(B_FIRST);
+            Console.WriteLine("--------------------------");
             String C_Str = (String)jobject["C_Str"];
-            //对参数进行编码
             String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", B_FIRST, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            Console.WriteLine(bRlt);
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球单式") < 0)
             {
                 leftForm.Invoke(new Action(() => {
@@ -104,17 +109,18 @@ namespace CxjText.utlis
                     if (nameKey.IndexOf("bet_point") >= 0) {
                         bet_point = valueStr;
                     }
-                    orderStr = orderStr + nameKey + "=" + valueStr + "&";
+                    orderStr = orderStr + WebUtility.UrlEncode(nameKey)+"="+WebUtility.UrlEncode(valueStr) + "&";
                 }
             }
             float bet_win = 0;
             try {
-                if (C_Str.IndexOf("标准盘") >= 0)
+                bool isDuYing =(bool) jobject["isDuYing"];
+                if (isDuYing)
                 {
-                    bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
+                    bet_win = float.Parse(bet_point) * user.inputMoney ;
                 }
                 else {
-                    bet_win = float.Parse(bet_point) * user.inputMoney;
+                    bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
                 }
                 
             }
@@ -133,7 +139,7 @@ namespace CxjText.utlis
             orderStr = orderStr + "touzhutype=0&bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
-            checkMoneyrUrl = checkMoneyrUrl + "?" + C_Str;
+            checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
             if (String.IsNullOrEmpty(rlt)) {
                 //请求失败处理 UI处理
@@ -168,7 +174,10 @@ namespace CxjText.utlis
                 return;
             }
 
-            return;
+            Console.WriteLine(orderStr);
+           // orderStr = WebUtility.UrlEncode(orderStr);
+         //   Console.WriteLine(orderStr);
+           return;
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPost(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user.cookie);

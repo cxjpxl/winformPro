@@ -317,6 +317,7 @@ namespace CxjText.views
                 if (user.tag.Equals("B")) { //B系统要先请求这个参数的东西才能下单
                     jObject["B_FIRST"] = dataJObject["B_FIRST"];
                     jObject["C_Str"] = dataJObject["C_Str"];
+                    jObject["isDuYing"] = dataJObject["isDuYing"];
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
