@@ -14,6 +14,11 @@ namespace CxjText.utlis
         {
             UserInfo userInfoX = (UserInfo)x;
             UserInfo userInfoY = (UserInfo)y;
+
+            if (userInfoX.tag.Equals(userInfoY.tag)) {
+                return 1;
+            }
+
             if (userInfoX.tag.CompareTo(userInfoY.tag) > 0) {
                 return 1;
             }
