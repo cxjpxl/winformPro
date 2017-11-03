@@ -87,13 +87,20 @@ namespace CxjText.views
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI_SysA(jObject);
                     mid = (String)jObject["mid"]; // 获得唯一标示
-                } else if (userInfo.tag.Equals("B"))
+                }
+                else if (userInfo.tag.Equals("B"))
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI_SysB(jObject);
                     mid = (String)jObject["Match_ID"]; // 获得唯一标示
                 }
-                else {
+                else if (userInfo.tag.Equals("I")) {
+                    JArray jObject = (JArray)jArray[i]; //数据格式
+                    rltObj = DataUtils.updateUI_SysI(jObject);
+                    mid = (String)jObject[0]; // 获得唯一标示
+                }
+                else
+                {
 
 
                 }
@@ -148,6 +155,8 @@ namespace CxjText.views
                 case "B":
                     rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
+                case "I":
+                    break;
                 default:
                     break;
 
@@ -162,7 +171,25 @@ namespace CxjText.views
             if (e.ScrollOrientation == ScrollOrientation.VerticalScroll&&!this.isUpdate) {
                 int currIndex = e.NewValue;// 当前行
                 this.locationIndex = currIndex % 3;
-                this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
+
+                this.currMid = "";
+
+
+                switch (userInfo.tag)
+                {
+                    case "A":
+                        this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
+                        break;
+                    case "B":
+                        this.currMid=(String)this.cJArray[currIndex / 3]["Match_ID"] + "";
+                        break;
+                    case "I":
+                        this.currMid=(String)this.cJArray[currIndex / 3][0] + "";
+                        break;
+                    default:
+                        break;
+
+                }
                 Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
             }
         }

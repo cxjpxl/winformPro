@@ -229,6 +229,64 @@ namespace CxjText.utlis
             return returnObj;
         }
 
+        /**********************I系统数据填充*******************************/
+        public static JObject updateUI_SysI(JArray jObject)
+        {
 
+            JObject returnObj = new JObject();
+            String lianSaiStr = (String)jObject[1];
+            returnObj.Add("c00", lianSaiStr.Trim());
+
+            String time = (String)jObject[4] + "\n" + (String)jObject[5];
+            returnObj.Add("c01", time.Trim());
+
+            String c02 = (String)jObject[2]; //球队名称
+            returnObj.Add("c02", c02.Trim());
+
+            String c03 = "";
+            returnObj.Add("c03", c03.Trim());
+            String c04 = "";
+            returnObj.Add("c04", c04.Trim());
+            String c05 = "";
+            returnObj.Add("c05", c05.Trim());
+            String c06 = "";
+            returnObj.Add("c06", c06.Trim());
+            String c07 = "";
+            returnObj.Add("c07", c07.Trim());
+            String c08 = "";
+            returnObj.Add("c08", c08.Trim());
+            /*********************************************************************/
+            returnObj.Add("c10", lianSaiStr.Trim());
+            returnObj.Add("c11", time.Trim());
+
+            String c12 = (String)jObject[3]; //球队名称
+            returnObj.Add("c12", c12.Trim());
+            String c13 = "";
+            returnObj.Add("c13", c13.Trim());
+            String c14 = "";
+            returnObj.Add("c14", c14.Trim());
+            String c15 = "";
+            returnObj.Add("c15", c15.Trim());
+            String c16 = "";
+            returnObj.Add("c16", c16.Trim());
+            String c17 = "";
+            returnObj.Add("c17", c17.Trim());
+            String c18 = "";
+            returnObj.Add("c18", c18.Trim());
+            /*********************************************************************/
+            returnObj.Add("c20", lianSaiStr.Trim());
+            returnObj.Add("c21", time.Trim());
+            returnObj.Add("c22", "和局");
+            String c23 = "";
+            returnObj.Add("c23", c23.Trim());
+            returnObj.Add("c24", "");
+            returnObj.Add("c25", "");
+            returnObj.Add("c26", "");
+            returnObj.Add("c27", "");
+            returnObj.Add("c28", "");
+            /*********************************************************************/
+
+            return returnObj;
+        }
     }
 }

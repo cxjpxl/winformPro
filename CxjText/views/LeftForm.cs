@@ -92,10 +92,23 @@ namespace CxjText.views
             if (userInfo == null) return;
             JArray jArray = new JArray();
             for (int i = 0; i < this.dataJArray.Count; i++) {
-                JObject jObject = (JObject)this.dataJArray[i];
-                //系统更改 修改5
-                if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo)) {
-                    jArray.Add(jObject);
+
+                if (userInfo.tag.Equals("I")) //数据格式
+                {
+                    JArray jObject = (JArray)this.dataJArray[i];
+                    String m = (String)jObject[2];
+                    String g= (String)jObject[3];
+                    if (m.IndexOf(searchStr) >= 0 || g.IndexOf(searchStr) >= 0) {
+                        jArray.Add(jObject);
+                    }
+                }
+                else {
+                    JObject jObject = (JObject)this.dataJArray[i];
+                    //系统更改 修改5
+                    if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo))
+                    {
+                        jArray.Add(jObject);
+                    }
                 }
             }
 
@@ -215,7 +228,7 @@ namespace CxjText.views
                 JArray itemJAarry = (JArray)jArray[i];
                 NameTy nameTy = new NameTy();
                 //系统更改 修改3
-                nameTy.name = RltDataUtils.getArrayTitle(userInfo, itemJAarry);          
+                nameTy.name = RltDataUtils.getArrayTitle(userInfo, itemJAarry);
                 nameList.Add(nameTy);
                 //系统更改 修改4
                 String mid = RltDataUtils.getOnlyFlag(i, jArray, userInfo);

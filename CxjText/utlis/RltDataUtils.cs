@@ -23,16 +23,23 @@ namespace CxjText.utlis
                     rltJArray = new JArray();
                 }
             }
-            else if (userInfo.tag.Equals("B")) {
+            else if (userInfo.tag.Equals("B"))
+            {
                 rltJArray = (JArray)jObject["db"];
                 if (rltJArray == null)
                 {
                     rltJArray = new JArray();
                 }
             }
-            else
+            else if (userInfo.tag.Equals("I")) {
+                rltJArray = (JArray)jObject["db"];
+                if (rltJArray == null)
+                {
+                    rltJArray = new JArray();
+                }
+            }else
             {
-
+                
             }
 
             return rltJArray;
@@ -54,7 +61,8 @@ namespace CxjText.utlis
                         for (int j = i + 1; j < jArray.Count; j++)
                         {
                             JObject itemJObject1 = (JObject)jArray[j];
-                            if (!String.IsNullOrEmpty(itemJObject1["a0"].ToString())) {
+                            if (!String.IsNullOrEmpty(itemJObject1["a0"].ToString()))
+                            {
                                 break;
                             }
 
@@ -70,32 +78,68 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("B")) {
+            else if (userInfo.tag.Equals("B"))
+            {
                 JArray jArray = (JArray)jObject["db"];
-                if (jArray == null || jArray.Count == 0) {
+                if (jArray == null || jArray.Count == 0)
+                {
                     return rltJArray;
                 }
 
-                for (int i = 0; i < jArray.Count; i++) {
+                for (int i = 0; i < jArray.Count; i++)
+                {
                     JObject itemJObect = (JObject)jArray[i];
                     JArray itemJArray = new JArray();
                     itemJArray.Add(itemJObect);
                     String name = (String)itemJObect["Match_Name"];
                     int j = i + 1;
-                    for (; j < jArray.Count; j++) {
-                        JObject itemJObject1 =(JObject) jArray[j];
-                        String name1 =(String) itemJObject1["Match_Name"];
+                    for (; j < jArray.Count; j++)
+                    {
+                        JObject itemJObject1 = (JObject)jArray[j];
+                        String name1 = (String)itemJObject1["Match_Name"];
                         if (name.Equals(name1))
                         {
                             itemJArray.Add(itemJObject1);
-                        }else {
+                        }
+                        else
+                        {
                             break;
                         }
                     }
-                     i = j;
+                    i = j;
                     rltJArray.Add(itemJArray);
                 }
-            }else
+            }else if (userInfo.tag.Equals("I")) {
+                JArray jArray = (JArray)jObject["db"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JArray itemJObect = (JArray)jArray[i];
+                    JArray itemJArray = new JArray();
+                    itemJArray.Add(itemJObect);
+                    String name = (String)itemJObect[1];//联赛名字
+                    int j = i + 1;
+                    for (; j < jArray.Count; j++)
+                    {
+                        JArray itemJObject1 = (JArray)jArray[j];
+                        String name1 = (String)itemJObject1[1];//联赛名字
+                        if (name.Equals(name1))
+                        {
+                            itemJArray.Add(itemJObject1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    i = j;
+                    rltJArray.Add(itemJArray);
+                }
+            }
+            else
             {
                 Console.WriteLine("系统开发中!");
             }
@@ -111,6 +155,8 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("B")) {
                 title = currentArray[0]["Match_Name"].ToString();
+            } else if (userInfo.tag.Equals("I")) {
+                title = currentArray[0][1].ToString();
             }
             else
             {
@@ -128,6 +174,10 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("B")) {
                 mid = (String)jArray[index][0]["Match_ID"] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("I"))
+            {
+                mid = (String)jArray[index][0][0] + ""; //唯一标识
             }
             else
             {
