@@ -146,6 +146,9 @@ namespace CxjText.utlis
             String Match_Bdxpk1 = (String)jObject["Match_Bdxpk1"];
             if (Match_Bdxpk1 == null) Match_Bdxpk1 = "";
             String c08 = Match_Bdxpk1 + " " + Match_Bdpl;
+            if (String.IsNullOrEmpty(Match_Bdpl) || Match_Bdpl.Trim().Equals("0")) {
+                c08 = "";
+            }
             returnObj.Add("c08", c08.Trim());
             /*********************************************************************/
             returnObj.Add("c10", lianSaiStr.Trim());
@@ -208,6 +211,11 @@ namespace CxjText.utlis
             String Match_Bxpl = (String)jObject["Match_Bxpl"];
             if (Match_Bxpl == null) Match_Bxpl = "";
             String c18 = Match_Bdxpk2 + " " + Match_Bxpl;
+            if (String.IsNullOrEmpty(Match_Bxpl) || Match_Bxpl.Trim().Equals("0"))
+            {
+                c18 = "";
+            }
+
             returnObj.Add("c18", c18.Trim());
             /*********************************************************************/
             returnObj.Add("c20", lianSaiStr);
