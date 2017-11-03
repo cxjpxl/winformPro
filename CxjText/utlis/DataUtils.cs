@@ -243,17 +243,44 @@ namespace CxjText.utlis
             String c02 = (String)jObject[2]; //球队名称
             returnObj.Add("c02", c02.Trim());
 
-            String c03 = "";
+            String c03 = (String)jObject[8];
+            if (String.IsNullOrEmpty(c03) || c03.Equals("null") || c03.Equals("0.00")) {
+                c03 = "";
+            }
             returnObj.Add("c03", c03.Trim());
-            String c04 = "";
+
+            String c04 = (String)jObject[13];
+            if (String.IsNullOrEmpty(c04) || c04.Equals("null") || c04.Equals("0.00"))
+            {
+                c04 = "";
+            }
             returnObj.Add("c04", c04.Trim());
-            String c05 = "";
+
+            String c05 = "大"+ (String)jObject[17] +" "+ (String)jObject[18];
+            if (String.IsNullOrEmpty((String)jObject[18]) || ((String)jObject[18]).Equals("null") || ((String)jObject[18]).Equals("0.00"))
+            {
+                c05 = "";
+            }
             returnObj.Add("c05", c05.Trim());
-            String c06 = "";
+
+            String c06 = "单"+" " + (String)jObject[34];
+            if (String.IsNullOrEmpty((String)jObject[34]) || ((String)jObject[34]).Equals("null") || ((String)jObject[34]).Equals("0.00")) {
+                c06 = "";
+            }
             returnObj.Add("c06", c06.Trim());
-            String c07 = "";
+
+            String c07 = (String)jObject[26];
+            if (String.IsNullOrEmpty(c07) || c07.Equals("null") || c07.Equals("0.00"))
+            {
+                c07 = "";
+            }
             returnObj.Add("c07", c07.Trim());
-            String c08 = "";
+
+            String c08 = "大" + (String)jObject[30] + " " + (String)jObject[31];
+            if (String.IsNullOrEmpty((String)jObject[31]) || ((String)jObject[31]).Equals("null") || ((String)jObject[31]).Equals("0.00"))
+            {
+                c08 = "";
+            }
             returnObj.Add("c08", c08.Trim());
             /*********************************************************************/
             returnObj.Add("c10", lianSaiStr.Trim());
@@ -261,24 +288,59 @@ namespace CxjText.utlis
 
             String c12 = (String)jObject[3]; //球队名称
             returnObj.Add("c12", c12.Trim());
-            String c13 = "";
+
+            String c13 = (String)jObject[9];
+            if (String.IsNullOrEmpty(c13) || c13.Equals("null") || c13.Equals("0.00"))
+            {
+                c13 = "";
+            }
             returnObj.Add("c13", c13.Trim());
-            String c14 = "";
+
+            String c14 = (String)jObject[14];
+            if (String.IsNullOrEmpty(c14) || c14.Equals("null") || c14.Equals("0.00"))
+            {
+                c14 = "";
+            }
             returnObj.Add("c14", c14.Trim());
-            String c15 = "";
+
+            String c15 = "小" + (String)jObject[17] + " " + (String)jObject[19];
+            if (String.IsNullOrEmpty((String)jObject[19]) || ((String)jObject[19]).Equals("null") || ((String)jObject[19]).Equals("0.00"))
+            {
+                c15 = "";
+            }
             returnObj.Add("c15", c15.Trim());
-            String c16 = "";
+
+            String c16 = "双" + " " + (String)jObject[35];
+            if (String.IsNullOrEmpty((String)jObject[35]) || ((String)jObject[35]).Equals("null") || ((String)jObject[35]).Equals("0.00"))
+            {
+                c16 = "";
+            }
             returnObj.Add("c16", c16.Trim());
-            String c17 = "";
+
+            String c17 = (String)jObject[27];
+            if (String.IsNullOrEmpty(c17) || c17.Equals("null") || c17.Equals("0.00"))
+            {
+                c17 = "";
+            }
             returnObj.Add("c17", c17.Trim());
-            String c18 = "";
+
+            String c18 = "小" + (String)jObject[30] + " " + (String)jObject[32];
+            if (String.IsNullOrEmpty((String)jObject[32]) || ((String)jObject[32]).Equals("null") || ((String)jObject[32]).Equals("0.00"))
+            {
+                c18 = "";
+            }
             returnObj.Add("c18", c18.Trim());
             /*********************************************************************/
             returnObj.Add("c20", lianSaiStr.Trim());
             returnObj.Add("c21", time.Trim());
             returnObj.Add("c22", "和局");
-            String c23 = "";
+            String c23 = (String)jObject[10];
+            if (String.IsNullOrEmpty(c23) || c23.Equals("null") || c23.Equals("0.00"))
+            {
+                c23 = "";
+            }
             returnObj.Add("c23", c23.Trim());
+
             returnObj.Add("c24", "");
             returnObj.Add("c25", "");
             returnObj.Add("c26", "");

@@ -118,8 +118,6 @@ namespace CxjText.utlis
 
 
         //B系统点击处理
-
-        //A系统点击处理
         public static String DataSysBClick(JObject dataJObject,
             JArray cJArray, DataGridViewCellEventArgs e, RowMergeView dgvSA
             )
@@ -400,6 +398,114 @@ namespace CxjText.utlis
             }
             gameName = (String)jObject["Match_Name"]; //获取赛事
             gameTeam = (String)jObject["Match_Master"] + "-" + (String)jObject["Match_Guest"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
+
+
+        /******************************************************************/
+        //I系统点击处理
+        public static String DataSysIClick(JObject dataJObject,
+            JArray cJArray, DataGridViewCellEventArgs e, RowMergeView dgvSA
+            )
+        {
+            int index = e.RowIndex / 3;
+            int numRow = e.RowIndex % 3;
+            int clickNum = e.ColumnIndex;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            JArray jObject = (JArray)cJArray[index];
+            if (jObject == null) return null;
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        rltStr = "";
+                        break;
+                    case 4:
+                        rltStr = ""; 
+                        break;
+                    case 5:
+                        rltStr = "";
+                        break;
+                    case 6:
+                        rltStr = "";
+                        break;
+                    case 7:
+                        rltStr = "";
+                        break;
+                    case 8:
+                        rltStr = "";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = "";
+                        break;
+                    case 4:
+                        rltStr = "";
+                        break;
+                    case 5:
+                        rltStr = "";
+                        break;
+                    case 6:
+                        rltStr = "";
+                        break;
+                    case 7:
+                        rltStr = "";
+                        break;
+                    case 8:
+                        rltStr = "";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = "";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
+            bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject[1]; //获取赛事
+            gameTeam = (String)jObject[2] + "-" + (String)jObject[3]; //球队名称
+
 
             //统一显示的
             dataJObject["gameName"] = gameName; //获取赛事

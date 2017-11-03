@@ -92,19 +92,18 @@ namespace CxjText.utlis
                     JArray itemJArray = new JArray();
                     itemJArray.Add(itemJObect);
                     String name = (String)itemJObect["Match_Name"];
-                    int j = i + 1;
-                    for (; j < jArray.Count; j++)
+                    int j =  0;
+                    for (j = i+1; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
                         String name1 = (String)itemJObject1["Match_Name"];
                         if (name.Equals(name1))
                         {
                             itemJArray.Add(itemJObject1);
+                            continue;
                         }
-                        else
-                        {
-                            break;
-                        }
+                        j = j - 1;
+                        break;
                     }
                     i = j;
                     rltJArray.Add(itemJArray);
@@ -129,11 +128,10 @@ namespace CxjText.utlis
                         if (name.Equals(name1))
                         {
                             itemJArray.Add(itemJObject1);
+                            continue;
                         }
-                        else
-                        {
-                            break;
-                        }
+                        j = j - 1;
+                        break;
                     }
                     i = j;
                     rltJArray.Add(itemJArray);
