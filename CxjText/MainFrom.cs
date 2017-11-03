@@ -6,6 +6,7 @@ using CxjText.bean;
 using CxjText.views;
 using CxjText.iface;
 using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace CxjText
 {
@@ -130,8 +131,21 @@ namespace CxjText
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
-                
-                String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+
+                String rlt = "";
+                if (userInfo.tag.Equals("I")) //post
+                {
+                    JObject headJObject = new JObject();
+                    headJObject["Host"] = userInfo.baseUrl;
+                    headJObject["Origin"] = userInfo.dataUrl;
+                    headJObject["Referer"] = userInfo.dataUrl+ "/hsport/index.html";
+                    String paramsStr = "t="+FormUtils.getCurrentTime()+"&day=0&class=1&type=1&page=1&num=100&league=";
+                    rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                }
+                else {
+                    rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+                }
+                 
                 Config.console("---rlt:" + rlt);
                 if (String.IsNullOrEmpty(rlt))
                 {
@@ -158,6 +172,15 @@ namespace CxjText
                 userInfo.updateTime = FormUtils.getCurrentTime();
                 Config.console("END");
                 this.Invoke(new Action(() => {
+                    if (userInfo.tag.Equals("I")&&userInfo.status == 2) { //登录的情况下
+                        //I系统用户登录的时候有刷新钱的功能
+                        JObject jobject = JObject.Parse(rlt);
+                        if (jobject != null && jobject["_info"] != null&&jobject["_info"]["money"] != null) {
+                            String money = (String)jobject["_info"]["money"];
+                            userInfo.money = money;
+                            loginForm.AddToListToUpDate(position);
+                        }
+                    }
                      leftForm.SetCurrentData(rlt,position); //将数据传给界面处理
                      upDateTimer.Start();
                 }));
