@@ -147,21 +147,26 @@ namespace CxjText.views
         private void GoLogin(Object positionObj) {
             int position = (int)positionObj;
             UserInfo userInfo = (UserInfo)Config.userList[position];
-
-            //A系统登录处理
-            if (userInfo.tag.Equals("A")) {
-                LoginUtils.loginA(this,position);
-                return;
-            }
-
-            //B系统登录处理
-            if (userInfo.tag.Equals("B"))
+            try
             {
-                LoginUtils.loginB(this, position);
-                return;
-            }
+                //A系统登录处理
+                if (userInfo.tag.Equals("A"))
+                {
+                    LoginUtils.loginA(this, position);
+                    return;
+                }
 
-            return;
+                //B系统登录处理
+                if (userInfo.tag.Equals("B"))
+                {
+                    LoginUtils.loginB(this, position);
+                    return;
+                }
+            }
+            catch (SystemException e) {
+                userInfo.status = 3;
+                AddToListToUpDate(position);
+            }
         }
 
 

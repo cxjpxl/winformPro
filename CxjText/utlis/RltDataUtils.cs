@@ -69,7 +69,8 @@ namespace CxjText.utlis
                         }
                     }
                 }
-            } else if (userInfo.tag.Equals("B")) {
+            }
+            else if (userInfo.tag.Equals("B")) {
                 JArray jArray = (JArray)jObject["db"];
                 if (jArray == null || jArray.Count == 0) {
                     return rltJArray;

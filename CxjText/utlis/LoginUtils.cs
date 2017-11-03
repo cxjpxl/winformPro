@@ -1,6 +1,7 @@
 ﻿using CxjText.bean;
 using CxjText.utils;
 using CxjText.views;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -180,23 +181,21 @@ namespace CxjText.utlis
                 return;
             }
 
-             String bMoneyRlt = HttpUtils.HttpPost(userInfo.loginUrl + "/top_money_data.php", "", "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
-             Console.WriteLine(bMoneyRlt);
+             String bMoneyRlt = HttpUtils.httpGet(userInfo.loginUrl + "/leftDao.php", "", userInfo.cookie);
              if (String.IsNullOrEmpty(bMoneyRlt))
              {
                     userInfo.status = 3;
                     loginForm.AddToListToUpDate(position);
                     return;
               }
-              bMoneyRlt = bMoneyRlt.Trim();
-              String[] moneys = bMoneyRlt.Split('|');
-              if (moneys != null && moneys.Length == 0)
-               {
-                    userInfo.status = 3;
-                    loginForm.AddToListToUpDate(position);
-                    return;
-               }
-
+              bMoneyRlt = bMoneyRlt.Substring(1,bMoneyRlt.Length-3);
+              JObject moneyJObject = JObject.Parse(bMoneyRlt);
+              if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"])) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+              }
+                String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
                userInfo.money = moneys[0];
                userInfo.status = 2; //成功
                loginForm.AddToListToUpDate(position);

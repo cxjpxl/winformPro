@@ -65,16 +65,12 @@ namespace CxjText.utlis
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
-            String parmsStr = (String)jobject["rlt"];//B系统里面这个没有用
+            String parmsStr = (String)jobject["rlt"];//B系统里面参数
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
-            //点击处理
-            String B_FIRST = (String)jobject["B_FIRST"];//参数
-         
-          
             String C_Str = (String)jobject["C_Str"];
-            String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", B_FIRST, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
             
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球单式") < 0)
             {
@@ -139,8 +135,6 @@ namespace CxjText.utlis
             orderStr = "touzhutype=0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
-            //cck_lasttime=1509618707108; cck_count=2;
-            
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
             if (String.IsNullOrEmpty(rlt)) {
@@ -198,18 +192,19 @@ namespace CxjText.utlis
             }));
 
             //资金更新
-            String bMoneyRlt = HttpUtils.HttpPost(user.loginUrl + "/top_money_data.php", "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            String bMoneyRlt = HttpUtils.httpGet(user.loginUrl + "/leftDao.php", "", user.cookie);
             if (String.IsNullOrEmpty(bMoneyRlt)) return;
-            bMoneyRlt = bMoneyRlt.Trim();
-            String[] moneys = bMoneyRlt.Split('|');
-            if (moneys != null && moneys.Length == 0) return;
+            bMoneyRlt = bMoneyRlt.Substring(1, bMoneyRlt.Length - 3);
+            JObject moneyJObject = JObject.Parse(bMoneyRlt);
+            if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"]))
+                return;
+            String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
             user.money = moneys[0];
             //获取钱成功  要更新UI
             if (loginForm != null)
             {
                 loginForm.AddToListToUpDate(index);
             }
-
         }
     }
 }

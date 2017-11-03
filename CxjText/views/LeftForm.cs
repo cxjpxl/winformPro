@@ -117,6 +117,7 @@ namespace CxjText.views
 
             UserInfo userInfo =(UserInfo) Config.userList[index];
             try {
+                this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
                 JObject rltJObject = (JObject)JsonConvert.DeserializeObject(rlt);
                 if (rltJObject == null) return ;
                 //系统更改 修改1
@@ -204,8 +205,6 @@ namespace CxjText.views
 
         //动态渲染数据
         private void NameGridShow(UserInfo userInfo, JArray jArray) {
-
-            this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
             //判断是否要刷新UI
             bool mustUp = MustRefsNameUi(userInfo, jArray);
             if (!mustUp) return;  //false 表示不用刷新
@@ -287,11 +286,18 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-                if (user.inputMoney < user.leastMoney) continue; 
-                //系统修改需要更改 获取下单的参数
-                String orderParmas = FormUtils.getOrderParmas(rltStr,user);
-                //下单处理
-                if (String.IsNullOrEmpty(orderParmas)) {
+                if (user.inputMoney < user.leastMoney) continue;
+                
+                //下单参数的处理
+                String orderParmas = "";
+                if (tag.Equals("A"))
+                {
+                    orderParmas =rltStr + "&money=" + userInfo.inputMoney;
+                }else if (tag.Equals("B"))
+                {
+                    orderParmas = rltStr;
+                }
+                else {
                     continue;
                 }
 
@@ -315,7 +321,6 @@ namespace CxjText.views
                 jObject["rlt"] = orderParmas;
                 jObject["inputTag"] = inputInfo.tag;
                 if (user.tag.Equals("B")) { //B系统要先请求这个参数的东西才能下单
-                    jObject["B_FIRST"] = dataJObject["B_FIRST"];
                     jObject["C_Str"] = dataJObject["C_Str"];
                     jObject["isDuYing"] = dataJObject["isDuYing"];
                 }
@@ -336,15 +341,32 @@ namespace CxjText.views
         {
             JObject jobject = (JObject)obj;
             int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
-            if (user.tag.Equals("A")) {
-                OrderUtils.OrderA(jobject, this, loginForm, rltForm);
-                return;
+            try {
+                if (user.tag.Equals("A"))
+                {
+                    OrderUtils.OrderA(jobject, this, loginForm, rltForm);
+                    return;
+                }
+
+                if (user.tag.Equals("B"))
+                {
+                    OrderUtils.OrderB(jobject, this, loginForm, rltForm);
+                    return;
+                }
             }
-            if (user.tag.Equals("B")) {
-                OrderUtils.OrderB(jobject, this, loginForm, rltForm);
-                return;
+            catch (SystemException e)
+            {
+                Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
             }
+            
         }
 
     }
