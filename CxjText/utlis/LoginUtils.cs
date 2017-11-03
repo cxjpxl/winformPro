@@ -25,7 +25,6 @@ namespace CxjText.utlis
             {
                 userInfo.status = 0;
                 loginForm.AddToListToUpDate(position);
-                if (userInfo.tag.Equals("A"))
                 HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
@@ -203,5 +202,99 @@ namespace CxjText.utlis
         }
 
 
+        /**************************I系统登录的处理************************************/
+        public static void loginI(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.status = 0;
+                loginForm.AddToListToUpDate(position);
+                //HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.AddToListToUpDate(position);
+            String codeUrl = userInfo.loginUrl + "/app/member/index/verify/t/" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取登录的系统参数 
+            String paramsStr = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&code=" + codeStrBuf.ToString()+ "&action=login&r="+FormUtils.getCurrentTime();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/app/member/index/login";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl;
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr)) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            JObject jObject = JObject.Parse(rltStr);
+            if (jObject == null || jObject["status"] == null || (int)jObject["status"] <= 0) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取其他的用户信息
+            String moneyUrl = userInfo.dataUrl + "/app/member/index/getindex";
+            rltStr = HttpUtils.HttpPostHeader(moneyUrl,"", "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            jObject = JObject.Parse(rltStr);
+            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null|| jObject["list"]["u_info"] == null )
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+
+            String uid =(String) (jObject["list"]["u_info"]["uid"]);
+            String money = (String)(jObject["list"]["u_info"]["money"]);
+            userInfo.uid = uid;
+            userInfo.money = money;
+            userInfo.status = 2; //成功
+            loginForm.AddToListToUpDate(position);
+        }
     }
 }

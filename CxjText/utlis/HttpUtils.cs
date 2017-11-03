@@ -1,4 +1,5 @@
 ﻿using CxjText.bean;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Specialized;
 using System.IO;
@@ -34,6 +35,67 @@ namespace CxjText.utils
                                                 SslPolicyErrors sslPolicyErrors){
             return true;
         }
+
+        //请求包含头部
+        public static string HttpPostHeader(string Url, String paramsStr, String contentType, CookieContainer cookie, JObject headJObject)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
+            request.Method = "POST";
+            request.Timeout = 30 * 1000;
+            request.ReadWriteTimeout = 30 * 1000;
+            SetHeaderValue(request.Headers, "Host",(String) headJObject["Host"]);
+            SetHeaderValue(request.Headers, "Origin", (String)headJObject["Origin"]);
+            SetHeaderValue(request.Headers, "Referer", (String)headJObject["Referer"]);
+            if (String.IsNullOrEmpty(contentType))
+            {
+                // request.ContentType = "application/json;charset=UTF-8";
+            }
+            else
+            {
+                request.ContentType = contentType;
+            }
+
+            if (cookie != null)
+            {
+                request.CookieContainer = cookie; //cookie信息由CookieContainer自行维护
+            }
+
+
+            byte[] payload;
+            payload = Encoding.UTF8.GetBytes(paramsStr);
+            request.ContentLength = payload.Length;
+            Stream writer = request.GetRequestStream();
+            writer.Write(payload, 0, payload.Length);
+            writer.Close();
+
+            HttpWebResponse response;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                Stream s;
+                s = response.GetResponseStream();
+                string strValue = "";
+                StreamReader Reader = new StreamReader(s, Encoding.UTF8);
+                strValue = Reader.ReadToEnd();
+                Reader.Close();
+                response.Close();
+                /* while ((StrDate = Reader.ReadLine()) != null)
+                 {
+                     strValue += StrDate;
+                 }*/
+                return strValue;
+            }
+            catch (SystemException e)
+            {
+                Console.WriteLine("in HttpPost:" + Url);
+                return null;
+            }
+
+        }
+
+
+
 
 
 

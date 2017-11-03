@@ -149,18 +149,19 @@ namespace CxjText.views
             UserInfo userInfo = (UserInfo)Config.userList[position];
             try
             {
-                //A系统登录处理
-                if (userInfo.tag.Equals("A"))
-                {
-                    LoginUtils.loginA(this, position);
-                    return;
-                }
 
-                //B系统登录处理
-                if (userInfo.tag.Equals("B"))
-                {
-                    LoginUtils.loginB(this, position);
-                    return;
+                switch (userInfo.tag) {
+                    case "A":
+                        LoginUtils.loginA(this, position);
+                        break;
+                    case "B":
+                        LoginUtils.loginB(this, position);
+                        break;
+                    case "I":
+                        LoginUtils.loginI(this, position);
+                        break;
+                    default:
+                        break;
                 }
             }
             catch (SystemException e) {
