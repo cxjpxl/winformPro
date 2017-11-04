@@ -18,8 +18,10 @@ namespace CxjText.utlis
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             //请求发出前先更新UI 标记http请求已发送
+            JObject headJObject = new JObject();
+            headJObject["Origin"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
-            String rlt = HttpUtils.HttpPost(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+            String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (rlt == null|| rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
                 leftForm.Invoke(new Action(() =>

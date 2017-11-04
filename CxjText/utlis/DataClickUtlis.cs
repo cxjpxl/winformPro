@@ -32,22 +32,22 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3://03
-                        rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=H&rate=" + (String)jObject["a7"];
+                       // rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=H&rate=" + (String)jObject["a7"];
                         break;
                     case 4:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=H&rate=" + (String)jObject["a11"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=9&bet=H&rate=" + (String)jObject["a11"];
                         break;
                     case 5:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=C&rate=" + (String)jObject["a14"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=10&bet=C&rate=" + (String)jObject["a14"];
                         break;
                     case 6:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=ODD&rate=" + (String)jObject["a16"];
+                       // rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=ODD&rate=" + (String)jObject["a16"];
                         break;
                     case 7:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=H&rate=" + (String)jObject["a31"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=19&bet=H&rate=" + (String)jObject["a31"];
                         break;
                     case 8:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=C&rate=" + (String)jObject["a34"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=30&bet=C&rate=" + (String)jObject["a34"];
                         break;
                     default:
                         return null;
@@ -60,22 +60,22 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=C&rate=" + (String)jObject["a8"];
+                       // rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=C&rate=" + (String)jObject["a8"];
                         break;
                     case 4:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=2&bet=C&rate=" + (String)jObject["a12"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=9&bet=C&rate=" + (String)jObject["a12"];
                         break;
                     case 5:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=3&bet=H&rate=" + (String)jObject["a15"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=10&bet=H&rate=" + (String)jObject["a15"];
                         break;
                     case 6:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=EVEN&rate=" + (String)jObject["a17"];
+                      //  rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=EVEN&rate=" + (String)jObject["a17"];
                         break;
                     case 7:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=12&bet=C&rate=" + (String)jObject["a32"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=19&bet=C&rate=" + (String)jObject["a32"];
                         break;
                     case 8:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=13&bet=H&rate=" + (String)jObject["a35"];
+                        rltStr = "auto=1&mid=" + mid + "&ltype=30&bet=H&rate=" + (String)jObject["a35"];
                         break;
                     default:
                         return null;
@@ -87,7 +87,7 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=N&rate=" + (String)jObject["a9"];
+                        //rltStr = "auto=1&mid=" + mid + "&ltype=1&bet=N&rate=" + (String)jObject["a9"];
                         break;
                     default:
                         return null;

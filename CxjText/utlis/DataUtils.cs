@@ -14,28 +14,26 @@ namespace CxjText.utlis
         {
 
             JObject returnObj = new JObject();
-
+            //联赛名称
             String lianSaiStr = (String)jObject["a26"];
             returnObj.Add("c00", lianSaiStr.Trim());
-
-            String time = (String)jObject["a18"] + "\n" + (String)jObject["a19"];
-            String htmlStr = FormUtils.changeHtml((String)jObject["a6"]);
-            if (!String.IsNullOrEmpty(htmlStr))
-            {
-                time = time + "\n" + htmlStr;
-            }
+            //联赛时间
+            String time = (String)jObject["a19"] + "\n" + (String)jObject["a16"] + " - " + (String)jObject["a17"];
             returnObj.Add("c01", time.Trim());
-
-            String c02 = (String)jObject["a2"]; //球队名称
-            returnObj.Add("c02", c02.Trim());//球队名称
-            String c03 = (String)jObject["a7"];
+            //主队名字
+            String c02 = (String)jObject["a2"];
+            returnObj.Add("c02", c02.Trim());
+            //主队独赢
+            String c03 = "";
             returnObj.Add("c03", c03.Trim());
+            //全场主让球
             String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
             returnObj.Add("c04", c04.Trim());
+
             String c05 = (String)jObject["a22"] + " " + (String)jObject["a14"];
             returnObj.Add("c05", c05.Trim());
             String c06 = (String)jObject["odd"] + " " + (String)jObject["a16"];
-            returnObj.Add("c06", c06.Trim());
+            returnObj.Add("c06", "");
             String c07 = (String)jObject["a36"] + " " + (String)jObject["a31"];
             returnObj.Add("c07", c07.Trim());
             String c08 = (String)jObject["a38"] + " " + (String)jObject["a34"];
@@ -43,16 +41,21 @@ namespace CxjText.utlis
             /*********************************************************************/
             returnObj.Add("c10", lianSaiStr.Trim());
             returnObj.Add("c11", time.Trim());
-            String c12 = (String)jObject["a3"]; //球队名称
+            //客队名字
+            String c12 = (String)jObject["a3"]; 
             returnObj.Add("c12", c12.Trim());
+            //客队独赢
             String c13 = (String)jObject["a8"];
             returnObj.Add("c13", c13.Trim());
+            //全场客让球
             String c14 = (String)jObject["a21"] + " " + (String)jObject["a12"];
             returnObj.Add("c14", c14.Trim());
+
             String c15 = (String)jObject["a23"] + " " + (String)jObject["a15"];
             returnObj.Add("c15", c15.Trim());
+
             String c16 = (String)jObject["even"] + " " + (String)jObject["a17"];
-            returnObj.Add("c16", c16.Trim());
+            returnObj.Add("c16","");
             String c17 = (String)jObject["a37"] + " " + (String)jObject["a32"];
             returnObj.Add("c17", c17.Trim());
             String c18 = (String)jObject["a39"] + " " + (String)jObject["a35"];
@@ -61,7 +64,7 @@ namespace CxjText.utlis
             returnObj.Add("c20", lianSaiStr.Trim());
             returnObj.Add("c21", time.Trim());
             returnObj.Add("c22", "和局");
-            String c23 = (String)jObject["a9"];
+            String c23 = "";
             returnObj.Add("c23", c23.Trim());
             returnObj.Add("c24", "");
             returnObj.Add("c25", "");

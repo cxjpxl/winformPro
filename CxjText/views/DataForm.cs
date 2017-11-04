@@ -136,6 +136,8 @@ namespace CxjText.views
         //点击事件的处理 参数不要删除  注意注意
         private void dgvSA_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+
+           // return;
             if (e.RowIndex == -1 || e.ColumnIndex == -1) return;
             if (e.ColumnIndex == 0 || e.ColumnIndex == 1) return;
             String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
@@ -153,7 +155,7 @@ namespace CxjText.views
                     rltStr = DataClickUtlis.DataSysAClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 case "B":
-                    rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
+                   // rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 case "I":
                     break;
