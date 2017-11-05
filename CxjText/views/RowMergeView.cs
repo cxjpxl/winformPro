@@ -304,6 +304,12 @@ public partial class RowMergeView : DataGridView
             }
             else
             {
+                // 对联赛做特殊处理 超出一定字符显示省略...
+                if (e.ColumnIndex == 0)
+                {
+                    value = value.Length > 10 ? value.Substring(0, 8) + "..." : value;
+                }
+                // 对球队名称做特殊处理
                 if (e.ColumnIndex == 2)
                 {
                     int row = e.RowIndex%3;
@@ -328,7 +334,7 @@ public partial class RowMergeView : DataGridView
                         }
                     }
                 }
-                e.Graphics.DrawString((String)e.Value, font_diff, fontBrush_diff, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                e.Graphics.DrawString(value, font_diff, fontBrush_diff, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
             }
 
             //if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
