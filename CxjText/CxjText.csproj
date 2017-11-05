@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utlis\CompareAz.cs" />
     <Compile Include="utlis\DataClickUtlis.cs" />
+    <Compile Include="utlis\DataPramsUtils.cs" />
     <Compile Include="utlis\DataUtils.cs" />
     <Compile Include="utlis\FileUtils.cs" />
     <Compile Include="utlis\FormUtils.cs" />

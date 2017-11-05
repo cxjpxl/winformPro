@@ -41,7 +41,6 @@ namespace CxjText.utlis
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
-
             String moneyUrl = user.loginUrl + "/member/aspx/do.aspx?action=islogin";
             rlt = HttpUtils.httpGet(moneyUrl, "text/html; charset=utf-8", user.cookie);
             //获取钱失败

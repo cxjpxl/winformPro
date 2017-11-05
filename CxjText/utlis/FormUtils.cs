@@ -105,7 +105,6 @@ namespace CxjText.utlis
             String url = null;
             if (userInfo.tag.Equals("A"))
             {
-                //url = userInfo.dataUrl + "/sport/football.aspx?data=json&action=r&page=1&keyword=&sort=&uid=&_=" + getCurrentTime();
                 url = userInfo.dataUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + getCurrentTime();
             } else if (userInfo.tag.Equals("B")) {
                 url = userInfo.dataUrl + "/show/ft_danshi_data.php?leaguename=&CurrPage=0&_=" + getCurrentTime();
@@ -133,10 +132,10 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("B"))
             {
-                if (rlt[rlt.Length - 1] == ')')
+                if (rlt[rlt.Length - 2] == ')')
                 {
-                    rlt = rlt.Substring(1, rlt.Length - 2);
-                    return rlt;
+                    rlt = rlt.Substring(1, rlt.Length - 3);
+                    return rlt.Trim();
                 }
             }
             else if (userInfo.tag.Equals("I")) {
