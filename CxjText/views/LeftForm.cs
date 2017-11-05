@@ -35,8 +35,7 @@ namespace CxjText.views
         }
 
 
-        public void setMainForm(RltForm rltForm, LoginForm loginForm) {
-            this.rltForm = rltForm;
+        public void setMainForm( LoginForm loginForm) {
             this.loginForm = loginForm;
         }
        
@@ -46,8 +45,17 @@ namespace CxjText.views
         {
             ViewInit(); //显示联赛名的列表
             DataFormInit(); //显示数据列表的窗体
+            RltFormInit();
         }
 
+
+        private void RltFormInit() {
+            rltForm = new RltForm();
+            rltForm.TopLevel = false;    //设置为非顶级窗体
+            rltForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
+            this.rltPanle.Controls.Add(rltForm);      //添加窗体
+            rltForm.Show();
+        }
 
         //添加数据窗口控件
         private void DataFormInit()

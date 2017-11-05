@@ -65,7 +65,7 @@
             this.RltDgv.ReadOnly = true;
             this.RltDgv.RowHeadersVisible = false;
             this.RltDgv.RowTemplate.Height = 23;
-            this.RltDgv.Size = new System.Drawing.Size(886, 199);
+            this.RltDgv.Size = new System.Drawing.Size(815, 199);
             this.RltDgv.TabIndex = 0;
             // 
             // Column9
@@ -84,7 +84,6 @@
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 120;
             // 
             // Column2
             // 
@@ -102,7 +101,7 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column3.Width = 80;
+            this.Column3.Width = 60;
             // 
             // Column4
             // 
@@ -147,7 +146,7 @@
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column8.Width = 80;
+            this.Column8.Width = 50;
             // 
             // RltForm
             // 
