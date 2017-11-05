@@ -58,19 +58,20 @@ namespace CxjText.utlis
                         String a0 = itemJObject["a0"].ToString();
                         JArray itemJArray = new JArray();
                         itemJArray.Add(itemJObject);
-                        for (int j = i + 1; j < jArray.Count; j++)
+                        int j = i + 1;
+                        for (; j < jArray.Count; j++)
                         {
                             JObject itemJObject1 = (JObject)jArray[j];
-                            if (!String.IsNullOrEmpty(itemJObject1["a0"].ToString()))
-                            {
-                                break;
-                            }
-
                             if (a0.Equals(itemJObject1["a26"].ToString()))
                             {
                                 itemJArray.Add(itemJObject1);
+                                continue;
                             }
+
+                            j = j - 1;
+                            break;
                         }
+                        i = j;
                         if (itemJArray.Count > 0)
                         {
                             rltJArray.Add(itemJArray);
