@@ -5,7 +5,6 @@ using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
-using System.Net;
 using System.Windows.Forms;
 
 namespace CxjText.views
@@ -155,7 +154,7 @@ namespace CxjText.views
                     rltStr = DataClickUtlis.DataSysAClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 case "B":
-                   // rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 case "I":
                     break;

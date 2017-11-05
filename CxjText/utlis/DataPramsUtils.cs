@@ -51,6 +51,7 @@ namespace CxjText.utlis
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
+            if (String.IsNullOrEmpty(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             JArray jArry = (JArray)jObject["db"];

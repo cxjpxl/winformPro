@@ -96,7 +96,7 @@ namespace CxjText.utlis
             returnObj.Add("c02", c02.Trim());
             //主队独赢
             String Match_BzM = (String)jObject["Match_BzM"];
-            String c03 = Match_BzM.Trim().Equals("0") ? "" : Match_BzM;
+            String c03 = Match_BzM.Trim().Equals("0.00") ? "" : Match_BzM;
             returnObj.Add("c03", c03.Trim());
             //主队全场让球
             String Match_ShowType = (String)jObject["Match_ShowType"];
@@ -163,7 +163,7 @@ namespace CxjText.utlis
             returnObj.Add("c12", c12.Trim());
 
             String Match_BzG = (String)jObject["Match_BzG"];
-            String c13 = Match_BzG.Trim().Equals("0") ? "" : Match_BzG;
+            String c13 = Match_BzG.Trim().Equals("0.00") ? "" : Match_BzG;
             returnObj.Add("c13", c13.Trim());
 
             String Match_Ao = (String)jObject["Match_Ao"];
@@ -228,7 +228,7 @@ namespace CxjText.utlis
             returnObj.Add("c21", time);
             returnObj.Add("c22", "和局");
             String c23 = (String)jObject["Match_BzH"];
-            if (String.IsNullOrEmpty(c23) || c23.Trim().Equals("0"))
+            if (String.IsNullOrEmpty(c23) || c23.Trim().Equals("0.00"))
             {
                 c23 = "";
             }
