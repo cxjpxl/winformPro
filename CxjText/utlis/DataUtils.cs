@@ -117,8 +117,9 @@ namespace CxjText.utlis
             String c05 = (String)jObject["Match_DxGG"] + " " + (String)jObject["Match_DxDpl"];
             returnObj.Add("c05", c05.Trim());
 
-            //主队全场单双
-            String c06 = "";
+            //半场独赢
+            String c06 = (String)jObject["Match_Bmdy"];
+            if (String.IsNullOrEmpty(c06) || c06.Equals("0.00")) c06 = "";
             returnObj.Add("c06", c06.Trim());
 
             //Match_BRpk  Match_Hr_ShowType
@@ -185,7 +186,8 @@ namespace CxjText.utlis
             returnObj.Add("c15", c15.Trim());
 
             //客队全场单双
-            String c16 =  "";
+            String c16 = (String)jObject["Match_Bgdy"];
+            if (String.IsNullOrEmpty(c16) || c16.Equals("0.00")) c16 = "";
             returnObj.Add("c16", c16.Trim());
 
             //Match_BRpk
@@ -235,7 +237,10 @@ namespace CxjText.utlis
             returnObj.Add("c23", c23);
             returnObj.Add("c24", "");
             returnObj.Add("c25", "");
-            returnObj.Add("c26", "");
+
+            String c26 = (String)jObject["Match_Bhdy"];
+            if (String.IsNullOrEmpty(c26) || c26.Equals("0.00")) c26 = "";
+            returnObj.Add("c26", c26.Trim());
             returnObj.Add("c27", "");
             returnObj.Add("c28", "");
             /*********************************************************************/
