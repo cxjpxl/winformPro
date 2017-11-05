@@ -311,17 +311,20 @@ namespace CxjText.views
                 
                 //下单参数的处理
                 String orderParmas = "";
-                if (tag.Equals("A"))
-                {
-                    orderParmas =rltStr + "&money=" + user.inputMoney;
-                }else if (tag.Equals("B"))
-                {
-                    orderParmas = rltStr;
-                }
-                else {
-                    continue;
-                }
 
+                switch (tag) {
+                    case "A":
+                        orderParmas = rltStr + "&money=" + user.inputMoney;
+                        break;
+                    case "B":
+                        orderParmas = rltStr;
+                        break;
+                    case "I":
+                        orderParmas = rltStr;
+                        break;
+                    default:
+                        continue;
+                }
                 //添加UI的处理
                 InputInfo inputInfo = new InputInfo();
                 inputInfo.tag = FormUtils.getCurrentTime()+"-"+i; //标注
@@ -341,9 +344,13 @@ namespace CxjText.views
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
                 jObject["inputTag"] = inputInfo.tag;
-                if (user.tag.Equals("B")) { //B系统要先请求这个参数的东西才能下单
+                if (user.tag.Equals("B"))
+                { //B系统要先请求这个参数的东西才能下单
                     jObject["C_Str"] = dataJObject["C_Str"];
                     jObject["isDuYing"] = dataJObject["isDuYing"];
+                }
+                else if (user.tag.Equals("I")) {
+                    jObject["money"] = user.inputMoney;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -365,17 +372,21 @@ namespace CxjText.views
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             try {
-                if (user.tag.Equals("A"))
+                switch (user.tag)
                 {
-                    OrderUtils.OrderA(jobject, this, loginForm, rltForm);
-                    return;
+                    case "A":
+                        OrderUtils.OrderA(jobject, this, loginForm, rltForm);
+                        break;
+                    case "B":
+                        OrderUtils.OrderB(jobject, this, loginForm, rltForm);
+                        break;
+                    case "I":
+                        OrderUtils.OrderI(jobject,this,loginForm,rltForm);
+                        break;
+                    default:
+                        return ;
                 }
 
-                if (user.tag.Equals("B"))
-                {
-                    OrderUtils.OrderB(jobject, this, loginForm, rltForm);
-                    return;
-                }
             }
             catch (SystemException e)
             {

@@ -271,10 +271,11 @@ namespace CxjText.utlis
 
             //全场-让球
             String data12 = (String)jObject[12];
-            if(data12!=null)
-            data12 = data12.Replace(" " , "");
+            if (data12 != null)
+                data12 = data12.Replace(" ", "");
+            else data12 = "";
             String data15 = (String)jObject[15];
-            String data13 = (String)(String)jObject[13];
+            String data13 = (String)jObject[13];
             String c04 = "";
             if (String.IsNullOrEmpty(data13) || data13.Equals("null") || data13.Equals("0.00"))
             {
@@ -294,8 +295,8 @@ namespace CxjText.utlis
 
             //全场大小
             String data17 = (String)jObject[17];
-            if(data17!=null)
-            data17 = data17.Replace(" ","");
+            if (data17 != null) data17 = data17.Replace(" ", "");
+            else data17 = "";
             String c05 = "大"+ data17 + " "+ (String)jObject[18];
             if (String.IsNullOrEmpty((String)jObject[18]) || ((String)jObject[18]).Equals("null") || ((String)jObject[18]).Equals("0.00"))
             {
@@ -317,6 +318,7 @@ namespace CxjText.utlis
             String data25 = (String)jObject[25];
             if (data25 != null)
                 data25 = data25.Replace(" ", "");
+            else data25 = "";
             String c07 = "";
             if (String.IsNullOrEmpty(data26) || data26.Equals("null") || data26.Equals("0.00"))
             {
@@ -335,8 +337,9 @@ namespace CxjText.utlis
 
             //半场场大小
             String data30 = (String)jObject[30];
-            if(data30!=null)
+            if (data30 != null)
                 data30 = data30.Replace(" ", "");
+            else data30 = "";
             String c08 = "大" + data30 + " " + (String)jObject[31];
             if (String.IsNullOrEmpty((String)jObject[31]) || ((String)jObject[31]).Equals("null") || ((String)jObject[31]).Equals("0.00"))
             {

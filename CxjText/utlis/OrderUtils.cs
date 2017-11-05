@@ -1,8 +1,11 @@
 ﻿using CxjText.bean;
 using CxjText.utils;
 using CxjText.views;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 
 namespace CxjText.utlis
@@ -23,7 +26,7 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             Console.WriteLine(rlt);
-            if (rlt == null|| rlt.IndexOf("false") >= 0 || rlt.Length > 0)
+            if (rlt == null || rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
 
                 String reseaStr = "失败";
@@ -94,7 +97,7 @@ namespace CxjText.utlis
                 return;
             }
 
-           
+
             //解析列表数据  这些数据是到时候要提交到服务器的
             String[] strs = bRlt.Split('\n');
             String orderStr = "";
@@ -116,20 +119,20 @@ namespace CxjText.utlis
                     if (nameKey.IndexOf("bet_point") >= 0) {
                         bet_point = valueStr;
                     }
-                    orderStr = orderStr + WebUtility.UrlEncode(nameKey)+"="+WebUtility.UrlEncode(valueStr) + "&";
+                    orderStr = orderStr + WebUtility.UrlEncode(nameKey) + "=" + WebUtility.UrlEncode(valueStr) + "&";
                 }
             }
             float bet_win = 0;
             try {
-                bool isDuYing =(bool) jobject["isDuYing"];
+                bool isDuYing = (bool)jobject["isDuYing"];
                 if (isDuYing)
                 {
-                    bet_win = float.Parse(bet_point) * user.inputMoney ;
+                    bet_win = float.Parse(bet_point) * user.inputMoney;
                 }
                 else {
                     bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
                 }
-                
+
             }
             catch (SystemException e)
             {
@@ -183,7 +186,7 @@ namespace CxjText.utlis
             }
 
 
-           
+
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPostB_Order(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user);
@@ -222,5 +225,144 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(index);
             }
         }
+
+
+        public static void OrderI(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            //请求发出前先更新UI 标记http请求已发送
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/hsport/index.html";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
+            String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl+ "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(orderBetStr)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+            JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
+            if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null || !((String)orderBJObect["1"]).Equals("滚球足球")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+            int min =(int) orderBJObect["min"];
+            int max = (int)orderBJObect["max"];
+            int money = (int )jobject["money"];
+            if (money < min)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "输入金额太小");
+                    }
+                }));
+                return;
+            }
+
+            if (money > max)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "输入金额太大");
+                    }
+                }));
+                return;
+            }
+
+            Console.WriteLine(orderBetStr);
+           // return;
+
+            String orderUrl = user.dataUrl+ "/app/hsport/sports/order_buy";
+            String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
+            String orderStr = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
+            if (String.IsNullOrEmpty(orderStr)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            JArray jArray = (JArray)JsonConvert.DeserializeObject(orderStr);
+            if (jArray == null || jArray.Count == 0 || ((int)jArray[0]) != 1) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            //交易成功 , 更新UI 并更新钱
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //更新钱
+            //获取其他的用户信息
+            String moneyUrl = user.dataUrl + "/app/member/index/getindex";
+            String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return;
+            }
+            JObject jObject = JObject.Parse(rltStr);
+            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["list"]["u_info"] == null)
+            {
+                return;
+            }
+
+
+            String uid = (String)(jObject["list"]["u_info"]["uid"]);
+            String money1 = (String)(jObject["list"]["u_info"]["money"]);
+            user.uid = uid;
+            user.money = money1;
+            //获取钱成功  要更新UI
+            if (loginForm != null)
+            {
+                loginForm.AddToListToUpDate(index);
+            }
+        }
+
+
+        public static List<Cookie> GetAllCookies(CookieContainer cc)
+        {
+            List<Cookie> lstCookies = new List<Cookie>();
+            Hashtable table = (Hashtable)cc.GetType().InvokeMember("m_domainTable",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField |
+                System.Reflection.BindingFlags.Instance, null, cc, new object[] { });
+
+            foreach (object pathList in table.Values)
+            {
+                SortedList lstCookieCol = (SortedList)pathList.GetType().InvokeMember("m_list",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.GetField
+                    | System.Reflection.BindingFlags.Instance, null, pathList, new object[] { });
+                foreach (CookieCollection colCookies in lstCookieCol.Values)
+                    foreach (Cookie c in colCookies) lstCookies.Add(c);
+            }
+            return lstCookies;
+        }
+
     }
 }

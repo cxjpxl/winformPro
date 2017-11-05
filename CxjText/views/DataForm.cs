@@ -102,7 +102,6 @@ namespace CxjText.views
                 else
                 {
 
-
                 }
 
                 if(rltObj != null)
@@ -158,6 +157,7 @@ namespace CxjText.views
                     rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 case "I":
+                    rltStr = DataClickUtlis.DataSysIClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
                 default:
                     break;

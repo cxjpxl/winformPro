@@ -7,6 +7,7 @@ using CxjText.views;
 using CxjText.iface;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace CxjText
 {

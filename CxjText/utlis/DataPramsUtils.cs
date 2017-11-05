@@ -84,7 +84,7 @@ namespace CxjText.utlis
             return jObject.ToString() ;
         }
 
-        //I系统获取数据
+        //I系统获取数据 num传大点就一次性把数据全部取回来
         public static String getIData(int position,MainFrom mainFrom,LoginForm loginForm) {
             UserInfo userInfo =(UserInfo) Config.userList[position];
             String getDataUrl = userInfo.dataUrl + "/app/hsport/sports/match";

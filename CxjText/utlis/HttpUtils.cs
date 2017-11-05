@@ -43,9 +43,28 @@ namespace CxjText.utils
             request.Method = "POST";
             request.Timeout = 30 * 1000;
             request.ReadWriteTimeout = 30 * 1000;
-            SetHeaderValue(request.Headers, "Host",(String) headJObject["Host"]);
-            SetHeaderValue(request.Headers, "Origin", (String)headJObject["Origin"]);
-            SetHeaderValue(request.Headers, "Referer", (String)headJObject["Referer"]);
+            if (headJObject["Host"] != null)
+            {
+                SetHeaderValue(request.Headers, "Host", (String)headJObject["Host"]);
+            }
+            if (headJObject["Referer"] != null)
+            {
+                SetHeaderValue(request.Headers, "Referer", (String)headJObject["Referer"]);
+            }
+            if (headJObject["Origin"] != null)
+            {
+                SetHeaderValue(request.Headers, "Origin", (String)headJObject["Origin"]);
+            }
+            if (headJObject["X-Requested-With"] != null) {
+                SetHeaderValue(request.Headers, "X-Requested-With", (String)headJObject["X-Requested-With"]);
+            }
+            if (headJObject["Accept"] != null)
+            {
+                SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
+            }
+            
+
+
             if (String.IsNullOrEmpty(contentType))
             {
                 // request.ContentType = "application/json;charset=UTF-8";
@@ -89,6 +108,7 @@ namespace CxjText.utils
             catch (SystemException e)
             {
                 Console.WriteLine("in HttpPost:" + Url);
+                Console.WriteLine("in HttpPost:" + e.ToString());
                 return null;
             }
 

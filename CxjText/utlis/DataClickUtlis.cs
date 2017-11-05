@@ -439,28 +439,35 @@ namespace CxjText.utlis
             String gameTeam = "";
             JArray jObject = (JArray)cJArray[index];
             if (jObject == null) return null;
+            String bs = "";
             if (numRow == 0)
             {
                 inputType = "主队";
                 switch (clickNum)
                 {
                     case 3://03
-                        rltStr = "";
+                        bs = (String) jObject[7];
+                        rltStr = "t="+FormUtils.getCurrentTime()+ "&day=2&class=1&type=1&betid=1&content=101&odds="+ (String)jObject[8];
                         break;
                     case 4:
-                        rltStr = ""; 
+                        bs = (String)jObject[11];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=3&content=301&odds=" + (String)jObject[13];
                         break;
                     case 5:
-                        rltStr = "";
+                        bs = (String)jObject[16];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=5&content=501&odds=" + (String)jObject[18];
                         break;
                     case 6:
-                        rltStr = "";
+                        bs = (String)jObject[20];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=2&content=201&odds=" + (String)jObject[21];
                         break;
                     case 7:
-                        rltStr = "";
+                        bs = (String)jObject[24];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=4&content=401&odds=" + (String)jObject[26];
                         break;
                     case 8:
-                        rltStr = "";
+                        bs = (String)jObject[29];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=6&content=601&odds=" + (String)jObject[31];
                         break;
                     default:
                         return null;
@@ -473,22 +480,28 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "";
+                        bs = (String)jObject[7];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=1&content=102&odds=" + (String)jObject[9];
                         break;
                     case 4:
-                        rltStr = "";
+                        bs = (String)jObject[11];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=3&content=302&odds=" + (String)jObject[14];
                         break;
                     case 5:
-                        rltStr = "";
+                        bs = (String)jObject[16];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=3&content=502&odds=" + (String)jObject[19];
                         break;
                     case 6:
-                        rltStr = "";
+                        bs = (String)jObject[20];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=2&content=202&odds=" + (String)jObject[22];
                         break;
                     case 7:
-                        rltStr = "";
+                        bs = (String)jObject[24];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=4&content=402&odds=" + (String)jObject[27];
                         break;
                     case 8:
-                        rltStr = "";
+                        bs = (String)jObject[29];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=6&content=602&odds=" + (String)jObject[32];
                         break;
                     default:
                         return null;
@@ -500,7 +513,12 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "";
+                        bs = (String)jObject[7];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=1&content=103&odds=" + (String)jObject[10];
+                        break;
+                    case 6:
+                        bs = (String)jObject[20];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=2&content=202&odds=" + (String)jObject[23];
                         break;
                     default:
                         return null;
@@ -511,7 +529,11 @@ namespace CxjText.utlis
                 return null;
             }
 
+            if (String.IsNullOrEmpty(rltStr)) {
+                return null;
+            }
 
+            rltStr = rltStr + "&bs=" + bs;
             inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
             bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             if (String.IsNullOrEmpty(bateStr.Trim()))
