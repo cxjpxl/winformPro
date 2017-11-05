@@ -121,11 +121,11 @@ namespace CxjText.views
             }
 
             //有数据
-            if (jArray.Count > 0)
+            if (!String.IsNullOrEmpty(this.searchStr))
             {
                 this.selectFlag = "";
                 this.nameShowGridView.CurrentCell = null;
-                dataForm.setData(jArray, this.cIndex, this.selectFlag);
+                dataForm.setData(jArray, this.cIndex, this.selectFlag, this.searchStr);
             }
             else {
                 setDataFormShow(userInfo); //更新数据界面
@@ -179,11 +179,11 @@ namespace CxjText.views
                     }
                     if (selectIndex == -1)
                     {
-                        dataForm.setData( this.dataJArray,this.cIndex,this.selectFlag);
+                        dataForm.setData( this.dataJArray,this.cIndex,this.selectFlag,this.searchStr);
                     }
                     else
                     {
-                        dataForm.setData( (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag);
+                        dataForm.setData( (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag, this.searchStr);
                     }
 
                 }
