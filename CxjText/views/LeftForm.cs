@@ -313,7 +313,7 @@ namespace CxjText.views
                 String orderParmas = "";
                 if (tag.Equals("A"))
                 {
-                    orderParmas =rltStr + "&money=" + userInfo.inputMoney;
+                    orderParmas =rltStr + "&money=" + user.inputMoney;
                 }else if (tag.Equals("B"))
                 {
                     orderParmas = rltStr;

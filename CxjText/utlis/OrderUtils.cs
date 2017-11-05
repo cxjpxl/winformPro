@@ -14,6 +14,7 @@ namespace CxjText.utlis
         {
 
             String parmsStr = (String)jobject["rlt"];
+            Console.WriteLine(parmsStr);
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
@@ -22,6 +23,8 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(rlt);
+            Console.WriteLine("1");
             if (rlt == null|| rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -33,6 +36,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+            Console.WriteLine("2");
             //交易成功 , 更新UI 并更新钱
             leftForm.Invoke(new Action(() =>
             {
@@ -41,7 +45,7 @@ namespace CxjText.utlis
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
-
+            Console.WriteLine("3");
             String moneyUrl = user.loginUrl + "/member/aspx/do.aspx?action=islogin";
             rlt = HttpUtils.httpGet(moneyUrl, "text/html; charset=utf-8", user.cookie);
             //获取钱失败
@@ -50,6 +54,7 @@ namespace CxjText.utlis
                 return;
             }
 
+            Console.WriteLine("4");
             int rltNum = FormUtils.explandMoneyData(rlt, user);
             //获取钱失败
             if (rltNum < 0)
