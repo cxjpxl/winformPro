@@ -77,7 +77,7 @@
             this.Column0.Name = "Column0";
             this.Column0.ReadOnly = true;
             this.Column0.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column0.Width = 190;
+            this.Column0.Width = 130;
             // 
             // Column1
             // 
@@ -95,7 +95,7 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 80;
+            this.Column2.Width = 140;
             // 
             // Column3
             // 
@@ -122,16 +122,16 @@
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
             this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 90;
+            this.Column5.Width = 95;
             // 
             // Column6
             // 
             this.Column6.DataPropertyName = "6";
-            this.Column6.HeaderText = "全场单双";
+            this.Column6.HeaderText = "半场独赢";
             this.Column6.Name = "Column6";
             this.Column6.ReadOnly = true;
             this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column6.Width = 90;
+            this.Column6.Width = 60;
             // 
             // Column7
             // 
@@ -149,7 +149,7 @@
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column8.Width = 80;
+            this.Column8.Width = 95;
             // 
             // DataForm
             // 

@@ -44,6 +44,7 @@ public partial class RowMergeView : DataGridView
                     //二维表头
                     if (e.RowIndex == -1)
                     {
+                        e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                         if (SpanRows.ContainsKey(e.ColumnIndex)) //被合并的列
                         {
                             //画边框
@@ -113,13 +114,23 @@ public partial class RowMergeView : DataGridView
             {
                 e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+            
+            // 设置单元格的文字对齐方式
+            if (e.ColumnIndex<3)
+            {
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            }
+            else
+            {
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
 
             // 画线相关
             Brush gridBrush = new SolidBrush(this.GridColor);
             SolidBrush backBrush = new SolidBrush(e.CellStyle.BackColor);
             SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
             Pen gridLinePen = new Pen(gridBrush);
-            Pen redLinePen = new Pen(Brushes.Black);
+            Pen dividingLinePen = new Pen(Brushes.Black);// 分割线颜色
 
             // 单元格宽度
             int cellwidth;
@@ -213,7 +224,7 @@ public partial class RowMergeView : DataGridView
                 PaintingFont(e, cellwidth, UpRows, DownRows, count);
                 if (DownRows == 1)
                 {
-                    e.Graphics.DrawLine(redLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+                    e.Graphics.DrawLine(dividingLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
                     count = 0;
                 }
                 // 画右边线
@@ -233,7 +244,7 @@ public partial class RowMergeView : DataGridView
                 // 画底边线
                 if (e.RowIndex%3==2)
                 {
-                    e.Graphics.DrawLine(redLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
+                    e.Graphics.DrawLine(dividingLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1);
                 }
                 else
                 {
@@ -253,8 +264,8 @@ public partial class RowMergeView : DataGridView
         private void PaintingFont(System.Windows.Forms.DataGridViewCellPaintingEventArgs e, int cellwidth, int UpRows, int DownRows, int count)
             {
                 SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
-                int fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
-                int fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
+                float fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
+                float fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
                 int cellheight = e.CellBounds.Height;
 
                 if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
@@ -279,7 +290,33 @@ public partial class RowMergeView : DataGridView
                 }
                 else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleRight)
                 {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    float space = 5;// 尾部添加空隙
+                    fontwidth += space;
+                    if (e.ColumnIndex == 4 || e.ColumnIndex == 5 || e.ColumnIndex == 7 || e.ColumnIndex == 8)
+                    {
+                        SolidBrush fontBrush1 = new SolidBrush(System.Drawing.Color.Red);
+                        Font font1 =  new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
+                        String value = (String)e.Value, value0 = "", value1 = "";
+                        string[] sArray = value.Split(new char[1] { ' '});
+                        if (sArray.Length==2)
+                        {
+                            value0 = sArray[0];
+                            value1 = sArray[1];
+                        }
+                        else
+                        {
+                            value0 = "";
+                            value1 = value;
+                        }
+                        float fontwidth0 = (int)e.Graphics.MeasureString(value0, e.CellStyle.Font).Width;
+                        float fontwidth1 = (int)e.Graphics.MeasureString(value1, font1).Width + space;
+                        e.Graphics.DrawString(value0, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                        e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + cellwidth - fontwidth1, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    }
+                    else
+                    {
+                        e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    }
                 }
                 else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopCenter)
                 {
