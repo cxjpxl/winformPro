@@ -229,7 +229,7 @@ public partial class RowMergeView : DataGridView
                 }
                 // 画右边线
                 e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom);
-
+            
                 e.Handled = true;
             }
             else
@@ -262,79 +262,106 @@ public partial class RowMergeView : DataGridView
         /// <param name="DownRows"></param>
         /// <param name="count"></param>
         private void PaintingFont(System.Windows.Forms.DataGridViewCellPaintingEventArgs e, int cellwidth, int UpRows, int DownRows, int count)
+        {
+            SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
+            float fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
+            float fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
+            int cellheight = e.CellBounds.Height;
+            
+            if (e.ColumnIndex > 2)
             {
-                SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
-                float fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
-                float fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
-                int cellheight = e.CellBounds.Height;
-
-                if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
+                SolidBrush fontBrush1 = new SolidBrush(System.Drawing.Color.Red);
+                Font font1 = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
+                String value = (String)e.Value, value0 = "", value1 = "";
+                string[] sArray = value.Split(new char[1] { ' ' });
+                if (sArray.Length == 2)
                 {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y + cellheight * DownRows - fontheight);
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomLeft)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y + cellheight * DownRows - fontheight);
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomRight)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y + cellheight * DownRows - fontheight);
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleCenter)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleLeft)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleRight)
-                {
-                    float space = 5;// 尾部添加空隙
-                    fontwidth += space;
-                    if (e.ColumnIndex>2)
-                    {
-                        SolidBrush fontBrush1 = new SolidBrush(System.Drawing.Color.Red);
-                        Font font1 = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
-                        String value = (String)e.Value, value0 = "", value1 = "";
-                        string[] sArray = value.Split(new char[1] { ' ' });
-                        if (sArray.Length == 2)
-                        {
-                            value0 = sArray[0];
-                            value1 = sArray[1];
-                        }
-                        else
-                        {
-                            value0 = "";
-                            value1 = value;
-                        }
-                        float fontwidth0 = (int)e.Graphics.MeasureString(value0, e.CellStyle.Font).Width;
-                        float fontwidth1 = (int)e.Graphics.MeasureString(value1, font1).Width + space;
-                        e.Graphics.DrawString(value0, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                        e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + cellwidth - fontwidth1, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                    }
-                    else
-                    {
-                        e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                    }
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopCenter)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1));
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopLeft)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1));
-                }
-                else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopRight)
-                {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1));
+                    value0 = sArray[0];
+                    value1 = sArray[1];
                 }
                 else
                 {
-                    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    value0 = "";
+                    value1 = value;
+                }
+                // 独赢要居中 其他的右对齐
+                if (e.ColumnIndex == 3 || e.ColumnIndex == 6)
+                {
+                    e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                }
+                else
+                {
+                    float space = 5;// 尾部添加空隙
+                    fontwidth += space;
+                    float fontwidth0 = (int)e.Graphics.MeasureString(value0, e.CellStyle.Font).Width;
+                    float fontwidth1 = (int)e.Graphics.MeasureString(value1, font1).Width + space;
+                    e.Graphics.DrawString(value0, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + cellwidth - fontwidth1, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
                 }
             }
+            else
+            {
+                SolidBrush fontBrush1 = fontBrush;
+                if (e.ColumnIndex == 2)
+                {
+                    int row = e.RowIndex%3;
+                    if (row == 0)
+                    {
+                        fontBrush1 = new SolidBrush(Color.FromArgb(144, 4, 7));
+                    }
+                    else if(row == 1)
+                    {
+                        fontBrush1 = new SolidBrush(Color.FromArgb(33, 56, 132));
+                    }
+                    else
+                    {
+                        fontBrush1 = new SolidBrush(Color.FromArgb(102, 102, 102));
+                    }
+                }
+                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush1, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+            }
+
+            //if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y + cellheight * DownRows - fontheight);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomLeft)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y + cellheight * DownRows - fontheight);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomRight)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y + cellheight * DownRows - fontheight);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleCenter)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleLeft)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.MiddleRight)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopCenter)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1));
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopLeft)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1));
+            //}
+            //else if (e.CellStyle.Alignment == DataGridViewContentAlignment.TopRight)
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1));
+            //}
+            //else
+            //{
+            //    e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+            //}
+        }
         #endregion
         #region 属性
         /// <summary>
