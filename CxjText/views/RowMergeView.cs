@@ -292,13 +292,13 @@ public partial class RowMergeView : DataGridView
                 {
                     float space = 5;// 尾部添加空隙
                     fontwidth += space;
-                    if (e.ColumnIndex == 4 || e.ColumnIndex == 5 || e.ColumnIndex == 7 || e.ColumnIndex == 8)
+                    if (e.ColumnIndex>2)
                     {
                         SolidBrush fontBrush1 = new SolidBrush(System.Drawing.Color.Red);
-                        Font font1 =  new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
+                        Font font1 = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
                         String value = (String)e.Value, value0 = "", value1 = "";
-                        string[] sArray = value.Split(new char[1] { ' '});
-                        if (sArray.Length==2)
+                        string[] sArray = value.Split(new char[1] { ' ' });
+                        if (sArray.Length == 2)
                         {
                             value0 = sArray[0];
                             value1 = sArray[1];
