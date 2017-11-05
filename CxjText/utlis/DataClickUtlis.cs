@@ -195,16 +195,17 @@ namespace CxjText.utlis
                                         "&rand=" + FormUtils.getCurrentTime();
                         break;
                     case 6:
-                        touzhuxiang = WebUtility.UrlEncode("单双");
+                        isDuYing = true;
+                        touzhuxiang = WebUtility.UrlEncode("上半场标准盘");
                         rltStr = "ball_sort=" + WebUtility.UrlEncode("足球滚球") +
-                                        "&match_id=" + mid +
-                                        "&touzhuxiang=" + WebUtility.UrlEncode("单双-单") +
-                                        "&point_column=Match_DsDpl" +
-                                        "&ben_add=0" +
-                                        "&is_lose=0" +
-                                        "&xx=" + WebUtility.UrlEncode("单") +
-                                        "&touzhutype=0" +
-                                        "&rand=" + FormUtils.getCurrentTime();
+                                         "&match_id=" + mid +
+                                         "&touzhuxiang=" + WebUtility.UrlEncode("上半场标准盘-" + (String)jObject["Match_Master"] + "-独赢") +
+                                         "&point_column=Match_Bmdy" +
+                                         "&ben_add=0" +
+                                         "&is_lose=1" +
+                                         "&xx=" + WebUtility.UrlEncode((String)jObject["Match_Master"]) +
+                                         "&touzhutype=0" +
+                                         "&rand=" + FormUtils.getCurrentTime();
                         break;
                     case 7:
                         touzhuxiang = WebUtility.UrlEncode("上半场让球");
@@ -303,14 +304,15 @@ namespace CxjText.utlis
                                         "&rand=" + FormUtils.getCurrentTime();
                         break;
                     case 6:
-                        touzhuxiang = WebUtility.UrlEncode("单双");
+                        isDuYing = true;
+                        touzhuxiang = WebUtility.UrlEncode("上半场标准盘");
                         rltStr = "ball_sort=" + WebUtility.UrlEncode("足球滚球") +
                                         "&match_id=" + mid +
-                                        "&touzhuxiang=" + WebUtility.UrlEncode("单双 -双") +
-                                        "&point_column=Match_DsSpl" +
+                                        "&touzhuxiang=" + WebUtility.UrlEncode("上半场标准盘-" + (String)jObject["Match_Guest"] + "-独赢") +
+                                        "&point_column=Match_Bgdy" +
                                         "&ben_add=0" +
-                                        "&is_lose=0" +
-                                        "&xx=" + WebUtility.UrlEncode("双") +
+                                        "&is_lose=1" +
+                                        "&xx=" + WebUtility.UrlEncode((String)jObject["Match_Guest"]) +
                                         "&touzhutype=0" +
                                         "&rand=" + FormUtils.getCurrentTime();
                         break;
@@ -366,6 +368,19 @@ namespace CxjText.utlis
                                        "&match_id=" + mid +
                                        "&touzhuxiang=" + WebUtility.UrlEncode("标准盘 -和局") +
                                        "&point_column=Match_BzH" +
+                                       "&ben_add=0" +
+                                       "&is_lose=1" +
+                                       "&xx=" + WebUtility.UrlEncode("和局") +
+                                       "&touzhutype=0" +
+                                       "&rand=" + FormUtils.getCurrentTime();
+                        break;
+                    case 6:
+                        isDuYing = true;
+                        touzhuxiang = WebUtility.UrlEncode("上半场标准盘");
+                        rltStr = "ball_sort=" + WebUtility.UrlEncode("足球滚球") +
+                                       "&match_id=" + mid +
+                                       "&touzhuxiang=" + WebUtility.UrlEncode("上半场标准盘 -和局") +
+                                       "&point_column=Match_Bhdy" +
                                        "&ben_add=0" +
                                        "&is_lose=1" +
                                        "&xx=" + WebUtility.UrlEncode("和局") +
