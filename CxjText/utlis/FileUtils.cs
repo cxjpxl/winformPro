@@ -45,6 +45,15 @@ namespace CxjText.utlis
                     String loginUrl = strs[4];//登录的链接地址
                     String dataUrl = strs[5]; //获取数据的接口
 
+                    if (loginUrl.EndsWith("/")) {
+                        loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
+                    }
+
+                    if (dataUrl.EndsWith("/"))
+                    {
+                        dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
+                    }
+
                     if (list.Contains(baseUrl))
                     { //过滤重复的网址
                         break;

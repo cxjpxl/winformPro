@@ -22,13 +22,22 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(rlt);
             if (rlt == null|| rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
+
+                String reseaStr = "失败";
+                if (rlt != null) {
+                    String[] strs = rlt.Split('|');
+                    if (strs.Length > 1) {
+                        reseaStr = strs[1];
+                    }
+                }
                 leftForm.Invoke(new Action(() =>
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, reseaStr);
                     }
                 }));
                 return;

@@ -58,7 +58,7 @@ namespace CxjText
         private void DataInit()
         {
             //获取到用户数据
-            FileUtils.ReadUserJObject(AppDomain.CurrentDomain.BaseDirectory+"user.txt");
+            FileUtils.ReadUserJObject(@"C:\user.txt");
         }
 
      
