@@ -105,7 +105,6 @@ namespace CxjText.utlis
             String url = null;
             if (userInfo.tag.Equals("A"))
             {
-                //url = userInfo.dataUrl + "/sport/football.aspx?data=json&action=r&page=1&keyword=&sort=&uid=&_=" + getCurrentTime();
                 url = userInfo.dataUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + getCurrentTime();
             } else if (userInfo.tag.Equals("B")) {
                 url = userInfo.dataUrl + "/show/ft_danshi_data.php?leaguename=&CurrPage=0&_=" + getCurrentTime();

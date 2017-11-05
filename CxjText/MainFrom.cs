@@ -114,7 +114,31 @@ namespace CxjText
                     return;
                 }
                 //获取数据请求接口的url
-                //刷新修改2   获取刷新的url
+                String dataRtlStr = null;
+                switch (userInfo.tag) {
+                    case "A":
+                        dataRtlStr = DataPramsUtils.getAData(userInfo);
+                        break;
+                    case "B":
+                        break;
+                    case "I":
+                        break;
+                    default:
+                        break;
+                }
+                //返回数据是空表示获取数据失败
+                if (String.IsNullOrEmpty(dataRtlStr)||leftForm == null) {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+                //获取数据成功
+                this.Invoke(new Action(() => {
+                    leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
+                    upDateTimer.Start();
+                }));
+                return;
+
+
                 String getDataUrl = FormUtils.getDataUrl(userInfo);
                 Config.console("---" + getDataUrl);
                 if (String.IsNullOrEmpty(getDataUrl) || loginForm == null)
@@ -143,6 +167,8 @@ namespace CxjText
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
+                
+
                 //解析数据返回
                 //刷新修改3  去掉多余的数据
                 rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
