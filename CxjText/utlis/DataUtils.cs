@@ -262,40 +262,82 @@ namespace CxjText.utlis
             String c02 = (String)jObject[2]; //球队名称
             returnObj.Add("c02", c02.Trim());
 
+            //独赢
             String c03 = (String)jObject[8];
             if (String.IsNullOrEmpty(c03) || c03.Equals("null") || c03.Equals("0.00")) {
                 c03 = "";
             }
             returnObj.Add("c03", c03.Trim());
 
-            String c04 = (String)jObject[13];
-            if (String.IsNullOrEmpty(c04) || c04.Equals("null") || c04.Equals("0.00"))
+            //全场-让球
+            String data12 = (String)jObject[12];
+            if(data12!=null)
+            data12 = data12.Replace(" " , "");
+            String data15 = (String)jObject[15];
+            String data13 = (String)(String)jObject[13];
+            String c04 = "";
+            if (String.IsNullOrEmpty(data13) || data13.Equals("null") || data13.Equals("0.00"))
             {
                 c04 = "";
             }
+            else {
+                if (data15.Equals("H"))
+                {
+                    c04 = data12 + " " + data13;
+                }
+                else {
+                    c04 = data13;
+                }
+            }
             returnObj.Add("c04", c04.Trim());
 
-            String c05 = "大"+ (String)jObject[17] +" "+ (String)jObject[18];
+
+            //全场大小
+            String data17 = (String)jObject[17];
+            if(data17!=null)
+            data17 = data17.Replace(" ","");
+            String c05 = "大"+ data17 + " "+ (String)jObject[18];
             if (String.IsNullOrEmpty((String)jObject[18]) || ((String)jObject[18]).Equals("null") || ((String)jObject[18]).Equals("0.00"))
             {
                 c05 = "";
             }
             returnObj.Add("c05", c05.Trim());
 
-            String c06 = "单"+" " + (String)jObject[34];
-            if (String.IsNullOrEmpty((String)jObject[34]) || ((String)jObject[34]).Equals("null") || ((String)jObject[34]).Equals("0.00")) {
+            //半场-独赢
+            String c06 =  (String)jObject[21];
+            if (String.IsNullOrEmpty(c06) || c06.Equals("null") || c06.Equals("0.00"))
+            {
                 c06 = "";
             }
             returnObj.Add("c06", c06.Trim());
 
-            String c07 = (String)jObject[26];
-            if (String.IsNullOrEmpty(c07) || c07.Equals("null") || c07.Equals("0.00"))
+            //半场让球
+            String data28 = (String)jObject[28];
+            String data26 = (String)jObject[26];
+            String data25 = (String)jObject[25];
+            if (data25 != null)
+                data25 = data25.Replace(" ", "");
+            String c07 = "";
+            if (String.IsNullOrEmpty(data26) || data26.Equals("null") || data26.Equals("0.00"))
             {
                 c07 = "";
             }
+            else {
+                if (data28.Equals("H"))
+                {
+                    c07 = data25 + " " + data26;
+                }
+                else {
+                    c07 = data26;
+                }
+            }
             returnObj.Add("c07", c07.Trim());
 
-            String c08 = "大" + (String)jObject[30] + " " + (String)jObject[31];
+            //半场场大小
+            String data30 = (String)jObject[30];
+            if(data30!=null)
+                data30 = data30.Replace(" ", "");
+            String c08 = "大" + data30 + " " + (String)jObject[31];
             if (String.IsNullOrEmpty((String)jObject[31]) || ((String)jObject[31]).Equals("null") || ((String)jObject[31]).Equals("0.00"))
             {
                 c08 = "";
@@ -315,35 +357,57 @@ namespace CxjText.utlis
             }
             returnObj.Add("c13", c13.Trim());
 
-            String c14 = (String)jObject[14];
-            if (String.IsNullOrEmpty(c14) || c14.Equals("null") || c14.Equals("0.00"))
+            String c14 = "";
+            String data14 = (String)jObject[14];
+            if (String.IsNullOrEmpty(data14) || data14.Equals("null") || data14.Equals("0.00"))
             {
                 c14 = "";
             }
+            else {
+                if (data15.Equals("C"))
+                {
+                    c14 = data12 + " " + data14;
+                }
+                else {
+                    c14 = data14;
+                }
+            }
             returnObj.Add("c14", c14.Trim());
 
-            String c15 = "小" + (String)jObject[17] + " " + (String)jObject[19];
+            String c15 = "小" + data17 + " " + (String)jObject[19];
             if (String.IsNullOrEmpty((String)jObject[19]) || ((String)jObject[19]).Equals("null") || ((String)jObject[19]).Equals("0.00"))
             {
                 c15 = "";
             }
             returnObj.Add("c15", c15.Trim());
 
-            String c16 = "双" + " " + (String)jObject[35];
-            if (String.IsNullOrEmpty((String)jObject[35]) || ((String)jObject[35]).Equals("null") || ((String)jObject[35]).Equals("0.00"))
+            String c16 =  (String)jObject[22];
+            if (String.IsNullOrEmpty(c16) || c16.Equals("null") || c16.Equals("0.00"))
             {
                 c16 = "";
             }
             returnObj.Add("c16", c16.Trim());
 
-            String c17 = (String)jObject[27];
-            if (String.IsNullOrEmpty(c17) || c17.Equals("null") || c17.Equals("0.00"))
+            String data27 = (String)jObject[27];
+            String c17 = "";
+            if (String.IsNullOrEmpty(data27) || data27.Equals("null") || data27.Equals("0.00"))
             {
                 c17 = "";
             }
+            else {
+                if (data28.Equals("C"))
+                {
+                    c17 = data25 + " "+ data27;
+                }
+                else {
+
+                    c17 = data27;
+                }
+            }
+            
             returnObj.Add("c17", c17.Trim());
 
-            String c18 = "小" + (String)jObject[30] + " " + (String)jObject[32];
+            String c18 = "小" + data30 + " " + (String)jObject[32];
             if (String.IsNullOrEmpty((String)jObject[32]) || ((String)jObject[32]).Equals("null") || ((String)jObject[32]).Equals("0.00"))
             {
                 c18 = "";
@@ -362,7 +426,13 @@ namespace CxjText.utlis
 
             returnObj.Add("c24", "");
             returnObj.Add("c25", "");
-            returnObj.Add("c26", "");
+
+            String c26 = (String)jObject[23];
+            if (String.IsNullOrEmpty(c26) || c26.Equals("null") || c26.Equals("0.00"))
+            {
+                c26 = "";
+            }
+            returnObj.Add("c26", c26.Trim());
             returnObj.Add("c27", "");
             returnObj.Add("c28", "");
             /*********************************************************************/

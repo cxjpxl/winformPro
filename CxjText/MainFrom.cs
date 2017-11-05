@@ -123,6 +123,7 @@ namespace CxjText
                         dataRtlStr = DataPramsUtils.getBData(userInfo);
                         break;
                     case "I":
+                        dataRtlStr = DataPramsUtils.getIData(position,this,this.loginForm);
                         break;
                     default:
                         break;
@@ -132,78 +133,22 @@ namespace CxjText
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
+                //判断当前选中和数据返回是否同一个数据 不是直接返回
+                if (position != loginForm.getCurrentSelectRow())
+                {
+                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
+                //获取到数据  更新UI (传入用户信息和数据               
+                userInfo.updateTime = FormUtils.getCurrentTime();
                 //获取数据成功
                 this.Invoke(new Action(() => {
                     leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
-                //获取到数据  更新UI (传入用户信息和数据               
-                userInfo.updateTime = FormUtils.getCurrentTime();
-                return;
 
-
-                String getDataUrl = FormUtils.getDataUrl(userInfo);
-                Config.console("---" + getDataUrl);
-                if (String.IsNullOrEmpty(getDataUrl) || loginForm == null)
-                {
-                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
-                    return;
-                }
-
-                String rlt = "";
-                if (userInfo.tag.Equals("I")) //post
-                {
-                    JObject headJObject = new JObject();
-                    headJObject["Host"] = userInfo.baseUrl;
-                    headJObject["Origin"] = userInfo.dataUrl;
-                    headJObject["Referer"] = userInfo.dataUrl+ "/hsport/index.html";
-                    String paramsStr = "t="+FormUtils.getCurrentTime()+"&day=0&class=1&type=1&page=1&num=100&league=";
-                    rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-                }
-                else {
-                    rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
-                }
-                 
-                Config.console("---rlt:" + rlt);
-                if (String.IsNullOrEmpty(rlt))
-                {
-                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
-                    return;
-                }
+              
                 
-
-                //解析数据返回
-                //刷新修改3  去掉多余的数据
-                rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-                if (String.IsNullOrEmpty(rlt))
-                {
-                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
-                    return;
-                }
-
-                //判断当前选中和数据返回是否同一个数据 不是直接返回
-                /*if (position != loginForm.getCurrentSelectRow())
-                {
-                    this.Invoke(new Action(() => { upDateTimer.Start(); }));
-                    return;
-                }*/
-
-                //获取到数据  更新UI (传入用户信息和数据               
-                userInfo.updateTime = FormUtils.getCurrentTime();
-                Config.console("END");
-                this.Invoke(new Action(() => {
-                    if (userInfo.tag.Equals("I")&&userInfo.status == 2) { //登录的情况下
-                        //I系统用户登录的时候有刷新钱的功能
-                        JObject jobject = JObject.Parse(rlt);
-                        if (jobject != null && jobject["_info"] != null&&jobject["_info"]["money"] != null) {
-                            String money = (String)jobject["_info"]["money"];
-                            userInfo.money = money;
-                            loginForm.AddToListToUpDate(position);
-                        }
-                    }
-                     leftForm.SetCurrentData(rlt,position); //将数据传给界面处理
-                     upDateTimer.Start();
-                }));
             }
             catch (SystemException e) {
                 if (this.isFinish) return;
