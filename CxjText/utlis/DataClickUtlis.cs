@@ -235,11 +235,11 @@ namespace CxjText.utlis
                         touzhuxiang = WebUtility.UrlEncode("上半场大小");
                         rltStr = "ball_sort=" + WebUtility.UrlEncode("足球上半场") +
                                         "&match_id=" + mid +
-                                        "&touzhuxiang=" + WebUtility.UrlEncode("上半场大小-" + (String)jObject["Match_Bdxpk1"]) +
+                                        "&touzhuxiang=" + WebUtility.UrlEncode("上半场大小-" + (String)jObject["Match_Bdxpk"]) +
                                         "&point_column=Match_Bdpl" +
                                         "&ben_add=1" +
                                         "&is_lose=0" +
-                                        "&xx=" + WebUtility.UrlEncode((String)jObject["Match_Bdxpk1"]) +
+                                        "&xx=" + WebUtility.UrlEncode((String)jObject["Match_Bdxpk"]) +
                                         "&touzhutype=0" +
                                         "&rand=" + FormUtils.getCurrentTime();
                         break;

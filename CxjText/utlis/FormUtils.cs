@@ -132,10 +132,10 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("B"))
             {
-                if (rlt[rlt.Length - 1] == ')')
+                if (rlt[rlt.Length - 2] == ')')
                 {
-                    rlt = rlt.Substring(1, rlt.Length - 2);
-                    return rlt;
+                    rlt = rlt.Substring(1, rlt.Length - 3);
+                    return rlt.Trim();
                 }
             }
             else if (userInfo.tag.Equals("I")) {

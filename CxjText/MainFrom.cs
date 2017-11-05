@@ -120,6 +120,7 @@ namespace CxjText
                         dataRtlStr = DataPramsUtils.getAData(userInfo);
                         break;
                     case "B":
+                        dataRtlStr = DataPramsUtils.getBData(userInfo);
                         break;
                     case "I":
                         break;
@@ -136,6 +137,8 @@ namespace CxjText
                     leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
+                //获取到数据  更新UI (传入用户信息和数据               
+                userInfo.updateTime = FormUtils.getCurrentTime();
                 return;
 
 
