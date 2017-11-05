@@ -188,6 +188,11 @@ namespace CxjText.utlis
                     return;
               }
               bMoneyRlt = bMoneyRlt.Substring(1,bMoneyRlt.Length-3);
+            if (!bMoneyRlt.StartsWith("{") && !bMoneyRlt.EndsWith("}")) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
               JObject moneyJObject = JObject.Parse(bMoneyRlt);
               if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"])) {
                 userInfo.status = 3;
@@ -260,11 +265,13 @@ namespace CxjText.utlis
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl;
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr)) {
+            if (String.IsNullOrEmpty(rltStr)||(!rltStr.StartsWith("{")&&!rltStr.EndsWith("}"))) {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
                 return;
             }
+
+
             JObject jObject = JObject.Parse(rltStr);
             if (jObject == null || jObject["status"] == null || (int)jObject["status"] <= 0) {
                 userInfo.status = 3;
@@ -274,7 +281,7 @@ namespace CxjText.utlis
             //获取其他的用户信息
             String moneyUrl = userInfo.dataUrl + "/app/member/index/getindex";
             rltStr = HttpUtils.HttpPostHeader(moneyUrl,"", "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(rltStr))
+            if (String.IsNullOrEmpty(rltStr)||(!rltStr.StartsWith("{")&&!rltStr.EndsWith("}")))
             {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);

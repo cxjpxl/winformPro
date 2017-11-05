@@ -152,7 +152,7 @@ namespace CxjText.utlis
             Console.WriteLine(C_Str);
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
-            if (String.IsNullOrEmpty(rlt)) {
+            if (String.IsNullOrEmpty(rlt)||(!rlt.StartsWith("{") && !rlt.EndsWith("}"))) {
                 //请求失败处理 UI处理
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -162,7 +162,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) {
                 leftForm.Invoke(new Action(() => {
@@ -213,7 +212,11 @@ namespace CxjText.utlis
             //资金更新
             String bMoneyRlt = HttpUtils.httpGet(user.loginUrl + "/leftDao.php", "", user.cookie);
             if (String.IsNullOrEmpty(bMoneyRlt)) return;
+            if (bMoneyRlt.Length < 4) return; 
             bMoneyRlt = bMoneyRlt.Substring(1, bMoneyRlt.Length - 3);
+            if (!bMoneyRlt.StartsWith("{")&&!bMoneyRlt.EndsWith("}")) {
+                return;
+            }
             JObject moneyJObject = JObject.Parse(bMoneyRlt);
             if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"]))
                 return;
@@ -249,7 +252,10 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
+            if (!orderBetStr.StartsWith("{") && !orderBetStr.EndsWith("}"))
+            {
+                return;
+            }
             JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
             if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null || !((String)orderBJObect["1"]).Equals("滚球足球")) {
                 leftForm.Invoke(new Action(() => {
@@ -286,9 +292,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            Console.WriteLine(orderBetStr);
-           // return;
-
+            
             String orderUrl = user.dataUrl+ "/app/hsport/sports/order_buy";
             String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
             String orderStr = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
@@ -299,6 +303,10 @@ namespace CxjText.utlis
                         rltForm.RefershLineData(inputTag, "失败");
                     }
                 }));
+                return;
+            }
+            if (!orderStr.StartsWith("[") && !orderStr.EndsWith("]"))
+            {
                 return;
             }
             JArray jArray = (JArray)JsonConvert.DeserializeObject(orderStr);
@@ -327,6 +335,12 @@ namespace CxjText.utlis
             {
                 return;
             }
+
+            if (!rltStr.StartsWith("{") && !rltStr.EndsWith("}"))
+            {
+                return;
+            }
+
             JObject jObject = JObject.Parse(rltStr);
             if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["list"]["u_info"] == null)
             {
