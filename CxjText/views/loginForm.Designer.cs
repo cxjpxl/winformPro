@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.loginDaGridView = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,6 +49,8 @@
             this.loginDaGridView.AllowUserToAddRows = false;
             this.loginDaGridView.AllowUserToResizeColumns = false;
             this.loginDaGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(166)))), ((int)(((byte)(112)))));
+            this.loginDaGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.loginDaGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.loginDaGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.loginDaGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -59,6 +63,8 @@
             this.loginDaGridView.Location = new System.Drawing.Point(0, 0);
             this.loginDaGridView.Name = "loginDaGridView";
             this.loginDaGridView.RowHeadersVisible = false;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(249)))), ((int)(((byte)(206)))));
+            this.loginDaGridView.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.loginDaGridView.RowTemplate.Height = 23;
             this.loginDaGridView.Size = new System.Drawing.Size(356, 364);
             this.loginDaGridView.TabIndex = 1;

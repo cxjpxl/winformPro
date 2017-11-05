@@ -59,6 +59,7 @@ namespace CxjText.views
         //更新UI
         public void setData(JArray jArray,int index,string selectFlag,String searchStr) {
             isUpdate = true;
+            this.dgvSA.SearchStr = searchStr;
             this.userInfo =(UserInfo) Config.userList[index];
             this.cJArray = jArray; //数据的存储
             if (jArray == null || jArray.Count == 0) {

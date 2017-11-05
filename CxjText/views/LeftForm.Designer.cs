@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.nameShowGridView = new System.Windows.Forms.DataGridView();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datapanel = new System.Windows.Forms.Panel();
@@ -40,6 +42,8 @@
             this.nameShowGridView.AllowUserToAddRows = false;
             this.nameShowGridView.AllowUserToResizeColumns = false;
             this.nameShowGridView.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(166)))), ((int)(((byte)(112)))));
+            this.nameShowGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.nameShowGridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.nameShowGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.nameShowGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -48,6 +52,8 @@
             this.nameShowGridView.Margin = new System.Windows.Forms.Padding(0);
             this.nameShowGridView.Name = "nameShowGridView";
             this.nameShowGridView.RowHeadersVisible = false;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(249)))), ((int)(((byte)(206)))));
+            this.nameShowGridView.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.nameShowGridView.RowTemplate.Height = 23;
             this.nameShowGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.nameShowGridView.Size = new System.Drawing.Size(141, 598);

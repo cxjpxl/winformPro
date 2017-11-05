@@ -264,15 +264,18 @@ public partial class RowMergeView : DataGridView
         private void PaintingFont(System.Windows.Forms.DataGridViewCellPaintingEventArgs e, int cellwidth, int UpRows, int DownRows, int count)
         {
             SolidBrush fontBrush = new SolidBrush(e.CellStyle.ForeColor);
+            SolidBrush fontBrush_diff = fontBrush;
+            Font font_diff = e.CellStyle.Font;
             float fontheight = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Height;
             float fontwidth = (int)e.Graphics.MeasureString(e.Value.ToString(), e.CellStyle.Font).Width;
             int cellheight = e.CellBounds.Height;
-            
+            String value = (String)e.Value;
+
             if (e.ColumnIndex > 2)
             {
-                SolidBrush fontBrush1 = new SolidBrush(System.Drawing.Color.Red);
-                Font font1 = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
-                String value = (String)e.Value, value0 = "", value1 = "";
+                fontBrush_diff = new SolidBrush(System.Drawing.Color.Red);
+                font_diff = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
+                String value0 = "", value1 = "";
                 string[] sArray = value.Split(new char[1] { ' ' });
                 if (sArray.Length == 2)
                 {
@@ -287,38 +290,45 @@ public partial class RowMergeView : DataGridView
                 // 独赢要居中 其他的右对齐
                 if (e.ColumnIndex == 3 || e.ColumnIndex == 6)
                 {
-                    e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    e.Graphics.DrawString(value1, font_diff, fontBrush_diff, e.CellBounds.X + (cellwidth - fontwidth) / 2, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
                 }
                 else
                 {
                     float space = 5;// 尾部添加空隙
                     fontwidth += space;
                     float fontwidth0 = (int)e.Graphics.MeasureString(value0, e.CellStyle.Font).Width;
-                    float fontwidth1 = (int)e.Graphics.MeasureString(value1, font1).Width + space;
+                    float fontwidth1 = (int)e.Graphics.MeasureString(value1, font_diff).Width + space;
                     e.Graphics.DrawString(value0, e.CellStyle.Font, fontBrush, e.CellBounds.X + cellwidth - fontwidth, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
-                    e.Graphics.DrawString(value1, font1, fontBrush1, e.CellBounds.X + cellwidth - fontwidth1, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                    e.Graphics.DrawString(value1, font_diff, fontBrush_diff, e.CellBounds.X + cellwidth - fontwidth1, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
                 }
             }
             else
             {
-                SolidBrush fontBrush1 = fontBrush;
                 if (e.ColumnIndex == 2)
                 {
                     int row = e.RowIndex%3;
-                    if (row == 0)
+                    if (row == 2)
                     {
-                        fontBrush1 = new SolidBrush(Color.FromArgb(144, 4, 7));
-                    }
-                    else if(row == 1)
-                    {
-                        fontBrush1 = new SolidBrush(Color.FromArgb(33, 56, 132));
+                        fontBrush_diff = new SolidBrush(Color.FromArgb(102, 102, 102));
                     }
                     else
                     {
-                        fontBrush1 = new SolidBrush(Color.FromArgb(102, 102, 102));
+                        if (row == 1)
+                        {
+                            fontBrush_diff = new SolidBrush(Color.FromArgb(33, 56, 132));
+                        }else if (row == 0)
+                        {
+                            fontBrush_diff = new SolidBrush(Color.FromArgb(144, 4, 7));
+                        }
+                        // 如果搜索关键字存在 则标红有关键字的球队
+                        if (this.SearchStr != null && this.SearchStr != "" && value.Contains(this.SearchStr))
+                        {
+                            fontBrush_diff = new SolidBrush(System.Drawing.Color.Red);
+                            font_diff = new Font(e.CellStyle.Font, e.CellStyle.Font.Style | FontStyle.Bold);
+                        }
                     }
                 }
-                e.Graphics.DrawString((String)e.Value, e.CellStyle.Font, fontBrush1, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
+                e.Graphics.DrawString((String)e.Value, font_diff, fontBrush_diff, e.CellBounds.X, e.CellBounds.Y - cellheight * (UpRows - 1) + (cellheight * count - fontheight) / 2);
             }
 
             //if (e.CellStyle.Alignment == DataGridViewContentAlignment.BottomCenter)
@@ -385,7 +395,21 @@ public partial class RowMergeView : DataGridView
                 _mergerowjobject = value;
             }
         }
-            private JObject _mergerowjobject = new JObject();
+        private JObject _mergerowjobject = new JObject();
+        // 搜索球队关键字
+        public String SearchStr
+        {
+            get
+            {
+                return _searchstr;
+            }
+            set
+            {
+                _searchstr = value;
+            }
+        }
+        private String _searchstr = "";
+
         #endregion
         #region 二维表头
         private struct SpanInfo //表头信息
