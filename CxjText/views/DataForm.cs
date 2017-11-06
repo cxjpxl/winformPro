@@ -60,7 +60,12 @@ namespace CxjText.views
         public void setData(JArray jArray,int index,string selectFlag,String searchStr) {
             isUpdate = true;
             this.dgvSA.SearchStr = searchStr;
+            String preTag = "";
+            if (this.userInfo != null) {
+                preTag = this.userInfo.tag;
+            }
             this.userInfo =(UserInfo) Config.userList[index];
+            String currentTag = this.userInfo.tag;
             this.cJArray = jArray; //数据的存储
             if (jArray == null || jArray.Count == 0) {
                 this.dt.Clear();
@@ -70,7 +75,7 @@ namespace CxjText.views
             }
             int sPosition = 0;
             // 若改变网站或者联赛 则需要将滚动条置零
-            if (this.cIndex==-1 || this.cIndex!=index || this.selectFlag != selectFlag)
+            if (this.cIndex==-1  || this.selectFlag != selectFlag||!preTag.Equals(currentTag))
             {
                 this.currMid = null;
                 sPosition = 0;
@@ -192,7 +197,7 @@ namespace CxjText.views
                         break;
 
                 }
-                Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
+                //Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
             }
         }
     }
