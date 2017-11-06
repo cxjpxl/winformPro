@@ -80,31 +80,39 @@ namespace CxjText.utlis
         //多系统处理   判断时候能更新数据
         public static bool canUpdateData(String tag, long userTime, long currentTime) {
 
-            if (tag.Equals("A"))//A系统
+            bool isUpdate = false;
+            switch (tag)
             {
-                if (currentTime - userTime >= 1 * 1000)  //1s刷新Ui一次
-                {
-                    return true;
-                }
+                case "A":
+                    if (currentTime - userTime >= 1 * 1000)  
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "B":
+                    if (currentTime - userTime >= 12 * 1000) 
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "I":
+                    if (currentTime - userTime >= 5 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "U":
+                    if (currentTime - userTime >= 5 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                default:
+                    Console.WriteLine("系统待开发中!");
+                    break;
+
             }
-            else if (tag.Equals("B"))
-            {
-                if (currentTime - userTime >= 15 * 1000)  //1s刷新Ui一次
-                {
-                    return true;
-                }
-            }
-            else if (tag.Equals("I")) {
-                if (currentTime - userTime >= 5 * 1000)  //1s刷新Ui一次
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                Console.WriteLine("系统待开发中!");
-            }
-            return false;
+            return isUpdate;
         }
 
         //多系统处理   获取数据接口

@@ -27,15 +27,24 @@ namespace CxjText.utlis
                     rltJArray = new JArray();
                 }
             }
-            else if (userInfo.tag.Equals("I")) {
+            else if (userInfo.tag.Equals("I"))
+            {
                 rltJArray = (JArray)jObject["db"];
                 if (rltJArray == null)
                 {
                     rltJArray = new JArray();
                 }
-            }else
+            }
+            else if (userInfo.tag.Equals("U")) {
+                rltJArray = (JArray)jObject["db"];
+                if (rltJArray == null)
+                {
+                    rltJArray = new JArray();
+                }
+            }
+            else
             {
-                
+
             }
 
             return rltJArray;
@@ -89,8 +98,8 @@ namespace CxjText.utlis
                     JArray itemJArray = new JArray();
                     itemJArray.Add(itemJObect);
                     String name = (String)itemJObect["Match_Name"];
-                    int j =  0;
-                    for (j = i+1; j < jArray.Count; j++)
+                    int j = 0;
+                    for (j = i + 1; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
                         String name1 = (String)itemJObject1["Match_Name"];
@@ -105,7 +114,9 @@ namespace CxjText.utlis
                     i = j;
                     rltJArray.Add(itemJArray);
                 }
-            }else if (userInfo.tag.Equals("I")) {
+            }
+            else if (userInfo.tag.Equals("I"))
+            {
                 JArray jArray = (JArray)jObject["db"];
                 if (jArray == null || jArray.Count == 0)
                 {
@@ -134,6 +145,36 @@ namespace CxjText.utlis
                     rltJArray.Add(itemJArray);
                 }
             }
+            else if (userInfo.tag.Equals("U"))
+            {
+                JArray jArray = (JArray)jObject["db"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JArray itemJObect = (JArray)jArray[i];
+                    JArray itemJArray = new JArray();
+                    itemJArray.Add(itemJObect);
+                    String name = (String)itemJObect[2];//联赛名字
+                    int j = i + 1;
+                    for (; j < jArray.Count; j++)
+                    {
+                        JArray itemJObject1 = (JArray)jArray[j];
+                        String name1 = (String)itemJObject1[2];//联赛名字
+                        if (name.Equals(name1))
+                        {
+                            itemJArray.Add(itemJObject1);
+                            continue;
+                        }
+                        j = j - 1;
+                        break;
+                    }
+                    i = j;
+                    rltJArray.Add(itemJArray);
+                }
+            }
             else
             {
                 Console.WriteLine("系统开发中!");
@@ -148,10 +189,16 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["a26"].ToString();
             }
-            else if (userInfo.tag.Equals("B")) {
+            else if (userInfo.tag.Equals("B"))
+            {
                 title = currentArray[0]["Match_Name"].ToString();
-            } else if (userInfo.tag.Equals("I")) {
+            }
+            else if (userInfo.tag.Equals("I"))
+            {
                 title = currentArray[0][1].ToString();
+            }
+            else if (userInfo.tag.Equals("U")) {
+                title = currentArray[0][2].ToString();
             }
             else
             {
@@ -167,11 +214,15 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("B")) {
+            else if (userInfo.tag.Equals("B"))
+            {
                 mid = (String)jArray[index][0]["Match_ID"] + ""; //唯一标识
             }
             else if (userInfo.tag.Equals("I"))
             {
+                mid = (String)jArray[index][0][0] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("U")) {
                 mid = (String)jArray[index][0][0] + ""; //唯一标识
             }
             else
@@ -189,10 +240,13 @@ namespace CxjText.utlis
             {
                 String a2 = (String)jObject["a2"];
                 String a3 = (String)jObject["a3"];
-                if (a2.IndexOf(str) >= 0 || a3.IndexOf(str) >= 0) {
+                if (a2.IndexOf(str) >= 0 || a3.IndexOf(str) >= 0)
+                {
                     return true;
                 }
-            } else if (userInfo.tag.Equals("B")) {
+            }
+            else if (userInfo.tag.Equals("B"))
+            {
                 String Match_Master = (String)jObject["Match_Master"];
                 String Match_Guest = (String)jObject["Match_Guest"];
                 if (Match_Master.IndexOf(str) >= 0 || Match_Guest.IndexOf(str) >= 0)
@@ -200,7 +254,15 @@ namespace CxjText.utlis
                     return true;
                 }
             }
-            else {
+            else if (userInfo.tag.Equals("I")) {
+
+            }
+            else if (userInfo.tag.Equals("U"))
+            {
+
+            }
+            else
+            {
                 Config.console("系统开发中！");
             }
             return false;

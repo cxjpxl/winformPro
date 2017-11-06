@@ -126,22 +126,25 @@ namespace CxjText
                     case "I":
                         dataRtlStr = DataPramsUtils.getIData(position,this,this.loginForm);
                         break;
+                    case "U":
+                        dataRtlStr = DataPramsUtils.getUData(userInfo);
+                        break;
                     default:
                         break;
                 }
+                
                 //返回数据是空表示获取数据失败
-                if (String.IsNullOrEmpty(dataRtlStr)||leftForm == null) {
+                if (String.IsNullOrEmpty(dataRtlStr)) {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
+                userInfo.updateTime = FormUtils.getCurrentTime();
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
                 {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
-                //获取到数据  更新UI (传入用户信息和数据               
-                userInfo.updateTime = FormUtils.getCurrentTime();
                 //获取数据成功
                 this.Invoke(new Action(() => {
                     leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理

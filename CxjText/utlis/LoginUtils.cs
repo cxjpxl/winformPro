@@ -4,10 +4,8 @@ using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CxjText.utlis
 {
@@ -26,6 +24,7 @@ namespace CxjText.utlis
             {
                 userInfo.status = 0;
                 loginForm.AddToListToUpDate(position);
+                userInfo.uid = "";
                 HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
@@ -120,6 +119,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.uid = "";
                 userInfo.status = 0;
                 loginForm.AddToListToUpDate(position);
                 HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
@@ -217,6 +217,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.uid = "";
                 userInfo.status = 0;
                 loginForm.AddToListToUpDate(position);
                 //HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
@@ -314,6 +315,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.uid = "";
                 userInfo.status = 0;
                 loginForm.AddToListToUpDate(position);
                 userInfo.cookie = null;

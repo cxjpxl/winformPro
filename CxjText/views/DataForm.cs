@@ -103,6 +103,10 @@ namespace CxjText.views
                     JArray jObject = (JArray)jArray[i]; //数据格式
                     rltObj = DataUtils.updateUI_SysI(jObject);
                     mid = (String)jObject[0]; // 获得唯一标示
+                } else if (userInfo.tag.Equals("U")) {
+                    JArray jObject = (JArray)jArray[i]; //数据格式
+                    rltObj = DataUtils.updateUI_SysU(jObject);
+                    mid = (String)jObject[0]; // 获得唯一标示
                 }
                 else
                 {
@@ -192,6 +196,9 @@ namespace CxjText.views
                         break;
                     case "I":
                         this.currMid=(String)this.cJArray[currIndex / 3][0] + "";
+                        break;
+                    case "U":
+                        this.currMid = (String)this.cJArray[currIndex / 3][0] + "";
                         break;
                     default:
                         break;
