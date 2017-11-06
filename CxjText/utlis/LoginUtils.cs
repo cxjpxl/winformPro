@@ -188,7 +188,8 @@ namespace CxjText.utlis
                     return;
               }
               bMoneyRlt = bMoneyRlt.Substring(1,bMoneyRlt.Length-3);
-            if (!bMoneyRlt.StartsWith("{") && !bMoneyRlt.EndsWith("}")) {
+            if (!FormUtils.IsJsonObject(bMoneyRlt))
+            {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
                 return;
@@ -265,7 +266,8 @@ namespace CxjText.utlis
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl;
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr)||(!rltStr.StartsWith("{")&&!rltStr.EndsWith("}"))) {
+            if (!FormUtils.IsJsonObject(rltStr))
+            {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
                 return;
@@ -281,7 +283,7 @@ namespace CxjText.utlis
             //获取其他的用户信息
             String moneyUrl = userInfo.dataUrl + "/app/member/index/getindex";
             rltStr = HttpUtils.HttpPostHeader(moneyUrl,"", "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(rltStr)||(!rltStr.StartsWith("{")&&!rltStr.EndsWith("}")))
+            if (!FormUtils.IsJsonObject(rltStr))
             {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);

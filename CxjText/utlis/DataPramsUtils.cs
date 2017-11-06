@@ -14,10 +14,7 @@ namespace CxjText.utlis
             String  rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)) return null; 
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-            if (String.IsNullOrEmpty(rlt)) return null;
-            rlt = rlt.Trim();
-            //解析A的数据  然后循环获取
-            if (!rlt.StartsWith("{") && !rlt.EndsWith("}")) return null;
+            if (!FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             JArray jArry = (JArray)jObject["results"];
@@ -33,7 +30,7 @@ namespace CxjText.utlis
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
-                if (!pageRlt.StartsWith("{") && !pageRlt.EndsWith("}")) return null;
+                if (!FormUtils.IsJsonObject(pageRlt)) return null;
                 JObject pageJObject = JObject.Parse(pageRlt);
                 if (pageJObject == null) continue;
                 JArray pageJArry =(JArray)pageJObject["results"];
@@ -74,7 +71,7 @@ namespace CxjText.utlis
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
-                if (!pageRlt.StartsWith("{") && !pageRlt.EndsWith("}")) return null;
+                if (!FormUtils.IsJsonObject(pageRlt)) return null;
                 JObject pageJObject = JObject.Parse(pageRlt);
                 if (pageJObject == null) continue;
                 JArray pageJArry = (JArray)pageJObject["db"];

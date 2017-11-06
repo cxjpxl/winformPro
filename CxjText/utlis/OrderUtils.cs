@@ -152,7 +152,7 @@ namespace CxjText.utlis
             Console.WriteLine(C_Str);
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
-            if (String.IsNullOrEmpty(rlt)||(!rlt.StartsWith("{") && !rlt.EndsWith("}"))) {
+            if (!FormUtils.IsJsonObject(rlt)) {
                 //请求失败处理 UI处理
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -214,7 +214,8 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(bMoneyRlt)) return;
             if (bMoneyRlt.Length < 4) return; 
             bMoneyRlt = bMoneyRlt.Substring(1, bMoneyRlt.Length - 3);
-            if (!bMoneyRlt.StartsWith("{")&&!bMoneyRlt.EndsWith("}")) {
+            if (!FormUtils.IsJsonObject(bMoneyRlt))
+            {
                 return;
             }
             JObject moneyJObject = JObject.Parse(bMoneyRlt);
@@ -243,17 +244,14 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
             String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl+ "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(orderBetStr)) {
+            if (!FormUtils.IsJsonObject(orderBetStr))
+            {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
                     }
                 }));
-                return;
-            }
-            if (!orderBetStr.StartsWith("{") && !orderBetStr.EndsWith("}"))
-            {
                 return;
             }
             JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
@@ -296,17 +294,13 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl+ "/app/hsport/sports/order_buy";
             String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
             String orderStr = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
-            if (String.IsNullOrEmpty(orderStr)) {
+            if (!FormUtils.IsJsonArray(orderStr)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
                     }
                 }));
-                return;
-            }
-            if (!orderStr.StartsWith("[") && !orderStr.EndsWith("]"))
-            {
                 return;
             }
             JArray jArray = (JArray)JsonConvert.DeserializeObject(orderStr);
@@ -331,16 +325,7 @@ namespace CxjText.utlis
             //获取其他的用户信息
             String moneyUrl = user.dataUrl + "/app/member/index/getindex";
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr))
-            {
-                return;
-            }
-
-            if (!rltStr.StartsWith("{") && !rltStr.EndsWith("}"))
-            {
-                return;
-            }
-
+            if (!FormUtils.IsJsonObject(rltStr)) return;
             JObject jObject = JObject.Parse(rltStr);
             if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["list"]["u_info"] == null)
             {

@@ -9,7 +9,7 @@ namespace CxjText.utlis
 {
     class FormUtils
     {
-        
+
         //多系统处理   解析登录返回
         public static int explandsLoginData(UserInfo userInfo, String dataStr) {
 
@@ -55,7 +55,7 @@ namespace CxjText.utlis
                     return -1;
                 }
 
-            }else {
+            } else {
                 Console.WriteLine("系统待开发中!");
                 return -1;
             }
@@ -148,7 +148,7 @@ namespace CxjText.utlis
             return str;
         }
 
-       
+
 
         //获取订单参数
         public static String getOrderParmas(String parmasStr, UserInfo userInfo) {
@@ -166,7 +166,7 @@ namespace CxjText.utlis
             }
         }
 
-        
+
 
         public static int explandMoneyData(String dataStr, UserInfo userInfo) {
 
@@ -286,6 +286,32 @@ namespace CxjText.utlis
 
 
             return Htmlstring;
+        }
+
+        //判断是否json
+        public static bool IsJsonObject(String str) {
+            if (String.IsNullOrEmpty(str)) {
+                return false;
+            }
+
+            if (str.StartsWith("{") && str.EndsWith("}")) {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsJsonArray(String str)
+        {
+            if (String.IsNullOrEmpty(str))
+            {
+                return false;
+            }
+
+            if (str.StartsWith("[") && str.EndsWith("]"))
+            {
+                return true;
+            }
+            return false;
         }
 
     }
