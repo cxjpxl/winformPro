@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -302,6 +303,123 @@ namespace CxjText.utlis
             String money = (String)(jObject["list"]["u_info"]["money"]);
             userInfo.uid = uid;
             userInfo.money = money;
+            userInfo.status = 2; //成功
+            loginForm.AddToListToUpDate(position);
+        }
+
+
+        /**************************U系统登录处理******************************************/
+        public static void loginU(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.status = 0;
+                loginForm.AddToListToUpDate(position);
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.AddToListToUpDate(position);
+            String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "username=" + userInfo.user + "&userpassword=" + userInfo.pwd + "&code=" + codeStrBuf.ToString();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/login";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl+ "/home";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+            if (rltStr == null)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            
+            //获取uid
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if(list== null ||list.Count == 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            String uid = null;
+            for (int i = 0; i < list.Count; i++) {
+                Cookie c = list[i];
+                if (c.Name.Equals("Cookie_LoginId")) {
+                    uid = c.Value;
+                }
+            }
+            if (String.IsNullOrEmpty(uid)) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            userInfo.uid = uid; //获取到uid
+            String moneyUrl = userInfo.loginUrl + "/RestCredit?uid="+uid;
+            String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl,"uid="+uid,"",userInfo.cookie,headJObject); 
+            if (String.IsNullOrEmpty(moneyRltStr)) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            try {
+                float money  = float.Parse(moneyRltStr.Replace("\"", ""));
+                userInfo.money = money + ""; //获取钱成功
+            }
+            catch (SystemException e) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取钱
             userInfo.status = 2; //成功
             loginForm.AddToListToUpDate(position);
         }

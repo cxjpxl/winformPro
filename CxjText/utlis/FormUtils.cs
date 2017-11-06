@@ -55,6 +55,14 @@ namespace CxjText.utlis
                     return -1;
                 }
 
+            } else if (userInfo.tag.Equals("U")) {
+                if (dataStr.Contains("娱乐场协议与规则")) {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
             } else {
                 Console.WriteLine("系统待开发中!");
                 return -1;
