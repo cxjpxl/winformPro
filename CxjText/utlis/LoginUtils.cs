@@ -13,7 +13,7 @@ namespace CxjText.utlis
 {
     public class LoginUtils
     {
-        //A登录
+        /**************************A系统登录的处理****************************/
         public static void loginA(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -110,8 +110,7 @@ namespace CxjText.utlis
             userInfo.status = 2; //成功
             loginForm.AddToListToUpDate(position);
         }
-
-        /************************************************************************/
+        /**************************B系统登录的处理****************************/
         public static void loginB(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -207,9 +206,7 @@ namespace CxjText.utlis
                loginForm.AddToListToUpDate(position);
                return;
         }
-
-
-        /**************************I系统登录的处理************************************/
+        /**************************I系统登录的处理****************************/
         public static void loginI(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -306,9 +303,7 @@ namespace CxjText.utlis
             userInfo.status = 2; //成功
             loginForm.AddToListToUpDate(position);
         }
-
-
-        /**************************U系统登录处理******************************************/
+        /**************************U系统登录处理******************************/
         public static void loginU(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
