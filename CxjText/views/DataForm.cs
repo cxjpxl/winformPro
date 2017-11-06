@@ -61,7 +61,7 @@ namespace CxjText.views
             isUpdate = true;
             this.dgvSA.SearchStr = searchStr;
             String preTag = "";
-            if (this.userInfo != null) {
+            if (this.userInfo != null) { //获取当前系统的值
                 preTag = this.userInfo.tag;
             }
             this.userInfo =(UserInfo) Config.userList[index];

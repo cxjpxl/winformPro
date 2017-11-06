@@ -74,7 +74,8 @@
             this.dgvSA.ReadOnly = true;
             this.dgvSA.RowHeadersVisible = false;
             this.dgvSA.RowTemplate.Height = 23;
-            this.dgvSA.Size = new System.Drawing.Size(815, 430);
+            this.dgvSA.SearchStr = "";
+            this.dgvSA.Size = new System.Drawing.Size(817, 462);
             this.dgvSA.TabIndex = 0;
             this.dgvSA.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSA_CellClick);
             this.dgvSA.Scroll += new System.Windows.Forms.ScrollEventHandler(this.dgvSA_Scroll);
@@ -113,7 +114,7 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column3.Width = 60;
+            this.Column3.Width = 50;
             // 
             // Column4
             // 
@@ -122,7 +123,7 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column4.Width = 80;
+            this.Column4.Width = 95;
             // 
             // Column5
             // 
@@ -149,7 +150,7 @@
             this.Column7.Name = "Column7";
             this.Column7.ReadOnly = true;
             this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column7.Width = 80;
+            this.Column7.Width = 95;
             // 
             // Column8
             // 
@@ -164,7 +165,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(815, 430);
+            this.ClientSize = new System.Drawing.Size(815, 462);
             this.Controls.Add(this.dgvSA);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DataForm";

@@ -25,7 +25,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            Console.WriteLine(rlt);
+            //Console.WriteLine(rlt);
             if (rlt == null || rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
 
@@ -84,8 +84,8 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             String C_Str = (String)jobject["C_Str"];
             String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
-            Console.WriteLine("---------------");
-            Console.WriteLine(bRlt);
+            //Console.WriteLine("---------------");
+            //Console.WriteLine(bRlt);
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球滚球") < 0)
             {
                 leftForm.Invoke(new Action(() => {

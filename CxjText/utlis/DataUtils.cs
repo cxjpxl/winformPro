@@ -109,7 +109,15 @@ namespace CxjText.utlis
             returnObj.Add("c04", c04.Trim());
 
             //主队全场大小
-            String c05 = (String)jObject["Match_DxGG"] + " " + (String)jObject["Match_DxDpl"];
+            String Match_DxDpl = (String)jObject["Match_DxDpl"];
+            String c05 = "";
+            if (String.IsNullOrEmpty(Match_DxDpl) || Match_DxDpl.Equals("0"))
+            {
+                c05 = "";
+            }
+            else {
+                c05 = (String)jObject["Match_DxGG"] + " " + Match_DxDpl;
+            }
             returnObj.Add("c05", c05.Trim());
 
             //半场独赢
@@ -177,10 +185,18 @@ namespace CxjText.utlis
             returnObj.Add("c14", c14.Trim());
 
             //客队全场大小
-            String c15 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxXpl"];
+            String Match_DxXpl = (String)jObject["Match_DxXpl"];
+            String c15 = "";
+            if (String.IsNullOrEmpty(Match_DxXpl) || Match_DxXpl.Equals("0"))
+            {
+                c15 = "";
+            }
+            else {
+                c15 = (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxXpl"];
+            }
             returnObj.Add("c15", c15.Trim());
 
-            //客队全场单双
+            //客队全场独赢
             String c16 = (String)jObject["Match_Bgdy"];
             if (String.IsNullOrEmpty(c16) || c16.Equals("0.00")) c16 = "";
             returnObj.Add("c16", c16.Trim());

@@ -31,9 +31,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.nameShowGridView = new System.Windows.Forms.DataGridView();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datapanel = new System.Windows.Forms.Panel();
             this.rltPanle = new System.Windows.Forms.Panel();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.nameShowGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,9 +56,27 @@
             this.nameShowGridView.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.nameShowGridView.RowTemplate.Height = 23;
             this.nameShowGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.nameShowGridView.Size = new System.Drawing.Size(141, 598);
+            this.nameShowGridView.Size = new System.Drawing.Size(152, 630);
             this.nameShowGridView.TabIndex = 0;
             this.nameShowGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NameShowGridView_CellMouseClick);
+            // 
+            // datapanel
+            // 
+            this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.datapanel.Location = new System.Drawing.Point(152, 0);
+            this.datapanel.Margin = new System.Windows.Forms.Padding(0);
+            this.datapanel.Name = "datapanel";
+            this.datapanel.Size = new System.Drawing.Size(815, 462);
+            this.datapanel.TabIndex = 1;
+            // 
+            // rltPanle
+            // 
+            this.rltPanle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rltPanle.Location = new System.Drawing.Point(152, 476);
+            this.rltPanle.Margin = new System.Windows.Forms.Padding(0);
+            this.rltPanle.Name = "rltPanle";
+            this.rltPanle.Size = new System.Drawing.Size(815, 154);
+            this.rltPanle.TabIndex = 4;
             // 
             // name
             // 
@@ -69,32 +87,14 @@
             this.name.ReadOnly = true;
             this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.name.Width = 140;
-            // 
-            // datapanel
-            // 
-            this.datapanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.datapanel.Location = new System.Drawing.Point(152, 0);
-            this.datapanel.Margin = new System.Windows.Forms.Padding(0);
-            this.datapanel.Name = "datapanel";
-            this.datapanel.Size = new System.Drawing.Size(815, 430);
-            this.datapanel.TabIndex = 1;
-            // 
-            // rltPanle
-            // 
-            this.rltPanle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rltPanle.Location = new System.Drawing.Point(152, 444);
-            this.rltPanle.Margin = new System.Windows.Forms.Padding(0);
-            this.rltPanle.Name = "rltPanle";
-            this.rltPanle.Size = new System.Drawing.Size(815, 154);
-            this.rltPanle.TabIndex = 4;
+            this.name.Width = 150;
             // 
             // LeftForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(976, 607);
+            this.ClientSize = new System.Drawing.Size(976, 639);
             this.Controls.Add(this.rltPanle);
             this.Controls.Add(this.datapanel);
             this.Controls.Add(this.nameShowGridView);
@@ -111,7 +111,7 @@
 
         private System.Windows.Forms.DataGridView nameShowGridView;
         private System.Windows.Forms.Panel datapanel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.Panel rltPanle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
     }
 }
