@@ -123,7 +123,7 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column4.Width = 95;
+            this.Column4.Width = 90;
             // 
             // Column5
             // 
@@ -132,7 +132,7 @@
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
             this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 95;
+            this.Column5.Width = 90;
             // 
             // Column6
             // 
@@ -150,7 +150,7 @@
             this.Column7.Name = "Column7";
             this.Column7.ReadOnly = true;
             this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column7.Width = 95;
+            this.Column7.Width = 90;
             // 
             // Column8
             // 
@@ -159,7 +159,7 @@
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column8.Width = 95;
+            this.Column8.Width = 90;
             // 
             // DataForm
             // 
