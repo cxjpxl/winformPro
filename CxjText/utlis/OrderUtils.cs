@@ -317,22 +317,20 @@ namespace CxjText.utlis
 
             //更新钱
             //获取其他的用户信息
-            String moneyUrl = user.dataUrl + "/app/member/index/getindex";
+            String getMoneyUrl = user.dataUrl + "/app/member/userInfo/autosendmoneny";
+            String moneyP = "r=" + FormUtils.getCurrentTime();
             headJObject["Referer"] = user.dataUrl;
-            String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            Console.WriteLine(rltStr);
+
+            String rltStr = HttpUtils.HttpPostHeader(getMoneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (!FormUtils.IsJsonObject(rltStr)) return;
             JObject jObject = JObject.Parse(rltStr);
-            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["list"]["u_info"] == null)
+            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null)
             {
                 return;
             }
 
-
-            String uid = (String)(jObject["list"]["u_info"]["uid"]);
-            String money1 = (String)(jObject["list"]["u_info"]["money"]);
-            Console.WriteLine(money1);
-            user.uid = uid;
+            String money1 = (String)(jObject["list"]["money"]);
+            if (String.IsNullOrEmpty(money1)) return;
             user.money = money1;
             //获取钱成功  要更新UI
             if (loginForm != null)
