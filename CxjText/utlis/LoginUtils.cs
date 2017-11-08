@@ -11,8 +11,7 @@ namespace CxjText.utlis
 {
     public class LoginUtils
     {
-
-
+        //重新登录获取cookie的时间处理
         public static bool canRestLogin(long time,String tag) {
             long cTime = FormUtils.getCurrentTime();
             int timeOffest = 1000 * 60 * 60;//一个小时重新登录一下
