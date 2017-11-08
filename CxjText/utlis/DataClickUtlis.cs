@@ -567,28 +567,35 @@ namespace CxjText.utlis
             JArray jObject = (JArray)cJArray[index];
             if (jObject == null) return null;
             //&uid=
+            String gid = "";
             if (numRow == 0)
             {
                 inputType = "主队";
                 switch (clickNum)
                 {
                     case 3://03
-                        rltStr = "gid="+jObject[0]+"&odd_f_type=H&type=H&gnum="+jObject[3]+"&langx=zh-cn";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=H&gnum="+jObject[3]+"&langx=zh-cn";
                         break;
                     case 4:
-                        rltStr = "gid=" + jObject[0] + "&odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong="+jObject[7]+"&langx=zh-cn";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong="+jObject[7]+"&langx=zh-cn";
                         break;
                     case 5:
-                        rltStr = "";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=C&gnum="+ jObject[4] + "&langx=zh-cn";
                         break;
                     case 6:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=H&gnum="+ jObject[3] + "&langx=zh-cn";
                         break;
                     case 7:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong=" + jObject[21] + "&langx=zh-cn";
                         break;
                     case 8:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -601,22 +608,28 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "gid="+jObject[0]+"&odd_f_type=H&type=C&gnum="+jObject[4]+ "&langx=zh-cn";
                         break;
                     case 4:
-                        rltStr = "";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[7] + "&langx=zh-cn";
                         break;
                     case 5:
-                        rltStr = "";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
                         break;
                     case 6:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     case 7:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[21] + "&langx=zh-cn";
                         break;
                     case 8:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -628,10 +641,12 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        rltStr = "";
+                        gid = "gid=" + jObject[0];
+                        rltStr = "odd_f_type=H&type=N&gnum="+jObject[4]+"&langx=zh-cn";
                         break;
                     case 6:
-                        rltStr = "";
+                        gid = "gid=" + jObject[20];
+                        rltStr = "odd_f_type=H&type=N&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -647,14 +662,16 @@ namespace CxjText.utlis
                 return null;
             }
 
+            dataJObject["gid"] = gid;
+
             inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
             bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             if (String.IsNullOrEmpty(bateStr.Trim()))
             {
                 return null;
             }
-            gameName = (String)jObject[1]; //获取赛事
-            gameTeam = (String)jObject[2] + "-" + (String)jObject[3]; //球队名称
+            gameName = (String)jObject[2]; //获取赛事
+            gameTeam = (String)jObject[5] + "-" + (String)jObject[6]; //球队名称
 
 
             //统一显示的

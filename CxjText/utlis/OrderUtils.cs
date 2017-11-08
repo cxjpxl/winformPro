@@ -4,7 +4,6 @@ using CxjText.views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 
@@ -230,7 +229,7 @@ namespace CxjText.utlis
             }
         }
 
-
+        //I下单
         public static void OrderI(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
@@ -343,6 +342,36 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(index);
             }
         }
+
+
+        //U下单
+        public static void OrderU(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+
+            HttpUtils.httpGet(user.dataUrl+ "/Sport?uid="+user.uid,"",user.cookie);
+            HttpUtils.httpGet(user.dataUrl + "/SpHome?uid=" + user.uid, "", user.cookie);
+            HttpUtils.httpGet(user.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+user.uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=", "",user.cookie);
+
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Referer"] = user.dataUrl + "app/member/FT_browse/index?rtype=re&uid="+user.uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
+            String brtUrl = user.dataUrl + "/app/member/FT_order/FT_order_hrm?" + parmsStr + "&uid=" + user.uid;
+            String betStr = HttpUtils.HttpGetHeader(brtUrl, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betStr)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            Console.WriteLine(betStr);
+        }
+
 
     }
 }

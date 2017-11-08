@@ -27,6 +27,7 @@ namespace CxjText.bean
         public CookieContainer cookie = null; //用于http请求的时候传的cookie
 
         public long updateTime = -1; //记录上一次刷新数据的时间
+        public long loginTime = -1; //记录上次登录的时间
 
         public UserInfo() {
             cookie = new CookieContainer();

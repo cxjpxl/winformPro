@@ -11,6 +11,16 @@ namespace CxjText.utlis
 {
     public class LoginUtils
     {
+
+
+        public static bool canRestLogin(long time) {
+            long cTime = FormUtils.getCurrentTime();
+            int timeOffest = 1000 * 60 * 60;//一个小时重新登录一下
+            if (cTime - time >= timeOffest) { 
+                return true;
+            }
+            return false;
+        }
         /**************************A系统登录的处理****************************/
         public static void loginA(LoginForm loginForm, int position)
         {
@@ -106,6 +116,7 @@ namespace CxjText.utlis
             }
 
             userInfo.uid = uid; //获取到uid
+            userInfo.loginTime = FormUtils.getCurrentTime();
             userInfo.status = 2; //成功
             loginForm.AddToListToUpDate(position);
         }
@@ -202,7 +213,8 @@ namespace CxjText.utlis
               }
                 String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
                userInfo.money = moneys[0];
-               userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime();
+                userInfo.status = 2; //成功
                loginForm.AddToListToUpDate(position);
                return;
         }
@@ -301,6 +313,7 @@ namespace CxjText.utlis
             String money = (String)(jObject["list"]["u_info"]["money"]);
             userInfo.uid = uid;
             userInfo.money = money;
+            userInfo.loginTime = FormUtils.getCurrentTime();
             userInfo.status = 2; //成功
             loginForm.AddToListToUpDate(position);
         }
@@ -418,6 +431,7 @@ namespace CxjText.utlis
             }
             //获取钱
             userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime();
             loginForm.AddToListToUpDate(position);
         }
     }

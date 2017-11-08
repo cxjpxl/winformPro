@@ -333,6 +333,10 @@ namespace CxjText.views
                     case "I":
                         orderParmas = rltStr;
                         break;
+                    case "U":
+                        String gid = (String)dataJObject["gid"];
+                        orderParmas = gid + "&"+rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -360,7 +364,11 @@ namespace CxjText.views
                     jObject["C_Str"] = dataJObject["C_Str"];
                     jObject["isDuYing"] = dataJObject["isDuYing"];
                 }
-                else if (user.tag.Equals("I")) {
+                else if (user.tag.Equals("I"))
+                {
+                    jObject["money"] = user.inputMoney;
+                }
+                else if (user.tag.Equals("U")) {
                     jObject["money"] = user.inputMoney;
                 }
                 //开线程并发去下注
@@ -394,6 +402,9 @@ namespace CxjText.views
                     case "I":
                         OrderUtils.OrderI(jobject,this,loginForm,rltForm);
                         break;
+                    case "U":
+                        OrderUtils.OrderU(jobject, this, loginForm, rltForm);
+                        break;
                     default:
                         return ;
                 }
@@ -401,6 +412,7 @@ namespace CxjText.views
             }
             catch (SystemException e)
             {
+                Console.WriteLine(e.ToString());
                 Invoke(new Action(() =>
                 {
                     if (rltForm != null)
