@@ -63,7 +63,19 @@ namespace CxjText.utlis
                 {
                     return -1;
                 }
-            } else {
+            }
+            else if (userInfo.tag.Equals("R"))
+            {
+                if (dataStr.Contains("UID="))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else {
                 Console.WriteLine("系统待开发中!");
                 return -1;
             }

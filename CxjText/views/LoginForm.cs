@@ -164,6 +164,9 @@ namespace CxjText.views
                     case "U":
                         LoginUtils.loginU(this,position);
                         break;
+                    case "R":
+                        LoginUtils.loginR(this, position);
+                        break;
                     default:
                         break;
                 }

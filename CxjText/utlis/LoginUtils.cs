@@ -18,16 +18,19 @@ namespace CxjText.utlis
             int timeOffest = 1000 * 60 * 60;//一个小时重新登录一下
             switch (tag) {
                 case "A":
-                    timeOffest = 1000 * 60 * 60;
+                    timeOffest = 1000 * 60 * 60;//一个小时
                     break;
                 case "B":
-                    timeOffest = 1000 * 60 * 29;
+                    timeOffest = 1000 * 60 * 29;//半个小时
                     break;
                 case "I":
-                    timeOffest = 1000 * 60 * 29;
+                    timeOffest = 1000 * 60 * 29;//半个小时
                     break;
                 case "U":
-                    timeOffest = 1000 * 60 * 29;
+                    timeOffest = 1000 * 60 * 29;//半个小时
+                    break;
+                case "R":
+                    timeOffest = 1000 * 60 * 29;//半个小时
                     break;
                 default:
                     return false;
@@ -453,5 +456,102 @@ namespace CxjText.utlis
             userInfo.loginTime = FormUtils.getCurrentTime();
             loginForm.AddToListToUpDate(position);
         }
+        /************************R系统登录处理********************************/
+        public static void loginR(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.status = 0;
+                loginForm.AddToListToUpDate(position);
+                userInfo.uid = "";
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.AddToListToUpDate(position);
+            String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "uid2=guest&SS=&SR=&TS=&act=login&username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&rmNum=" + codeStrBuf.ToString();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/app/member/login.ashx";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            //获取uid
+            String[] strs = rltStr.Split('=');
+            String uidStr = strs[strs.Length - 1];
+            String[] uidStrs = uidStr.Split('\'');
+            String uid = uidStrs[0];
+            userInfo.uid = uid;
+            //获取别的数据
+
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            //获取钱
+            String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t="+FormUtils.getCurrentTime();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
+            String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(moneyStr)) {
+                userInfo.status = 3;
+                loginForm.AddToListToUpDate(position);
+                return; 
+            }
+            userInfo.money = moneyStr;
+            userInfo.status = 2;
+            loginForm.AddToListToUpDate(position);
+        }
+
     }
 }
