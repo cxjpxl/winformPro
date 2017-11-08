@@ -334,8 +334,7 @@ namespace CxjText.views
                         orderParmas = rltStr;
                         break;
                     case "U":
-                        String gid = (String)dataJObject["gid"];
-                        orderParmas = gid + "&"+rltStr;
+                        orderParmas = rltStr + "&uid=" + user.uid;
                         break;
                     default:
                         continue;
@@ -370,6 +369,7 @@ namespace CxjText.views
                 }
                 else if (user.tag.Equals("U")) {
                     jObject["money"] = user.inputMoney;
+                    jObject["rString"] = dataJObject["rString"];
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;

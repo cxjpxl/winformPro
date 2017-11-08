@@ -412,6 +412,22 @@ namespace CxjText.utlis
             }
 
             userInfo.uid = uid; //获取到uid
+
+            //我同意的点击处理
+            /* String aggreStr = "uid="+uid+"&gtype=FIRST&submit=%E6%88%91%E5%90%8C%E6%84%8F";
+             HttpUtils.HttpPost(userInfo.loginUrl + "/Home", aggreStr, "application/x-www-form-urlencoded", userInfo.cookie);
+             HttpUtils.httpGet(userInfo.dataUrl+ "/Sport?uid="+ uid,"", userInfo.cookie);
+             HttpUtils.httpGet(userInfo.dataUrl + "/SpHome?uid=" + uid, "", userInfo.cookie);
+             JObject headJObject1 = new JObject();
+             headJObject1["Host"] = userInfo.baseUrl;
+             headJObject1["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
+             HttpUtils.HttpGetHeader("http://www.googletagmanager.com/gtm.js?id=GTM-5M4BG3", "", userInfo.cookie, headJObject1);
+             HttpUtils.HttpGetHeader("https://www.google-analytics.com/analytics.js", "", userInfo.cookie, headJObject1);
+             HttpUtils.httpGet(userInfo.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=", "", userInfo.cookie);
+             */
+
+            //获取钱的处理
+            headJObject["Referer"] = userInfo.dataUrl + "/Sport?uid="+uid;
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid="+uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl,"uid="+uid,"",userInfo.cookie,headJObject); 
             if (String.IsNullOrEmpty(moneyRltStr)) {

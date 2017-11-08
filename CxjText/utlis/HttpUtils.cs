@@ -66,6 +66,8 @@ namespace CxjText.utils
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
             }
 
+            SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests","1");
+
             if (String.IsNullOrEmpty(contentType))
             {
                 //request.ContentType = "application/json;charset=UTF-8";

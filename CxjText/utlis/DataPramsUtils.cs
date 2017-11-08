@@ -3,6 +3,9 @@ using CxjText.utils;
 using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Net;
+
 namespace CxjText.utlis
 {
    public class DataPramsUtils
@@ -115,6 +118,7 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(uid)) uid = "";
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)||!rlt.Contains("t_page")) return null;
             String[] rltLine = rlt.Split('\n');
             if (rltLine.Length == 0) return null;

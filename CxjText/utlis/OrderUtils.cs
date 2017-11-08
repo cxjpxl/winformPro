@@ -4,7 +4,6 @@ using CxjText.views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace CxjText.utlis
@@ -72,8 +71,6 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(index);
             }
         }
-
-
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
@@ -228,7 +225,6 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(index);
             }
         }
-
         //I下单
         public static void OrderI(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
             String parmsStr = (String)jobject["rlt"];
@@ -342,25 +338,20 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(index);
             }
         }
-
-
         //U下单
         public static void OrderU(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
-
-            HttpUtils.httpGet(user.dataUrl+ "/Sport?uid="+user.uid,"",user.cookie);
-            HttpUtils.httpGet(user.dataUrl + "/SpHome?uid=" + user.uid, "", user.cookie);
-            HttpUtils.httpGet(user.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+user.uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=", "",user.cookie);
-
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["Referer"] = user.dataUrl + "app/member/FT_browse/index?rtype=re&uid="+user.uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
-            String brtUrl = user.dataUrl + "/app/member/FT_order/FT_order_hrm?" + parmsStr + "&uid=" + user.uid;
-            String betStr = HttpUtils.HttpGetHeader(brtUrl, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(betStr)) {
+            String RefererUrl = user.dataUrl + "/app/member/select?uid=" + user.uid+ "&langx=zh-cn";
+            headJObject["Referer"] = RefererUrl;
+            String rString = (String)jobject["rString"];
+            String brtUrl = user.dataUrl + "/app/member/FT_order/FT_order_"+ rString + "?" + parmsStr;
+            String betStr = HttpUtils.HttpGetHeader(brtUrl, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betStr)||!betStr.Contains("确定交易")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -369,9 +360,115 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            Console.WriteLine(betStr);
-        }
+            betStr = betStr.Trim();
+            //解析列表数据  这些数据是到时候要提交到服务器的
+            String[] strs = betStr.Split('\n');
+            String orderPrams = "";
+            String gmin_single = "";
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\"")) 
+                { //找到input字段
+                    //获取name的值
+                    int nameIndex = str.IndexOf("name=\"");
+                    String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
+                    nameIndex = str1.IndexOf('"');
+                    String nameKey = str1.Substring(0, nameIndex);
+                    str1 = str1.Substring(nameIndex, str1.Length - nameIndex);
+                    nameIndex = str1.IndexOf("value=\"");
+                    str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
+                    nameIndex = str1.IndexOf('"');
+                    String valueStr = str1.Substring(0, nameIndex);
 
+                    if (nameKey.Equals("gmin_single")) {
+                        gmin_single = valueStr;
+                    }
+                    //数据解析出来
+                    orderPrams =orderPrams + nameKey + "=" + valueStr + "&";
+                }
+            }
+           
+            if (String.IsNullOrEmpty(orderPrams)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            int money = (int)jobject["money"];
+            try {
+                int minMoney = int.Parse(gmin_single);
+                if (minMoney > money) {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "输入金额太小");
+                        }
+                    }));
+                    return;
+                }
+            }
+            catch (SystemException e) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+
+            orderPrams = orderPrams + "autoOdd=Y&gold=" + money;
+            String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_"+ rString.Replace("r","R");
+            headJObject["Referer"] = brtUrl;
+            String orderRltStr = HttpUtils.HttpPostHeader(orderUrl,orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(orderRltStr);
+            if (String.IsNullOrEmpty(orderRltStr) || !orderRltStr.Contains("成功提交注单")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "提交失败");
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //获取钱
+            String moneyUrl = user.loginUrl + "/RestCredit?uid=" + user.uid;
+            headJObject["Referer"] = user.dataUrl + "/Sport?uid=" + user.uid;
+            String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + user.uid, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRltStr))
+            {
+                 return;
+            }
+
+            try
+            {
+                float money1 = float.Parse(moneyRltStr.Replace("\"", ""));
+                user.money = money1 + ""; //获取钱成功
+            }
+            catch (SystemException e)
+            {
+                return;
+            }
+            leftForm.Invoke(new Action(() => {
+                if (loginForm != null)
+                {
+                    loginForm.AddToListToUpDate(index);
+                }
+            }));
+        }
 
     }
 }

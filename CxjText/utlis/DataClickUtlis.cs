@@ -566,36 +566,35 @@ namespace CxjText.utlis
             String gameTeam = "";
             JArray jObject = (JArray)cJArray[index];
             if (jObject == null) return null;
-            //&uid=
-            String gid = "";
+            String rString = "";
             if (numRow == 0)
             {
                 inputType = "主队";
                 switch (clickNum)
                 {
                     case 3://03
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=H&gnum="+jObject[3]+"&langx=zh-cn";
+                        rString = "rm";
+                        rltStr = "gid=" + jObject[0] + "&"+"odd_f_type=H&type=H&gnum=" +jObject[3]+"&langx=zh-cn";
                         break;
                     case 4:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong="+jObject[7]+"&langx=zh-cn";
+                        rString = "re";
+                        rltStr = "gid=" + jObject[0] + "&" + "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong="+jObject[7]+"&langx=zh-cn";
                         break;
                     case 5:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=C&gnum="+ jObject[4] + "&langx=zh-cn";
+                        rString = "rou";
+                        rltStr = "gid=" + jObject[0] + "&" + "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     case 6:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=H&gnum="+ jObject[3] + "&langx=zh-cn";
+                        rString = "hrm";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
                         break;
                     case 7:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong=" + jObject[21] + "&langx=zh-cn";
+                        rString = "hre";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=H&gnum=" + jObject[3] + "&strong=" + jObject[21] + "&langx=zh-cn";
                         break;
                     case 8:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
+                        rString = "hrou";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -608,28 +607,28 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "gid="+jObject[0]+"&odd_f_type=H&type=C&gnum="+jObject[4]+ "&langx=zh-cn";
+                        rString = "rm";
+                        rltStr = "gid=" + jObject[0] + "&" +"odd_f_type=H&type=C&gnum="+jObject[4]+ "&langx=zh-cn";
                         break;
                     case 4:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[7] + "&langx=zh-cn";
+                        rString = "re";
+                        rltStr = "gid=" + jObject[0] + "&" + "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[7] + "&langx=zh-cn";
                         break;
                     case 5:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
+                        rString = "rou";
+                        rltStr = "gid=" + jObject[0] + "&" + "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
                         break;
                     case 6:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
+                        rString = "hrm";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=C&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     case 7:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[21] + "&langx=zh-cn";
+                        rString = "hre";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=C&gnum=" + jObject[4] + "&strong=" + jObject[21] + "&langx=zh-cn";
                         break;
                     case 8:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
+                        rString = "hrou";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=H&gnum=" + jObject[3] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -641,12 +640,12 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
-                        gid = "gid=" + jObject[0];
-                        rltStr = "odd_f_type=H&type=N&gnum="+jObject[4]+"&langx=zh-cn";
+                        rString = "rm";
+                        rltStr = "gid=" + jObject[0] + "&" + "odd_f_type=H&type=N&gnum=" +jObject[4]+"&langx=zh-cn";
                         break;
                     case 6:
-                        gid = "gid=" + jObject[20];
-                        rltStr = "odd_f_type=H&type=N&gnum=" + jObject[4] + "&langx=zh-cn";
+                        rString = "hrm";
+                        rltStr = "gid=" + jObject[20] + "&" + "odd_f_type=H&type=N&gnum=" + jObject[4] + "&langx=zh-cn";
                         break;
                     default:
                         return null;
@@ -657,13 +656,11 @@ namespace CxjText.utlis
                 return null;
             }
 
-            if (String.IsNullOrEmpty(rltStr))
+            if (String.IsNullOrEmpty(rltStr)||String.IsNullOrEmpty(rString))
             {
                 return null;
             }
-
-            dataJObject["gid"] = gid;
-
+            dataJObject["rString"] = rString;
             inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
             bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             if (String.IsNullOrEmpty(bateStr.Trim()))
