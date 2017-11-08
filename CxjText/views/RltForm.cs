@@ -33,14 +33,22 @@ namespace CxjText.views
 
         //更新数据
         public void RefershLineData(String tag,String status) {
-            for (int i = 0; i < list.Count; i++) {
-                InputInfo inputInfo = list[i];
-                if (inputInfo.tag.Equals(tag)) {
-                    inputInfo.status = status;
-                    customersBindingSource.ResetBindings(true);
-                    break;
+            try {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    InputInfo inputInfo = list[i];
+                    if (inputInfo!=null&&inputInfo.tag.Equals(tag))
+                    {
+                        inputInfo.status = status;
+                        customersBindingSource.ResetBindings(true);
+                        break;
+                    }
                 }
             }
+            catch (SystemException e) {
+
+            }
+            
         }
 
     }

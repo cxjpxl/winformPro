@@ -185,7 +185,6 @@ namespace CxjText.utlis
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPostB_Order(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user);
-            Console.WriteLine(orderRlt);
             if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -319,7 +318,9 @@ namespace CxjText.utlis
             //更新钱
             //获取其他的用户信息
             String moneyUrl = user.dataUrl + "/app/member/index/getindex";
+            headJObject["Referer"] = user.dataUrl;
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(rltStr);
             if (!FormUtils.IsJsonObject(rltStr)) return;
             JObject jObject = JObject.Parse(rltStr);
             if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["list"]["u_info"] == null)
@@ -330,6 +331,7 @@ namespace CxjText.utlis
 
             String uid = (String)(jObject["list"]["u_info"]["uid"]);
             String money1 = (String)(jObject["list"]["u_info"]["money"]);
+            Console.WriteLine(money1);
             user.uid = uid;
             user.money = money1;
             //获取钱成功  要更新UI
