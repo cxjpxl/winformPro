@@ -153,5 +153,24 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
 
+        /*******************R系统获取数据***********************************/
+        public static String getRData(UserInfo userInfo)
+        {
+            String getDataUrl = userInfo.dataUrl + "/foot/redata/1";
+            String paramsStr = "";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/foot/re";
+            String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt)) return null;
+            
+            // 解析html
+
+
+
+            return null;
+        }
+
     }
 }

@@ -127,6 +127,9 @@ namespace CxjText
                     case "U":
                         dataRtlStr = DataPramsUtils.getUData(userInfo);
                         break;
+                    case "R":
+                        dataRtlStr = DataPramsUtils.getRData(userInfo);
+                        break;
                     default:
                         break;
                 }
