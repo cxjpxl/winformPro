@@ -122,7 +122,7 @@ namespace CxjText
                         dataRtlStr = DataPramsUtils.getBData(userInfo);
                         break;
                     case "I":
-                        dataRtlStr = DataPramsUtils.getIData(position,this,this.loginForm);
+                        dataRtlStr = DataPramsUtils.getIData(userInfo);
                         break;
                     case "U":
                         dataRtlStr = DataPramsUtils.getUData(userInfo);

@@ -85,8 +85,7 @@ namespace CxjText.utlis
             return jObject.ToString() ;
         }
         /***************I系统获取数据 num传大点就一次性把数据全部取回来**********/
-        public static String getIData(int position,MainFrom mainFrom,LoginForm loginForm) {
-            UserInfo userInfo =(UserInfo) Config.userList[position];
+        public static String getIData(UserInfo userInfo) {
             String getDataUrl = userInfo.dataUrl + "/app/hsport/sports/match";
             String paramsStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&page=1&num=10000&league=";
             JObject headJObject = new JObject();
@@ -96,19 +95,6 @@ namespace CxjText.utlis
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-            JObject jobject = JObject.Parse(rlt);
-            if (jobject != null && jobject["_info"] != null && jobject["_info"]["money"] != null)
-            {
-                String money = (String)jobject["_info"]["money"];
-                userInfo.money = money;
-                if (mainFrom != null && loginForm != null)
-                {
-                    mainFrom.Invoke(new Action(() =>
-                    {
-                        loginForm.AddToListToUpDate(position); //更新钱的数据
-                    }));
-                }
-            }
             return rlt;
         }
         /*******************U系统获取数据***********************************/
