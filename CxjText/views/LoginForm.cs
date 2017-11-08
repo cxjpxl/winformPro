@@ -254,7 +254,7 @@ namespace CxjText.views
             return -1;
         }
 
-        //定时器  检测登录
+        //定时器10s检测一次  检测登录
         private void loginTimer_Tick(object sender, EventArgs e)
         {
             loginTimer.Stop();
@@ -262,8 +262,7 @@ namespace CxjText.views
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
                 if (user.status != 2&&user.status !=3) continue;
-                if (user.status == 2)
-                {
+                if (user.status == 2){
                     //检测上次登录的时间
                     if (!LoginUtils.canRestLogin(user.loginTime)) continue;
                 }

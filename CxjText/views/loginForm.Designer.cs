@@ -141,7 +141,7 @@
             // loginTimer
             // 
             this.loginTimer.Enabled = true;
-            this.loginTimer.Interval = 5000;
+            this.loginTimer.Interval = 10000;
             this.loginTimer.Tick += new System.EventHandler(this.loginTimer_Tick);
             // 
             // LoginForm
