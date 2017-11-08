@@ -159,9 +159,9 @@ namespace CxjText.utlis
             String getDataUrl = userInfo.dataUrl + "/foot/redata/1";
             String paramsStr = "";
             JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/foot/re";
+            headJObject["Host"] = userInfo.baseUrl.Replace("www","mkt");
+            headJObject["Origin"] = userInfo.dataUrl.Replace("www", "mkt");
+            headJObject["Referer"] = userInfo.dataUrl.Replace("www", "mkt") + "/foot/re";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rlt)) return null;
             
