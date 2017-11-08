@@ -377,9 +377,13 @@ namespace CxjText.views
                 t.Start(jObject);
             }
 
-            if (!hasData) {
-                MessageBox.Show(tag+"系统,账号没有登录或者金额低于"+ userInfo.leastMoney);
+            if (!hasData)
+            {
+                MessageBox.Show(tag + "系统,账号没有登录或者金额低于" + userInfo.leastMoney);
             }
+            /*else {
+                MessageBox.Show(tag + "系统下单成功");
+            }*/
 
         }
 

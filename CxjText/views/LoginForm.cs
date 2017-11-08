@@ -261,11 +261,8 @@ namespace CxjText.views
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
-                if (user.status != 2&&user.status !=3) continue;
-                if (user.status == 2){
-                    //检测上次登录的时间
-                    if (!LoginUtils.canRestLogin(user.loginTime)) continue;
-                }
+                if (user.status != 2) continue;
+                if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
                 user.status = 0; //强制更改未登录
                 AddToListToUpDate(i);
                 Thread t = new Thread(new ParameterizedThreadStart(this.GoLogin));

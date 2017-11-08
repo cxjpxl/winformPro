@@ -13,9 +13,25 @@ namespace CxjText.utlis
     {
 
 
-        public static bool canRestLogin(long time) {
+        public static bool canRestLogin(long time,String tag) {
             long cTime = FormUtils.getCurrentTime();
             int timeOffest = 1000 * 60 * 60;//一个小时重新登录一下
+            switch (tag) {
+                case "A":
+                    timeOffest = 1000 * 60 * 60;
+                    break;
+                case "B":
+                    timeOffest = 1000 * 60 * 29;
+                    break;
+                case "I":
+                    timeOffest = 1000 * 60 * 29;
+                    break;
+                case "U":
+                    timeOffest = 1000 * 60 * 29;
+                    break;
+                default:
+                    return false;
+            }
             if (cTime - time >= timeOffest) { 
                 return true;
             }
