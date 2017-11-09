@@ -485,7 +485,7 @@ namespace CxjText.utlis
                         break;
                     case 5:
                         bs = (String)jObject[16];
-                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=3&content=502&odds=" + (String)jObject[19];
+                        rltStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&betid=5&content=502&odds=" + (String)jObject[19];
                         break;
                     case 6:
                         bs = (String)jObject[20];

@@ -133,7 +133,14 @@ namespace CxjText.utils
             {
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
             }
-
+            if (headJObject["UserAgent"] != null) {
+                SetHeaderValue(request.Headers, "UserAgent", (String)headJObject["UserAgent"]);
+            }
+            if (headJObject["Connection"] != null)
+            {
+                SetHeaderValue(request.Headers, "Connection", (String)headJObject["Connection"]);
+            }
+            
 
 
             if (String.IsNullOrEmpty(contentType))

@@ -259,6 +259,7 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
             String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl+ "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+
             if (!FormUtils.IsJsonObject(orderBetStr))
             {
                 leftForm.Invoke(new Action(() => {
@@ -532,15 +533,17 @@ namespace CxjText.utlis
             parmsJObject.Add("rType", parms[2]);
             parmsJObject.Add("bType", parms[3]);
             parmsJArray.Add(parmsJObject);
-            //String bOrderParmsStr = "[{gid="+ parms[0]+ "&sType="+parms[1]+ "&rType="+parms[2]+ "&bType="+parms[3]+"}]";
             String bOrderParmsStr = "[{\"gid\":"+parms[0]+",\"sType\":"+parms[1]+",\"rType\":"+parms[2]+",\"bType\":"+parms[3]+"}]";
-            Console.WriteLine(bOrderParmsStr);
-
 
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = url1 ;
             headJObject["Origin"] = user.dataUrl.Replace("www", "mkt");
             String betUrl = user.dataUrl.Replace("www", "mkt") + "/home/order";
+
+            Console.WriteLine(headJObject.ToString());
+            Console.WriteLine(betUrl);
+            Console.WriteLine(bOrderParmsStr);
+
             String bOrderStr = HttpUtils.HttpPostHeader(betUrl,bOrderParmsStr, "application/json; charset=UTF-8", user.cookie,headJObject);
 
             Console.WriteLine(bOrderStr);
