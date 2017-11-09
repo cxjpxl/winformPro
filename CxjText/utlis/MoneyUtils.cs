@@ -95,11 +95,10 @@ namespace CxjText.utlis
             //获取钱的处理
 
 
-            userInfo.uid = "anfndf";
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/Sport?uid=" + userInfo.uid;
+            headJObject["Referer"] = userInfo.dataUrl + "/Home";
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(moneyRltStr))

@@ -56,7 +56,7 @@ namespace CxjText.utlis
                 }
 
             } else if (userInfo.tag.Equals("U")) {
-                if (dataStr.Contains("娱乐场协议与规则")) {
+                if (dataStr.Contains("协议与规则")) {
                     return 1;
                 }
                 else
