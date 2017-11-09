@@ -151,8 +151,6 @@ namespace CxjText
                     leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
-
-              
                 
             }
             catch (SystemException e) {
