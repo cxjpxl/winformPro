@@ -108,6 +108,12 @@ namespace CxjText.views
                     rltObj = DataUtils.updateUI_SysU(jObject);
                     mid = (String)jObject[0]; // 获得唯一标示
                 }
+                else if (userInfo.tag.Equals("R"))
+                {
+                    JObject jObject = (JObject)jArray[i];
+                    rltObj = DataUtils.updateUI_SysR(jObject);
+                    mid = (String)jObject["mid"]; // 获得唯一标示
+                }
                 else
                 {
 
@@ -202,6 +208,9 @@ namespace CxjText.views
                         break;
                     case "U":
                         this.currMid = (String)this.cJArray[currIndex / 3][0] + "";
+                        break;
+                    case "R":
+                        this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
                         break;
                     default:
                         break;

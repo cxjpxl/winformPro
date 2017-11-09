@@ -310,7 +310,7 @@ namespace CxjText.utlis
 
 
                         /***************************半场让球*************************************/
-                        HtmlNode bqChangeRqNode = allNodes[19];
+                        HtmlNode bqChangeRqNode = allNodes[17];
                         String bh_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[0].InnerText.ToString().Trim();
                         String bg_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[2].InnerText.ToString().Trim();
                         String bh_rang_value = bqChangeRqNode.ChildNodes[3].ChildNodes[1].InnerText.ToString().Trim();
@@ -329,7 +329,7 @@ namespace CxjText.utlis
                         end = str1.IndexOf(")");
                         String bg_rang_click = str1.Substring(start + 1, end - start - 1);
                         /*********************************半场大小****************************************/
-                        HtmlNode bdaxiaoNode = allNodes[21];
+                        HtmlNode bdaxiaoNode = allNodes[19];
                         String bh_daxiao_key = bdaxiaoNode.ChildNodes[1].ChildNodes[0].InnerText.ToString().Trim();
                         String bg_daxiao_key = bdaxiaoNode.ChildNodes[1].ChildNodes[2].InnerText.ToString().Trim();
                         String bh_daxiao_value = bdaxiaoNode.ChildNodes[3].ChildNodes[1].InnerText.ToString().Trim();

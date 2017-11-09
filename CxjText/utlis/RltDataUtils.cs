@@ -42,6 +42,14 @@ namespace CxjText.utlis
                     rltJArray = new JArray();
                 }
             }
+            else if (userInfo.tag.Equals("R"))
+            {
+                rltJArray = (JArray)jObject["list"];
+                if (rltJArray == null)
+                {
+                    rltJArray = new JArray();
+                }
+            }
             else
             {
 
@@ -175,6 +183,37 @@ namespace CxjText.utlis
                     rltJArray.Add(itemJArray);
                 }
             }
+            else if (userInfo.tag.Equals("R"))
+            {
+                JArray jArray = (JArray)jObject["list"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject itemJObect = (JObject)jArray[i];
+                    JArray itemJArray = new JArray();
+                    itemJArray.Add(itemJObect);
+                    String name = (String)itemJObect["lianSai"];
+                    int j = 0;
+                    for (j = i + 1; j < jArray.Count; j++)
+                    {
+                        JObject itemJObject1 = (JObject)jArray[j];
+                        String name1 = (String)itemJObject1["lianSai"];
+                        if (name.Equals(name1))
+                        {
+                            itemJArray.Add(itemJObject1);
+                            continue;
+                        }
+                        j = j - 1;
+                        break;
+                    }
+                    i = j;
+                    rltJArray.Add(itemJArray);
+                }
+            }
             else
             {
                 Console.WriteLine("系统开发中!");
@@ -200,6 +239,10 @@ namespace CxjText.utlis
             else if (userInfo.tag.Equals("U")) {
                 title = currentArray[0][2].ToString();
             }
+            else if (userInfo.tag.Equals("R"))
+            {
+                title = currentArray[0]["lianSai"].ToString();
+            }
             else
             {
                 title = "系统开发中!";
@@ -224,6 +267,10 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("U")) {
                 mid = (String)jArray[index][0][0] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("R"))
+            {
+                mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
             else
             {
@@ -260,6 +307,15 @@ namespace CxjText.utlis
             else if (userInfo.tag.Equals("U"))
             {
 
+            }
+            else if (userInfo.tag.Equals("R"))
+            {
+                String nameH = (String)jObject["nameH"];
+                String nameG = (String)jObject["nameG"];
+                if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
+                {
+                    return true;
+                }
             }
             else
             {

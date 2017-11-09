@@ -671,5 +671,74 @@ namespace CxjText.utlis
 
             return returnObj;
         }
+        /********************R系统数据填充***************************/
+        public static JObject updateUI_SysR(JObject jObject)
+        {
+
+            JObject returnObj = new JObject();
+            //联赛名称
+            String lianSaiStr = (String)jObject["lianSai"];
+            returnObj.Add("c00", lianSaiStr.Trim());
+            //联赛时间
+            String time = (String)jObject["time"];
+            returnObj.Add("c01", time.Trim());
+            //主队名字
+            String c02 = (String)jObject["nameH"];
+            returnObj.Add("c02", c02.Trim());
+            //主队独赢
+            String c03 = (String)jObject["h_du_y"]; 
+            returnObj.Add("c03", c03.Trim());
+            //全场主让球
+            String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
+            returnObj.Add("c04", c04.Trim());
+
+            String c05 = (String)jObject["h_rang"] ;
+            returnObj.Add("c05", c05.Trim());
+
+            String c06 = (String)jObject["bh_du_y"];
+            returnObj.Add("c06", c06.Trim());
+
+            String c07 = (String)jObject["bh_rang"] ;
+            returnObj.Add("c07", c07.Trim());
+            String c08 = (String)jObject["bh_daxiao"];
+            returnObj.Add("c08", c08.Trim());
+            /*********************************************************************/
+            returnObj.Add("c10", lianSaiStr.Trim());
+            returnObj.Add("c11", time.Trim());
+            //客队名字
+            String c12 = (String)jObject["nameG"];
+            returnObj.Add("c12", c12.Trim());
+            //客队独赢
+            String c13 = (String)jObject["g_du_y"];
+            returnObj.Add("c13", c13.Trim());
+            //全场客让球
+            String c14 = (String)jObject["g_rang"];
+            returnObj.Add("c14", c14.Trim());
+
+            String c15 = (String)jObject["g_daxiao"];
+            returnObj.Add("c15", c15.Trim());
+
+            String c16 = (String)jObject["bg_du_y"];
+            returnObj.Add("c16", c16.Trim());
+            String c17 = (String)jObject["bg_rang"];
+            returnObj.Add("c17", c17.Trim());
+            String c18 = (String)jObject["bg_daxiao"];
+            returnObj.Add("c18", c18.Trim());
+            /*********************************************************************/
+            returnObj.Add("c20", lianSaiStr.Trim());
+            returnObj.Add("c21", time.Trim());
+            returnObj.Add("c22", "和局");
+            String c23 = (String)jObject["he_du_y"]; ;
+            returnObj.Add("c23", c23.Trim());
+            returnObj.Add("c24", "");
+            returnObj.Add("c25", "");
+            String c26 = (String)jObject["bhe_du_y"]; ;
+            returnObj.Add("c26", c26.Trim());
+            returnObj.Add("c27", "");
+            returnObj.Add("c28", "");
+            /*********************************************************************/
+
+            return returnObj;
+        }
     }
 }
