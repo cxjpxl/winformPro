@@ -51,25 +51,32 @@ namespace CxjText.utlis
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
-            String moneyUrl = user.loginUrl + "/member/aspx/do.aspx?action=islogin";
-            rlt = HttpUtils.httpGet(moneyUrl, "text/html; charset=utf-8", user.cookie);
-            //获取钱失败
-            if (String.IsNullOrEmpty(rlt))
+
+            //交易成功 , 更新UI 并更新钱
+            int moneyStatus = MoneyUtils.GetAMoney(user);
+            if (moneyStatus == 1)
             {
-                return;
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }else if (moneyStatus == -1) {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+
             }
 
-            int rltNum = FormUtils.explandMoneyData(rlt, user);
-            //获取钱失败
-            if (rltNum < 0)
-            {
-                return;
-            }
-            //获取钱成功  要更新UI
-            if (loginForm != null)
-            {
-                loginForm.AddToListToUpDate(index);
-            }
+            
         }
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
@@ -204,24 +211,17 @@ namespace CxjText.utlis
                 }
             }));
 
-            //资金更新
-            String bMoneyRlt = HttpUtils.httpGet(user.loginUrl + "/leftDao.php", "", user.cookie);
-            if (String.IsNullOrEmpty(bMoneyRlt)) return;
-            if (bMoneyRlt.Length < 4) return; 
-            bMoneyRlt = bMoneyRlt.Substring(1, bMoneyRlt.Length - 3);
-            if (!FormUtils.IsJsonObject(bMoneyRlt))
+            int moneyStatus = MoneyUtils.GetBMoney(user);
+            if (moneyStatus == 1)
             {
-                return;
+                //获取钱成功  要更新UI
+                if (loginForm != null)
+                {
+                    loginForm.AddToListToUpDate(index);
+                }
             }
-            JObject moneyJObject = JObject.Parse(bMoneyRlt);
-            if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"]))
+            else {
                 return;
-            String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
-            user.money = moneys[0];
-            //获取钱成功  要更新UI
-            if (loginForm != null)
-            {
-                loginForm.AddToListToUpDate(index);
             }
         }
         //I下单
@@ -317,26 +317,21 @@ namespace CxjText.utlis
 
             //更新钱
             //获取其他的用户信息
-            String getMoneyUrl = user.dataUrl + "/app/member/userInfo/autosendmoneny";
-            String moneyP = "r=" + FormUtils.getCurrentTime();
-            headJObject["Referer"] = user.dataUrl;
-
-            String rltStr = HttpUtils.HttpPostHeader(getMoneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            if (!FormUtils.IsJsonObject(rltStr)) return;
-            JObject jObject = JObject.Parse(rltStr);
-            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null)
+            int moneyStatus = MoneyUtils.GetIMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else
             {
                 return;
             }
-
-            String money1 = (String)(jObject["list"]["money"]);
-            if (String.IsNullOrEmpty(money1)) return;
-            user.money = money1;
-            //获取钱成功  要更新UI
-            if (loginForm != null)
-            {
-                loginForm.AddToListToUpDate(index);
-            }
+           
         }
         //U下单
         public static void OrderU(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
@@ -445,29 +440,21 @@ namespace CxjText.utlis
             }));
 
             //获取钱
-            String moneyUrl = user.loginUrl + "/RestCredit?uid=" + user.uid;
-            headJObject["Referer"] = user.dataUrl + "/Sport?uid=" + user.uid;
-            String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + user.uid, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(moneyRltStr))
+            int moneyStatus = MoneyUtils.GetUMoney(user);
+            if (moneyStatus == 1)
             {
-                 return;
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
             }
-
-            try
-            {
-                float money1 = float.Parse(moneyRltStr.Replace("\"", ""));
-                user.money = money1 + ""; //获取钱成功
-            }
-            catch (SystemException e)
-            {
+            else {
                 return;
             }
-            leftForm.Invoke(new Action(() => {
-                if (loginForm != null)
-                {
-                    loginForm.AddToListToUpDate(index);
-                }
-            }));
+            
         }
 
     }

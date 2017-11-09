@@ -223,7 +223,7 @@ namespace CxjText.utlis
                             String money = (String)jObject.GetValue("money");
                             userInfo.money = money;
                             return 1;
-                        }
+                        }  //0没有登录
                     }
                     catch (SystemException e)
                     {

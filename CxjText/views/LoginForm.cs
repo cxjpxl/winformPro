@@ -210,15 +210,15 @@ namespace CxjText.views
                     }
                     else if (status == 0)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "未登录";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "下线";
                     }
                     else if (status == 1)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "请求中";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "连接中";
                     }
                     else if (status == 2)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "成功";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "上线";
                     }
                     else
                     {
@@ -257,7 +257,7 @@ namespace CxjText.views
             return -1;
         }
 
-        //定时器10s检测一次  检测登录
+        //定时器10s检测一次  检测钱  其实就是刷新cookie
         private void loginTimer_Tick(object sender, EventArgs e)
         {
             loginTimer.Stop();
@@ -266,12 +266,54 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (user.status != 2) continue;
                 if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
-                user.status = 0; //强制更改未登录
-                AddToListToUpDate(i);
-                Thread t = new Thread(new ParameterizedThreadStart(this.GoLogin));
+                Thread t = new Thread(new ParameterizedThreadStart(this.getMoney));
                 t.Start(i);
             }
             loginTimer.Start();
         }
+
+
+        public void getMoney(object pos) {
+            int position = (int)pos;
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            int moneyStatus = 0;
+            try
+            {
+                switch (userInfo.tag)
+                {
+                    case "A":
+                        moneyStatus =  MoneyUtils.GetAMoney(userInfo);
+                        break;
+                    case "B":
+                        moneyStatus = MoneyUtils.GetBMoney(userInfo);
+                        break;
+                    case "I":
+                        moneyStatus = MoneyUtils.GetIMoney(userInfo);
+                        break;
+                    case "U":
+                        moneyStatus = MoneyUtils.GetUMoney(userInfo);
+                        break;
+                    case "R":
+                        moneyStatus = MoneyUtils.GetRMoney(userInfo);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (SystemException e)
+            {
+                moneyStatus = 0;
+            }
+
+            if (moneyStatus == 1)
+            {
+                AddToListToUpDate(position);
+            }
+            else if (moneyStatus == -1) {
+                userInfo.status = 0; //下线
+                AddToListToUpDate(position);
+            }
+        }
+
     }
 }

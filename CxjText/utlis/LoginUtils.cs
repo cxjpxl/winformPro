@@ -14,22 +14,22 @@ namespace CxjText.utlis
         //重新登录获取cookie的时间处理
         public static bool canRestLogin(long time,String tag) {
             long cTime = FormUtils.getCurrentTime();
-            int timeOffest = 1000 * 60 * 60;//一个小时重新登录一下
+            int timeOffest = 1000 * 60;
             switch (tag) {
                 case "A":
-                    timeOffest = 1000 * 60 * 60;//一个小时
+                    timeOffest = 1000 * 60 ;
                     break;
                 case "B":
-                    timeOffest = 1000 * 60 * 29;//半个小时
+                    timeOffest = 1000 * 60 ;
                     break;
                 case "I":
-                    timeOffest = 1000 * 60 * 29;//半个小时
+                    timeOffest = 1000 * 60 ;
                     break;
                 case "U":
-                    timeOffest = 1000 * 60 * 29;//半个小时
+                    timeOffest = 1000 * 60;
                     break;
                 case "R":
-                    timeOffest = 1000 * 60 * 29;//半个小时
+                    timeOffest = 1000 * 60 ;
                     break;
                 default:
                     return false;
@@ -134,9 +134,21 @@ namespace CxjText.utlis
             }
 
             userInfo.uid = uid; //获取到uid
-            userInfo.loginTime = FormUtils.getCurrentTime();
-            userInfo.status = 2; //成功
-            loginForm.AddToListToUpDate(position);
+            int moneyStatus = MoneyUtils.GetAMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.loginTime = FormUtils.getCurrentTime();
+                userInfo.status = 2; //成功
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            else {
+                userInfo.status = 3; 
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+
+            
         }
         /**************************B系统登录的处理****************************/
         public static void loginB(LoginForm loginForm, int position)
@@ -208,33 +220,21 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
                 return;
             }
-
-             String bMoneyRlt = HttpUtils.httpGet(userInfo.loginUrl + "/leftDao.php", "", userInfo.cookie);
-             if (String.IsNullOrEmpty(bMoneyRlt))
-             {
-                    userInfo.status = 3;
-                    loginForm.AddToListToUpDate(position);
-                    return;
-              }
-              bMoneyRlt = bMoneyRlt.Substring(1,bMoneyRlt.Length-3);
-            if (!FormUtils.IsJsonObject(bMoneyRlt))
+            //获取资金
+            int moneyStatus = MoneyUtils.GetBMoney(userInfo);
+            if (moneyStatus == 1)
             {
+                userInfo.loginTime = FormUtils.getCurrentTime();
+                userInfo.status = 2; //成功
+                loginForm.AddToListToUpDate(position);
+                return;
+            }
+            else {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
                 return;
             }
-              JObject moneyJObject = JObject.Parse(bMoneyRlt);
-              if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"])) {
-                userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
-                return;
-              }
-                String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
-               userInfo.money = moneys[0];
-                userInfo.loginTime = FormUtils.getCurrentTime();
-                userInfo.status = 2; //成功
-               loginForm.AddToListToUpDate(position);
-               return;
+                
         }
         /**************************I系统登录的处理****************************/
         public static void loginI(LoginForm loginForm, int position)
@@ -310,30 +310,19 @@ namespace CxjText.utlis
                 return;
             }
             //获取其他的用户信息
-            String moneyUrl = userInfo.dataUrl + "/app/member/index/getindex";
-            rltStr = HttpUtils.HttpPostHeader(moneyUrl,"", "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-            if (!FormUtils.IsJsonObject(rltStr))
+            int moneyStatus = MoneyUtils.GetIMoney(userInfo);
+            if (moneyStatus == 1)
             {
+                userInfo.loginTime = FormUtils.getCurrentTime();
+                userInfo.status = 2; //成功
+                loginForm.AddToListToUpDate(position);
+            }
+            else {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
                 return;
             }
-            jObject = JObject.Parse(rltStr);
-            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null|| jObject["list"]["u_info"] == null )
-            {
-                userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
-                return;
-            }
-
-
-            String uid =(String) (jObject["list"]["u_info"]["uid"]);
-            String money = (String)(jObject["list"]["u_info"]["money"]);
-            userInfo.uid = uid;
-            userInfo.money = money;
-            userInfo.loginTime = FormUtils.getCurrentTime();
-            userInfo.status = 2; //成功
-            loginForm.AddToListToUpDate(position);
+           
         }
         /**************************U系统登录处理******************************/
         public static void loginU(LoginForm loginForm, int position)
@@ -430,30 +419,20 @@ namespace CxjText.utlis
             }
 
             userInfo.uid = uid; //获取到uid
-            
-            //获取钱的处理
-            headJObject["Referer"] = userInfo.dataUrl + "/Sport?uid="+uid;
-            String moneyUrl = userInfo.loginUrl + "/RestCredit?uid="+uid;
-            String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl,"uid="+uid,"",userInfo.cookie,headJObject); 
-            if (String.IsNullOrEmpty(moneyRltStr)) {
+
+            int moneyStatus = MoneyUtils.GetUMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime();
+                loginForm.AddToListToUpDate(position);
+            }
+            else {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
-                return;
             }
 
-            try {
-                float money  = float.Parse(moneyRltStr.Replace("\"", ""));
-                userInfo.money = money + ""; //获取钱成功
-            }
-            catch (SystemException e) {
-                userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
-                return;
-            }
-            //获取钱
-            userInfo.status = 2; //成功
-            userInfo.loginTime = FormUtils.getCurrentTime();
-            loginForm.AddToListToUpDate(position);
+           
         }
         /************************R系统登录处理********************************/
         public static void loginR(LoginForm loginForm, int position)
@@ -536,20 +515,18 @@ namespace CxjText.utlis
             userInfo.uid = uid;
             //获取别的数据
 
-            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             //获取钱
-            String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t="+FormUtils.getCurrentTime();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
-            String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(moneyStr)) {
+            int moneyStatus = MoneyUtils.GetRMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.status = 2;
+                loginForm.AddToListToUpDate(position);
+            }
+            else {
                 userInfo.status = 3;
                 loginForm.AddToListToUpDate(position);
-                return; 
             }
-            userInfo.money = moneyStr;
-            userInfo.status = 2;
-            loginForm.AddToListToUpDate(position);
+            
         }
 
     }
