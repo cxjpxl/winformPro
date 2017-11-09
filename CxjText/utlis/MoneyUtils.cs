@@ -2,16 +2,11 @@
 using CxjText.utils;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CxjText.utlis
 {
     public class MoneyUtils
     {
-
         //获取A的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetAMoney(UserInfo user)
         {
@@ -44,41 +39,49 @@ namespace CxjText.utlis
         //获取B的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetBMoney(UserInfo user)
         {
-            String bMoneyRlt = HttpUtils.httpGet(user.loginUrl + "/leftDao.php", "", user.cookie);
-            if (String.IsNullOrEmpty(bMoneyRlt)) return 0;
-            bMoneyRlt = bMoneyRlt.Substring(1, bMoneyRlt.Length - 3);
-            if (!FormUtils.IsJsonObject(bMoneyRlt))
-            {
-                return 0;
-            }
-            JObject moneyJObject = JObject.Parse(bMoneyRlt);
-            if (moneyJObject == null || String.IsNullOrEmpty((String)moneyJObject["user_money"]))
-            {
-                return 0;
-            }
-            String[] moneys = ((String)moneyJObject["user_money"]).Split(' ');
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            String bMoneyRlt = HttpUtils.HttpGetHeader(user.loginUrl + "/top_money_data.php", "", user.cookie, headJObject);
+            if (bMoneyRlt == null) return 0;
+            if (bMoneyRlt.Trim().Equals("")) return -1;
+            if (bMoneyRlt.Contains("重新登录")) return -1;
+            bMoneyRlt = bMoneyRlt.Trim();
+            if (bMoneyRlt.Contains("<")) {
+                String[] strs = bMoneyRlt.Split('\n');
+                for (int i = 0; i < strs.Length; i++) {
+                    String str = strs[i].Trim();
+                    if (!str.Contains("<")) {
+                        bMoneyRlt = str;
+                        break;
+                    }
+                }
+             }
+            if (bMoneyRlt.Contains("<")) return 0;
+            String[] moneys = bMoneyRlt.Split('|');
             user.money = moneys[0];
             return 1;
         }
         //获取I的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetIMoney(UserInfo user)
         {
-
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl;
-
             String getMoneyUrl = user.dataUrl + "/app/member/userInfo/autosendmoneny";
             String moneyP = "r=" + FormUtils.getCurrentTime();
             String rltStr = HttpUtils.HttpPostHeader(getMoneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (!FormUtils.IsJsonObject(rltStr)) return 0;
             JObject jObject = JObject.Parse(rltStr);
-            if (jObject == null || !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["uid"] == null)
+            if (jObject == null) return 0;
+            if (((String)jObject["info"]).Contains("重新登录")) {
+                return -1;
+            }
+            if ( !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["uid"] == null)
             {
                 return 0;
             }
-
             String money = (String)(jObject["list"]["money"]);
             String uid = (String)(jObject["uid"]);
             if (String.IsNullOrEmpty(money)) return 0;
@@ -90,6 +93,9 @@ namespace CxjText.utlis
         public static int GetUMoney(UserInfo userInfo)
         {
             //获取钱的处理
+
+
+            userInfo.uid = "anfndf";
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
@@ -103,6 +109,9 @@ namespace CxjText.utlis
             try
             {
                 float money = float.Parse(moneyRltStr.Replace("\"", ""));
+                if (money < 0) {   //小于0表示没有登录
+                    return -1;
+                }
                 userInfo.money = money + ""; //获取钱成功
             }
             catch (SystemException e)
@@ -124,6 +133,22 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(moneyStr))
             {
                 return 0;
+            }
+            //成功直接返回金额  没有登录返回json
+            if (FormUtils.IsJsonObject(moneyStr)) {
+                JObject jObject = JObject.Parse(moneyStr);
+                if (jObject == null || jObject["success"] == null) {
+                    return 0;
+                }
+
+                bool isSuccess =(bool) jObject["success"];
+                if (!isSuccess)
+                {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
             }
             userInfo.money = moneyStr;
             return 1;

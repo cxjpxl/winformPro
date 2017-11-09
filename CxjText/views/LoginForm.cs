@@ -177,9 +177,7 @@ namespace CxjText.views
             }
         }
 
-
-
-        
+        //添加到消息队列里面
         public void AddToListToUpDate(int position) {
             upDateList.Add(position);
             upDateRow();
@@ -218,7 +216,7 @@ namespace CxjText.views
                     }
                     else if (status == 2)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "上线";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "在线";
                     }
                     else
                     {
@@ -260,7 +258,6 @@ namespace CxjText.views
         //定时器10s检测一次  检测钱  其实就是刷新cookie
         private void loginTimer_Tick(object sender, EventArgs e)
         {
-            loginTimer.Stop();
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
@@ -269,10 +266,9 @@ namespace CxjText.views
                 Thread t = new Thread(new ParameterizedThreadStart(this.getMoney));
                 t.Start(i);
             }
-            loginTimer.Start();
         }
 
-
+        //获取资金剩余情况
         public void getMoney(object pos) {
             int position = (int)pos;
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -313,6 +309,7 @@ namespace CxjText.views
                 userInfo.status = 0; //下线
                 AddToListToUpDate(position);
             }
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
         }
 
     }

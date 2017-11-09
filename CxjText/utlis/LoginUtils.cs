@@ -14,22 +14,17 @@ namespace CxjText.utlis
         //重新登录获取cookie的时间处理
         public static bool canRestLogin(long time,String tag) {
             long cTime = FormUtils.getCurrentTime();
-            int timeOffest = 1000 * 60;
+            int timeOffest = 1000 * 60 * 5;
             switch (tag) {
                 case "A":
-                    timeOffest = 1000 * 60 ;
                     break;
                 case "B":
-                    timeOffest = 1000 * 60 ;
                     break;
                 case "I":
-                    timeOffest = 1000 * 60 ;
                     break;
                 case "U":
-                    timeOffest = 1000 * 60;
                     break;
                 case "R":
-                    timeOffest = 1000 * 60 ;
                     break;
                 default:
                     return false;
@@ -137,7 +132,6 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetAMoney(userInfo);
             if (moneyStatus == 1)
             {
-                userInfo.loginTime = FormUtils.getCurrentTime();
                 userInfo.status = 2; //成功
                 loginForm.AddToListToUpDate(position);
                 return;
@@ -224,7 +218,6 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetBMoney(userInfo);
             if (moneyStatus == 1)
             {
-                userInfo.loginTime = FormUtils.getCurrentTime();
                 userInfo.status = 2; //成功
                 loginForm.AddToListToUpDate(position);
                 return;
@@ -313,7 +306,6 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetIMoney(userInfo);
             if (moneyStatus == 1)
             {
-                userInfo.loginTime = FormUtils.getCurrentTime();
                 userInfo.status = 2; //成功
                 loginForm.AddToListToUpDate(position);
             }
@@ -424,7 +416,6 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
-                userInfo.loginTime = FormUtils.getCurrentTime();
                 loginForm.AddToListToUpDate(position);
             }
             else {

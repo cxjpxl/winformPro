@@ -69,7 +69,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 3; //登录失效
+                        user.status = 0; //登录失效
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
@@ -91,7 +91,8 @@ namespace CxjText.utlis
             //Console.WriteLine(bRlt);
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球滚球") < 0)
             {
-                leftForm.Invoke(new Action(() => {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -105,9 +106,11 @@ namespace CxjText.utlis
             String[] strs = bRlt.Split('\n');
             String orderStr = "";
             String bet_point = "";
-            for (int i = 0; i < strs.Length; i++) {
+            for (int i = 0; i < strs.Length; i++)
+            {
                 String str = strs[i].Trim();
-                if (str.IndexOf("input") > 0) { //找到input字段
+                if (str.IndexOf("input") > 0)
+                { //找到input字段
                     //获取name的值
                     int nameIndex = str.IndexOf("name=\"");
                     String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
@@ -119,20 +122,23 @@ namespace CxjText.utlis
                     str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
                     nameIndex = str1.IndexOf('"');
                     String valueStr = str1.Substring(0, nameIndex);
-                    if (nameKey.IndexOf("bet_point") >= 0) {
+                    if (nameKey.IndexOf("bet_point") >= 0)
+                    {
                         bet_point = valueStr;
                     }
                     orderStr = orderStr + WebUtility.UrlEncode(nameKey) + "=" + WebUtility.UrlEncode(valueStr) + "&";
                 }
             }
             float bet_win = 0;
-            try {
+            try
+            {
                 bool isDuYing = (bool)jobject["isDuYing"];
                 if (isDuYing)
                 {
                     bet_win = float.Parse(bet_point) * user.inputMoney;
                 }
-                else {
+                else
+                {
                     bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
                 }
 
@@ -140,7 +146,8 @@ namespace CxjText.utlis
             catch (SystemException e)
             {
                 //请求失败处理 UI处理
-                leftForm.Invoke(new Action(() => {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -155,9 +162,11 @@ namespace CxjText.utlis
             Console.WriteLine(C_Str);
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
-            if (!FormUtils.IsJsonObject(rlt)) {
+            if (!FormUtils.IsJsonObject(rlt))
+            {
                 //请求失败处理 UI处理
-                leftForm.Invoke(new Action(() => {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -166,8 +175,10 @@ namespace CxjText.utlis
                 return;
             }
             JObject jObject = JObject.Parse(rlt);
-            if (jObject == null) {
-                leftForm.Invoke(new Action(() => {
+            if (jObject == null)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -178,7 +189,8 @@ namespace CxjText.utlis
             String result = (String)jObject["result"];
             if (String.IsNullOrEmpty(result) || !result.Equals("ok"))
             {
-                leftForm.Invoke(new Action(() => {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -192,8 +204,10 @@ namespace CxjText.utlis
             //下单接口的请求
             String orderRlt = HttpUtils.HttpPostB_Order(user.dataUrl + "/bet.php", orderStr,
                 "application/x-www-form-urlencoded", user);
-            if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0) {
-                leftForm.Invoke(new Action(() => {
+            if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
@@ -204,7 +218,8 @@ namespace CxjText.utlis
 
 
             //交易成功 , 更新UI 并更新钱
-            leftForm.Invoke(new Action(() => {
+            leftForm.Invoke(new Action(() =>
+            {
                 if (rltForm != null)
                 {
                     rltForm.RefershLineData(inputTag, "成功");
@@ -220,8 +235,17 @@ namespace CxjText.utlis
                     loginForm.AddToListToUpDate(index);
                 }
             }
-            else {
-                return;
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 0; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
             }
         }
         //I下单
@@ -326,12 +350,19 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            }
-            else
+            }else if (moneyStatus == -1)
             {
-                return;
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 0; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
             }
-           
+
         }
         //U下单
         public static void OrderU(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm) {
@@ -450,11 +481,19 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
+            }else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 0; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
             }
-            else {
-                return;
-            }
-            
+
         }
 
     }
