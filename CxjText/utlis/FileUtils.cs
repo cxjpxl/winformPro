@@ -86,7 +86,7 @@ namespace CxjText.utlis
                         String[] ConfigStrs = Config.urls.Split('\t');
                         for (int i = 0; i < ConfigStrs.Length; i++)
                         {
-                            if (ConfigStrs[i].Equals(baseUrl))
+                            if (ConfigStrs[i].Contains(baseUrl))
                             {
                                 loginStatus = 0; //未登录的情况
                                 break;
