@@ -532,16 +532,16 @@ namespace CxjText.utlis
             parmsJObject.Add("rType", parms[2]);
             parmsJObject.Add("bType", parms[3]);
             parmsJArray.Add(parmsJObject);
-            // String bOrderParmsStr = "gid="+ parms[0]+ "&sType="+parms[1]+ "&rType="+parms[2]+ "&bType="+parms[3];
+            //String bOrderParmsStr = "[{gid="+ parms[0]+ "&sType="+parms[1]+ "&rType="+parms[2]+ "&bType="+parms[3]+"}]";
             String bOrderParmsStr = "[{\"gid\":"+parms[0]+",\"sType\":"+parms[1]+",\"rType\":"+parms[2]+",\"bType\":"+parms[3]+"}]";
             Console.WriteLine(bOrderParmsStr);
 
 
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
-            headJObject["Referer"] = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime(); ;
+            headJObject["Referer"] = url1 ;
             headJObject["Origin"] = user.dataUrl.Replace("www", "mkt");
             String betUrl = user.dataUrl.Replace("www", "mkt") + "/home/order";
-            String bOrderStr = HttpUtils.HttpPostHeader(betUrl,bOrderParmsStr, "application/json;charset=UTF-8", user.cookie,headJObject);
+            String bOrderStr = HttpUtils.HttpPostHeader(betUrl,bOrderParmsStr, "application/json; charset=UTF-8", user.cookie,headJObject);
 
             Console.WriteLine(bOrderStr);
             return;

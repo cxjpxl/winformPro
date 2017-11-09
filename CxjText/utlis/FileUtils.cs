@@ -47,6 +47,20 @@ namespace CxjText.utlis
                     String loginUrl = strs[4];//登录的链接地址
                     String dataUrl = strs[5]; //获取数据的接口
 
+
+                    if (baseUrl.Contains("http://")) {
+                        baseUrl = baseUrl.Remove(0,7);
+                    }
+
+
+                    if (baseUrl.Contains("https://")) {
+                        baseUrl = baseUrl.Remove(0, 8);
+                    }
+                    if (baseUrl.EndsWith("/"))
+                    {
+                        baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
+                    }
+                    
                     if (loginUrl.EndsWith("/")) {
                         loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
                     }

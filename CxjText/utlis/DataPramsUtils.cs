@@ -153,7 +153,6 @@ namespace CxjText.utlis
             jObject.Add("db",jarray);
             return jObject.ToString();
         }
-
         /*******************R系统获取数据***********************************/
         public static String getRData(UserInfo userInfo)
         {
