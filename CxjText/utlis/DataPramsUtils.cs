@@ -187,8 +187,7 @@ namespace CxjText.utlis
                 //找到联赛的表格
                 String htmlString = htmlNode.InnerHtml.ToString();
                 if (htmlString.Contains("LeagueTr")) {
-                    HtmlNode lianSaiNode = htmlNode.SelectSingleNode("//tr[@class='LeagueTr']");
-                    String lianSaiName = lianSaiNode.InnerText.ToString().Trim();
+                    String lianSaiName = htmlNode.InnerText.ToString().Trim();
                     int j = i + 1;
                     //获取赛事
                     for (; j < htmlNodes.Count; j++)
