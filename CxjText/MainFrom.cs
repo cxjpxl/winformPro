@@ -154,6 +154,7 @@ namespace CxjText
                 
             }
             catch (SystemException e) {
+                Console.WriteLine(e.ToString());
                 if (this.isFinish) return;
                 this.Invoke(new Action(() => { upDateTimer.Start(); }));
             }
