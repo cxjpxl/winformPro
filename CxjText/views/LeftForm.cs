@@ -336,6 +336,9 @@ namespace CxjText.views
                     case "U":
                         orderParmas = rltStr + "&uid=" + user.uid;
                         break;
+                    case "R":
+                        orderParmas = rltStr ;
+                        break;
                     default:
                         continue;
                 }
@@ -367,9 +370,13 @@ namespace CxjText.views
                 {
                     jObject["money"] = user.inputMoney;
                 }
-                else if (user.tag.Equals("U")) {
+                else if (user.tag.Equals("U"))
+                {
                     jObject["money"] = user.inputMoney;
                     jObject["rString"] = dataJObject["rString"];
+                }
+                else if (user.tag.Equals("R")) {
+                    jObject["money"] = user.inputMoney;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -408,6 +415,9 @@ namespace CxjText.views
                         break;
                     case "U":
                         OrderUtils.OrderU(jobject, this, loginForm, rltForm);
+                        break;
+                    case "R":
+                        OrderUtils.OrderR(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return ;

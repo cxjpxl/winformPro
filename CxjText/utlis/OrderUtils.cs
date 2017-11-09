@@ -87,8 +87,6 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             String C_Str = (String)jobject["C_Str"];
             String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
-            //Console.WriteLine("---------------");
-            //Console.WriteLine(bRlt);
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球滚球") < 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -159,7 +157,6 @@ namespace CxjText.utlis
             orderStr = "touzhutype=0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
-            Console.WriteLine(C_Str);
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
             String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
             if (!FormUtils.IsJsonObject(rlt))
@@ -452,7 +449,6 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_"+ rString.Replace("r","R");
             headJObject["Referer"] = brtUrl;
             String orderRltStr = HttpUtils.HttpPostHeader(orderUrl,orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            Console.WriteLine(orderRltStr);
             if (String.IsNullOrEmpty(orderRltStr) || !orderRltStr.Contains("成功提交注单")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -493,6 +489,65 @@ namespace CxjText.utlis
                     }
                 }));
             }
+
+        }
+        //R下单
+        public static void OrderR(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+
+            String[] parms = parmsStr.Split(',');
+            if (parms.Length != 4) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "参数错误");
+                    }
+                }));
+                return;
+            }
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = user.dataUrl.Replace("www", "mkt"); 
+            String url1 = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime();
+            String rlt = HttpUtils.HttpGetHeader(url1,"",user.cookie,headJObject);
+            if (String.IsNullOrEmpty(rlt)||!rlt.Contains("交易单")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "单号错误");
+                    }
+                }));
+                return;
+            }
+
+            JArray parmsJArray = new JArray();
+            JObject parmsJObject = new JObject();
+            parmsJObject.Add("gid",parms[0]);
+            parmsJObject.Add("sType", parms[1]);
+            parmsJObject.Add("rType", parms[2]);
+            parmsJObject.Add("bType", parms[3]);
+            parmsJArray.Add(parmsJObject);
+            // String bOrderParmsStr = "gid="+ parms[0]+ "&sType="+parms[1]+ "&rType="+parms[2]+ "&bType="+parms[3];
+            String bOrderParmsStr = "[{\"gid\":"+parms[0]+",\"sType\":"+parms[1]+",\"rType\":"+parms[2]+",\"bType\":"+parms[3]+"}]";
+            Console.WriteLine(bOrderParmsStr);
+
+
+            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime(); ;
+            headJObject["Origin"] = user.dataUrl.Replace("www", "mkt");
+            String betUrl = user.dataUrl.Replace("www", "mkt") + "/home/order";
+            String bOrderStr = HttpUtils.HttpPostHeader(betUrl,bOrderParmsStr, "application/json;charset=UTF-8", user.cookie,headJObject);
+
+            Console.WriteLine(bOrderStr);
+            return;
+
+
+
 
         }
 

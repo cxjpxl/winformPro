@@ -177,6 +177,9 @@ namespace CxjText.views
                 case "U":
                     rltStr = DataClickUtlis.DataSysUClick(dataJObject, this.cJArray, e, this.dgvSA);
                     break;
+                case "R":
+                    rltStr = DataClickUtlis.DataSysRClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    break;
                 default:
                     break;
 

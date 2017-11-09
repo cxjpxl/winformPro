@@ -679,5 +679,118 @@ namespace CxjText.utlis
             return rltStr;
         }
 
+
+        //R系统点击处理
+        public static String DataSysRClick(JObject dataJObject,
+            JArray cJArray, DataGridViewCellEventArgs e, RowMergeView dgvSA
+            )
+        {
+            int index = e.RowIndex / 3;
+            int numRow = e.RowIndex % 3;
+            int clickNum = e.ColumnIndex;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            JObject jObject = (JObject)cJArray[index];
+            if (jObject == null) return null;
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        rltStr = (String)jObject["h_du_y_click"];
+                        break;
+                    case 4:
+                        rltStr = (String)jObject["h_rang_click"];
+                        break;
+                    case 5:
+                        rltStr = (String)jObject["h_daxiao_click"];
+                        break;
+                    case 6:
+                        rltStr = (String)jObject["bh_du_y_click"];
+                        break;
+                    case 7:
+                        rltStr = (String)jObject["bh_rang_click"];
+                        break;
+                    case 8:
+                        rltStr = (String)jObject["bh_daxiao_click"];
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        rltStr = (String)jObject["g_du_y_click"];
+                        break;
+                    case 4:
+                        rltStr = (String)jObject["g_rang_click"];
+                        break;
+                    case 5:
+                        rltStr = (String)jObject["g_daxiao_click"];
+                        break;
+                    case 6:
+                        rltStr = (String)jObject["bg_du_y_click"];
+                        break;
+                    case 7:
+                        rltStr = (String)jObject["bg_rang_click"];
+                        break;
+                    case 8:
+                        rltStr = (String)jObject["bg_daxiao_click"];
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = (String)jObject["he_du_y_click"];
+                        break;
+                    case 6:
+                        rltStr = (String)jObject["bhe_du_y_click"];
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+       
+            inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
+            bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["lianSai"]; //获取赛事
+            gameTeam = (String)jObject["nameH"] + "-" + (String)jObject["nameG"]; //球队名称
+
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
     }
 }
