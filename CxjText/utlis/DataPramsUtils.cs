@@ -1,6 +1,7 @@
 ﻿using CxjText.bean;
 using CxjText.utils;
 using CxjText.views;
+using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -156,7 +157,7 @@ namespace CxjText.utlis
         /*******************R系统获取数据***********************************/
         public static String getRData(UserInfo userInfo)
         {
-            String getDataUrl = userInfo.dataUrl + "/foot/redata/1";
+            String getDataUrl = userInfo.dataUrl.Replace("www", "mkt") + "/foot/redata/1";
             String paramsStr = "";
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl.Replace("www","mkt");
@@ -164,8 +165,26 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl.Replace("www", "mkt") + "/foot/re";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rlt)) return null;
-            
+
             // 解析html
+            //解析html 字符串或者本地html文件  
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(rlt);
+
+            
+            JArray jArray = new JArray();
+            HtmlNodeCollection nodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='LeagueTr']");
+            for (int i=0; i<nodes.Count;i++)
+            {
+                JObject obj = new JObject();
+                HtmlNodeCollection spanNodes = nodes[i].SelectNodes("./td/span");
+                string name = spanNodes[spanNodes.Count - 1].InnerText;
+                obj.Add(name, "联赛对应的球赛数据");
+                jArray.Add(obj);
+            }
+
+            JObject rltObj = new JObject();
+            rltObj.Add("db", jArray);
 
 
 
