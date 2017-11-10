@@ -173,7 +173,11 @@ namespace CxjText.views
             }
             catch (SystemException e) {
                 userInfo.status = 3;
-                AddToListToUpDate(position);
+                userInfo.cookie = null;
+                userInfo.uid = "";
+                this.Invoke(new Action(() => {
+                    AddToListToUpDate(position);
+                }));
             }
         }
 
@@ -263,6 +267,7 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (user.status != 2) continue;
                 if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
+                user.loginTime = FormUtils.getCurrentTime(); //更新时间
                 Thread t = new Thread(new ParameterizedThreadStart(this.getMoney));
                 t.Start(i);
             }
@@ -301,15 +306,21 @@ namespace CxjText.views
                 moneyStatus = 0;
             }
 
+            Console.WriteLine("系统：" + userInfo.tag + " ---->" + moneyStatus);
+
             if (moneyStatus == 1)
             {
                 AddToListToUpDate(position);
             }
             else if (moneyStatus == -1) {
                 userInfo.status = 0; //下线
-                AddToListToUpDate(position);
+                userInfo.uid = "";
+                userInfo.cookie = null;
+                this.Invoke(new Action(() => {
+                    AddToListToUpDate(position);
+                }));
             }
-            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            
         }
 
     }

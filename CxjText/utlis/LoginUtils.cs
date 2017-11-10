@@ -19,6 +19,7 @@ namespace CxjText.utlis
                 case "A":
                     break;
                 case "B":
+                    timeOffest = 1000 * 60;
                     break;
                 case "I":
                     break;
@@ -46,9 +47,12 @@ namespace CxjText.utlis
             if (status == 2) //状态是登录状态  要退出登录
             {
                 userInfo.status = 0;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 userInfo.uid = "";
-                HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
+               // HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
                 return;
@@ -56,7 +60,9 @@ namespace CxjText.utlis
 
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
-            loginForm.AddToListToUpDate(position);
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -68,7 +74,10 @@ namespace CxjText.utlis
             if (codeNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                
                 return;
             }
             //获取打码平台的码
@@ -81,7 +90,9 @@ namespace CxjText.utlis
             if (num <= 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -94,14 +105,18 @@ namespace CxjText.utlis
             if (rltStr == null)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -110,7 +125,9 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(uidRlt))
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //解析
@@ -124,7 +141,9 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(uid))
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -133,12 +152,16 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             else {
-                userInfo.status = 3; 
-                loginForm.AddToListToUpDate(position);
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -156,8 +179,10 @@ namespace CxjText.utlis
             {
                 userInfo.uid = "";
                 userInfo.status = 0;
-                loginForm.AddToListToUpDate(position);
-                HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+               // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
                 return;
@@ -165,7 +190,9 @@ namespace CxjText.utlis
 
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
-            loginForm.AddToListToUpDate(position);
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime(); 
             //登录请求
             if (userInfo.cookie == null)
@@ -176,7 +203,9 @@ namespace CxjText.utlis
             if (codeNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取打码平台的码
@@ -189,7 +218,9 @@ namespace CxjText.utlis
             if (num <= 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -202,7 +233,9 @@ namespace CxjText.utlis
             if (rltStr == null)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
@@ -211,7 +244,9 @@ namespace CxjText.utlis
             if (rltNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取资金
@@ -219,12 +254,16 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             else {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
                 
@@ -242,16 +281,19 @@ namespace CxjText.utlis
             {
                 userInfo.uid = "";
                 userInfo.status = 0;
-                loginForm.AddToListToUpDate(position);
-                //HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
-            loginForm.AddToListToUpDate(position);
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
             String codeUrl = userInfo.loginUrl + "/app/member/index/verify/t/" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -263,7 +305,9 @@ namespace CxjText.utlis
             if (codeNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取打码平台的码
@@ -276,7 +320,9 @@ namespace CxjText.utlis
             if (num <= 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取登录的系统参数 
@@ -291,7 +337,9 @@ namespace CxjText.utlis
             if (!FormUtils.IsJsonObject(rltStr))
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -299,7 +347,9 @@ namespace CxjText.utlis
             JObject jObject = JObject.Parse(rltStr);
             if (jObject == null || jObject["status"] == null || (int)jObject["status"] <= 0) {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取其他的用户信息
@@ -307,11 +357,15 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
             }
             else {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
            
@@ -329,15 +383,21 @@ namespace CxjText.utlis
             {
                 userInfo.uid = "";
                 userInfo.status = 0;
-                loginForm.AddToListToUpDate(position);
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
-            loginForm.AddToListToUpDate(position);
+            loginForm.Invoke(new Action(() =>
+            {
+                loginForm.AddToListToUpDate(position);
+            }));
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -349,7 +409,10 @@ namespace CxjText.utlis
             if (codeNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取打码平台的码
@@ -362,7 +425,10 @@ namespace CxjText.utlis
             if (num <= 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -378,14 +444,20 @@ namespace CxjText.utlis
             if (rltStr == null)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             
@@ -394,7 +466,10 @@ namespace CxjText.utlis
             if(list== null ||list.Count == 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             String uid = null;
@@ -406,7 +481,10 @@ namespace CxjText.utlis
             }
             if (String.IsNullOrEmpty(uid)) {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -416,11 +494,17 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
             }
             else {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
             }
 
            
@@ -437,16 +521,22 @@ namespace CxjText.utlis
             if (status == 2) //状态是登录状态  要退出登录
             {
                 userInfo.status = 0;
-                loginForm.AddToListToUpDate(position);
                 userInfo.uid = "";
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
-            loginForm.AddToListToUpDate(position);
+            loginForm.Invoke(new Action(() =>
+            {
+                loginForm.AddToListToUpDate(position);
+            }));
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -458,7 +548,10 @@ namespace CxjText.utlis
             if (codeNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             //获取打码平台的码
@@ -471,7 +564,10 @@ namespace CxjText.utlis
             if (num <= 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -487,14 +583,20 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(rltStr))
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
                 return;
             }
 
@@ -511,11 +613,17 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
             }
             else {
                 userInfo.status = 3;
-                loginForm.AddToListToUpDate(position);
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
             }
             
         }

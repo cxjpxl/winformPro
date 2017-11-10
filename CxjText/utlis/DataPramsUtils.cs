@@ -15,7 +15,7 @@ namespace CxjText.utlis
         public static String getAData(UserInfo userInfo) {
             //page是由1开始
            String getDataUrl= userInfo.dataUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime(); 
-            String  rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+            String  rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null; 
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
             if (!FormUtils.IsJsonObject(rlt)) return null;
@@ -30,7 +30,7 @@ namespace CxjText.utlis
             //循环获取当前数据
             for (int i = 1; i < totalpage; i++) {
                 String pageUrl  = userInfo.dataUrl + "/sport/football.aspx?data=json&action=re&page="+(i+1)+"&keyword=&sort=&uid=&_=" + (FormUtils.getCurrentTime()+i);
-                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.cookie);
+                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
@@ -50,7 +50,7 @@ namespace CxjText.utlis
         {
             //page是由0开始
             String getDataUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
-            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
             if (String.IsNullOrEmpty(rlt)) return null;
@@ -69,7 +69,7 @@ namespace CxjText.utlis
             for (int i = 1; i < p_page; i++)
             {
                 String pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i+"&_=" + FormUtils.getCurrentTime();
-                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.cookie);
+                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2?userInfo.cookie:null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
@@ -93,7 +93,8 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/hsport/index.html";
-            String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            String rlt = HttpUtils.HttpPostHeader(getDataUrl, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8",
+                userInfo.status == 2 ? userInfo.cookie : null, headJObject);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
             return rlt;
@@ -104,7 +105,7 @@ namespace CxjText.utlis
             String uid = userInfo.uid;
             if (String.IsNullOrEmpty(uid)) uid = "";
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
-            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.cookie);
+            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)||!rlt.Contains("t_page")) return null;
             String[] rltLine = rlt.Split('\n');
@@ -132,7 +133,7 @@ namespace CxjText.utlis
             //分页继续解析数据
             for (int i = 1; i < t_page; i++) {
                 String pageUrl  = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+i+"&league_id=&hot_game=";
-                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.cookie);
+                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt) || !pageRlt.Contains("t_page")) continue;
                 String[] pageRltLine = pageRlt.Split('\n');
                 if (pageRltLine.Length == 0) continue;
@@ -171,7 +172,7 @@ namespace CxjText.utlis
             for (int page = 1; page <= dataPages; page++)
             {
                 String url = getDataUrl + page + "";
-                String rlt = HttpUtils.HttpPostHeader(url, "", "", userInfo.cookie, headJObject);
+                String rlt = HttpUtils.HttpPostHeader(url, "", "", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
                 if (String.IsNullOrEmpty(rlt)) break;
 
                 // 解析html

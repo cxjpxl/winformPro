@@ -338,7 +338,7 @@ namespace CxjText.utlis
                         break;
                     case 8:
                         touzhuxiang = WebUtility.UrlEncode("上半场大小");
-                        rltStr = "ball_sort=" + WebUtility.UrlEncode("足球上半场") +
+                        rltStr = "ball_sort=" + WebUtility.UrlEncode("足球滚球") +
                                         "&match_id=" + mid +
                                         "&touzhuxiang=" + WebUtility.UrlEncode("上半场大小 -" + (String)jObject["Match_Bdxpk2"]) +
                                         "&point_column=Match_Bxpl" +
