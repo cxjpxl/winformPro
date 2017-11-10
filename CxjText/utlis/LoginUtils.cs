@@ -240,7 +240,6 @@ namespace CxjText.utlis
             }
             //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
-            Console.WriteLine(rltNum);
             if (rltNum < 0)
             {
                 userInfo.status = 3;
@@ -600,6 +599,7 @@ namespace CxjText.utlis
                 return;
             }
 
+            
             //获取uid
             String[] strs = rltStr.Split('=');
             String uidStr = strs[strs.Length - 1];
@@ -607,6 +607,54 @@ namespace CxjText.utlis
             String uid = uidStrs[0];
             userInfo.uid = uid;
             //获取别的数据
+
+            
+            //获取UA
+            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus&other=header";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
+            String uaRlt = HttpUtils.HttpGetHeader(UaUrl,"",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(uaRlt) || !uaRlt.Contains("UA=")) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+
+            String newCookieUrl = "";
+            String[] htmls = uaRlt.Split('\n');
+            for (int i= 0; i < htmls.Length; i++) {
+                String htmlStr = htmls[i].Trim();
+                if (htmlStr.Contains("UA=")&&htmlStr.Contains("src=\"")) {
+                    int start1 = htmlStr.IndexOf("src=\"")+5;
+                    htmlStr = htmlStr.Substring(start1,htmlStr.Length - start1 );
+                    String[] usrls = htmlStr.Split('"');
+                    newCookieUrl = usrls[0];
+                    break;
+                }
+            }
+
+            if (String.IsNullOrEmpty(newCookieUrl)) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            //mkt访问
+            headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
+            headJObject["Accept"] = "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+            String mktUrl = newCookieUrl;
+            HttpUtils.HttpGetHeader(mktUrl, "", userInfo.cookie, headJObject);
+            
 
             //获取钱
             int moneyStatus = MoneyUtils.GetRMoney(userInfo);

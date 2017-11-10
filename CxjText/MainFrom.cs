@@ -19,6 +19,7 @@ namespace CxjText
         public MainFrom()
         {
             InitializeComponent();
+            HttpUtils.setMaxContectionNum(100);
         }
 
         //窗口加载出来的时候调用

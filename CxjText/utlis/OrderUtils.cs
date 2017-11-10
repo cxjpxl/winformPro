@@ -1,6 +1,7 @@
 ﻿using CxjText.bean;
 using CxjText.utils;
 using CxjText.views;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -63,7 +64,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            }else if (moneyStatus == -1) {
+            } else if (moneyStatus == -1) {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>
                 {
@@ -76,7 +77,7 @@ namespace CxjText.utlis
 
             }
 
-            
+
         }
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
@@ -258,7 +259,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = user.dataUrl + "/hsport/index.html";
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
-            String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl+ "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl + "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
 
             if (!FormUtils.IsJsonObject(orderBetStr))
             {
@@ -281,9 +282,9 @@ namespace CxjText.utlis
                 return;
             }
 
-            int min =(int) orderBJObect["min"];
+            int min = (int)orderBJObect["min"];
             int max = (int)orderBJObect["max"];
-            int money = (int )jobject["money"];
+            int money = (int)jobject["money"];
             if (money < min)
             {
                 leftForm.Invoke(new Action(() => {
@@ -306,10 +307,10 @@ namespace CxjText.utlis
                 return;
             }
 
-            
-            String orderUrl = user.dataUrl+ "/app/hsport/sports/order_buy";
+
+            String orderUrl = user.dataUrl + "/app/hsport/sports/order_buy";
             String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
-            String orderStr = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
+            String orderStr = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (!FormUtils.IsJsonArray(orderStr)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -348,7 +349,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            }else if (moneyStatus == -1)
+            } else if (moneyStatus == -1)
             {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>
@@ -370,12 +371,12 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            String RefererUrl = user.dataUrl + "/app/member/select?uid=" + user.uid+ "&langx=zh-cn";
+            String RefererUrl = user.dataUrl + "/app/member/select?uid=" + user.uid + "&langx=zh-cn";
             headJObject["Referer"] = RefererUrl;
             String rString = (String)jobject["rString"];
-            String brtUrl = user.dataUrl + "/app/member/FT_order/FT_order_"+ rString + "?" + parmsStr;
+            String brtUrl = user.dataUrl + "/app/member/FT_order/FT_order_" + rString + "?" + parmsStr;
             String betStr = HttpUtils.HttpGetHeader(brtUrl, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(betStr)||!betStr.Contains("确定交易")) {
+            if (String.IsNullOrEmpty(betStr) || !betStr.Contains("确定交易")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -392,7 +393,7 @@ namespace CxjText.utlis
             for (int i = 0; i < strs.Length; i++)
             {
                 String str = strs[i].Trim();
-                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\"")) 
+                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
                 { //找到input字段
                     //获取name的值
                     int nameIndex = str.IndexOf("name=\"");
@@ -409,10 +410,10 @@ namespace CxjText.utlis
                         gmin_single = valueStr;
                     }
                     //数据解析出来
-                    orderPrams =orderPrams + nameKey + "=" + valueStr + "&";
+                    orderPrams = orderPrams + nameKey + "=" + valueStr + "&";
                 }
             }
-           
+
             if (String.IsNullOrEmpty(orderPrams)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -447,9 +448,9 @@ namespace CxjText.utlis
 
 
             orderPrams = orderPrams + "autoOdd=Y&gold=" + money;
-            String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_"+ rString.Replace("r","R");
+            String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_" + rString.Replace("r", "R");
             headJObject["Referer"] = brtUrl;
-            String orderRltStr = HttpUtils.HttpPostHeader(orderUrl,orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            String orderRltStr = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRltStr) || !orderRltStr.Contains("成功提交注单")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -478,7 +479,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            }else if (moneyStatus == -1)
+            } else if (moneyStatus == -1)
             {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>
@@ -495,6 +496,8 @@ namespace CxjText.utlis
         //R下单
         public static void OrderR(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
+
+
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
@@ -511,12 +514,13 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
-            headJObject["Referer"] = user.dataUrl.Replace("www", "mkt"); 
+            headJObject["Referer"] = user.dataUrl.Replace("www", "mkt");
             String url1 = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime();
-            String rlt = HttpUtils.HttpGetHeader(url1,"",user.cookie,headJObject);
-            if (String.IsNullOrEmpty(rlt)||!rlt.Contains("交易单")) {
+            String rlt = HttpUtils.HttpGetHeader(url1, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("交易单")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -525,32 +529,190 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
             JArray parmsJArray = new JArray();
             JObject parmsJObject = new JObject();
-            parmsJObject.Add("gid",parms[0]);
-            parmsJObject.Add("sType", parms[1]);
-            parmsJObject.Add("rType", parms[2]);
-            parmsJObject.Add("bType", parms[3]);
-            parmsJArray.Add(parmsJObject);
-            String bOrderParmsStr = "[{\"gid\":"+parms[0]+",\"sType\":"+parms[1]+",\"rType\":"+parms[2]+",\"bType\":"+parms[3]+"}]";
 
+            int gid = 0;
+            int sType = 0;
+            int rType = 0;
+            int bType = 0;
+            try {
+                gid = int.Parse(parms[0]);
+                sType = int.Parse(parms[1]);
+                rType = int.Parse(parms[2]);
+                bType = int.Parse(parms[3]);
+            }
+            catch (SystemException e) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "参数错误");
+                    }
+                }));
+                return;
+            }
+
+
+            parmsJObject.Add("gid", gid);
+            parmsJObject.Add("sType", sType);
+            parmsJObject.Add("rType", rType);
+            parmsJObject.Add("bType", bType);
+            parmsJArray.Add(parmsJObject);
+            String bOrderParmsStr = parmsJArray.ToString();
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
-            headJObject["Referer"] = url1 ;
+            headJObject["Referer"] = url1;
             headJObject["Origin"] = user.dataUrl.Replace("www", "mkt");
             String betUrl = user.dataUrl.Replace("www", "mkt") + "/home/order";
+            String bOrderStr = HttpUtils.HttpPostHeader(betUrl, bOrderParmsStr, "application/json; charset=UTF-8", user.cookie, headJObject);
+            //获取数据
+            if (String.IsNullOrEmpty(bOrderStr) 
+                || !FormUtils.IsJsonObject(bOrderStr)
+                || !bOrderStr.Contains("data-strong")
+                || !bOrderStr.Contains("data-ratio")
+                || !bOrderStr.Contains("data-fkey")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+            parmsJObject = JObject.Parse(bOrderStr);
+            int min = (int)parmsJObject["min"];
+            int max = (int)parmsJObject["max"];
+            if (money < min) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "金额不低于"+min);
+                    }
+                }));
+                return;
+            }
 
-            Console.WriteLine(headJObject.ToString());
-            Console.WriteLine(betUrl);
-            Console.WriteLine(bOrderParmsStr);
+            if (money > max)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "金额不大于" + max);
+                    }
+                }));
+                return;
+            }
 
-            String bOrderStr = HttpUtils.HttpPostHeader(betUrl,bOrderParmsStr, "application/json; charset=UTF-8", user.cookie,headJObject);
+            String desc =(String) parmsJObject["desc"];
+            int tempIndex = desc.IndexOf("data-strong=\"")+13;
+            String tempString = desc.Substring(tempIndex, desc.Length - tempIndex);
+            String[] tempStrs = tempString.Split('"');
+            String strongStr = tempStrs[0].ToString().Trim().ToLower();
 
-            Console.WriteLine(bOrderStr);
-            return;
+            tempIndex = desc.IndexOf("data-ratio=\"") + 12;
+            tempString = desc.Substring(tempIndex, desc.Length - tempIndex);
+            tempStrs = tempString.Split('"');
+            String ratioString = tempStrs[0].ToString().Trim().ToLower();
+
+            tempIndex = desc.IndexOf("data-fkey=\"") + 11;
+            tempString = desc.Substring(tempIndex, desc.Length - tempIndex);
+            tempStrs = tempString.Split('"');
+            String dataFkeyStr = tempStrs[0].ToString().Trim().ToLower();
 
 
 
+            JObject orderJObject = new JObject();
+            orderJObject.Add("gid", gid);
+            orderJObject.Add("sType", sType);
+            orderJObject.Add("rType", rType);
+            orderJObject.Add("bType", bType);
+
+            orderJObject.Add("gidm", 0);
+            orderJObject.Add("odds", parmsJObject["odds"]);
+
+            if (!String.IsNullOrEmpty(strongStr))
+            {
+                if (strongStr.Equals("false"))
+                {
+                    orderJObject.Add("strong", false);
+                }
+                else if (strongStr.Equals("true"))
+                {
+                    orderJObject.Add("strong", true);
+                }
+                else {
+                    orderJObject.Add("strong", "");
+                }
+                
+            }
+            else {
+                orderJObject.Add("strong", "");
+            }
+            orderJObject.Add("ratio", ratioString);
+            orderJObject.Add("FKey", dataFkeyStr);
+            orderJObject.Add("AutoMore", true);
+            orderJObject.Add("money", money);
+            parmsJArray = new JArray();
+            parmsJArray.Add(orderJObject);
+            String orderUrl = user.dataUrl.Replace("www", "mkt") + "/home/submit";
+            String ordetRltStr = HttpUtils.HttpPostHeader(orderUrl, parmsJArray.ToString(), "application/json; charset=UTF-8", user.cookie, headJObject);
+
+            Console.WriteLine(ordetRltStr);
+            if (String.IsNullOrEmpty(ordetRltStr)
+                || !FormUtils.IsJsonObject(ordetRltStr)) {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败" );
+                    }
+                }));
+                return;
+            }
+
+            JObject rltJObject = JObject.Parse(ordetRltStr);
+            bool isSuccess = (bool)rltJObject["success"];
+            if (!isSuccess) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetRMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 0; //登录失效
+                        user.cookie = null;
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
 
         }
 

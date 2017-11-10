@@ -175,9 +175,7 @@ namespace CxjText.views
                 userInfo.status = 3;
                 userInfo.cookie = null;
                 userInfo.uid = "";
-                this.Invoke(new Action(() => {
-                    AddToListToUpDate(position);
-                }));
+                AddToListToUpDate(position);
             }
         }
 
@@ -316,9 +314,7 @@ namespace CxjText.views
                 userInfo.status = 0; //下线
                 userInfo.uid = "";
                 userInfo.cookie = null;
-                this.Invoke(new Action(() => {
-                    AddToListToUpDate(position);
-                }));
+                AddToListToUpDate(position);
             }
             
         }
