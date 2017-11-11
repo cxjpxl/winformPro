@@ -74,6 +74,20 @@ namespace CxjText.utlis
                 {
                     return -1;
                 }
+            } else if (userInfo.tag.Equals("G")) {
+                if (String.IsNullOrEmpty(dataStr))
+                {
+                    return -1;
+                }
+
+                if (dataStr.Trim().Equals("1"))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
             }
             else {
                 Console.WriteLine("系统待开发中!");

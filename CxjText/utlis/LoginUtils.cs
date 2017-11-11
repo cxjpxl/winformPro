@@ -702,6 +702,111 @@ namespace CxjText.utlis
             }
             
         }
+        /**************************G系统登录的处理****************************/
+        public static void loginG(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            String codeUrl = userInfo.loginUrl + "/yzm.php?type=" + FormUtils.getCurrentTime();
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //获取登录的系统参数 
+            JObject headJObject = new JObject();
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/viewcache/3f381e4642f5ca80c5cce16cfb87e434.html?v=0.0.12";
+            String paramsStr = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
+
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/index.php/webcenter/Login/login_do";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            Console.WriteLine(rltStr);
+            if (rltStr == null)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+           
+            //到时候要变成获钱和uid token
+            if (rltNum > 0)
+            {
+                userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            else
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+        }
 
     }
 }

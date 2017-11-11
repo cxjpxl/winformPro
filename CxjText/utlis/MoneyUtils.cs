@@ -152,6 +152,12 @@ namespace CxjText.utlis
             userInfo.money = moneyStr;
             return 1;
         }
+        //获取G的money 
+        public static int GetGMoney(UserInfo user)
+        {
+           
+            return 1;
+        }
 
     }
 }

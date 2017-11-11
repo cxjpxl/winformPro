@@ -167,6 +167,9 @@ namespace CxjText.views
                     case "R":
                         LoginUtils.loginR(this, position);
                         break;
+                    case "G":
+                        LoginUtils.loginG(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -219,7 +222,7 @@ namespace CxjText.views
                     }
                     else if (status == 2)
                     {
-                        this.loginDaGridView.Rows[index].Cells[4].Value = "在线";
+                        this.loginDaGridView.Rows[index].Cells[4].Value = "成功";
                     }
                     else
                     {
