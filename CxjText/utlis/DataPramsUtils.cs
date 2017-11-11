@@ -53,7 +53,7 @@ namespace CxjText.utlis
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-            if (String.IsNullOrEmpty(rlt)) return null;
+            if (String.IsNullOrEmpty(rlt)||!FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             JArray jArry = (JArray)jObject["db"];
@@ -72,8 +72,7 @@ namespace CxjText.utlis
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2?userInfo.cookie:null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
-                if (String.IsNullOrEmpty(pageRlt)) continue;
-                if (!FormUtils.IsJsonObject(pageRlt)) return null;
+                if (String.IsNullOrEmpty(pageRlt) || !FormUtils.IsJsonObject(pageRlt)) continue;
                 JObject pageJObject = JObject.Parse(pageRlt);
                 if (pageJObject == null) continue;
                 JArray pageJArry = (JArray)pageJObject["db"];

@@ -611,12 +611,12 @@ namespace CxjText.utlis
             tempIndex = desc.IndexOf("data-ratio=\"") + 12;
             tempString = desc.Substring(tempIndex, desc.Length - tempIndex);
             tempStrs = tempString.Split('"');
-            String ratioString = tempStrs[0].ToString().Trim().ToLower();
+            String ratioString = tempStrs[0].ToString().Trim();
 
             tempIndex = desc.IndexOf("data-fkey=\"") + 11;
             tempString = desc.Substring(tempIndex, desc.Length - tempIndex);
             tempStrs = tempString.Split('"');
-            String dataFkeyStr = tempStrs[0].ToString().Trim().ToLower();
+            String dataFkeyStr = tempStrs[0].ToString().Trim();
 
 
 

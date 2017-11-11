@@ -18,8 +18,8 @@ namespace CxjText.utlis
             switch (tag) {
                 case "A":
                     break;
-                case "B":
-                    timeOffest = 1000 * 60;
+                case "B":  //B 40分钟重新登录一次  替换cookie
+                    timeOffest = 1000 * 60 * 40;
                     break;
                 case "I":
                     break;

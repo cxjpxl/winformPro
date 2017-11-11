@@ -257,7 +257,7 @@ namespace CxjText.views
             return -1;
         }
 
-        //定时器10s检测一次  检测钱  其实就是刷新cookie
+        //定时器1min检测一次  检测钱  其实就是刷新cookie
         private void loginTimer_Tick(object sender, EventArgs e)
         {
             for (int i = 0; i < Config.userList.Count; i++) {
@@ -266,13 +266,13 @@ namespace CxjText.views
                 if (user.status != 2) continue;
                 if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
                 user.loginTime = FormUtils.getCurrentTime(); //更新时间
-                Thread t = new Thread(new ParameterizedThreadStart(this.getMoney));
+                Thread t = new Thread(new ParameterizedThreadStart(this.UpdateMoney));
                 t.Start(i);
             }
         }
 
         //获取资金剩余情况
-        public void getMoney(object pos) {
+        public void UpdateMoney(object pos) {
             int position = (int)pos;
             UserInfo userInfo = (UserInfo)Config.userList[position];
             int moneyStatus = 0;
@@ -283,9 +283,14 @@ namespace CxjText.views
                     case "A":
                         moneyStatus =  MoneyUtils.GetAMoney(userInfo);
                         break;
-                    case "B":
-                        moneyStatus = MoneyUtils.GetBMoney(userInfo);
-                        break;
+                    case "B": //B特殊处理下
+                        userInfo.status = 0; //下线
+                        userInfo.cookie = null;
+                        userInfo.uid = "";
+                        GoLogin(position); //B一个小时登录一次
+                        return;
+                      //  moneyStatus = MoneyUtils.GetBMoney(userInfo);
+                      //  break;
                     case "I":
                         moneyStatus = MoneyUtils.GetIMoney(userInfo);
                         break;
@@ -301,6 +306,10 @@ namespace CxjText.views
             }
             catch (SystemException e)
             {
+                if (userInfo.tag.Equals("B")) {  //B特殊处理下
+                    userInfo.loginTime = -1;
+                    return;
+                }
                 moneyStatus = 0;
             }
 
