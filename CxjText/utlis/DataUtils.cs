@@ -786,7 +786,7 @@ namespace CxjText.utlis
             }
             else
             {
-                c05 ="大"+ (String)jObject["Match_DxGG"] + " " + Match_DxDpl;
+                c05 ="大"+ (String)jObject["Match_DxGG1"] + " " + Match_DxDpl;
             }
             returnObj.Add("c05", c05.Trim());
 
@@ -822,15 +822,15 @@ namespace CxjText.utlis
             //主队半场大小
             String Match_Bdpl = (String)jObject["Match_Bdpl"];
             if (Match_Bdpl == null) Match_Bdpl = "";
-            String Match_Bdxpk = (String)jObject["Match_Bdxpk"];
-            if (Match_Bdxpk == null) Match_Bdxpk = "";
+            String Match_Bdxpk1 = (String)jObject["Match_Bdxpk1"];
+            if (Match_Bdxpk1 == null) Match_Bdxpk1 = "";
             String c08 = "";
             if (String.IsNullOrEmpty(Match_Bdpl) || Match_Bdpl.Trim().Equals("0"))
             {
                 c08 = "";
             }
             else {
-                c08 ="大"+ Match_Bdxpk + " " + Match_Bdpl;
+                c08 ="大"+ Match_Bdxpk1 + " " + Match_Bdpl;
             }
             returnObj.Add("c08", c08.Trim());
             /*********************************************************************/
@@ -867,7 +867,7 @@ namespace CxjText.utlis
             }
             else
             {
-                c15 = "小" + (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxXpl"];
+                c15 = "小" + (String)jObject["Match_DxGG2"] + " " + (String)jObject["Match_DxXpl"];
             }
             returnObj.Add("c15", c15.Trim());
 
