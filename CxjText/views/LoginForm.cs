@@ -175,6 +175,7 @@ namespace CxjText.views
                 userInfo.status = 3;
                 userInfo.cookie = null;
                 userInfo.uid = "";
+                userInfo.loginTime = -1;
                 AddToListToUpDate(position);
             }
         }
@@ -266,13 +267,13 @@ namespace CxjText.views
                 if (user.status != 2) continue;
                 if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
                 user.loginTime = FormUtils.getCurrentTime(); //更新时间
-                Thread t = new Thread(new ParameterizedThreadStart(this.UpdateMoney));
+                Thread t = new Thread(new ParameterizedThreadStart(this.UpdateCookie));
                 t.Start(i);
             }
         }
 
-        //获取资金剩余情况
-        public void UpdateMoney(object pos) {
+        //利用下面东西更新网站的cookie
+        public void UpdateCookie(object pos) {
             int position = (int)pos;
             UserInfo userInfo = (UserInfo)Config.userList[position];
             int moneyStatus = 0;
@@ -298,16 +299,18 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
                         break;
                     case "R":
-                        moneyStatus = MoneyUtils.GetRMoney(userInfo);
-                        break;
+                        userInfo.status = 0; //下线
+                        userInfo.cookie = null;
+                        userInfo.uid = "";
+                        GoLogin(position); //R一个多小时登录一次
+                        return;
                     default:
                         break;
                 }
             }
             catch (SystemException e)
             {
-                if (userInfo.tag.Equals("B")) {  //B特殊处理下
-                    userInfo.loginTime = -1;
+                if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R")) {  //B特殊处理下
                     return;
                 }
                 moneyStatus = 0;

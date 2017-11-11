@@ -18,14 +18,16 @@ namespace CxjText.utlis
             switch (tag) {
                 case "A":
                     break;
-                case "B":  //B 40分钟重新登录一次  替换cookie
+                case "B":  //B 30分钟重新登录一次  替换cookie
                     timeOffest = 1000 * 60 * 29;
                     break;
                 case "I":
                     break;
                 case "U":
                     break;
-                case "R":
+                case "R": //1个小时多
+                    timeOffest = 1000 * 60 * 100;
+                    //timeOffest = 1000 * 60;
                     break;
                 default:
                     return false;
@@ -152,6 +154,7 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
@@ -252,8 +255,8 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetBMoney(userInfo);
             if (moneyStatus == 1)
             {
-                Console.WriteLine("B   -----------------   登录成功");
                 userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
@@ -357,6 +360,7 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
@@ -494,6 +498,7 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 loginForm.Invoke(new Action(() =>
                 {
                     loginForm.AddToListToUpDate(position);
@@ -682,6 +687,7 @@ namespace CxjText.utlis
             if (moneyStatus == 1)
             {
                 userInfo.status = 2;
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 loginForm.Invoke(new Action(() =>
                 {
                     loginForm.AddToListToUpDate(position);
