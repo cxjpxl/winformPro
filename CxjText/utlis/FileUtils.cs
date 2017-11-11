@@ -51,8 +51,6 @@ namespace CxjText.utlis
                     if (baseUrl.Contains("http://")) {
                         baseUrl = baseUrl.Remove(0,7);
                     }
-
-
                     if (baseUrl.Contains("https://")) {
                         baseUrl = baseUrl.Remove(0, 8);
                     }
@@ -60,15 +58,46 @@ namespace CxjText.utlis
                     {
                         baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
                     }
+
+                    if (!baseUrl.Contains("www.")) {
+                        baseUrl = "www." + baseUrl;
+                    }
+
                     
                     if (loginUrl.EndsWith("/")) {
                         loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
                     }
 
+                    if (!loginUrl.Contains("www."))
+                    {
+                        if (loginUrl.Contains("http://"))
+                        {
+                            loginUrl = "http://" + "www." + loginUrl.Substring(7, loginUrl.Length - 7);
+                        }
+                        else if (loginUrl.Contains("https://"))
+                        {
+                            loginUrl = "https://" + "www." + loginUrl.Substring(8, loginUrl.Length - 8);
+                        }
+                    }
+
+
                     if (dataUrl.EndsWith("/"))
                     {
                         dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
                     }
+
+                    if (!dataUrl.Contains("www."))
+                    {
+                        if (dataUrl.Contains("http://"))
+                        {
+                            dataUrl = "http://" + "www." + dataUrl.Substring(7, dataUrl.Length - 7);
+                        }
+                        else if (loginUrl.Contains("https://"))
+                        {
+                            dataUrl = "https://" + "www." + dataUrl.Substring(8, dataUrl.Length - 8);
+                        }
+                    }
+
 
                     if (list.Contains(baseUrl))
                     { //过滤重复的网址
@@ -101,6 +130,7 @@ namespace CxjText.utlis
                     userInfo.baseUrl = baseUrl;
                     userInfo.loginUrl = loginUrl;
                     userInfo.dataUrl = dataUrl;
+                    userInfo.loginTime = FormUtils.getCurrentTime();
                     if (tag.Equals("A"))
                     {
                         userInfo.leastMoney = 10;

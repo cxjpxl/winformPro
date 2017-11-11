@@ -19,7 +19,7 @@ namespace CxjText.utlis
                 case "A":
                     break;
                 case "B":  //B 40分钟重新登录一次  替换cookie
-                    timeOffest = 1000 * 60 * 40;
+                    timeOffest = 1000 * 60 * 29;
                     break;
                 case "I":
                     break;
@@ -252,6 +252,7 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetBMoney(userInfo);
             if (moneyStatus == 1)
             {
+                Console.WriteLine("B   -----------------   登录成功");
                 userInfo.status = 2; //成功
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -610,7 +611,8 @@ namespace CxjText.utlis
 
             
             //获取UA
-            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus&other=header";
+            //String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus&other=header";
+            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String uaRlt = HttpUtils.HttpGetHeader(UaUrl,"",userInfo.cookie,headJObject);
@@ -647,7 +649,26 @@ namespace CxjText.utlis
                 return;
             }
 
-
+            //url处理
+            if (!newCookieUrl.Contains("mkt.")){
+                if (newCookieUrl.Contains("http://"))
+                {
+                    newCookieUrl ="http://"+ "mkt." +  newCookieUrl.Substring(7, newCookieUrl.Length - 7);
+                }
+                else if (newCookieUrl.Contains("https://"))
+                {
+                    newCookieUrl = "https://" + "mkt." + newCookieUrl.Substring(8, newCookieUrl.Length - 8);
+                }
+                else {
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() =>
+                    {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+            }
+            
             //mkt访问
             headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
