@@ -307,13 +307,19 @@ namespace CxjText.views
                         userInfo.uid = "";
                         GoLogin(position); //R一个多小时登录一次
                         return;
+                    case "G":
+                        userInfo.status = 0; //下线
+                        userInfo.cookie = null;
+                        userInfo.uid = "";
+                        GoLogin(position);
+                        return;
                     default:
                         break;
                 }
             }
             catch (SystemException e)
             {
-                if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R")) {  //B特殊处理下
+                if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R") || userInfo.tag.Equals("G")) {  //B特殊处理下
                     return;
                 }
                 moneyStatus = 0;

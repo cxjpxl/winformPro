@@ -29,6 +29,10 @@ namespace CxjText.utlis
                     timeOffest = 1000 * 60 * 100;
                     //timeOffest = 1000 * 60;
                     break;
+                case "G": 
+                    timeOffest = 1000 * 60 * 29;
+                    //timeOffest = 1000 * 60;
+                    break;
                 default:
                     return false;
             }
@@ -768,7 +772,6 @@ namespace CxjText.utlis
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/index.php/webcenter/Login/login_do";
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
-            Console.WriteLine(rltStr);
             if (rltStr == null)
             {
                 userInfo.status = 3;
@@ -786,9 +789,80 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-           
+
+            //获取token  和 uid
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if (list == null || list.Count == 0) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String uid = "";
+
+            for (int i = 0; i < list.Count; i++) {
+                Cookie cookie = list[i];
+                if (cookie == null) continue;
+                if (cookie.Name.Equals("uid")) {
+                    uid = cookie.Value;
+                    break;
+                }
+            }
+
+            if (String.IsNullOrEmpty(uid))
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            //获取token
+            String sportsUrl = userInfo.dataUrl + "/index.php/Index/sports";
+            headJObject = new JObject();
+            headJObject["Referer"] = userInfo.dataUrl + "/index.php/Index/module_sports";
+            String sportRlt = HttpUtils.HttpGetHeader(sportsUrl,"",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(sportRlt)||!sportRlt.Contains("uid="+uid)) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            String token = "";
+            String[] htmls = sportRlt.Split('\n');
+            for (int i = 0; i < htmls.Length; i++)
+            {
+                String htmlStr = htmls[i].Trim();
+                if (htmlStr.Contains("uid="+uid))
+                {
+                    int start = htmlStr.IndexOf("token=");
+                    if (start > 0) {
+                        token = htmlStr.Substring(start + 6, 32);
+                    }
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(token)) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            userInfo.uid = uid;
+            userInfo.exp = token;
+            int moneyStatus = MoneyUtils.GetGMoney(userInfo);
+
             //到时候要变成获钱和uid token
-            if (rltNum > 0)
+            if (moneyStatus == 1)
             {
                 userInfo.status = 2; //成功
                 userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
@@ -800,6 +874,9 @@ namespace CxjText.utlis
             else
             {
                 userInfo.status = 3;
+                userInfo.uid = "";
+                userInfo.exp = "";
+                userInfo.cookie = null;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));

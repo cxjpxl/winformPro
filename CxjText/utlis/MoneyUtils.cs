@@ -152,10 +152,37 @@ namespace CxjText.utlis
             userInfo.money = moneyStr;
             return 1;
         }
-        //获取G的money 
+        //获取G的money   1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetGMoney(UserInfo user)
         {
-           
+            String uid = user.uid;
+            String token = user.exp;
+
+            if (String.IsNullOrEmpty(uid) || String.IsNullOrEmpty(token)){
+                return -1;
+            }
+            String moneyUrl = user.dataUrl + "/index.php/sports/user/getuserinfo";
+            JObject headJObject = new JObject();
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/index.php/sports/main?token="+token+"&uid="+uid;
+
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "token=" + token + "&uid=" + uid, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt)) {
+                return 0;
+            }
+            JObject jObject = JObject.Parse(moneyRlt);
+            if (jObject["login"] == null) {
+                return 0;
+            }
+            int login = (int)jObject["login"];
+            if (login != 1) {
+                return -1;
+            }
+
+            String money = (String)jObject["money"];
+            token = (String)jObject["token"];
+            user.money = money;
+            user.exp = token;
             return 1;
         }
 
