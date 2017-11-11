@@ -68,7 +68,8 @@ namespace CxjText.utlis
                         loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
                     }
 
-                    if (!loginUrl.Contains("www."))
+                    //R系统要特殊处理下
+                    if (!loginUrl.Contains("www.")&&tag.Equals("R"))
                     {
                         if (loginUrl.Contains("http://"))
                         {
@@ -85,8 +86,8 @@ namespace CxjText.utlis
                     {
                         dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
                     }
-
-                    if (!dataUrl.Contains("www."))
+                    //R系统要特殊处理下
+                    if (!dataUrl.Contains("www.") && tag.Equals("R"))
                     {
                         if (dataUrl.Contains("http://"))
                         {
