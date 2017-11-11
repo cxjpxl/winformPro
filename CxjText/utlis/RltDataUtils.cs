@@ -19,7 +19,7 @@ namespace CxjText.utlis
                     rltJArray = new JArray();
                 }
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("G"))
             {
                 rltJArray = (JArray)jObject["db"];
                 if (rltJArray == null)
@@ -92,7 +92,7 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B")||userInfo.tag.Equals("G"))
             {
                 JArray jArray = (JArray)jObject["db"];
                 if (jArray == null || jArray.Count == 0)
@@ -228,7 +228,7 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["a26"].ToString();
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("G"))
             {
                 title = currentArray[0]["Match_Name"].ToString();
             }
@@ -257,7 +257,7 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("G"))
             {
                 mid = (String)jArray[index][0]["Match_ID"] + ""; //唯一标识
             }
@@ -292,7 +292,7 @@ namespace CxjText.utlis
                     return true;
                 }
             }
-            else if (userInfo.tag.Equals("B"))
+            else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("G"))
             {
                 String Match_Master = (String)jObject["Match_Master"];
                 String Match_Guest = (String)jObject["Match_Guest"];

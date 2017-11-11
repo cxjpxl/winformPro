@@ -740,5 +740,201 @@ namespace CxjText.utlis
 
             return returnObj;
         }
+        /********************G系统数据填充***************************/
+        public static JObject updateUI_SysG(JObject jObject)
+        {
+            JObject returnObj = new JObject();
+            //球赛
+            String lianSaiStr = (String)jObject["Match_Name"];
+            returnObj.Add("c00", lianSaiStr.Trim());
+            //时间比分
+            String time = (String)jObject["Match_Date"];
+            if (time.IndexOf("45") >= 0)
+            {
+                time = "中场";
+            }
+            time = time + "\n" + (String)jObject["Match_NowScore"];
+            returnObj.Add("c01", time.Trim());
+            //主队名称
+            String c02 = (String)jObject["Match_Master"];
+            returnObj.Add("c02", c02.Trim());
+            //主队独赢
+            String Match_BzM = (String)jObject["Match_BzM"];
+            String c03 = Match_BzM.Trim().Equals("0") ? "" : Match_BzM;
+            returnObj.Add("c03", c03.Trim());
+            //主队全场让球
+            String Match_ShowType = (String)jObject["Match_ShowType"];
+            String Match_Ho = (String)jObject["Match_Ho"];
+            String rgg1 = "";
+            if (Match_ShowType.Equals("H") && !Match_Ho.Equals("0"))
+            {
+                rgg1 = (String)jObject["Match_RGG"];
+            }
+            String c04 = rgg1 + " " + Match_Ho;
+            if (c04.Trim().Equals("0"))
+            {
+                c04 = "";
+            }
+            returnObj.Add("c04", c04.Trim());
+
+            //主队全场大小
+            String Match_DxDpl = (String)jObject["Match_DxDpl"];
+            String c05 = "";
+            if (String.IsNullOrEmpty(Match_DxDpl) || Match_DxDpl.Equals("0"))
+            {
+                c05 = "";
+            }
+            else
+            {
+                c05 ="大"+ (String)jObject["Match_DxGG"] + " " + Match_DxDpl;
+            }
+            returnObj.Add("c05", c05.Trim());
+
+            //半场独赢
+            String c06 = (String)jObject["Match_Bmdy"];
+            if (String.IsNullOrEmpty(c06) || c06.Equals("0")) c06 = "";
+            returnObj.Add("c06", c06.Trim());
+
+            //Match_BRpk  Match_Hr_ShowType
+            String Match_Hr_ShowType = (String)jObject["Match_Hr_ShowType"];
+
+            String Match_BHo = (String)jObject["Match_BHo"];
+            String c07 = "";
+            if (!String.IsNullOrEmpty(Match_ShowType) && !String.IsNullOrEmpty(Match_BHo))
+            {
+                String Match_BRpk = "";
+                if (Match_ShowType.Equals("H") && !Match_BHo.Equals("0"))
+                {
+                    Match_BRpk = (String)jObject["Match_BRpk"];
+                }
+                c07 = Match_BRpk + " " + Match_BHo;
+                if (c07.Trim().Equals("0"))
+                {
+                    c07 = "";
+                }
+            }
+            else
+            {
+                c07 = "";
+            }
+            returnObj.Add("c07", c07.Trim());
+
+            //主队半场大小
+            String Match_Bdpl = (String)jObject["Match_Bdpl"];
+            if (Match_Bdpl == null) Match_Bdpl = "";
+            String Match_Bdxpk = (String)jObject["Match_Bdxpk"];
+            if (Match_Bdxpk == null) Match_Bdxpk = "";
+            String c08 = "";
+            if (String.IsNullOrEmpty(Match_Bdpl) || Match_Bdpl.Trim().Equals("0"))
+            {
+                c08 = "";
+            }
+            else {
+                c08 ="大"+ Match_Bdxpk + " " + Match_Bdpl;
+            }
+            returnObj.Add("c08", c08.Trim());
+            /*********************************************************************/
+            returnObj.Add("c10", lianSaiStr.Trim());
+            returnObj.Add("c11", time.Trim());
+
+            String c12 = (String)jObject["Match_Guest"]; //球队名称
+            returnObj.Add("c12", c12.Trim());
+
+            String Match_BzG = (String)jObject["Match_BzG"];
+            String c13 = Match_BzG.Trim().Equals("0") ? "" : Match_BzG;
+            returnObj.Add("c13", c13.Trim());
+
+            String Match_Ao = (String)jObject["Match_Ao"];
+            String rgg2 = "";
+            if (Match_ShowType.Equals("C") && !Match_Ao.Equals("0"))
+            {
+                rgg2 = (String)jObject["Match_RGG"];
+            }
+            String c14 = rgg2 + " " + Match_Ao;
+            if (c14.Trim().Equals("0"))
+            {
+                c14 = "";
+            }
+
+            returnObj.Add("c14", c14.Trim());
+
+            //客队全场大小
+            String Match_DxXpl = (String)jObject["Match_DxXpl"];
+            String c15 = "";
+            if (String.IsNullOrEmpty(Match_DxXpl) || Match_DxXpl.Equals("0"))
+            {
+                c15 = "";
+            }
+            else
+            {
+                c15 = "小" + (String)jObject["Match_DxGG1"] + " " + (String)jObject["Match_DxXpl"];
+            }
+            returnObj.Add("c15", c15.Trim());
+
+            //客队全场独赢
+            String c16 = (String)jObject["Match_Bgdy"];
+            if (String.IsNullOrEmpty(c16) || c16.Equals("0")) c16 = "";
+            returnObj.Add("c16", c16.Trim());
+
+            //Match_BRpk
+            String Match_BAo = (String)jObject["Match_BAo"];
+            String c17 = "";
+            if (!String.IsNullOrEmpty(Match_ShowType) && !String.IsNullOrEmpty(Match_BAo))
+            {
+                String Match_BRpk = "";
+                if (Match_ShowType.Equals("C") && !Match_BAo.Equals("0"))
+                {
+                    Match_BRpk = (String)jObject["Match_BRpk"];
+                }
+                c17 = Match_BRpk + " " + Match_BAo;
+
+                if (c17.Trim().Equals("0"))
+                {
+                    c17 = "";
+                }
+            }
+            else
+            {
+                c17 = "";
+            }
+            returnObj.Add("c17", c17.Trim());
+
+            //客队半场大小
+            String Match_Bdxpk2 = (String)jObject["Match_Bdxpk2"];
+            if (Match_Bdxpk2 == null) Match_Bdxpk2 = "";
+            String Match_Bxpl = (String)jObject["Match_Bxpl"];
+            if (Match_Bxpl == null) Match_Bxpl = "";
+            String c18 = "";
+            if (String.IsNullOrEmpty(Match_Bxpl) || Match_Bxpl.Trim().Equals("0"))
+            {
+                c18 = "";
+            }
+            else {
+                c18 ="小"+ Match_Bdxpk2 + " " + Match_Bxpl;
+            }
+
+            returnObj.Add("c18", c18.Trim());
+            /*********************************************************************/
+            returnObj.Add("c20", lianSaiStr);
+            returnObj.Add("c21", time);
+            returnObj.Add("c22", "和局");
+            String c23 = (String)jObject["Match_BzH"];
+            if (String.IsNullOrEmpty(c23) || c23.Trim().Equals("0"))
+            {
+                c23 = "";
+            }
+            returnObj.Add("c23", c23);
+            returnObj.Add("c24", "");
+            returnObj.Add("c25", "");
+
+            String c26 = (String)jObject["Match_Bhdy"];
+            if (String.IsNullOrEmpty(c26) || c26.Equals("0")) c26 = "";
+            returnObj.Add("c26", c26.Trim());
+            returnObj.Add("c27", "");
+            returnObj.Add("c28", "");
+            /*********************************************************************/
+
+            return returnObj;
+        }
     }
 }

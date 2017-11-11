@@ -114,6 +114,12 @@ namespace CxjText.views
                     rltObj = DataUtils.updateUI_SysR(jObject);
                     mid = (String)jObject["mid"]; // 获得唯一标示
                 }
+                else if (userInfo.tag.Equals("G"))
+                {
+                    JObject jObject = (JObject)jArray[i];
+                    rltObj = DataUtils.updateUI_SysG(jObject);
+                    mid = (String)jObject["Match_ID"]; // 获得唯一标示
+                }
                 else
                 {
 
@@ -204,6 +210,7 @@ namespace CxjText.views
                         this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
                         break;
                     case "B":
+                    case "G":
                         this.currMid=(String)this.cJArray[currIndex / 3]["Match_ID"] + "";
                         break;
                     case "I":

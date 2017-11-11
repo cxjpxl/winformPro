@@ -411,6 +411,15 @@ namespace CxjText.utlis
             jObject.Add("list", jArray);
             return jObject.ToString();
         }
+        /***********************G系统获取数据*************************/
+        public static String getGData(UserInfo userInfo)
+        {
+            //page是由0开始
+            String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
+            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+            if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
+            return rlt;
+        }
 
     }
 }
