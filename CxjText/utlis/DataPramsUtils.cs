@@ -315,13 +315,13 @@ namespace CxjText.utlis
 
                             /***************************半场让球*************************************/
                             HtmlNode bqChangeRqNode = allNodes[17];
-                            String bh_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[0].InnerText.ToString().Trim();
-                            String bg_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[2].InnerText.ToString().Trim();
+                            String bh_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[1].InnerText.ToString().Trim();
+                            String bg_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[3].InnerText.ToString().Trim();
                             String bh_rang_value = bqChangeRqNode.ChildNodes[3].ChildNodes[1].InnerText.ToString().Trim();
                             String bg_rang_value = bqChangeRqNode.ChildNodes[3].ChildNodes[3].InnerText.ToString().Trim();
 
-                            String bh_rang = h_rang_key + " " + h_rang_value;
-                            String bg_rang = g_rang_key + " " + g_rang_value;
+                            String bh_rang = bh_rang_key + " " + bh_rang_value;
+                            String bg_rang = bg_rang_key + " " + bg_rang_value;
 
                             str1 = bqChangeRqNode.ChildNodes[3].ChildNodes[1].OuterHtml.ToString().Trim();
                             start = str1.IndexOf("(");
@@ -339,8 +339,8 @@ namespace CxjText.utlis
                             String bh_daxiao_value = bdaxiaoNode.ChildNodes[3].ChildNodes[1].InnerText.ToString().Trim();
                             String bg_daxiao_value = bdaxiaoNode.ChildNodes[3].ChildNodes[3].InnerText.ToString().Trim();
 
-                            String bh_daxiao = h_daxiao_key + " " + h_daxiao_value;
-                            String bg_daxiao = g_daxiao_key + " " + g_daxiao_value;
+                            String bh_daxiao = bh_daxiao_key + " " + bh_daxiao_value;
+                            String bg_daxiao = bg_daxiao_key + " " + bg_daxiao_value;
 
                             str1 = bdaxiaoNode.ChildNodes[3].ChildNodes[1].OuterHtml.ToString().Trim();
                             start = str1.IndexOf("(");
