@@ -213,7 +213,6 @@ namespace CxjText.views
                         this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
                         break;
                     case "B":
-                    case "G":
                         this.currMid=(String)this.cJArray[currIndex / 3]["Match_ID"] + "";
                         break;
                     case "I":
@@ -225,11 +224,13 @@ namespace CxjText.views
                     case "R":
                         this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
                         break;
+                    case "G":
+                        this.currMid = (String)this.cJArray[currIndex / 3]["Match_ID"] + "";
+                        break;
                     default:
                         break;
 
                 }
-                //Console.WriteLine("当前行的数据：" + currIndex + "  data:" + this.currMid);
             }
         }
     }

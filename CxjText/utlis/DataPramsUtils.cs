@@ -431,11 +431,13 @@ namespace CxjText.utlis
             String p = "p=1&oddpk=H&leg=";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
-
+            Console.WriteLine("------------------------------");
+            Console.WriteLine(rlt);
             JObject rltJObject = JObject.Parse(rlt);
             try
             {
                 JObject dbJObjecct = (JObject)rltJObject["db"];
+                Console.WriteLine("在不是Array的数据里面");
                 JArray jArray = new JArray();
                 for (int i = 0; i < dbJObjecct.Count; i++) {
                     try {

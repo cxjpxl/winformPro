@@ -149,8 +149,12 @@ namespace CxjText.views
 
             UserInfo userInfo =(UserInfo) Config.userList[index];
             try {
+                if (!FormUtils.IsJsonObject(rlt)) {
+                    this.nameShowGridView.Columns[0].HeaderCell.Value = "获取数据失败";
+                    return;
+                }
                 this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
-                JObject rltJObject = (JObject)JsonConvert.DeserializeObject(rlt);
+                JObject rltJObject = JObject.Parse(rlt);
                 if (rltJObject == null) return ;
                 //系统更改 修改1
                 JArray rltJArray = RltDataUtils.explandRlt(userInfo,rltJObject);
