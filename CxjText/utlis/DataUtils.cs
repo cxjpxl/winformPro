@@ -689,17 +689,18 @@ namespace CxjText.utlis
             String c03 = (String)jObject["h_du_y"]; 
             returnObj.Add("c03", c03.Trim());
             //全场主让球
-            String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
+            String c04 = (String)jObject["h_rang"];
             returnObj.Add("c04", c04.Trim());
-
-            String c05 = (String)jObject["h_rang"] ;
+            // 全场主大小
+            String c05 = (String)jObject["h_daxiao"] ;
             returnObj.Add("c05", c05.Trim());
-
+            // 半场主独赢
             String c06 = (String)jObject["bh_du_y"];
             returnObj.Add("c06", c06.Trim());
-
+            // 半场主让球
             String c07 = (String)jObject["bh_rang"] ;
             returnObj.Add("c07", c07.Trim());
+            // 半场主大小
             String c08 = (String)jObject["bh_daxiao"];
             returnObj.Add("c08", c08.Trim());
             /*********************************************************************/
@@ -714,14 +715,16 @@ namespace CxjText.utlis
             //全场客让球
             String c14 = (String)jObject["g_rang"];
             returnObj.Add("c14", c14.Trim());
-
+            // 全场客大小
             String c15 = (String)jObject["g_daxiao"];
             returnObj.Add("c15", c15.Trim());
-
+            // 半场客独赢
             String c16 = (String)jObject["bg_du_y"];
             returnObj.Add("c16", c16.Trim());
+            // 半场客让球
             String c17 = (String)jObject["bg_rang"];
             returnObj.Add("c17", c17.Trim());
+            // 半场客大小
             String c18 = (String)jObject["bg_daxiao"];
             returnObj.Add("c18", c18.Trim());
             /*********************************************************************/
