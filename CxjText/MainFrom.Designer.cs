@@ -34,6 +34,7 @@
             this.leftPanel = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.codeMoneyText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -79,11 +80,21 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "搜索球队";
             // 
+            // codeMoneyText
+            // 
+            this.codeMoneyText.AutoSize = true;
+            this.codeMoneyText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.codeMoneyText.Location = new System.Drawing.Point(1002, 500);
+            this.codeMoneyText.Name = "codeMoneyText";
+            this.codeMoneyText.Size = new System.Drawing.Size(0, 16);
+            this.codeMoneyText.TabIndex = 7;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.leftPanel);
@@ -104,5 +115,6 @@
         private System.Windows.Forms.Panel leftPanel;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label codeMoneyText;
     }
 }

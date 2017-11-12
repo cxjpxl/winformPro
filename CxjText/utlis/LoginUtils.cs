@@ -69,6 +69,17 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -200,6 +211,17 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime(); 
             //登录请求
             if (userInfo.cookie == null)
@@ -301,6 +323,17 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
             String codeUrl = userInfo.loginUrl + "/app/member/index/verify/t/" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -406,6 +439,17 @@ namespace CxjText.utlis
             {
                 loginForm.AddToListToUpDate(position);
             }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -546,6 +590,18 @@ namespace CxjText.utlis
             {
                 loginForm.AddToListToUpDate(position);
             }));
+
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -732,6 +788,17 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
             String codeUrl = userInfo.loginUrl + "/yzm.php?type=" + FormUtils.getCurrentTime();
             //登录请求
             if (userInfo.cookie == null)

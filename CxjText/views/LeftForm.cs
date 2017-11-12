@@ -175,7 +175,7 @@ namespace CxjText.views
                 changeStrUi();  //更新数据界面
             }
             catch (SystemException e) {
-
+                Console.WriteLine(e.ToString());
             }
         }
 

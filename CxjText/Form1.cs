@@ -29,6 +29,7 @@ namespace CxjText
         //数据初始化
         private void dataInit()
         {
+            Config.codeMoneyStr = "";
             this.userContact.Text = Config.softUserStr;
             utlis.YDMWrapper.YDM_SetAppInfo(Config.codeAppId,Config.codeSerect);
            
@@ -78,7 +79,8 @@ namespace CxjText
                 }));
                 return;
             }
-           
+
+            Config.codeMoneyStr = codeMoney + "";
             //登录成功
             Invoke(new Action(() =>
             {

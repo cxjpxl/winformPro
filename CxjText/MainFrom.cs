@@ -182,5 +182,14 @@ namespace CxjText
                 this.leftForm.SetSeaechStr(str);
             }
         }
+
+        public void getCodeMoneyStatus(string moneyStr)
+        {
+            if (String.IsNullOrEmpty(moneyStr)) {
+                return;
+            }
+
+            this.Invoke(new Action(() => { codeMoneyText.Text = moneyStr; }));
+        }
     }
 }

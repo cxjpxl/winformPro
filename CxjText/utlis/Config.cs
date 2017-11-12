@@ -17,6 +17,8 @@ namespace CxjText.utils
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";
+        public static String codeMoneyStr = "";
+
 
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId

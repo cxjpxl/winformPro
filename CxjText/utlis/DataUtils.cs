@@ -749,6 +749,7 @@ namespace CxjText.utlis
             returnObj.Add("c00", lianSaiStr.Trim());
             //时间比分
             String time = (String)jObject["Match_Date"];
+            time = FormUtils.changeHtml(time);
             if (time.IndexOf("45") >= 0)
             {
                 time = "中场";

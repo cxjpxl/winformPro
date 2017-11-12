@@ -20,6 +20,7 @@ namespace CxjText.views
 
         public void setLoginFormInterface(LoginFormInterface loginFormInterface) {
             this.loginFormInterface = loginFormInterface;
+            this.loginFormInterface.getCodeMoneyStatus("云打码剩余分:" + Config.codeMoneyStr);
         }
 
 
@@ -264,6 +265,12 @@ namespace CxjText.views
         //定时器1min检测一次  检测钱  其实就是刷新cookie
         private void loginTimer_Tick(object sender, EventArgs e)
         {
+
+            if (!this.getCodeStatus) {
+                Thread t = new Thread(this.getCodeMoney);
+                t.Start();
+            }
+
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
@@ -274,6 +281,39 @@ namespace CxjText.views
                 t.Start(i);
             }
         }
+        private bool getCodeStatus = false;
+        private void getCodeMoney() {
+            getCodeStatus = true;
+            String str = "";
+            //获取云代码账号金额
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                if (codeMoney == -1007)
+                {
+                    str = "云打码账户余额不足,请充值";
+                }
+                else {
+                    getCodeStatus = false;
+                    return;
+                }
+
+            }
+
+            if (codeMoney < 100)
+            {
+                str = "云打码账户分低于100,请充值";
+            }
+            else {
+                str = "云打码剩余分:"+codeMoney;
+            }
+
+            if (this.loginFormInterface!=null) {
+                this.loginFormInterface.getCodeMoneyStatus(str);
+            }
+            getCodeStatus = false;
+        }
+
 
         //利用下面东西更新网站的cookie
         public void UpdateCookie(object pos) {
@@ -319,14 +359,13 @@ namespace CxjText.views
             }
             catch (SystemException e)
             {
+                Console.WriteLine(e.ToString());
                 if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R") || userInfo.tag.Equals("G")) {  //B特殊处理下
                     return;
                 }
                 moneyStatus = 0;
             }
-
             Console.WriteLine("系统：" + userInfo.tag + " ---->" + moneyStatus);
-
             if (moneyStatus == 1)
             {
                 AddToListToUpDate(position);
