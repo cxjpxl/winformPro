@@ -689,10 +689,10 @@ namespace CxjText.utlis
             String c03 = (String)jObject["h_du_y"]; 
             returnObj.Add("c03", c03.Trim());
             //全场主让球
-            String c04 = (String)jObject["a20"] + " " + (String)jObject["a11"];
+            String c04 = (String)jObject["h_rang"];
             returnObj.Add("c04", c04.Trim());
 
-            String c05 = (String)jObject["h_rang"] ;
+            String c05 = (String)jObject["h_daxiao"] ;
             returnObj.Add("c05", c05.Trim());
 
             String c06 = (String)jObject["bh_du_y"];
