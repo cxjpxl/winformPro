@@ -805,15 +805,9 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-
-          /*  userInfo.cookie.Add(new Cookie("type_client", "undefined", "/", userInfo.baseUrl));
-            userInfo.cookie.Add(new Cookie("code", "9f9c2ff7c587ad63925f69bbb4066673_1510492905", "/", userInfo.baseUrl));
-            userInfo.cookie.Add(new Cookie("__guid", "132501000.4096667636128771000.1510492904473.8206", "/", userInfo.baseUrl));
-            userInfo.cookie.Add(new Cookie("monitor_count", "1", "/", userInfo.baseUrl));*/
-
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Upgrade-Insecure-Requests"] = "1";
+            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -900,6 +894,7 @@ namespace CxjText.utlis
             String sportsUrl = userInfo.dataUrl + "/index.php/Index/sports";
             headJObject = new JObject();
             headJObject["Referer"] = userInfo.dataUrl + "/index.php/Index/module_sports";
+            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             String sportRlt = HttpUtils.HttpGetHeader(sportsUrl,"",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(sportRlt)||!sportRlt.Contains("uid="+uid)) {
                 userInfo.status = 3;

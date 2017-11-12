@@ -165,6 +165,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/index.php/sports/main?token="+token+"&uid="+uid;
+            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
 
             String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "token=" + token + "&uid=" + uid, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt)) {

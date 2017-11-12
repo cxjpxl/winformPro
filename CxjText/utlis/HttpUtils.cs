@@ -44,12 +44,11 @@ namespace CxjText.utils
         public static string HttpGetHeader(string Url, String contentType, CookieContainer cookie, JObject headJObject)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
-
             request.Method = "GET";
             request.Timeout = 10 * 1000;
             request.ReadWriteTimeout = 10 * 1000;
 
-             if (headJObject["Host"] != null)
+            if (headJObject["Host"] != null)
             {
                 SetHeaderValue(request.Headers, "Host", (String)headJObject["Host"]);
             }
@@ -69,8 +68,23 @@ namespace CxjText.utils
             {
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
             }
+            if (headJObject["User-Agent"] != null)
+            {
+                request.UserAgent = (String)headJObject["User-Agent"];
+            }
+            if (headJObject["Connection"] != null)
+            {
+                SetHeaderValue(request.Headers, "Connection", (String)headJObject["Connection"]);
+            }
+            if (headJObject["Accept-Encoding"] != null)
+            {
+                SetHeaderValue(request.Headers, "Accept-Encoding", (String)headJObject["Accept-Encoding"]);
+            }
+            if (headJObject["Accept-Language"] != null)
+            {
+                SetHeaderValue(request.Headers, "Accept-Language", (String)headJObject["Accept-Language"]);
+            }
 
-            SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests","1");
 
             if (String.IsNullOrEmpty(contentType))
             {
@@ -159,8 +173,8 @@ namespace CxjText.utils
             {
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
             }
-            if (headJObject["UserAgent"] != null) {
-                SetHeaderValue(request.Headers, "UserAgent", (String)headJObject["UserAgent"]);
+            if (headJObject["User-Agent"] != null) {
+                request.UserAgent = (String)headJObject["User-Agent"];
             }
             if (headJObject["Connection"] != null)
             {
@@ -463,7 +477,7 @@ namespace CxjText.utils
 
 
         //获取验证码 保存在exe文件同个目录下面
-        public static int getImage(String url,String name, CookieContainer cookie,JObject headJObect) {
+        public static int getImage(String url,String name, CookieContainer cookie,JObject headJObject) {
             ServicePointManager.ServerCertificateValidationCallback =
               new RemoteCertificateValidationCallback(RemoteCertificateValidationCallback);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -471,16 +485,43 @@ namespace CxjText.utils
                 request.CookieContainer = cookie;
             }
 
-
-            if (headJObect!=null && headJObect["Host"] != null)
-            {
-                SetHeaderValue(request.Headers, "Host", (String)headJObect["Host"]);
-            }
-
-
-            if (headJObect != null && headJObect["Upgrade-Insecure-Requests"] != null)
-            {
-                SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests", (String)headJObect["Upgrade-Insecure-Requests"]);
+            if (headJObject != null) {
+                if (headJObject["Host"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Host", (String)headJObject["Host"]);
+                }
+                if (headJObject["Referer"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Referer", (String)headJObject["Referer"]);
+                }
+                if (headJObject["Origin"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Origin", (String)headJObject["Origin"]);
+                }
+                if (headJObject["X-Requested-With"] != null)
+                {
+                    SetHeaderValue(request.Headers, "X-Requested-With", (String)headJObject["X-Requested-With"]);
+                }
+                if (headJObject["Accept"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
+                }
+                if (headJObject["User-Agent"] != null)
+                {
+                    request.UserAgent = (String)headJObject["User-Agent"];
+                }
+                if (headJObject["Connection"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Connection", (String)headJObject["Connection"]);
+                }
+                if (headJObject["Accept-Encoding"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Accept-Encoding", (String)headJObject["Accept-Encoding"]);
+                }
+                if (headJObject["Accept-Language"] != null)
+                {
+                    SetHeaderValue(request.Headers, "Accept-Language", (String)headJObject["Accept-Language"]);
+                }
             }
 
 
