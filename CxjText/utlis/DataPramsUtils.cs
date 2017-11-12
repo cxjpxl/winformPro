@@ -430,8 +430,29 @@ namespace CxjText.utlis
             headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             String p = "p=1&oddpk=H&leg=";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
-            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
+
+            JObject rltJObject = JObject.Parse(rlt);
+            try
+            {
+                JObject dbJObjecct = (JObject)rltJObject["db"];
+                JArray jArray = new JArray();
+                for (int i = 0; i < dbJObjecct.Count; i++) {
+                    try {
+                        JObject jObject = (JObject)dbJObjecct["" + (i+1)];
+                        if (jObject != null) {
+                            jArray.Add(jObject);
+                        }
+                    } catch (SystemException e) {
+                        continue;
+                    }
+                }
+                rltJObject["db"] = jArray;
+                rlt = rltJObject.ToString().Trim();
+            }
+            catch (SystemException e) {
+               
+            }
             return rlt;
         }
 
