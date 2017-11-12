@@ -463,13 +463,27 @@ namespace CxjText.utils
 
 
         //获取验证码 保存在exe文件同个目录下面
-        public static int getImage(String url,String name, CookieContainer cookie) {
+        public static int getImage(String url,String name, CookieContainer cookie,JObject headJObect) {
             ServicePointManager.ServerCertificateValidationCallback =
               new RemoteCertificateValidationCallback(RemoteCertificateValidationCallback);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (cookie != null) {
                 request.CookieContainer = cookie;
             }
+
+
+            if (headJObect!=null && headJObect["Host"] != null)
+            {
+                SetHeaderValue(request.Headers, "Host", (String)headJObect["Host"]);
+            }
+
+
+            if (headJObect != null && headJObect["Upgrade-Insecure-Requests"] != null)
+            {
+                SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests", (String)headJObect["Upgrade-Insecure-Requests"]);
+            }
+
+
             WebResponse response = null;
             Stream reader = null;
             try {

@@ -792,5 +792,121 @@ namespace CxjText.utlis
             dataJObject["inputType"] = inputType; //下注类型
             return rltStr;
         }
+
+        //G系统点击处理
+        public static String DataSysGClick(JObject dataJObject,
+            JArray cJArray, DataGridViewCellEventArgs e, RowMergeView dgvSA
+            )
+        {
+            int index = e.RowIndex / 3;
+            int numRow = e.RowIndex % 3;
+            int clickNum = e.ColumnIndex;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            JObject jObject = (JObject)cJArray[index];
+            if (jObject == null) return null;
+
+
+            String mid = (String)jObject["Match_ID"]; //赛事ID的获取
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = "sport_type=FTP&pk=Match_BzM&matchid="+mid+"&oddpk=H&dsorcg=1";
+                        break;
+                    case 4:
+                        rltStr = "sport_type=FTP&pk=Match_Ho&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 5:
+                        rltStr = "sport_type=FTP&pk=Match_DxDpl&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 6:
+                        rltStr = "sport_type=FTP&pk=Match_Bmdy&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 7:
+                        rltStr = "sport_type=FTP&pk=Match_BHo&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 8:
+                        rltStr = "sport_type=FTP&pk=Match_Bdpl&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = "sport_type=FTP&pk=Match_BzG&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 4:
+                        rltStr = "sport_type=FTP&pk=Match_Ao&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 5:
+                        rltStr = "sport_type=FTP&pk=Match_DxXpl&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 6:
+                        rltStr = "sport_type=FTP&pk=Match_Bgdy&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 7:
+                        rltStr = "sport_type=FTP&pk=Match_BAo&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 8:
+                        rltStr = "sport_type=FTP&pk=Match_Bxpl&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        rltStr = "sport_type=FTP&pk=Match_BzH&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    case 6:
+                        rltStr = "sport_type=FTP&pk=Match_Bhdy&matchid=" + mid + "&oddpk=H&dsorcg=1";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            //下单前要请求的参数不能为空（B要先请求一个接口）
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+            inputType = inputType + "-" + dgvSA.Columns[e.ColumnIndex].HeaderText.ToString();
+            bateStr = dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["Match_Name"]; //获取赛事
+            gameTeam = (String)jObject["Match_Master"] + "-" + (String)jObject["Match_Guest"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
     }
 }

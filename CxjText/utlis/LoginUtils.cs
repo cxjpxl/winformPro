@@ -87,7 +87,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie,null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -228,7 +228,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -341,7 +341,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -457,7 +457,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -609,7 +609,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -805,7 +805,16 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie); //这里要分系统获取验证码
+
+          /*  userInfo.cookie.Add(new Cookie("type_client", "undefined", "/", userInfo.baseUrl));
+            userInfo.cookie.Add(new Cookie("code", "9f9c2ff7c587ad63925f69bbb4066673_1510492905", "/", userInfo.baseUrl));
+            userInfo.cookie.Add(new Cookie("__guid", "132501000.4096667636128771000.1510492904473.8206", "/", userInfo.baseUrl));
+            userInfo.cookie.Add(new Cookie("monitor_count", "1", "/", userInfo.baseUrl));*/
+
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Upgrade-Insecure-Requests"] = "1";
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -831,7 +840,6 @@ namespace CxjText.utlis
             }
 
             //获取登录的系统参数 
-            JObject headJObject = new JObject();
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/viewcache/3f381e4642f5ca80c5cce16cfb87e434.html?v=0.0.12";
             String paramsStr = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
