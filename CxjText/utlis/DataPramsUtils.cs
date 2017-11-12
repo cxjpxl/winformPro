@@ -416,7 +416,20 @@ namespace CxjText.utlis
         {
             //page是由0开始
             String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
-            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            if (userInfo.status == 2)
+            {
+                headJObject["Referer"] = userInfo.dataUrl + "/index.php/sports/main?token=" + userInfo.exp + "&uid=" + userInfo.uid;
+            }
+            else
+            {
+                headJObject["Referer"] = userInfo.dataUrl + "/index.php/sports/main?token=&uid=";
+            }
+            String p = "p=1&oddpk=H&leg=";
+            String rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
+            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             return rlt;
         }
