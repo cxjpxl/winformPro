@@ -40,9 +40,11 @@ namespace CxjText.utlis
                        // rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=ODD&rate=" + (String)jObject["a16"];
                         break;
                     case 7:
+                        mid = (String)jObject["a28"];
                         rltStr = "auto=1&mid=" + mid + "&ltype=19&bet=H&rate=" + (String)jObject["a31"];
                         break;
                     case 8:
+                        mid = (String)jObject["a28"];
                         rltStr = "auto=1&mid=" + mid + "&ltype=30&bet=C&rate=" + (String)jObject["a34"];
                         break;
                     default:
@@ -68,9 +70,11 @@ namespace CxjText.utlis
                       //  rltStr = "auto=1&mid=" + mid + "&ltype=5&bet=EVEN&rate=" + (String)jObject["a17"];
                         break;
                     case 7:
+                        mid = (String)jObject["a28"];
                         rltStr = "auto=1&mid=" + mid + "&ltype=19&bet=C&rate=" + (String)jObject["a32"];
                         break;
                     case 8:
+                        mid = (String)jObject["a28"];
                         rltStr = "auto=1&mid=" + mid + "&ltype=30&bet=H&rate=" + (String)jObject["a35"];
                         break;
                     default:

@@ -21,13 +21,11 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             //请求发出前先更新UI 标记http请求已发送
             JObject headJObject = new JObject();
-            Console.WriteLine(parmsStr);
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "Referer:https://a58hg.lq2222.org/sport/football.aspx?action=re&uid=" + user.uid;
             headJObject["Host"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
-            String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            Console.WriteLine(rlt);
+                   String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (rlt == null || rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
 
