@@ -79,7 +79,6 @@ namespace CxjText.utlis
                 return;
             }
 
-
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -87,7 +86,10 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie,null); //这里要分系统获取验证码
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.loginUrl;
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -807,7 +809,6 @@ namespace CxjText.utlis
             }
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -894,7 +895,6 @@ namespace CxjText.utlis
             String sportsUrl = userInfo.dataUrl + "/index.php/Index/sports";
             headJObject = new JObject();
             headJObject["Referer"] = userInfo.dataUrl + "/index.php/Index/module_sports";
-            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             String sportRlt = HttpUtils.HttpGetHeader(sportsUrl,"",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(sportRlt)||!sportRlt.Contains("uid="+uid)) {
                 userInfo.status = 3;

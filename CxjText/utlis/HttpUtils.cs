@@ -47,7 +47,7 @@ namespace CxjText.utils
             request.Method = "GET";
             request.Timeout = 10 * 1000;
             request.ReadWriteTimeout = 10 * 1000;
-
+            request.UserAgent = Config.userAgent;
             if (headJObject["Host"] != null)
             {
                 SetHeaderValue(request.Headers, "Host", (String)headJObject["Host"]);
@@ -68,10 +68,10 @@ namespace CxjText.utils
             {
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
             }
-            if (headJObject["User-Agent"] != null)
+          /*  if (headJObject["User-Agent"] != null)
             {
                 request.UserAgent = (String)headJObject["User-Agent"];
-            }
+            }*/
             if (headJObject["Connection"] != null)
             {
                 SetHeaderValue(request.Headers, "Connection", (String)headJObject["Connection"]);
@@ -120,6 +120,7 @@ namespace CxjText.utils
             }
             catch (SystemException e)
             {
+       
                 if (response != null)
                 {
                     response.Close();
@@ -150,7 +151,7 @@ namespace CxjText.utils
             request.Method = "POST";
             request.Timeout = 10 * 1000;
             request.ReadWriteTimeout = 10 * 1000;
-
+            request.UserAgent = Config.userAgent;
 
             if (headJObject["Host"] != null)
             {
@@ -169,10 +170,10 @@ namespace CxjText.utils
             {
                 SetHeaderValue(request.Headers, "X-Requested-With", (String)headJObject["X-Requested-With"]);
             }
-            if (headJObject["Accept"] != null)
+            /*if (headJObject["Accept"] != null)
             {
                 SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
-            }
+            }*/
             if (headJObject["User-Agent"] != null) {
                 request.UserAgent = (String)headJObject["User-Agent"];
             }
@@ -235,6 +236,7 @@ namespace CxjText.utils
             }
             catch (SystemException e)
             {
+               
                 if (response != null)
                 {
                     response.Close();
@@ -271,6 +273,7 @@ namespace CxjText.utils
             SetHeaderValue(request.Headers, "Origin", userInfo.dataUrl);
             SetHeaderValue(request.Headers, "Referer", userInfo.dataUrl+ "/left.php");
             SetHeaderValue(request.Headers, "Upgrade-Insecure-Requests", "1");
+            request.UserAgent = Config.userAgent;
             if (String.IsNullOrEmpty(contentType))
             {
                 // request.ContentType = "application/json;charset=UTF-8";
@@ -315,6 +318,7 @@ namespace CxjText.utils
             }
             catch (SystemException e)
             {
+             
                 if (response != null)
                 {
                     response.Close();
@@ -346,6 +350,7 @@ namespace CxjText.utils
             request.Method = "POST";
             request.Timeout = 10 * 1000;
             request.ReadWriteTimeout = 10 * 1000;
+            request.UserAgent = Config.userAgent;
             if (String.IsNullOrEmpty(contentType))
             {
                // request.ContentType = "application/json;charset=UTF-8";
@@ -387,6 +392,7 @@ namespace CxjText.utils
                 return strValue;
             }
             catch (SystemException e) {
+                
                 if (response != null)
                 {
                     response.Close();
@@ -418,6 +424,7 @@ namespace CxjText.utils
             request.Method = "GET";
             request.Timeout = 10 * 1000;
             request.ReadWriteTimeout = 10 * 1000;
+            request.UserAgent = Config.userAgent;
             if (String.IsNullOrEmpty(contentType))
             {
                 //request.ContentType = "application/json;charset=UTF-8";
@@ -452,6 +459,7 @@ namespace CxjText.utils
             }
             catch (SystemException e)
             {
+              
                 if (response != null)
                 {
                     response.Close();
@@ -481,6 +489,7 @@ namespace CxjText.utils
             ServicePointManager.ServerCertificateValidationCallback =
               new RemoteCertificateValidationCallback(RemoteCertificateValidationCallback);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.UserAgent = Config.userAgent;
             if (cookie != null) {
                 request.CookieContainer = cookie;
             }
@@ -506,10 +515,10 @@ namespace CxjText.utils
                 {
                     SetHeaderValue(request.Headers, "Accept", (String)headJObject["Accept"]);
                 }
-                if (headJObject["User-Agent"] != null)
+               /* if (headJObject["User-Agent"] != null)
                 {
                     request.UserAgent = (String)headJObject["User-Agent"];
-                }
+                }*/
                 if (headJObject["Connection"] != null)
                 {
                     SetHeaderValue(request.Headers, "Connection", (String)headJObject["Connection"]);
@@ -549,6 +558,7 @@ namespace CxjText.utils
             }
             catch (SystemException e)
             {
+                Console.WriteLine(e.ToString());
                 if (response != null)
                 {
                     response.Close();
@@ -566,13 +576,9 @@ namespace CxjText.utils
                     request.Abort();
                     request = null;
                 }
-
-                Console.WriteLine("in getImage:" + url +"\n"+e.ToString());
                 return -1;
             }
-
             return 1;
-
         }
 
 

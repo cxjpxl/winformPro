@@ -80,7 +80,6 @@ namespace CxjText
             if (index == -1) return;
 
             //刷新用户数据界面  A系统1s一次  B系统10s一次  其他未知
-            Config.console("-------"+index+"--------");
             this.upDateTimer.Stop(); //暂停定时器
 
             //获取当前系统的时间  毫秒
@@ -105,8 +104,8 @@ namespace CxjText
 
         //获取数据接口 在线程里面
         private void GetData(object positionObj) {
+            int position = (int)positionObj;
             try {
-                int position = (int)positionObj;
                 UserInfo userInfo = (UserInfo)Config.userList[position];
                 if (userInfo == null)
                 {
@@ -137,7 +136,6 @@ namespace CxjText
                     default:
                         break;
                 }
-                
                 //返回数据是空表示获取数据失败
                 if (String.IsNullOrEmpty(dataRtlStr)) {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
@@ -155,11 +153,16 @@ namespace CxjText
                     leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
-                
             }
             catch (SystemException e) {
                 Console.WriteLine(e.ToString());
                 if (this.isFinish) return;
+                //判断当前选中和数据返回是否同一个数据 不是直接返回
+                if (position != loginForm.getCurrentSelectRow())
+                {
+                    // this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    return;
+                }
                 this.Invoke(new Action(() => { upDateTimer.Start(); }));
             }
         }

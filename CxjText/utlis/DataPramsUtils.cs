@@ -427,17 +427,13 @@ namespace CxjText.utlis
             {
                 headJObject["Referer"] = userInfo.dataUrl + "/index.php/sports/main?token=&uid=";
             }
-            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             String p = "p=1&oddpk=H&leg=";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
-            Console.WriteLine("------------------------------");
-            Console.WriteLine(rlt);
             JObject rltJObject = JObject.Parse(rlt);
             try
             {
                 JObject dbJObjecct = (JObject)rltJObject["db"];
-                Console.WriteLine("在不是Array的数据里面");
                 JArray jArray = new JArray();
                 for (int i = 0; i < dbJObjecct.Count; i++) {
                     try {
@@ -453,7 +449,8 @@ namespace CxjText.utlis
                 rlt = rltJObject.ToString().Trim();
             }
             catch (SystemException e) {
-               
+                //这里会抛出 System.InvalidCastException 转化异常  
+                //可以忽略掉 这个是为了区分那个array和object格式的数据的处理
             }
             return rlt;
         }

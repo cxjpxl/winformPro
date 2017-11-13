@@ -144,6 +144,7 @@ namespace CxjText.utlis
             }
             catch (SystemException e)
             {
+               
                 //请求失败处理 UI处理
                 leftForm.Invoke(new Action(() =>
                 {
@@ -437,6 +438,7 @@ namespace CxjText.utlis
                 }
             }
             catch (SystemException e) {
+              
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -543,6 +545,7 @@ namespace CxjText.utlis
                 bType = int.Parse(parms[3]);
             }
             catch (SystemException e) {
+               
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -728,7 +731,6 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["origin"] = user.dataUrl;
             headJObject["referer"] = user.dataUrl + "/index.php/sports/main?token=" + user.exp + "&uid=" + user.uid;
-            headJObject["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.9 Safari/537.36";
             String betUrl = user.dataUrl + "/index.php/sports/bet/makebetshow";
             String betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt)) {

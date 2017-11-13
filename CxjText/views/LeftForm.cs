@@ -173,12 +173,15 @@ namespace CxjText.views
                     return;
                 }
                 NameGridShow(userInfo,rltJArray);//更新当前界面
+
+
                 this.cTag = userInfo.tag; //记录当前系统
                 this.cIndex = index; //当前索引
                 this.cJArray = rltJArray; //保存当前的数据源
                 changeStrUi();  //更新数据界面
             }
             catch (SystemException e) {
+              
                 Console.WriteLine(e.ToString());
             }
         }
@@ -438,6 +441,7 @@ namespace CxjText.views
             }
             catch (SystemException e)
             {
+               
                 Console.WriteLine(e.ToString());
                 Invoke(new Action(() =>
                 {

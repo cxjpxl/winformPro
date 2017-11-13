@@ -77,6 +77,7 @@ namespace CxjText.views
                     } 
                 }
                 catch (SystemException e1) {
+                 
                     num = 0;
                 }
                 this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value = num;
@@ -176,6 +177,7 @@ namespace CxjText.views
                 }
             }
             catch (SystemException e) {
+          
                 userInfo.status = 3;
                 userInfo.cookie = null;
                 userInfo.uid = "";
@@ -241,6 +243,7 @@ namespace CxjText.views
                 }
             }
             catch (SystemException e) {
+               
                 Console.WriteLine(e.ToString());
             }
             upDateList.RemoveAt(0);
@@ -359,6 +362,7 @@ namespace CxjText.views
             }
             catch (SystemException e)
             {
+                
                 Console.WriteLine(e.ToString());
                 if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R") || userInfo.tag.Equals("G")) {  //B特殊处理下
                     return;

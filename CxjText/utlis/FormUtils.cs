@@ -35,6 +35,7 @@ namespace CxjText.utlis
                     }
                     catch (SystemException e)
                     {
+                       
                         return -1;
                     }
                 }
@@ -247,6 +248,7 @@ namespace CxjText.utlis
                     }
                     catch (SystemException e)
                     {
+                   
                         return -1;
                     }
                 }
