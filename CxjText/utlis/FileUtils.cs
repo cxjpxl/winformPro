@@ -35,6 +35,7 @@ namespace CxjText.utlis
 
                 ArrayList list = new ArrayList(); //记录不重复的数据
                 ArrayList userList = new ArrayList();
+                String softTag = Config.softTag;
                 while ((line = sr.ReadLine()) != null)
                 {
                     String[] strs = line.Split('\t');
@@ -145,9 +146,12 @@ namespace CxjText.utlis
 
 
                     userInfo.status = loginStatus;
-                    userList.Add(userInfo);
-
-                    list.Add(baseUrl);
+                    if (String.IsNullOrEmpty(softTag) || softTag.ToUpper().Equals(userInfo.tag))
+                    {
+                        userList.Add(userInfo);
+                        list.Add(baseUrl);
+                    }
+                    
                 }
                 //用户表全部存在本地静态变量里面
                 if (userList != null && userList.Count > 0)
