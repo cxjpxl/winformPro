@@ -136,6 +136,7 @@ namespace CxjText.utlis
                 String pGStr = gStr;
                 //比较
                 decimal lianSaiRate = SpeedyCompute(autoData.lianSaiStr, pLianSai);
+                lianSaiRate = 1;
                 if (lianSaiRate >= (decimal)0.7)
                 {
                     decimal hRate = SpeedyCompute(autoData.HStr, pHstr);

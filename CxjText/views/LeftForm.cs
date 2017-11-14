@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace CxjText.views
 {
-    public partial class LeftForm : Form,DataClickInface
+    public partial class LeftForm : Form, DataClickInface
     {
-       
+
         private int cIndex = -1;//当前显示的索引 决定系统
         private String selectFlag = null; //记录点击联赛第一个的A->mid
         private JArray cJArray = null; //当前数据显示联赛的数据源
@@ -35,11 +35,11 @@ namespace CxjText.views
         }
 
 
-        public void setMainForm( LoginForm loginForm) {
+        public void setMainForm(LoginForm loginForm) {
             this.loginForm = loginForm;
         }
-       
-        
+
+
         //加载的时候
         private void LeftForm_Load(object sender, EventArgs e)
         {
@@ -153,9 +153,9 @@ namespace CxjText.views
 
 
         //当前当前获取到的数据和用户索引
-        public void SetCurrentData(String rlt,int index) {
+        public void SetCurrentData(String rlt, int index) {
 
-            UserInfo userInfo =(UserInfo) Config.userList[index];
+            UserInfo userInfo = (UserInfo)Config.userList[index];
             try {
                 if (!FormUtils.IsJsonObject(rlt)) {
                     this.nameShowGridView.Columns[0].HeaderCell.Value = "获取数据失败";
@@ -163,9 +163,9 @@ namespace CxjText.views
                 }
                 this.nameShowGridView.Columns[0].HeaderCell.Value = userInfo.tag + "  " + userInfo.baseUrl;
                 JObject rltJObject = JObject.Parse(rlt);
-                if (rltJObject == null) return ;
+                if (rltJObject == null) return;
                 //系统更改 修改1
-                JArray rltJArray = RltDataUtils.explandRlt(userInfo,rltJObject);
+                JArray rltJArray = RltDataUtils.explandRlt(userInfo, rltJObject);
                 //系统更改 修改2
                 this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
                 if (rltJArray == null || rltJArray.Count == 0) {
@@ -180,43 +180,43 @@ namespace CxjText.views
                     setDataFormShow(userInfo);
                     return;
                 }
-                NameGridShow(userInfo,rltJArray);//更新当前界面
+                NameGridShow(userInfo, rltJArray);//更新当前界面
                 this.cTag = userInfo.tag; //记录当前系统
                 this.cIndex = index; //当前索引
                 this.cJArray = rltJArray; //保存当前的数据源
                 changeStrUi();  //更新数据界面
             }
             catch (SystemException e) {
-              
+
                 Console.WriteLine(e.ToString());
             }
         }
 
         //渲染数据的UI
         private void setDataFormShow(UserInfo userInfo) {
-                if (dataForm != null)
+            if (dataForm != null)
+            {
+                int selectIndex = -1;
+                if (this.nameShowGridView.CurrentCell != null)
                 {
-                    int selectIndex = -1;
-                    if (this.nameShowGridView.CurrentCell != null)
-                    {
-                        selectIndex = this.nameShowGridView.CurrentCell.RowIndex;
-                    }
-                    if (selectIndex == -1)
-                    {
-                        dataForm.setData( this.dataJArray,this.cIndex,this.selectFlag,this.searchStr);
-                    }
-                    else
-                    {
-                        dataForm.setData( (JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag, this.searchStr);
-                    }
-
+                    selectIndex = this.nameShowGridView.CurrentCell.RowIndex;
                 }
-            
+                if (selectIndex == -1)
+                {
+                    dataForm.setData(this.dataJArray, this.cIndex, this.selectFlag, this.searchStr);
+                }
+                else
+                {
+                    dataForm.setData((JArray)this.cJArray[selectIndex], this.cIndex, this.selectFlag, this.searchStr);
+                }
+
+            }
+
         }
 
 
         //判断UI是否要刷新
-        private bool MustRefsNameUi(UserInfo userInfo,JArray jArray) {
+        private bool MustRefsNameUi(UserInfo userInfo, JArray jArray) {
             if (this.cJArray == null || this.cJArray.Count == 0) {
                 return true;
             }
@@ -238,7 +238,7 @@ namespace CxjText.views
             for (int i = 0; i < this.cJArray.Count; i++) {
                 JArray itemCJAarry = (JArray)cJArray[i];
                 JArray itemJAarry = (JArray)jArray[i];
-                String name1  = RltDataUtils.getArrayTitle(userInfo, itemJAarry);
+                String name1 = RltDataUtils.getArrayTitle(userInfo, itemJAarry);
                 String name2 = RltDataUtils.getArrayTitle(userInfo, itemCJAarry);
                 if (!name1.Equals(name2)) {
                     return true;
@@ -264,7 +264,7 @@ namespace CxjText.views
                 nameList.Add(nameTy);
                 //系统更改 修改4
                 String mid = RltDataUtils.getOnlyFlag(i, jArray, userInfo);
-                if (mid!=null && mid.Equals(this.selectFlag)) {
+                if (mid != null && mid.Equals(this.selectFlag)) {
                     selectPosition = i;
                 }
             }
@@ -292,47 +292,47 @@ namespace CxjText.views
             }
 
             if (this.cJArray == null) return;
-            UserInfo userInfo =(UserInfo) Config.userList[cIndex];
+            UserInfo userInfo = (UserInfo)Config.userList[cIndex];
             if (e.Button == MouseButtons.Left)
             {
-               int rowIndex = e.RowIndex;
-               if (rowIndex == -1)
-               {
-                   this.nameShowGridView.CurrentCell = null;
-                   this.selectFlag = null;
-               }
-               else
-               {
-                  this.selectFlag = RltDataUtils.getOnlyFlag(rowIndex, this.cJArray, userInfo);
-               }
+                int rowIndex = e.RowIndex;
+                if (rowIndex == -1)
+                {
+                    this.nameShowGridView.CurrentCell = null;
+                    this.selectFlag = null;
+                }
+                else
+                {
+                    this.selectFlag = RltDataUtils.getOnlyFlag(rowIndex, this.cJArray, userInfo);
+                }
             }
-           
+
 
             setDataFormShow(userInfo);
         }
 
 
-        
+
 
         //数据点击处理
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
 
-            String gameName =(String) dataJObject["gameName"]; //获取赛事
-            String gameTeam = (String) dataJObject["gameTeam"]; //球队名称
-            String bateStr = (String) dataJObject["bateStr"];
-            String inputType = (String) dataJObject["inputType"];
+            String gameName = (String)dataJObject["gameName"]; //获取赛事
+            String gameTeam = (String)dataJObject["gameTeam"]; //球队名称
+            String bateStr = (String)dataJObject["bateStr"];
+            String inputType = (String)dataJObject["inputType"];
 
             //获取到下单的参数
             bool hasData = false;
             String tag = userInfo.tag;
             for (int i = 0; i < Config.userList.Count; i++) {
-                UserInfo user =(UserInfo) Config.userList[i];
+                UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
                 if (user.inputMoney < user.leastMoney) continue;
-                
+
                 //下单参数的处理
                 String orderParmas = "";
 
@@ -350,22 +350,22 @@ namespace CxjText.views
                         orderParmas = rltStr + "&uid=" + user.uid;
                         break;
                     case "R":
-                        orderParmas = rltStr ;
+                        orderParmas = rltStr;
                         break;
                     case "G":
-                        orderParmas = rltStr+"&uid="+user.uid+"&token="+user.exp;
+                        orderParmas = rltStr + "&uid=" + user.uid + "&token=" + user.exp;
                         break;
                     default:
                         continue;
                 }
                 //添加UI的处理
                 InputInfo inputInfo = new InputInfo();
-                inputInfo.tag = FormUtils.getCurrentTime()+"-"+i; //标注
+                inputInfo.tag = FormUtils.getCurrentTime() + "-" + i; //标注
                 inputInfo.baseUrl = user.baseUrl;
                 inputInfo.userName = user.user;
                 inputInfo.status = "请求中";
                 inputInfo.gameName = gameName;
-                inputInfo.gameTeam= gameTeam;
+                inputInfo.gameTeam = gameTeam;
                 inputInfo.bateStr = bateStr;
                 inputInfo.inputType = inputType;
                 inputInfo.inputMoney = user.inputMoney;
@@ -429,7 +429,7 @@ namespace CxjText.views
                         OrderUtils.OrderB(jobject, this, loginForm, rltForm);
                         break;
                     case "I":
-                        OrderUtils.OrderI(jobject,this,loginForm,rltForm);
+                        OrderUtils.OrderI(jobject, this, loginForm, rltForm);
                         break;
                     case "U":
                         OrderUtils.OrderU(jobject, this, loginForm, rltForm);
@@ -441,13 +441,13 @@ namespace CxjText.views
                         OrderUtils.OrderG(jobject, this, loginForm, rltForm);
                         break;
                     default:
-                        return ;
+                        return;
                 }
 
             }
             catch (SystemException e)
             {
-               
+
                 Console.WriteLine(e.ToString());
                 Invoke(new Action(() =>
                 {
@@ -457,7 +457,7 @@ namespace CxjText.views
                     }
                 }));
             }
-            
+
         }
 
         //自动下单
@@ -465,14 +465,20 @@ namespace CxjText.views
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
-            
+
             JObject jObject = StringComPleteUtils.haveData(autoData, this.dataJArray, userInfo);
-            if (jObject == null || dataForm == null) return;
+            if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
             int indexNum = (int)jObject["index"];
             String lianSai = (String)jObject["lianSai"];
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
-            MessageBox.Show("联赛:"+lianSai+"\n主队:"+nameH+"\n客队:"+nameG);
+
+            MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
+            return;
+            if (indexNum > this.dataJArray.Count) return;
+            object obj = this.dataJArray[indexNum];
+            //下单
+            dataForm.OnOrderClick(obj, 1, 4);
         }
 
     }
