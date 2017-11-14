@@ -8,7 +8,6 @@ namespace CxjText.bean
 {
     public class AutoData
     {
-        public String lianSaiStr = ""; 
         public String HStr = "";
         public String GStr = "";
     }

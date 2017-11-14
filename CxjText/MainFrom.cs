@@ -198,15 +198,14 @@ namespace CxjText
         //点击了对比按键  以后就变成socket数据进来的处理
         private void ComBtn_Click(object sender, EventArgs e)
         {
-            String lianSai = lianSaiEdit.Text.ToString().Trim();
+            
             String HStr = HEdit.Text.ToString().Trim();
             String GStr = GEdit.Text.ToString().Trim();
-            if (String.IsNullOrEmpty(lianSai) || String.IsNullOrEmpty(HStr) || String.IsNullOrEmpty(GStr)) return;
+            if (String.IsNullOrEmpty(HStr) || String.IsNullOrEmpty(GStr)) return;
             if (leftForm == null) return;
             if (this.isFinish) return;
 
             AutoData autoData = new AutoData();
-            autoData.lianSaiStr = lianSai;
             autoData.HStr = HStr;
             autoData.GStr = GStr;
             leftForm.setComplete(autoData);

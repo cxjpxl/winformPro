@@ -131,38 +131,35 @@ namespace CxjText.utlis
 
                 }
 
-                String pLianSai = lianSai;
+               
                 String pHstr = hStr;
                 String pGStr = gStr;
-                //比较
-                decimal lianSaiRate = SpeedyCompute(autoData.lianSaiStr, pLianSai);
-                if (lianSaiRate >= (decimal)0.7)
+
+                decimal hRate = SpeedyCompute(autoData.HStr, pHstr);
+                decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
+                if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
                 {
-                    decimal hRate = SpeedyCompute(autoData.HStr, pHstr);
-                    decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
-                    if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
-                    {
                         JObject jObject = new JObject();
                         jObject.Add("index", i);
                         jObject.Add("nameH", hStr);
                         jObject.Add("nameG", gStr);
                         jObject.Add("lianSai", lianSai);
                         return jObject;
-                    }
+                }
 
                     //比较
-                    hRate = SpeedyCompute(autoData.HStr, pGStr);
-                    gRate = SpeedyCompute(autoData.GStr, pHstr);
-                    if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
-                    {
+                hRate = SpeedyCompute(autoData.HStr, pGStr);
+                gRate = SpeedyCompute(autoData.GStr, pHstr);
+                if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
+                {
                         JObject jObject = new JObject();
                         jObject.Add("index", i);
                         jObject.Add("nameH", hStr);
                         jObject.Add("nameG", gStr);
                         jObject.Add("lianSai", lianSai);
                         return jObject;
-                    }
                 }
+              
             }
 
             return null;

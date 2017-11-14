@@ -35,7 +35,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.codeMoneyText = new System.Windows.Forms.Label();
-            this.lianSaiEdit = new System.Windows.Forms.TextBox();
             this.HEdit = new System.Windows.Forms.TextBox();
             this.GEdit = new System.Windows.Forms.TextBox();
             this.ComBtn = new System.Windows.Forms.Button();
@@ -94,18 +93,10 @@
             this.codeMoneyText.TabIndex = 7;
             this.codeMoneyText.Text = "打码平台";
             // 
-            // lianSaiEdit
-            // 
-            this.lianSaiEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lianSaiEdit.Location = new System.Drawing.Point(1044, 497);
-            this.lianSaiEdit.Name = "lianSaiEdit";
-            this.lianSaiEdit.Size = new System.Drawing.Size(236, 26);
-            this.lianSaiEdit.TabIndex = 8;
-            // 
             // HEdit
             // 
             this.HEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.HEdit.Location = new System.Drawing.Point(1044, 529);
+            this.HEdit.Location = new System.Drawing.Point(1044, 491);
             this.HEdit.Name = "HEdit";
             this.HEdit.Size = new System.Drawing.Size(236, 26);
             this.HEdit.TabIndex = 9;
@@ -113,14 +104,14 @@
             // GEdit
             // 
             this.GEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.GEdit.Location = new System.Drawing.Point(1044, 561);
+            this.GEdit.Location = new System.Drawing.Point(1044, 537);
             this.GEdit.Name = "GEdit";
             this.GEdit.Size = new System.Drawing.Size(236, 26);
             this.GEdit.TabIndex = 10;
             // 
             // ComBtn
             // 
-            this.ComBtn.Location = new System.Drawing.Point(1132, 593);
+            this.ComBtn.Location = new System.Drawing.Point(1116, 585);
             this.ComBtn.Name = "ComBtn";
             this.ComBtn.Size = new System.Drawing.Size(102, 30);
             this.ComBtn.TabIndex = 11;
@@ -136,7 +127,6 @@
             this.Controls.Add(this.ComBtn);
             this.Controls.Add(this.GEdit);
             this.Controls.Add(this.HEdit);
-            this.Controls.Add(this.lianSaiEdit);
             this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -159,7 +149,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label codeMoneyText;
-        private System.Windows.Forms.TextBox lianSaiEdit;
         private System.Windows.Forms.TextBox HEdit;
         private System.Windows.Forms.TextBox GEdit;
         private System.Windows.Forms.Button ComBtn;
