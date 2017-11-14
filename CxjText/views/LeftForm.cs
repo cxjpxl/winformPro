@@ -465,12 +465,14 @@ namespace CxjText.views
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
-            int indexNum = -1;
-            indexNum = StringComPleteUtils.haveData(autoData, this.dataJArray, userInfo);
-            if (indexNum > 0 && dataForm!=null) {
-                //dataForm.OnOrderClick(null,0,0);
-            }
-                
+            
+            JObject jObject = StringComPleteUtils.haveData(autoData, this.dataJArray, userInfo);
+            if (jObject == null || dataForm == null) return;
+            int indexNum = (int)jObject["index"];
+            String lianSai = (String)jObject["lianSai"];
+            String nameH = (String)jObject["nameH"];
+            String nameG = (String)jObject["nameG"];
+            MessageBox.Show("联赛:"+lianSai+"\n主队:"+nameH+"\n客队:"+nameG);
         }
 
     }

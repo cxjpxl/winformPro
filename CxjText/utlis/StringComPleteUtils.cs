@@ -79,10 +79,10 @@ namespace CxjText.utlis
         }
 
 
-        public static int haveData(AutoData autoData,JArray jArray,UserInfo userInfo)
+        public static JObject haveData(AutoData autoData,JArray jArray,UserInfo userInfo)
         {
-            if (autoData == null || userInfo == null) return -1;
-            if (jArray == null || jArray.Count == 0) return -1;
+            if (autoData == null || userInfo == null) return null;
+            if (jArray == null || jArray.Count == 0) return null;
 
             String tag = userInfo.tag;
             for (int i = 0; i < jArray.Count; i++) {
@@ -127,7 +127,7 @@ namespace CxjText.utlis
                         gStr = (String)jObjectG["Match_Guest"];
                         break;
                     default:
-                        return -1;
+                        return null;
 
                 }
 
@@ -142,11 +142,12 @@ namespace CxjText.utlis
                     decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
                     if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
                     {
-                        Console.WriteLine("联赛相似度:" + lianSaiRate + "  主队相似度:" + hRate + "  客队相似度:" + gRate);
-                        Console.WriteLine("联赛:  " + lianSai);
-                        Console.WriteLine("主队:  " + hStr);
-                        Console.WriteLine("客队:  " + gStr);
-                        return i;
+                        JObject jObject = new JObject();
+                        jObject.Add("index", i);
+                        jObject.Add("nameH", hStr);
+                        jObject.Add("nameG", gStr);
+                        jObject.Add("lianSai", lianSai);
+                        return jObject;
                     }
 
                     //比较
@@ -154,16 +155,17 @@ namespace CxjText.utlis
                     gRate = SpeedyCompute(autoData.GStr, pHstr);
                     if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
                     {
-                        Console.WriteLine("联赛相似度:" + lianSaiRate + "  主队相似度:" + hRate + "  客队相似度:" + gRate);
-                        Console.WriteLine("联赛:  " + lianSai);
-                        Console.WriteLine("主队:  " + hStr);
-                        Console.WriteLine("客队:  " + gStr);
-                        return i;
+                        JObject jObject = new JObject();
+                        jObject.Add("index", i);
+                        jObject.Add("nameH", hStr);
+                        jObject.Add("nameG", gStr);
+                        jObject.Add("lianSai", lianSai);
+                        return jObject;
                     }
                 }
             }
 
-            return -1;
+            return null;
         }
 
     }
