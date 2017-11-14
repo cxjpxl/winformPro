@@ -35,6 +35,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.codeMoneyText = new System.Windows.Forms.Label();
+            this.lianSaiEdit = new System.Windows.Forms.TextBox();
+            this.HEdit = new System.Windows.Forms.TextBox();
+            this.GEdit = new System.Windows.Forms.TextBox();
+            this.ComBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -63,7 +67,7 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.ForeColor = System.Drawing.Color.Black;
-            this.textBox1.Location = new System.Drawing.Point(1004, 433);
+            this.textBox1.Location = new System.Drawing.Point(1072, 401);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(179, 26);
             this.textBox1.TabIndex = 5;
@@ -74,7 +78,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(1052, 414);
+            this.label1.Location = new System.Drawing.Point(994, 404);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 6;
@@ -84,16 +88,55 @@
             // 
             this.codeMoneyText.AutoSize = true;
             this.codeMoneyText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.codeMoneyText.Location = new System.Drawing.Point(1002, 500);
+            this.codeMoneyText.Location = new System.Drawing.Point(994, 456);
             this.codeMoneyText.Name = "codeMoneyText";
-            this.codeMoneyText.Size = new System.Drawing.Size(0, 16);
+            this.codeMoneyText.Size = new System.Drawing.Size(72, 16);
             this.codeMoneyText.TabIndex = 7;
+            this.codeMoneyText.Text = "打码平台";
+            // 
+            // lianSaiEdit
+            // 
+            this.lianSaiEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lianSaiEdit.Location = new System.Drawing.Point(1044, 497);
+            this.lianSaiEdit.Name = "lianSaiEdit";
+            this.lianSaiEdit.Size = new System.Drawing.Size(236, 26);
+            this.lianSaiEdit.TabIndex = 8;
+            // 
+            // HEdit
+            // 
+            this.HEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.HEdit.Location = new System.Drawing.Point(1044, 529);
+            this.HEdit.Name = "HEdit";
+            this.HEdit.Size = new System.Drawing.Size(236, 26);
+            this.HEdit.TabIndex = 9;
+            // 
+            // GEdit
+            // 
+            this.GEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.GEdit.Location = new System.Drawing.Point(1044, 561);
+            this.GEdit.Name = "GEdit";
+            this.GEdit.Size = new System.Drawing.Size(236, 26);
+            this.GEdit.TabIndex = 10;
+            // 
+            // ComBtn
+            // 
+            this.ComBtn.Location = new System.Drawing.Point(1132, 593);
+            this.ComBtn.Name = "ComBtn";
+            this.ComBtn.Size = new System.Drawing.Size(102, 30);
+            this.ComBtn.TabIndex = 11;
+            this.ComBtn.Text = "对比";
+            this.ComBtn.UseVisualStyleBackColor = true;
+            this.ComBtn.Click += new System.EventHandler(this.ComBtn_Click);
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.ComBtn);
+            this.Controls.Add(this.GEdit);
+            this.Controls.Add(this.HEdit);
+            this.Controls.Add(this.lianSaiEdit);
             this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -116,5 +159,9 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label codeMoneyText;
+        private System.Windows.Forms.TextBox lianSaiEdit;
+        private System.Windows.Forms.TextBox HEdit;
+        private System.Windows.Forms.TextBox GEdit;
+        private System.Windows.Forms.Button ComBtn;
     }
 }

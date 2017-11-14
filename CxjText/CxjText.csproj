@@ -36,6 +36,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -52,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bean\AutoData.cs" />
     <Compile Include="bean\InputInfo.cs" />
     <Compile Include="bean\NameTy.cs" />
     <Compile Include="bean\UserInfo.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="utlis\MoneyUtils.cs" />
     <Compile Include="utlis\OrderUtils.cs" />
     <Compile Include="utlis\RltDataUtils.cs" />
+    <Compile Include="utlis\StringComPleteUtils.cs" />
     <Compile Include="utlis\YDMWrapper.cs" />
     <Compile Include="utlis\Config.cs" />
     <Compile Include="utlis\HttpUtils.cs" />

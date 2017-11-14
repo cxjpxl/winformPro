@@ -35,7 +35,7 @@ namespace CxjText.views
         //初始化数据源
         private void ViewInit()
         {
-            
+
             dt = new DataTable();
             dt.Columns.Add("0");
             dt.Columns.Add("1");
@@ -49,7 +49,7 @@ namespace CxjText.views
             this.dgvSA.DataSource = dt;
             this.dgvSA.MergeRowJObject.Add("Column0", "-1");// 要合并的列名"Column0"  要合并的总行数 -1 ：无限制 
             this.dgvSA.MergeRowJObject.Add("Column1", "3");// 要合并的列名"Column1"  要合并的总行数 3 ：合并三行
-    }
+        }
 
         //接口的设计
         public void setClickListener(DataClickInface inface) {
@@ -57,14 +57,14 @@ namespace CxjText.views
         }
 
         //更新UI
-        public void setData(JArray jArray,int index,string selectFlag,String searchStr) {
+        public void setData(JArray jArray, int index, string selectFlag, String searchStr) {
             isUpdate = true;
             this.dgvSA.SearchStr = searchStr;
             String preTag = "";
             if (this.userInfo != null) { //获取当前系统的值
                 preTag = this.userInfo.tag;
             }
-            this.userInfo =(UserInfo) Config.userList[index];
+            this.userInfo = (UserInfo)Config.userList[index];
             String currentTag = this.userInfo.tag;
             this.cJArray = jArray; //数据的存储
             if (jArray == null || jArray.Count == 0) {
@@ -75,7 +75,7 @@ namespace CxjText.views
             }
             int sPosition = 0;
             // 若改变网站或者联赛 则需要将滚动条置零
-            if (this.cIndex==-1  || this.selectFlag != selectFlag||!preTag.Equals(currentTag))
+            if (this.cIndex == -1 || this.selectFlag != selectFlag || !preTag.Equals(currentTag))
             {
                 this.currMid = null;
                 sPosition = 0;
@@ -90,34 +90,34 @@ namespace CxjText.views
                 if (userInfo.tag.Equals("A"))
                 {
                     JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI_SysA(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "A");
                     mid = (String)jObject["mid"]; // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("B"))
                 {
                     JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI_SysB(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "B");
                     mid = (String)jObject["Match_ID"]; // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("I")) {
                     JArray jObject = (JArray)jArray[i]; //数据格式
-                    rltObj = DataUtils.updateUI_SysI(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "I");
                     mid = (String)jObject[0]; // 获得唯一标示
                 } else if (userInfo.tag.Equals("U")) {
                     JArray jObject = (JArray)jArray[i]; //数据格式
-                    rltObj = DataUtils.updateUI_SysU(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "U");
                     mid = (String)jObject[0]; // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("R"))
                 {
                     JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI_SysR(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "R");
                     mid = (String)jObject["mid"]; // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("G"))
                 {
                     JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI_SysG(jObject);
+                    rltObj = DataUtils.updateUI(jObject, "G");
                     mid = (String)jObject["Match_ID"]; // 获得唯一标示
                 }
                 else
@@ -125,78 +125,99 @@ namespace CxjText.views
 
                 }
 
-                if(rltObj != null)
+                if (rltObj != null)
                 {
                     // 渲染UI
                     dt.Rows.Add(rltObj["c00"].ToString(), rltObj["c01"].ToString(), rltObj["c02"].ToString(), rltObj["c03"].ToString(), rltObj["c04"].ToString(), rltObj["c05"].ToString(), rltObj["c06"].ToString(), rltObj["c07"].ToString(), rltObj["c08"].ToString());
                     dt.Rows.Add(rltObj["c10"].ToString(), rltObj["c11"].ToString(), rltObj["c12"].ToString(), rltObj["c13"].ToString(), rltObj["c14"].ToString(), rltObj["c15"].ToString(), rltObj["c16"].ToString(), rltObj["c17"].ToString(), rltObj["c18"].ToString());
                     dt.Rows.Add(rltObj["c20"].ToString(), rltObj["c21"].ToString(), rltObj["c22"].ToString(), rltObj["c23"].ToString(), rltObj["c24"].ToString(), rltObj["c25"].ToString(), rltObj["c26"].ToString(), rltObj["c27"].ToString(), rltObj["c28"].ToString());
-                    
+
                 }
 
                 // 判断刷新数据前的当前UI的最顶部的单元格所属于那一场球赛
                 if (this.currMid != null && mid == this.currMid)
                 {
-                    sPosition = i*3+this.locationIndex; // 最顶部的单元格应该属于currMid球赛的locationIndex行
+                    sPosition = i * 3 + this.locationIndex; // 最顶部的单元格应该属于currMid球赛的locationIndex行
                 }
             }
             this.dgvSA.DataSource = dt;
-            if (sPosition >= this.cJArray.Count*3) //若是当前单元格的行数小于定位到的单元格行  则回滚到起始位
+            if (sPosition >= this.cJArray.Count * 3) //若是当前单元格的行数小于定位到的单元格行  则回滚到起始位
             {
-                sPosition=0;
+                sPosition = 0;
             }
             this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition; // 滚动到具体的单元格行
             this.isUpdate = false;
         }
 
-        
+
 
 
 
         //点击事件的处理 参数不要删除  注意注意
         private void dgvSA_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-
-           // return;
             if (e.RowIndex == -1 || e.ColumnIndex == -1) return;
             if (e.ColumnIndex == 0 || e.ColumnIndex == 1) return;
             String value = this.dgvSA.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             if (String.IsNullOrEmpty(value)) return;
-            int index = e.RowIndex/3; 
-            int numRow = e.RowIndex % 3; 
+            int index = e.RowIndex / 3;
+            int numRow = e.RowIndex % 3;
             int clickNum = e.ColumnIndex;
             if (index >= this.cJArray.Count) return;
+            object obj = this.cJArray[index];
+            if (obj == null) return;
+            OnOrderClick(obj, numRow, clickNum);//下注处理
+        }
 
+
+
+        public void OnOrderClick(object obj, int numRow, int clickNum) {
+            if (obj == null) return;
+            if (userInfo == null) return;
             //公共部分的处理
             JObject dataJObject = new JObject();
             String rltStr = "";
-            switch (userInfo.tag) {
+            switch (userInfo.tag)
+            {
                 case "A":
-                    rltStr = DataClickUtlis.DataSysAClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JObject jObjectA = (JObject)obj;
+                    if (jObjectA == null) return;
+                    rltStr = DataClickUtlis.DataSysAClick(dataJObject, jObjectA, numRow, clickNum, "A");
                     break;
                 case "B":
-                    rltStr = DataClickUtlis.DataSysBClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JObject jObjectB = (JObject)obj;
+                    if (jObjectB == null) return;
+                    rltStr = DataClickUtlis.DataSysBClick(dataJObject, jObjectB,  numRow, clickNum, "B");
                     break;
                 case "I":
-                    rltStr = DataClickUtlis.DataSysIClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JArray jArrayI = (JArray)obj;
+                    if (jArrayI == null) return;
+                    rltStr = DataClickUtlis.DataSysIClick(dataJObject, jArrayI, numRow, clickNum, "I");
                     break;
                 case "U":
-                    rltStr = DataClickUtlis.DataSysUClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JArray jArrayU = (JArray)obj;
+                    if (jArrayU == null) return;
+                    rltStr = DataClickUtlis.DataSysUClick(dataJObject, jArrayU,  numRow, clickNum, "U");
                     break;
                 case "R":
-                    rltStr = DataClickUtlis.DataSysRClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JObject jObjectR = (JObject)obj;
+                    if (jObjectR == null) return;
+                    rltStr = DataClickUtlis.DataSysRClick(dataJObject, jObjectR,  numRow, clickNum, "R");
                     break;
                 case "G":
-                    rltStr = DataClickUtlis.DataSysGClick(dataJObject, this.cJArray, e, this.dgvSA);
+                    JObject jObjectG = (JObject)obj;
+                    if (jObjectG == null) return;
+                    rltStr = DataClickUtlis.DataSysGClick(dataJObject, jObjectG,  numRow, clickNum, "G");
                     break;
                 default:
                     break;
 
             }
-            if (String.IsNullOrEmpty(rltStr)) return;
-            this.inface.OnClickLisenter(rltStr, dataJObject, this.userInfo);
-         
+            if (String.IsNullOrEmpty(rltStr) || this.inface == null) return;
+            this.inface.OnClickLisenter(rltStr, dataJObject, userInfo);
         }
+
+
         //滑动的时候的数据处理
         private void dgvSA_Scroll(object sender, ScrollEventArgs e)
         {
@@ -233,5 +254,8 @@ namespace CxjText.views
                 }
             }
         }
+
+        
+
     }
 }

@@ -150,7 +150,7 @@ namespace CxjText
                 }
                 //获取数据成功
                 this.Invoke(new Action(() => {
-                    leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
+                   leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
             }
@@ -193,6 +193,23 @@ namespace CxjText
             }
 
             this.Invoke(new Action(() => { codeMoneyText.Text = moneyStr; }));
+        }
+
+        //点击了对比按键  以后就变成socket数据进来的处理
+        private void ComBtn_Click(object sender, EventArgs e)
+        {
+            String lianSai = lianSaiEdit.Text.ToString().Trim();
+            String HStr = HEdit.Text.ToString().Trim();
+            String GStr = GEdit.Text.ToString().Trim();
+            if (String.IsNullOrEmpty(lianSai) || String.IsNullOrEmpty(HStr) || String.IsNullOrEmpty(GStr)) return;
+            if (leftForm == null) return;
+            if (this.isFinish) return;
+
+            AutoData autoData = new AutoData();
+            autoData.lianSaiStr = lianSai;
+            autoData.HStr = HStr;
+            autoData.GStr = GStr;
+            leftForm.setComplete(autoData);
         }
     }
 }

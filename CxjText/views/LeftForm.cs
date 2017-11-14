@@ -85,6 +85,46 @@ namespace CxjText.views
         }
 
 
+        private JArray getSeachArray(UserInfo userInfo) {
+            JArray jArray = new JArray();
+            if (this.dataJArray == null) return jArray;
+            for (int i = 0; i < this.dataJArray.Count; i++)
+            {
+                //系统更改 修改5
+                if (userInfo.tag.Equals("I")) //数据格式
+                {
+                    JArray jObject = (JArray)this.dataJArray[i];
+                    String m = (String)jObject[2];
+                    String g = (String)jObject[3];
+                    if (m.IndexOf(searchStr) >= 0 || g.IndexOf(searchStr) >= 0)
+                    {
+                        jArray.Add(jObject);
+                    }
+                }
+                else if (userInfo.tag.Equals("U"))
+                {
+                    JArray jObject = (JArray)this.dataJArray[i];
+                    String m = (String)jObject[5];
+                    String g = (String)jObject[6];
+                    if (m.IndexOf(searchStr) >= 0 || g.IndexOf(searchStr) >= 0)
+                    {
+                        jArray.Add(jObject);
+                    }
+                }
+                else
+                {
+                    JObject jObject = (JObject)this.dataJArray[i];
+
+                    if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo))
+                    {
+                        jArray.Add(jObject);
+                    }
+                }
+            }
+            return jArray;
+        }
+
+
         private void changeStrUi() {
             if (this.cIndex == -1) return;
             //数据源处理
@@ -98,39 +138,7 @@ namespace CxjText.views
                 return;
             }
             if (userInfo == null) return;
-            JArray jArray = new JArray();
-            for (int i = 0; i < this.dataJArray.Count; i++) {
-                //系统更改 修改5
-                if (userInfo.tag.Equals("I")) //数据格式
-                {
-                    JArray jObject = (JArray)this.dataJArray[i];
-                    String m = (String)jObject[2];
-                    String g = (String)jObject[3];
-                    if (m.IndexOf(searchStr) >= 0 || g.IndexOf(searchStr) >= 0)
-                    {
-                        jArray.Add(jObject);
-                    }
-                }
-                else if (userInfo.tag.Equals("U")) {
-                    JArray jObject = (JArray)this.dataJArray[i];
-                    String m = (String)jObject[5];
-                    String g = (String)jObject[6];
-                    if (m.IndexOf(searchStr) >= 0 || g.IndexOf(searchStr) >= 0)
-                    {
-                        jArray.Add(jObject);
-                    }
-                }
-                else
-                {
-                    JObject jObject = (JObject)this.dataJArray[i];
-                   
-                    if (RltDataUtils.hasSearchStr(jObject, this.searchStr, userInfo))
-                    {
-                        jArray.Add(jObject);
-                    }
-                }
-            }
-
+            JArray jArray = getSeachArray(userInfo); //获取搜索的数据对象
             //有数据
             if (!String.IsNullOrEmpty(this.searchStr))
             {
@@ -173,8 +181,6 @@ namespace CxjText.views
                     return;
                 }
                 NameGridShow(userInfo,rltJArray);//更新当前界面
-
-
                 this.cTag = userInfo.tag; //记录当前系统
                 this.cIndex = index; //当前索引
                 this.cJArray = rltJArray; //保存当前的数据源
@@ -452,6 +458,19 @@ namespace CxjText.views
                 }));
             }
             
+        }
+
+        //自动下单
+        public void setComplete(AutoData autoData) {
+            if (this.cIndex < 0) return;
+            if (this.nameShowGridView == null) return;
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            int indexNum = -1;
+            indexNum = StringComPleteUtils.haveData(autoData, this.dataJArray, userInfo);
+            if (indexNum > 0 && dataForm!=null) {
+                //dataForm.OnOrderClick(null,0,0);
+            }
+                
         }
 
     }
