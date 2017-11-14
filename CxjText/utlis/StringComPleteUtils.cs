@@ -1,4 +1,5 @@
 ﻿using CxjText.bean;
+using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,10 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(str1) || String.IsNullOrEmpty(str2)) {
                 return 0;
             }
-            str1 = str1.Trim();
-            str2 = str2.Trim();
+            str1 = str1.Trim().Replace(" ","").Replace("[","").Replace("]","").Replace("(","").Replace(")","");
+            str2 = str2.Trim().Replace(" ", "").Replace("[", "").Replace("]", "").Replace("(", "").Replace(")", "");
+            
+
             //将其都转化为简体
             str1 = Microsoft.VisualBasic.Strings.StrConv(str1, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, 0);
             str2 = Microsoft.VisualBasic.Strings.StrConv(str2, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, 0);
@@ -128,11 +131,13 @@ namespace CxjText.utlis
 
                 }
 
+                String pLianSai = lianSai;
+                String pHstr = hStr;
+                String pGStr = gStr;
                 //比较
-                decimal lianSaiRate = SpeedyCompute(autoData.lianSaiStr,lianSai);
-                decimal hRate = SpeedyCompute(autoData.HStr, hStr);
-                decimal gRate = SpeedyCompute(autoData.GStr, gStr);
-                Console.WriteLine("联赛相似度:" + lianSaiRate + "  主队相似度:" + hRate + "  客队相似度:" + gRate);
+                decimal lianSaiRate = SpeedyCompute(autoData.lianSaiStr, pLianSai);
+                decimal hRate = SpeedyCompute(autoData.HStr, pHstr);
+                decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
                 if (lianSaiRate >=(decimal) 0.7 && hRate > (decimal)0.7 && gRate > (decimal)0.7) {
                     Console.WriteLine("联赛相似度:"+lianSaiRate + "  主队相似度:"+ hRate + "  客队相似度:"+gRate);
                     Console.WriteLine("联赛:  "+lianSai);
@@ -140,6 +145,18 @@ namespace CxjText.utlis
                     Console.WriteLine("客队:  " + gStr);
                     return i;
                 }
+                //比较
+                 hRate = SpeedyCompute(autoData.HStr, pGStr);
+                 gRate = SpeedyCompute(autoData.GStr, pHstr);
+                if (lianSaiRate >= (decimal)0.7 && hRate > (decimal)0.7 && gRate > (decimal)0.7)
+                {
+                    Console.WriteLine("联赛相似度:" + lianSaiRate + "  主队相似度:" + hRate + "  客队相似度:" + gRate);
+                    Console.WriteLine("联赛:  " + lianSai);
+                    Console.WriteLine("主队:  " + hStr);
+                    Console.WriteLine("客队:  " + gStr);
+                    return i;
+                }
+
             }
 
             return -1;

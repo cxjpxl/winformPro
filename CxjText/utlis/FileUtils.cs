@@ -148,6 +148,7 @@ namespace CxjText.utlis
                     userInfo.status = loginStatus;
                     if (String.IsNullOrEmpty(softTag) || Config.softUserStr.Equals("admin")|| softTag.ToUpper().Equals(userInfo.tag))
                     {
+                        userInfo.status = 0; //如果专门的tag的话  是有访问权限的
                         userList.Add(userInfo);
                         list.Add(baseUrl);
                     }

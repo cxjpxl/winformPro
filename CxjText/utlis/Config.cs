@@ -9,7 +9,7 @@ namespace CxjText.utils
 
         //软件使用的人(一个软件只能一个账户使用)  直接在登录的地方显示和请求到后台
         public static String softUserStr = "admin"; //软件使用人  admin为管理员
-        public static String softTag = ""; //软件系统过滤
+        public static String softTag = "A"; //软件系统过滤
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.y39666.com" + "\t"+
                                     ""+"\t"+
