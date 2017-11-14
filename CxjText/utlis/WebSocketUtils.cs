@@ -17,7 +17,7 @@ namespace CxjText.utlis
 
             if(client != null)
             {
-                client.close();
+                client.Close();
             }
 
             client = new WebSocket(host);
