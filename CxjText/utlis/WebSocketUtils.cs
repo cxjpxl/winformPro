@@ -1,37 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CxjText.iface;
+using System;
+using System.Threading;
 using WebSocketSharp;
 
 namespace CxjText.utlis
 {
-    class WebSocketUtils
+    public class WebSocketUtils
     {
-        private WebSocket client;
-        const string host = "ws://test.gaomuxuexi.com:9000/app/";
-
-        public void init()
+        private WebSocket webSocket;
+        private String uri = "";
+        private bool isFinish = false;
+        private bool isError = false;
+        private LoginFormInterface inface = null;
+        public WebSocketUtils(String uri)
         {
+            this.uri = uri;
+            socketInit();
+        }
 
-            if(client != null)
+        public void setOnMessListener(LoginFormInterface inface) {
+            this.inface = inface;
+        }
+
+
+        private void socketInit()
+        {
+            try
             {
-                client.Close();
+                if (isFinish) return;
+                isError = false;
+                if (webSocket != null)
+                {
+                    webSocket.Close();
+                    webSocket = null;
+                }
+                webSocket = new WebSocket(uri);
+                webSocket.Connect();
+
+                webSocket.OnOpen += (ss, ee) => {
+                    isError = false;
+                };
+
+                webSocket.OnError += (ss, ee) => {
+                    if (isFinish) return;
+                    if (!isError)
+                    {
+                        isError = true;
+                        Thread.Sleep(2000); //休息2s 重新链接
+                        socketInit();
+                    }
+                };
+
+                webSocket.OnMessage += (ss, ee) =>
+                {
+                    isError = false;
+                    if (this.inface != null) {
+                        this.inface.OnWebSocketMessAge(ee.Data);
+                    }
+                };
+
+                webSocket.OnClose += (ss, ee) =>
+                {
+                    if ( !isFinish)
+                    { //被动断开
+                        socketInit();
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
+
+        /**
+           * 关闭socket链接
+           */
+        public void close()
+        {
+            isFinish = true;
+            if (webSocket == null) return;
+            try
+            {
+                webSocket.Close();
+            }
+            catch (Exception e)
+            {
+
             }
 
-            client = new WebSocket(host);
-            client.Connect();
-            client.OnOpen += (ss, ee) => {
-                Console.WriteLine("OnOpen to " + host);
-            };
-
-            //client.OnError += (ss, ee) =>
-            //   listBox1.Items.Add("     Error: " + ee.Message);
-            client.OnMessage += (ss, ee) =>
-               Console.WriteLine("OnMessage to " + ee.Data);
-            //client.OnClose += (ss, ee) =>
-            //   listBox1.Items.Add(string.Format(“Disconnected with { 0}”, host));
         }
 
     }

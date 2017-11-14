@@ -10,5 +10,6 @@ namespace CxjText.iface
     {
         void SelectOnClick(int index);
         void getCodeMoneyStatus(String moneyStr);
+        void OnWebSocketMessAge(String message);
     }
 }

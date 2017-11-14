@@ -15,6 +15,7 @@ namespace CxjText
         private LoginForm loginForm = null; //登录的界面
         private LeftForm leftForm = null; //左边的界面
         private bool isFinish = false;
+        private WebSocketUtils webSocketUtils = null;
         
         public MainFrom()
         {
@@ -32,8 +33,9 @@ namespace CxjText
                 return;
             }
             ViewInit();
-
-             this.upDateTimer.Start(); //启动定时任务器
+            this.upDateTimer.Start(); //启动定时任务器
+            webSocketUtils = new WebSocketUtils("ws://test.gaomuxuexi.com:9000/app/");
+            webSocketUtils.setOnMessListener(this);
         }
 
         private void ViewInit()
@@ -68,6 +70,9 @@ namespace CxjText
             this.upDateTimer.Stop(); //将定时器停止
             isFinish = true;
             Application.Exit();
+            if (webSocketUtils != null) {
+                webSocketUtils.close();
+            }
         }
 
         //定时器回调   1s一次
@@ -209,6 +214,12 @@ namespace CxjText
             autoData.HStr = HStr;
             autoData.GStr = GStr;
             leftForm.setComplete(autoData);
+        }
+
+        //收到数据
+        public void OnWebSocketMessAge(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
