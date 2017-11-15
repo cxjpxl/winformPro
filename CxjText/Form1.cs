@@ -1,4 +1,5 @@
 ﻿using CxjText.utils;
+using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace CxjText
     {
 
         private HttpUtils httpUtils = null;
-      
+        private String uuid = null;
         public Form1()
         {
             InitializeComponent();
@@ -21,6 +22,13 @@ namespace CxjText
         {
 
             dataInit();
+            uuid = FileUtils.getOnlyFlag();
+            if (String.IsNullOrEmpty(uuid) &&!Config.softUserStr.Equals("admin"))
+            {
+                MessageBox.Show("获取设备信息错误!");
+                Application.Exit();
+                return;
+            }
             codeUserEdit.Text = "cxj81886404";
             codePwdEdit.Text = "cxj13580127662";
         }
@@ -52,6 +60,39 @@ namespace CxjText
             JObject jObject = (JObject)obj;
             String codeUserStr =(String) jObject["codeUserStr"];
             String codePwdStr = (String)jObject["codePwdStr"];
+
+            //登录验证软件是否过期
+            if (!Config.softUserStr.Equals("admin")) {
+                JObject loginObj = new JObject();
+                loginObj.Add("userName", Config.softUserStr);
+                loginObj.Add("comId", uuid);
+                String loginStr = HttpUtils.HttpPost("http://47.88.168.99:8500/cxj/login", loginObj.ToString(), "application/json", null);
+                if (String.IsNullOrEmpty(loginStr)||!FormUtils.IsJsonObject(loginStr)) {
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        MessageBox.Show("登录失败，请检网络！");
+                    }));
+                    return;
+                }
+
+                loginObj = JObject.Parse(loginStr);
+                int no = (int)loginObj["no"];
+                if (no != 200) {
+                    String msg = (String)loginObj["msg"];
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        MessageBox.Show(msg);
+                    }));
+                    return;
+                }
+                Config.softTime = (long)loginObj["time"];
+            }
+
+
             //登录云打码账号
             int uid = utlis.YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
             if (uid < 0) {

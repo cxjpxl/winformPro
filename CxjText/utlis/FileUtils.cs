@@ -6,6 +6,7 @@ using System.Text;
 using CxjText.bean;
 using System.Net;
 using System.Collections.Generic;
+using System.Management;
 
 namespace CxjText.utlis
 {
@@ -187,6 +188,21 @@ namespace CxjText.utlis
                     foreach (Cookie c in colCookies) lstCookies.Add(c);
             }
             return lstCookies;
+        }
+
+
+        public static String getOnlyFlag() {
+            string code = null;  
+              SelectQuery query = new SelectQuery("select * from Win32_ComputerSystemProduct");  
+              using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))  
+              {  
+                  foreach (var item in searcher.Get())  
+                  {  
+                      using (item) code = item["UUID"].ToString();  
+                  }  
+              }  
+              return code;  ;
+
         }
     }
 }

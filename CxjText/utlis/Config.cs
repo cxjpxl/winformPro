@@ -6,7 +6,6 @@ namespace CxjText.utils
     public class Config
     {
         
-
         //软件使用的人(一个软件只能一个账户使用)  直接在登录的地方显示和请求到后台
         public static String softUserStr = "admin"; //软件使用人  admin为管理员
         public static String softTag = "A"; //软件系统过滤
