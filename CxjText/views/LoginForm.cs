@@ -182,6 +182,7 @@ namespace CxjText.views
                 userInfo.cookie = null;
                 userInfo.uid = "";
                 userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
                 AddToListToUpDate(position);
             }
         }
@@ -278,8 +279,8 @@ namespace CxjText.views
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
                 if (user.status != 2) continue;
-                if (!LoginUtils.canRestLogin(user.loginTime,user.tag)) continue;
-                user.loginTime = FormUtils.getCurrentTime(); //更新时间
+                if (!LoginUtils.canRestLogin(user.updateMoneyTime, user.tag)) continue;
+                user.updateMoneyTime = FormUtils.getCurrentTime();
                 Thread t = new Thread(new ParameterizedThreadStart(this.UpdateCookie));
                 t.Start(i);
             }
@@ -323,6 +324,7 @@ namespace CxjText.views
             int position = (int)pos;
             UserInfo userInfo = (UserInfo)Config.userList[position];
             int moneyStatus = 0;
+            long currentTime = FormUtils.getCurrentTime();
             try
             {
                 switch (userInfo.tag)
@@ -331,38 +333,65 @@ namespace CxjText.views
                         moneyStatus =  MoneyUtils.GetAMoney(userInfo);
                         break;
                     case "B": //B特殊处理下
-                        userInfo.status = 0; //下线
-                        userInfo.cookie = null;
-                        userInfo.uid = "";
-                        GoLogin(position); //B一个小时登录一次
-                        return;
-                      //  moneyStatus = MoneyUtils.GetBMoney(userInfo);
-                      //  break;
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 29)
+                        {
+                            userInfo.loginTime = currentTime;
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position); //B一个小时登录一次
+                            return;
+                        }
+                        else {
+                            moneyStatus = MoneyUtils.GetBMoney(userInfo);
+                            break;
+                        }
                     case "I":
+                     
                         moneyStatus = MoneyUtils.GetIMoney(userInfo);
                         break;
                     case "U":
+                        
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
                         break;
                     case "R":
-                        userInfo.status = 0; //下线
-                        userInfo.cookie = null;
-                        userInfo.uid = "";
-                        GoLogin(position); //R一个多小时登录一次
-                        return;
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 100)
+                        {
+                           
+                            userInfo.loginTime = currentTime;
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position); 
+                            return;
+                        }
+                        else
+                        {
+                            moneyStatus = MoneyUtils.GetRMoney(userInfo);
+                            break;
+                        }
                     case "G":
-                        userInfo.status = 0; //下线
-                        userInfo.cookie = null;
-                        userInfo.uid = "";
-                        GoLogin(position);
-                        return;
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
+                        {
+                            userInfo.loginTime = currentTime;
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        else
+                        {
+                            moneyStatus = MoneyUtils.GetGMoney(userInfo);
+                            break;
+                        }
                     default:
                         break;
                 }
             }
             catch (SystemException e)
             {
-                
+               
                 Console.WriteLine(e.ToString());
                 if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("R") || userInfo.tag.Equals("G")) {  //B特殊处理下
                     return;

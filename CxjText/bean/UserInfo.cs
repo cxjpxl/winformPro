@@ -29,6 +29,7 @@ namespace CxjText.bean
 
         public long updateTime = -1; //记录上一次刷新数据的时间
         public long loginTime = -1; //记录上次登录的时间
+        public long updateMoneyTime = -1;//记录money的更新时间
 
         public UserInfo() {
             cookie = new CookieContainer();

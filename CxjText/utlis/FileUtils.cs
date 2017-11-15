@@ -134,6 +134,7 @@ namespace CxjText.utlis
                     userInfo.loginUrl = loginUrl;
                     userInfo.dataUrl = dataUrl;
                     userInfo.loginTime = FormUtils.getCurrentTime();
+                    userInfo.updateMoneyTime = userInfo.loginTime;
                     if (tag.Equals("A"))
                     {
                         userInfo.leastMoney = 10;
