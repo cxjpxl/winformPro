@@ -16,7 +16,7 @@ namespace CxjText.utils
                                     "";
         public static bool canOrder = true; //是否可以下单  正式版本是true
 
-        public static String webSocketUrl = "ws://192.168.1.107:8600/";
+        public static String webSocketUrl = "ws://47.88.168.99:8600/";
 
 
 
