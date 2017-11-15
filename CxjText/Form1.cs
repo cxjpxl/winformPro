@@ -38,18 +38,12 @@ namespace CxjText
         private void dataInit()
         {
             Config.codeMoneyStr = "";
-            if (Config.softUserStr.Equals("admin")) {
-                this.userContact.Text = Config.softUserStr + "  -  多系统支持版本"; ;
+            if (Config.softUserStr.Contains("admin")) {
+                this.userContact.Text = Config.softUserStr + "  -  多系统支持版本"; 
             }
             else {
-                if (String.IsNullOrEmpty(Config.softTag))
-                {
-                    this.userContact.Text = Config.softUserStr + "  -  多系统支持版本";
-                }
-                else {
-                    this.userContact.Text = Config.softUserStr + "  -  " + Config.softTag+"系统支持版本";
-                }
-                
+                this.userContact.Text = Config.softUserStr;
+
             }
             utlis.YDMWrapper.YDM_SetAppInfo(Config.codeAppId,Config.codeSerect);
            

@@ -25,7 +25,7 @@ namespace CxjText.utlis
             try {
 
                 //不是管理员  没有配置地址直接return 
-                if (!Config.softUserStr.Equals("admin") && (Config.urls == null || Config.urls.Trim().Length == 0))
+                if (!Config.softUserStr.Contains("admin") && String.IsNullOrEmpty(Config.urls))
                 {
                     return;
                 }
@@ -36,7 +36,6 @@ namespace CxjText.utlis
 
                 ArrayList list = new ArrayList(); //记录不重复的数据
                 ArrayList userList = new ArrayList();
-                String softTag = Config.softTag;
                 while ((line = sr.ReadLine()) != null)
                 {
                     String[] strs = line.Split('\t');
@@ -108,13 +107,14 @@ namespace CxjText.utlis
                     }
 
                     int loginStatus = -1; //默认无权登录   
-                    if (Config.softUserStr.Equals("admin"))
+                    if (Config.softUserStr.Contains("admin"))
                     {
                         //管理员的话全部账号添加进来
                         loginStatus = 0; //未登录的情况
                     }
                     else
                     {
+                
                         String[] ConfigStrs = Config.urls.Split('\t');
                         for (int i = 0; i < ConfigStrs.Length; i++)
                         {
@@ -147,12 +147,9 @@ namespace CxjText.utlis
 
 
                     userInfo.status = loginStatus;
-                    if (String.IsNullOrEmpty(softTag) || Config.softUserStr.Equals("admin")|| softTag.ToUpper().Equals(userInfo.tag))
-                    {
-                        userInfo.status = 0; //如果专门的tag的话  是有访问权限的
-                        userList.Add(userInfo);
-                        list.Add(baseUrl);
-                    }
+                    userList.Add(userInfo);
+                    list.Add(baseUrl);
+                   
                     
                 }
                 //用户表全部存在本地静态变量里面

@@ -5,10 +5,12 @@ namespace CxjText.utils
 {
     public class Config
     {
+
         
-        //软件使用的人(一个软件只能一个账户使用)  直接在登录的地方显示和请求到后台
-        public static String softUserStr = "admin"; //软件使用人  admin为管理员
-        public static String softTag = "A"; //软件系统过滤
+        //软件使用人  admin为管理员   不用登录
+        //包含admin的可以使用别的网站但是要登录
+        //不包含admin  只能使用配置网址
+        public static String softUserStr = "admin";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.y39666.com" + "\t"+
                                     ""+"\t"+
