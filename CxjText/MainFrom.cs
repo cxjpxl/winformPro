@@ -34,7 +34,7 @@ namespace CxjText
             }
             ViewInit();
             this.upDateTimer.Start(); //启动定时任务器
-            webSocketUtils = new WebSocketUtils("ws://test.gaomuxuexi.com:9000/app/");
+            webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
         }
 
@@ -219,7 +219,7 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-            Console.WriteLine(message);
+            MessageBox.Show("收到消息："+message);
         }
     }
 }

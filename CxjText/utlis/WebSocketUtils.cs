@@ -35,13 +35,14 @@ namespace CxjText.utlis
                     webSocket = null;
                 }
                 webSocket = new WebSocket(uri);
-                webSocket.Connect();
+                webSocket.ConnectAsync();
 
                 webSocket.OnOpen += (ss, ee) => {
                     isError = false;
                 };
 
                 webSocket.OnError += (ss, ee) => {
+                    Console.WriteLine("on OnError");
                     if (isFinish) return;
                     if (!isError)
                     {
@@ -53,6 +54,7 @@ namespace CxjText.utlis
 
                 webSocket.OnMessage += (ss, ee) =>
                 {
+                    
                     isError = false;
                     if (this.inface != null) {
                         this.inface.OnWebSocketMessAge(ee.Data);
@@ -61,15 +63,21 @@ namespace CxjText.utlis
 
                 webSocket.OnClose += (ss, ee) =>
                 {
+                    Console.WriteLine("on Close");
                     if ( !isFinish)
                     { //被动断开
+                        Thread.Sleep(2000); //休息2s 重新链接
                         socketInit();
                     }
                 };
             }
             catch (Exception e)
             {
-
+                if (!isFinish)
+                { //被动断开
+                    Thread.Sleep(2000); //休息2s 重新链接
+                    socketInit();
+                }
             }
         }
 

@@ -5,7 +5,7 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static bool canOrder = true; //是否可以下单  正式版本是true
+        
 
         //软件使用的人(一个软件只能一个账户使用)  直接在登录的地方显示和请求到后台
         public static String softUserStr = "admin"; //软件使用人  admin为管理员
@@ -14,6 +14,11 @@ namespace CxjText.utils
         public static String urls = "www.y39666.com" + "\t"+
                                     ""+"\t"+
                                     "";
+        public static bool canOrder = true; //是否可以下单  正式版本是true
+
+        public static String webSocketUrl = "ws://192.168.1.107:8600/";
+
+
 
         //打码平台的账户和密码
         public static String codeUserStr = "";
