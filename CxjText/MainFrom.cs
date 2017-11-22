@@ -201,12 +201,7 @@ namespace CxjText
             this.Invoke(new Action(() => { codeMoneyText.Text = moneyStr; }));
         }
 
-        //点击了对比按键  以后就变成socket数据进来的处理
-        private void ComBtn_Click(object sender, EventArgs e)
-        {
-            
-           
-        }
+      
 
         //收到数据
         public void OnWebSocketMessAge(string message)
@@ -216,17 +211,19 @@ namespace CxjText
             }
 
 
-            Console.WriteLine(message);
-
             JObject jObject = JObject.Parse(message);
             if (leftForm == null) return;
             if (this.isFinish) return;
 
-            AutoData autoData = new AutoData();
-            autoData.HStr = (String)jObject["game"]["nameH"];
-            autoData.GStr = (String)jObject["game"]["nameG"];
-            leftForm.setComplete(autoData);
-
+           
+            this.Invoke(new Action(() => {
+                AutoData autoData = new AutoData();
+                autoData.HStr = (String)jObject["game"]["nameH"];
+                autoData.GStr = (String)jObject["game"]["nameG"];
+                HEdit.Text = autoData.HStr;
+                GEdit.Text = autoData.GStr;
+                leftForm.setComplete(autoData);
+            }));
         }
     }
 }

@@ -37,7 +37,6 @@
             this.codeMoneyText = new System.Windows.Forms.Label();
             this.HEdit = new System.Windows.Forms.TextBox();
             this.GEdit = new System.Windows.Forms.TextBox();
-            this.ComBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -109,22 +108,11 @@
             this.GEdit.Size = new System.Drawing.Size(236, 26);
             this.GEdit.TabIndex = 10;
             // 
-            // ComBtn
-            // 
-            this.ComBtn.Location = new System.Drawing.Point(1116, 585);
-            this.ComBtn.Name = "ComBtn";
-            this.ComBtn.Size = new System.Drawing.Size(102, 30);
-            this.ComBtn.TabIndex = 11;
-            this.ComBtn.Text = "对比";
-            this.ComBtn.UseVisualStyleBackColor = true;
-            this.ComBtn.Click += new System.EventHandler(this.ComBtn_Click);
-            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
-            this.Controls.Add(this.ComBtn);
             this.Controls.Add(this.GEdit);
             this.Controls.Add(this.HEdit);
             this.Controls.Add(this.codeMoneyText);
@@ -151,6 +139,5 @@
         private System.Windows.Forms.Label codeMoneyText;
         private System.Windows.Forms.TextBox HEdit;
         private System.Windows.Forms.TextBox GEdit;
-        private System.Windows.Forms.Button ComBtn;
     }
 }
