@@ -6,6 +6,7 @@ using CxjText.bean;
 using CxjText.views;
 using CxjText.iface;
 using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace CxjText
 {
@@ -204,22 +205,28 @@ namespace CxjText
         private void ComBtn_Click(object sender, EventArgs e)
         {
             
-            String HStr = HEdit.Text.ToString().Trim();
-            String GStr = GEdit.Text.ToString().Trim();
-            if (String.IsNullOrEmpty(HStr) || String.IsNullOrEmpty(GStr)) return;
-            if (leftForm == null) return;
-            if (this.isFinish) return;
-
-            AutoData autoData = new AutoData();
-            autoData.HStr = HStr;
-            autoData.GStr = GStr;
-            leftForm.setComplete(autoData);
+           
         }
 
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-            MessageBox.Show("收到消息："+message);
+            if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message)) {
+                return;
+            }
+
+
+            Console.WriteLine(message);
+
+            JObject jObject = JObject.Parse(message);
+            if (leftForm == null) return;
+            if (this.isFinish) return;
+
+            AutoData autoData = new AutoData();
+            autoData.HStr = (String)jObject["game"]["nameH"];
+            autoData.GStr = (String)jObject["game"]["nameG"];
+            leftForm.setComplete(autoData);
+
         }
     }
 }

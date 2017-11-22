@@ -475,6 +475,7 @@ namespace CxjText.views
 
             MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
             return;
+
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
             //下单

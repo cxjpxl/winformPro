@@ -137,7 +137,7 @@ namespace CxjText.utlis
 
                 decimal hRate = SpeedyCompute(autoData.HStr, pHstr);
                 decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
-                if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
+                if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
                 {
                         JObject jObject = new JObject();
                         jObject.Add("index", i);
@@ -150,7 +150,7 @@ namespace CxjText.utlis
                     //比较
                 hRate = SpeedyCompute(autoData.HStr, pGStr);
                 gRate = SpeedyCompute(autoData.GStr, pHstr);
-                if ( hRate > (decimal)0.7 && gRate > (decimal)0.7)
+                if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
                 {
                         JObject jObject = new JObject();
                         jObject.Add("index", i);
