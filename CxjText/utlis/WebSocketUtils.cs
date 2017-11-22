@@ -1,5 +1,6 @@
 ﻿using CxjText.iface;
 using System;
+using System.Text;
 using System.Threading;
 using WebSocketSharp;
 
@@ -20,6 +21,20 @@ namespace CxjText.utlis
 
         public void setOnMessListener(LoginFormInterface inface) {
             this.inface = inface;
+        }
+
+        public void send(String message) {
+            if (webSocket == null) return;
+            if (isFinish) return;
+            if (isError) return;
+            try
+            {
+                byte[] array = Encoding.UTF8.GetBytes(message);
+                webSocket.Send(array);
+            }
+            catch (Exception e) {
+
+            }
         }
 
 

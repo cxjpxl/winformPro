@@ -77,9 +77,19 @@ namespace CxjText
         }
 
         //定时器回调   1s一次
+        private int num = 0;
         private void updateTimer_Tick(object sender, EventArgs e)
         {
-            
+
+            num++;
+            if (num % 2 == 0) {
+                if (webSocketUtils != null) {
+                    webSocketUtils.send("11111");
+                }
+                num = 0;
+            }
+
+
             if (this.loginForm == null) return;
             //获取当前选中的行
             int index = this.loginForm.getCurrentSelectRow(); 
