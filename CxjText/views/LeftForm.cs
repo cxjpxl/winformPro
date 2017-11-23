@@ -461,18 +461,18 @@ namespace CxjText.views
         }
 
         //自动下单
-        public void setComplete(AutoData autoData) {
+        public void setComplete(EnventInfo enventInfo) {
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
 
-            JObject jObject = StringComPleteUtils.haveData(autoData, this.dataJArray, userInfo);
+            JObject jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
             if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
             int indexNum = (int)jObject["index"];
             String lianSai = (String)jObject["lianSai"];
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
-
+            Console.WriteLine("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
             MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
             return;
 

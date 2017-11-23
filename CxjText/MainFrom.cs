@@ -7,6 +7,7 @@ using CxjText.views;
 using CxjText.iface;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace CxjText
 {
@@ -17,7 +18,9 @@ namespace CxjText
         private LeftForm leftForm = null; //左边的界面
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
-        
+        private List<EnventInfo> listEnvets = new List<EnventInfo>();
+
+
         public MainFrom()
         {
             InitializeComponent();
@@ -81,14 +84,14 @@ namespace CxjText
         private void updateTimer_Tick(object sender, EventArgs e)
         {
 
-            num++;
+          /*  num++;
             if (num % 2 == 0) {
                 if (webSocketUtils != null) {
                     webSocketUtils.send("11111");
                 }
                 num = 0;
             }
-
+            */
 
             if (this.loginForm == null) return;
             //获取当前选中的行
@@ -211,7 +214,7 @@ namespace CxjText
             this.Invoke(new Action(() => { codeMoneyText.Text = moneyStr; }));
         }
 
-      
+
 
         //收到数据
         public void OnWebSocketMessAge(string message)
@@ -225,15 +228,85 @@ namespace CxjText
             if (leftForm == null) return;
             if (this.isFinish) return;
 
-           
-            this.Invoke(new Action(() => {
-                AutoData autoData = new AutoData();
-                autoData.HStr = (String)jObject["game"]["nameH"];
-                autoData.GStr = (String)jObject["game"]["nameG"];
-                HEdit.Text = autoData.HStr;
-                GEdit.Text = autoData.GStr;
-                leftForm.setComplete(autoData);
-            }));
+
+
+            if (jObject["game"] == null || jObject["data"] == null) return;
+            String cid = (String)jObject["data"]["CID"];
+            String mid = (String)jObject["data"]["MID"];
+
+            Console.WriteLine("cid:"+cid+",mid:"+mid);
+
+            if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
+            {
+                
+                EnventInfo enventInfo = new EnventInfo();
+                enventInfo.cid = cid;
+                enventInfo.mid = mid;
+                enventInfo.nameH = (String)jObject["game"]["nameH"]; 
+                enventInfo.nameG = (String)jObject["game"]["nameG"];
+                enventInfo.info = (String)jObject["data"]["Info"]; 
+                enventInfo.time = FormUtils.getCurrentTime();
+                enventInfo.T = (String)jObject["data"]["T"]; 
+                if (cid.Equals("9926") || cid.Equals("9927")) {
+                    listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                    listEnvets.Add(enventInfo);
+                    return;
+                }
+
+                //要下注的情况
+                //先对info做判断  有直接删除然后会return
+                if (enventInfo.info.Contains("cancle")) {
+                    listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                    return;
+                }
+                //查找
+                EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
+                if (enventInfo1 == null) return;
+                if (cid.Equals("2055")) //客队点球
+                {
+                    if (!enventInfo1.cid.Equals("9927")) {
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                        return;
+                    }
+                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000) {
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                        return;
+                    }
+                    //客队可以下注 
+                    this.Invoke(new Action(() => {
+                        HEdit.Text = enventInfo.nameH;
+                        GEdit.Text = enventInfo.nameG;
+                        Console.WriteLine("mid:" + mid+"----客队下注");
+                        leftForm.setComplete(enventInfo);
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                    }));
+                }
+                else if (cid.Equals("1031")) {  //主队点球
+                    if (!enventInfo1.cid.Equals("9926"))
+                    {
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                        return;
+                    }
+                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
+                    {
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                        return;
+                    }
+                    //主队可以下注
+                    this.Invoke(new Action(() => {
+                        HEdit.Text = enventInfo.nameH;
+                        GEdit.Text = enventInfo.nameG;
+                        Console.WriteLine("mid:" + mid + "----主队下注");
+                        leftForm.setComplete(enventInfo); 
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                    }));
+                }
+            }
+            else {
+                if (listEnvets.Count == 0) return;
+                listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                return;
+            }
         }
     }
 }

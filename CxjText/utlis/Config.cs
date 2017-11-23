@@ -41,5 +41,6 @@ namespace CxjText.utils
         public static void console(String str) {
             if(isDeug) Console.WriteLine(str);
         }
+
     }
 }

@@ -79,9 +79,9 @@ namespace CxjText.utlis
         }
 
 
-        public static JObject haveData(AutoData autoData,JArray jArray,UserInfo userInfo)
+        public static JObject haveData(EnventInfo enventInfo, JArray jArray,UserInfo userInfo)
         {
-            if (autoData == null || userInfo == null) return null;
+            if (enventInfo == null || userInfo == null) return null;
             if (jArray == null || jArray.Count == 0) return null;
 
             String tag = userInfo.tag;
@@ -135,8 +135,8 @@ namespace CxjText.utlis
                 String pHstr = hStr;
                 String pGStr = gStr;
 
-                decimal hRate = SpeedyCompute(autoData.HStr, pHstr);
-                decimal gRate = SpeedyCompute(autoData.GStr, pGStr);
+                decimal hRate = SpeedyCompute(enventInfo.nameH, pHstr);
+                decimal gRate = SpeedyCompute(enventInfo.nameG, pGStr);
                 if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
                 {
                         JObject jObject = new JObject();
@@ -148,8 +148,8 @@ namespace CxjText.utlis
                 }
 
                     //比较
-                hRate = SpeedyCompute(autoData.HStr, pGStr);
-                gRate = SpeedyCompute(autoData.GStr, pHstr);
+                hRate = SpeedyCompute(enventInfo.nameH, pGStr);
+                gRate = SpeedyCompute(enventInfo.nameG, pHstr);
                 if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
                 {
                         JObject jObject = new JObject();
