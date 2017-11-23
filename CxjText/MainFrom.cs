@@ -84,14 +84,14 @@ namespace CxjText
         private void updateTimer_Tick(object sender, EventArgs e)
         {
 
-          /*  num++;
+            num++;
             if (num % 2 == 0) {
                 if (webSocketUtils != null) {
                     webSocketUtils.send("11111");
                 }
                 num = 0;
             }
-            */
+            
 
             if (this.loginForm == null) return;
             //获取当前选中的行
@@ -223,14 +223,15 @@ namespace CxjText
                 return;
             }
 
-
+            Console.WriteLine(message);
             JObject jObject = JObject.Parse(message);
             if (leftForm == null) return;
             if (this.isFinish) return;
 
-
+            Console.WriteLine("判断");
 
             if (jObject["game"] == null || jObject["data"] == null) return;
+            Console.WriteLine("判断111111");
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
 
