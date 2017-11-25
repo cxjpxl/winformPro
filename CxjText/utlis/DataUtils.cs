@@ -71,7 +71,7 @@ namespace CxjText.utlis
                     break;
                 case "I":
                     JArray jObjectI = (JArray)obj;
-                    time = (String)jObjectI[4] + "\n" + (String)jObjectI[5]; 
+                    time = (String)jObjectI[4] + "\n" + (String)jObjectI[5]+"-"+ (String)jObjectI[6]; 
                     break;
                 case "U":
                     JArray jObjectU = (JArray)obj;
@@ -82,23 +82,31 @@ namespace CxjText.utlis
                     }
                     else
                     {
-                        int time1 = int.Parse(bc);
-                        if (time1 < 45)
+                        try
                         {
-                            bc = "上半场";
+                            int time1 = int.Parse(bc);
+                            if (time1 < 45)
+                            {
+                                bc = "上半场";
+                            }
+                            else
+                            {
+                                bc = "下半场";
+                            }
+
+
+                            String data48 = (String)jObjectU[48];
+                            if (data48.Contains("半场"))
+                            {
+                                data48 = "";
+                            }
+                            time = bc + "\n" + data48 + "\n" + ((String)jObjectU[18]).Trim() + " - " + ((String)jObjectU[19]).Trim();
                         }
-                        else
-                        {
-                            bc = "下半场";
+                        catch(Exception e) {
+                            time = (String)jObjectU[1];
                         }
                     }
 
-                    String data48 = (String)jObjectU[48];
-                    if (data48.Contains("半场"))
-                    {
-                        data48 = "";
-                    }
-                    time = bc + "\n" + data48 + "\n" + (String)jObjectU[18] + " - " + (String)jObjectU[19];
                     break;
                 case "R":
                     JObject jObjectR = (JObject)obj;
