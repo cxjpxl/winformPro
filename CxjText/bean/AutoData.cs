@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace CxjText.bean
 {
+    //下过注的记录
     public class AutoData
     {
-        public String HStr = "";
-        public String GStr = "";
+        public String baseUrl = "";
+        public String mid = "";
+        public long time = -1;
     }
 }

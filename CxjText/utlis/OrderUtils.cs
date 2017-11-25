@@ -5,12 +5,24 @@ using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace CxjText.utlis
 {
     public class OrderUtils
     {
+        public static List<AutoData> autoLists = new List<AutoData>();
+
+
+        public static void addAutoData(String baseUrl,String mid ,long time) {
+            AutoData autoData = new AutoData();
+            autoData.baseUrl = baseUrl;
+            autoData.mid = mid;
+            autoData.time = time;
+            autoLists.Add(autoData);
+        }
+
         //A下单 
         public static void OrderA(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
@@ -50,6 +62,9 @@ namespace CxjText.utlis
             {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null) {
+                        addAutoData(user.baseUrl,(String) jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -222,6 +237,10 @@ namespace CxjText.utlis
             {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -336,6 +355,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -467,6 +490,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -687,6 +714,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -859,6 +890,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
