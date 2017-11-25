@@ -35,8 +35,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.codeMoneyText = new System.Windows.Forms.Label();
-            this.HEdit = new System.Windows.Forms.TextBox();
-            this.GEdit = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -92,29 +90,11 @@
             this.codeMoneyText.TabIndex = 7;
             this.codeMoneyText.Text = "打码平台";
             // 
-            // HEdit
-            // 
-            this.HEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.HEdit.Location = new System.Drawing.Point(1044, 491);
-            this.HEdit.Name = "HEdit";
-            this.HEdit.Size = new System.Drawing.Size(236, 26);
-            this.HEdit.TabIndex = 9;
-            // 
-            // GEdit
-            // 
-            this.GEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.GEdit.Location = new System.Drawing.Point(1044, 537);
-            this.GEdit.Name = "GEdit";
-            this.GEdit.Size = new System.Drawing.Size(236, 26);
-            this.GEdit.TabIndex = 10;
-            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
-            this.Controls.Add(this.GEdit);
-            this.Controls.Add(this.HEdit);
             this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -137,7 +117,5 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label codeMoneyText;
-        private System.Windows.Forms.TextBox HEdit;
-        private System.Windows.Forms.TextBox GEdit;
     }
 }
