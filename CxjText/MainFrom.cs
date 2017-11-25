@@ -296,5 +296,17 @@ namespace CxjText
                 return;
             }
         }
+
+        public int GetCurrUserSelected()
+        {
+            if (this.rbRangQiu.Checked)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 }
