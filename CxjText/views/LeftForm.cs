@@ -465,15 +465,24 @@ namespace CxjText.views
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
-
+            //判断时候要下注   主要返回要下那一队
             JObject jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
             if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
+            bool isBanChang = (bool)jObject["isBanChang"];
+            bool selectDaXiao = (bool)jObject["selectDaXiao"];
+            bool isH = (bool)jObject["isH"]; //是否主队
+            String gameMid = (String)jObject["mid"];
             int indexNum = (int)jObject["index"];
             String lianSai = (String)jObject["lianSai"];
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
-            Console.WriteLine("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
-            MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
+            Console.WriteLine("联赛:" + lianSai + "  --"+ gameMid +
+                                "\n主队:" + nameH + 
+                                "\n客队:" + nameG+
+                                "\n是否主队下注:"+isH+
+                                "\n是否半场:"+isBanChang
+                                +"\n是否强制下大小:"+selectDaXiao);
+          //  MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
             return;
 
             if (indexNum > this.dataJArray.Count) return;

@@ -227,16 +227,9 @@ namespace CxjText
             JObject jObject = JObject.Parse(message);
             if (leftForm == null) return;
             if (this.isFinish) return;
-
-            Console.WriteLine("判断");
-
             if (jObject["game"] == null || jObject["data"] == null) return;
-            Console.WriteLine("判断111111");
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
-
-            Console.WriteLine("cid:"+cid+",mid:"+mid);
-
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
                 
@@ -256,7 +249,7 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("cancle")) {
+                if (enventInfo.info.Contains("Cancelled")) {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
                 }
@@ -277,7 +270,6 @@ namespace CxjText
                     this.Invoke(new Action(() => {
                         HEdit.Text = enventInfo.nameH;
                         GEdit.Text = enventInfo.nameG;
-                        Console.WriteLine("mid:" + mid+"----客队下注");
                         leftForm.setComplete(enventInfo);
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
@@ -297,7 +289,6 @@ namespace CxjText
                     this.Invoke(new Action(() => {
                         HEdit.Text = enventInfo.nameH;
                         GEdit.Text = enventInfo.nameG;
-                        Console.WriteLine("mid:" + mid + "----主队下注");
                         leftForm.setComplete(enventInfo); 
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));

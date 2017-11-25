@@ -91,38 +91,38 @@ namespace CxjText.views
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "A");
-                    mid = (String)jObject["mid"]; // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("B"))
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "B");
-                    mid = (String)jObject["Match_ID"]; // 获得唯一标示
+                     mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("I")) {
                     JArray jObject = (JArray)jArray[i]; //数据格式
                     rltObj = DataUtils.updateUI(jObject, "I");
-                    mid = (String)jObject[0]; // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 } else if (userInfo.tag.Equals("U")) {
                     JArray jObject = (JArray)jArray[i]; //数据格式
                     rltObj = DataUtils.updateUI(jObject, "U");
-                    mid = (String)jObject[0]; // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("R"))
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "R");
-                    mid = (String)jObject["mid"]; // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else if (userInfo.tag.Equals("G"))
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "G");
-                    mid = (String)jObject["Match_ID"]; // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else
                 {
-
+                    mid = "";
                 }
 
                 if (rltObj != null)
@@ -227,31 +227,8 @@ namespace CxjText.views
 
                 this.currMid = "";
 
-
-                switch (userInfo.tag)
-                {
-                    case "A":
-                        this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
-                        break;
-                    case "B":
-                        this.currMid=(String)this.cJArray[currIndex / 3]["Match_ID"] + "";
-                        break;
-                    case "I":
-                        this.currMid=(String)this.cJArray[currIndex / 3][0] + "";
-                        break;
-                    case "U":
-                        this.currMid = (String)this.cJArray[currIndex / 3][0] + "";
-                        break;
-                    case "R":
-                        this.currMid = (String)this.cJArray[currIndex / 3]["mid"] + "";
-                        break;
-                    case "G":
-                        this.currMid = (String)this.cJArray[currIndex / 3]["Match_ID"] + "";
-                        break;
-                    default:
-                        break;
-
-                }
+                object obj = this.cJArray[currIndex / 3];
+                this.currMid = DataUtils.getMid(obj, userInfo.tag);
             }
         }
 

@@ -1395,5 +1395,55 @@ namespace CxjText.utlis
 
             return returnObj;
         }
+
+        /*********************获取mid*********************/
+        public static String getMid(object obj, String tag)
+        {
+           String mid = "";
+
+            switch (tag)
+            {
+                case "A":
+                    {
+                        JObject jObjectA = (JObject)obj;
+                         mid = (String)jObjectA["mid"];
+                        break;
+                    }
+                case "B":
+                    {
+                        JObject jObjectB = (JObject)obj;
+                         mid = (String)jObjectB["Match_ID"];
+                        break;
+                    }
+                case "I":
+                    {
+                        JArray jObjectI = (JArray)obj;
+                         mid = (String)jObjectI[0];
+                        break;
+                    }
+                case "U":
+                    {
+                        JArray jObjectU = (JArray)obj;
+                         mid = (String)jObjectU[0];
+                        break;
+                    }
+                case "R":
+                    {
+                        JObject jObjectR = (JObject)obj;
+                         mid = (String)jObjectR["mid"];
+                        break;
+                    }
+                case "G":
+                    {
+                        JObject jObjectG = (JObject)obj;
+                         mid = (String)jObjectG["Match_ID"];
+                        break;
+                    }
+                default:
+                    break;
+
+            }
+            return mid;
+        }
     }
 }
