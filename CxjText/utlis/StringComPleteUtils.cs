@@ -149,6 +149,9 @@ namespace CxjText.utlis
                 bool selectDaXiao = false; //是否直接下大小
                 String pHstr = hStr;
                 String pGStr = gStr;
+                if (hStr.Contains("角球") || gStr.Contains("角球")) {
+                    continue;
+                }
                 String gameT = enventInfo.T;//当前比赛时间
                 String cid = enventInfo.cid;//当前比赛事件
 
