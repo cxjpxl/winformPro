@@ -490,8 +490,6 @@ namespace CxjText.views
                                 +"\n是否强制下大小:"+selectDaXiao);
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
-
-
             if (enventInfo.inputType == 0)  //让球
             {
                 if (isBanChang)
