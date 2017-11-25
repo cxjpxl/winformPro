@@ -374,6 +374,11 @@ namespace CxjText.views
                 }
                 hasData = true;
                 JObject jObject = new JObject();
+
+                if (dataJObject["gameMid"] != null) {
+                    jObject["gameMid"] = dataJObject["gameMid"];
+                }
+
                 jObject["position"] = i;
                 jObject["rlt"] = orderParmas;
                 jObject["inputTag"] = inputInfo.tag;
@@ -462,6 +467,7 @@ namespace CxjText.views
 
         //自动下单
         public void setComplete(EnventInfo enventInfo) {
+            if (enventInfo.inputType < 0) return;
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
@@ -482,13 +488,61 @@ namespace CxjText.views
                                 "\n是否主队下注:"+isH+
                                 "\n是否半场:"+isBanChang
                                 +"\n是否强制下大小:"+selectDaXiao);
-          //  MessageBox.Show("联赛:" + lianSai + "\n主队:" + nameH + "\n客队:" + nameG);
-            return;
-
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
-            //下单
-            dataForm.OnOrderClick(obj, 1, 4);
+
+
+            if (enventInfo.inputType == 0)  //让球
+            {
+                if (isBanChang)
+                {
+                    if (selectDaXiao) {
+                        dataForm.OnOrderClick(obj, 0, 8, jObject);
+                        return;
+                    }
+                    if (isH) //主队
+                    {
+                        dataForm.OnOrderClick(obj, 0, 7, jObject);
+                        return;
+                    }
+                    else { //客队
+                        dataForm.OnOrderClick(obj, 1, 7, jObject);
+                        return;
+                    }
+                }
+                else {
+                    if (selectDaXiao)
+                    {
+                        dataForm.OnOrderClick(obj, 0, 5, jObject);
+                        return;
+                    }
+                    if (isH) //主队
+                    {
+                        dataForm.OnOrderClick(obj, 0, 4, jObject);
+                        return;
+                    }
+                    else
+                    { //客队
+                        dataForm.OnOrderClick(obj, 1, 4, jObject);
+                        return;
+                    }
+                }
+            }
+            else if (enventInfo.inputType == 1) //大小
+            {
+                if (isBanChang)
+                {
+                    dataForm.OnOrderClick(obj, 0, 8, jObject);
+                    return;
+                }
+                else {
+                    dataForm.OnOrderClick(obj, 0, 5, jObject);
+                    return;
+                }
+            }
+            else {
+                return;
+            }           
         }
 
     }

@@ -16,6 +16,7 @@ namespace CxjText.bean
         public String nameH = ""; //主队名字
         public String nameG = "";//客队名字
         public String T = ""; //比赛进行时间
+        public int inputType = -1;//下注类型  0是让球  1是大小
 
 
     }

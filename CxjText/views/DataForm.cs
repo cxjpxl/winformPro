@@ -166,12 +166,12 @@ namespace CxjText.views
             if (index >= this.cJArray.Count) return;
             object obj = this.cJArray[index];
             if (obj == null) return;
-            OnOrderClick(obj, numRow, clickNum);//下注处理
+            OnOrderClick(obj, numRow, clickNum,null);//下注处理
         }
 
 
 
-        public void OnOrderClick(object obj, int numRow, int clickNum) {
+        public void OnOrderClick(object obj, int numRow, int clickNum,JObject autoJObject) {
             if (obj == null) return;
             if (userInfo == null) return;
             //公共部分的处理
@@ -214,6 +214,9 @@ namespace CxjText.views
 
             }
             if (String.IsNullOrEmpty(rltStr) || this.inface == null) return;
+            if (autoJObject != null) { //判断是否是自动下注
+                dataJObject["gameMid"] = autoJObject["mid"]; //mid记录
+            }
             this.inface.OnClickLisenter(rltStr, dataJObject, userInfo);
         }
 
