@@ -234,6 +234,7 @@ namespace CxjText
             {
                 
                 EnventInfo enventInfo = new EnventInfo();
+                enventInfo.inputType = this.GetCurrUserSelected();
                 enventInfo.cid = cid;
                 enventInfo.mid = mid;
                 enventInfo.nameH = (String)jObject["game"]["nameH"]; 
@@ -294,6 +295,19 @@ namespace CxjText
                 if (listEnvets.Count == 0) return;
                 listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                 return;
+            }
+        }
+
+        // 获取用户当前选中的下单规则 让球或者大小
+        public int GetCurrUserSelected()
+        {
+            if (this.rbRangQiu.Checked)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
             }
         }
     }

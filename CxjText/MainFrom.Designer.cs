@@ -35,6 +35,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.codeMoneyText = new System.Windows.Forms.Label();
+            this.rbRangQiu = new System.Windows.Forms.RadioButton();
+            this.rbDaxiao = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -90,11 +92,35 @@
             this.codeMoneyText.TabIndex = 7;
             this.codeMoneyText.Text = "打码平台";
             // 
+            // rbRangQiu
+            // 
+            this.rbRangQiu.AutoSize = true;
+            this.rbRangQiu.Checked = true;
+            this.rbRangQiu.Location = new System.Drawing.Point(997, 499);
+            this.rbRangQiu.Name = "rbRangQiu";
+            this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
+            this.rbRangQiu.TabIndex = 8;
+            this.rbRangQiu.TabStop = true;
+            this.rbRangQiu.Text = "让球";
+            this.rbRangQiu.UseVisualStyleBackColor = true;
+            // 
+            // rbDaxiao
+            // 
+            this.rbDaxiao.AutoSize = true;
+            this.rbDaxiao.Location = new System.Drawing.Point(997, 533);
+            this.rbDaxiao.Name = "rbDaxiao";
+            this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
+            this.rbDaxiao.TabIndex = 9;
+            this.rbDaxiao.Text = "大小";
+            this.rbDaxiao.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.rbDaxiao);
+            this.Controls.Add(this.rbRangQiu);
             this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -117,5 +143,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label codeMoneyText;
+        private System.Windows.Forms.RadioButton rbRangQiu;
+        private System.Windows.Forms.RadioButton rbDaxiao;
     }
 }
