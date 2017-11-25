@@ -30,6 +30,7 @@ namespace CxjText
         //窗口加载出来的时候调用
         private void MainFrom_Load(object sender, EventArgs e)
         {
+            OrderUtils.autoLists.Clear();
             DataInit(); //读取配置文件
             if (Config.userList == null || Config.userList.Count == 0) {
                 MessageBox.Show("读取配置文件出错");
@@ -91,7 +92,10 @@ namespace CxjText
                 }
                 num = 0;
             }
-            
+            //删除缓存列表数据
+            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 90 * 60 * 1000));
+
+
 
             if (this.loginForm == null) return;
             //获取当前选中的行

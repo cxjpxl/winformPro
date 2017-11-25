@@ -333,6 +333,16 @@ namespace CxjText.views
                 if (user.status != 2) continue;
                 if (user.inputMoney < user.leastMoney) continue;
 
+
+                if (dataJObject["gameMid"] != null) //判断是否已下
+                {
+                    String gameMid = (String)dataJObject["gameMid"];
+                    String baseUrl = user.baseUrl;
+                    AutoData autoData = OrderUtils.autoLists.Find(j =>  j.mid.Equals(gameMid) && j.baseUrl.Equals(baseUrl));
+                    if (autoData != null) continue;
+                }
+
+
                 //下单参数的处理
                 String orderParmas = "";
 
@@ -407,13 +417,10 @@ namespace CxjText.views
                 t.Start(jObject);
             }
 
-            if (!hasData)
+            if (!hasData && dataJObject["gameMid"] == null)
             {
                 MessageBox.Show(tag + "系统,账号没有登录或者金额低于" + userInfo.leastMoney);
             }
-            /*else {
-                MessageBox.Show(tag + "系统下单成功");
-            }*/
 
         }
 

@@ -31,6 +31,7 @@ namespace CxjText.utlis
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
+           
             //请求发出前先更新UI 标记http请求已发送
             JObject headJObject = new JObject();
             headJObject["Origin"] = user.dataUrl;
