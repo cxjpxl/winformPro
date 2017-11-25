@@ -234,6 +234,7 @@ namespace CxjText
             {
                 
                 EnventInfo enventInfo = new EnventInfo();
+                enventInfo.inputType = this.GetCurrUserSelected();
                 enventInfo.cid = cid;
                 enventInfo.mid = mid;
                 enventInfo.nameH = (String)jObject["game"]["nameH"]; 
@@ -297,6 +298,7 @@ namespace CxjText
             }
         }
 
+        // 获取用户当前选中的下单规则 让球或者大小
         public int GetCurrUserSelected()
         {
             if (this.rbRangQiu.Checked)
