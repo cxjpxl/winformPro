@@ -223,15 +223,16 @@ namespace CxjText
         }
 
 
-        private void speak(object cidObj) {
+        private void speak(String cid) {
 
             try
             {
-                String cid = (String)cidObj;
+              //  String cid = (String)cidObj;
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
-                    speechSynthesizer.Speak(speakStr);
+                    speechSynthesizer.Rate = 5;
+                    speechSynthesizer.SpeakAsync(speakStr);
                 }
 
             }
@@ -260,8 +261,7 @@ namespace CxjText
 
 
             //开始更新数据  更新数据后 重新user更新时间 然后打开定时器
-            Thread t = new Thread(new ParameterizedThreadStart(this.speak));
-            t.Start(cid);
+            speak(cid);
 
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
