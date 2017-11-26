@@ -514,18 +514,15 @@ namespace CxjText.views
                 if (isBanChang)
                 {
                     if (selectDaXiao) {
-                        Console.WriteLine("1");
                         dataForm.OnOrderClick(obj, 0, 8, jObject);
                         return;
                     }
                     if (isH) //主队
                     {
-                        Console.WriteLine("2");
                         dataForm.OnOrderClick(obj, 0, 7, jObject);
                         return;
                     }
                     else { //客队
-                        Console.WriteLine("3");
                         dataForm.OnOrderClick(obj, 1, 7, jObject);
                         return;
                     }
@@ -533,19 +530,16 @@ namespace CxjText.views
                 else {
                     if (selectDaXiao)
                     {
-                        Console.WriteLine("4");
                         dataForm.OnOrderClick(obj, 0, 5, jObject);
                         return;
                     }
                     if (isH) //主队
                     {
-                        Console.WriteLine("5");
                         dataForm.OnOrderClick(obj, 0, 4, jObject);
                         return;
                     }
                     else
                     { //客队
-                        Console.WriteLine("6");
                         dataForm.OnOrderClick(obj, 1, 4, jObject);
                         return;
                     }
@@ -555,12 +549,10 @@ namespace CxjText.views
             {
                 if (isBanChang)
                 {
-                    Console.WriteLine("7");
                     dataForm.OnOrderClick(obj, 0, 8, jObject);
                     return;
                 }
                 else {
-                    Console.WriteLine("8");
                     dataForm.OnOrderClick(obj, 0, 5, jObject);
                     return;
                 }

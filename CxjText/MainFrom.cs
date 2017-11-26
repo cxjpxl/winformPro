@@ -90,7 +90,7 @@ namespace CxjText
         {
 
             num++;
-            if (num % 2 == 0) {
+            if (num % 5 == 0) {
                 if (webSocketUtils != null) {
                     webSocketUtils.send("11111");
                 }

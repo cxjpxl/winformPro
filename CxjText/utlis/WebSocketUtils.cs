@@ -31,8 +31,20 @@ namespace CxjText.utlis
             if (contentStatus!=1) return;
             try
             {
-                byte[] array = Encoding.UTF8.GetBytes(message);
-                webSocket.Send(array);
+                if (this.webSocket.IsAlive)
+                {
+                    byte[] array = Encoding.UTF8.GetBytes(message);
+                    webSocket.Send(array);
+                    Console.WriteLine("发送成功");
+                }
+                else {
+                    contentStatus = 0;
+                    Thread.Sleep(2000); //休息2s 重新链接
+                    if (contentStatus == 2 || contentStatus == 1) return;
+                    isError = true;
+                    socketInit();
+                }
+              
             }
             catch (Exception e) {
                 contentStatus = 0;
