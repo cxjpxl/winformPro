@@ -261,6 +261,13 @@ namespace CxjText
                 enventInfo.mid = mid;
                 enventInfo.nameH = (String)jObject["game"]["nameH"]; 
                 enventInfo.nameG = (String)jObject["game"]["nameG"];
+
+                this.Invoke(new Action(() => {
+                    gameText.Text = "比赛: " + enventInfo.nameH + " - " + enventInfo.nameG;
+                }));
+                
+
+
                 enventInfo.info = (String)jObject["data"]["Info"]; 
                 enventInfo.time = FormUtils.getCurrentTime();
                 enventInfo.T = (String)jObject["data"]["T"]; 

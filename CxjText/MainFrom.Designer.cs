@@ -37,6 +37,7 @@
             this.codeMoneyText = new System.Windows.Forms.Label();
             this.rbRangQiu = new System.Windows.Forms.RadioButton();
             this.rbDaxiao = new System.Windows.Forms.RadioButton();
+            this.gameText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -96,7 +97,7 @@
             // 
             this.rbRangQiu.AutoSize = true;
             this.rbRangQiu.Checked = true;
-            this.rbRangQiu.Location = new System.Drawing.Point(997, 499);
+            this.rbRangQiu.Location = new System.Drawing.Point(997, 546);
             this.rbRangQiu.Name = "rbRangQiu";
             this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
             this.rbRangQiu.TabIndex = 8;
@@ -107,18 +108,29 @@
             // rbDaxiao
             // 
             this.rbDaxiao.AutoSize = true;
-            this.rbDaxiao.Location = new System.Drawing.Point(997, 533);
+            this.rbDaxiao.Location = new System.Drawing.Point(997, 580);
             this.rbDaxiao.Name = "rbDaxiao";
             this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
             this.rbDaxiao.TabIndex = 9;
             this.rbDaxiao.Text = "大小";
             this.rbDaxiao.UseVisualStyleBackColor = true;
             // 
+            // gameText
+            // 
+            this.gameText.AutoSize = true;
+            this.gameText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.gameText.Location = new System.Drawing.Point(995, 492);
+            this.gameText.Name = "gameText";
+            this.gameText.Size = new System.Drawing.Size(56, 16);
+            this.gameText.TabIndex = 10;
+            this.gameText.Text = "比赛：";
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.gameText);
             this.Controls.Add(this.rbDaxiao);
             this.Controls.Add(this.rbRangQiu);
             this.Controls.Add(this.codeMoneyText);
@@ -145,5 +157,6 @@
         private System.Windows.Forms.Label codeMoneyText;
         private System.Windows.Forms.RadioButton rbRangQiu;
         private System.Windows.Forms.RadioButton rbDaxiao;
+        private System.Windows.Forms.Label gameText;
     }
 }
