@@ -81,6 +81,10 @@ namespace CxjText
             if (webSocketUtils != null) {
                 webSocketUtils.close();
             }
+
+            if (speechSynthesizer != null) {
+                speechSynthesizer.SpeakAsyncCancelAll();
+            }
             Application.Exit();
         }
 
