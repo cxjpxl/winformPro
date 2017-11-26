@@ -236,7 +236,7 @@ namespace CxjText
         }
 
 
-        private void speak(String cid) {
+        private void speak(String cid,String info) {
 
             try
             {
@@ -244,7 +244,11 @@ namespace CxjText
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
-                    speechSynthesizer.Rate = 5;
+                    speechSynthesizer.Rate = 6;
+                    if (info.Contains("Cancelled"))
+                    {
+                        speakStr = "点球取消";
+                    }
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
 
@@ -273,9 +277,6 @@ namespace CxjText
             String mid = (String)jObject["data"]["MID"];
 
 
-            //开始更新数据  更新数据后 重新user更新时间 然后打开定时器
-            speak(cid);
-
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
             enventInfo.cid = cid;
@@ -285,6 +286,8 @@ namespace CxjText
             enventInfo.info = (String)jObject["data"]["Info"];
             enventInfo.time = FormUtils.getCurrentTime();
             enventInfo.T = (String)jObject["data"]["T"];
+
+            speak(cid, enventInfo.info);
 
             this.Invoke(new Action(() => {
                 gameText.Text = "比赛：" + enventInfo.nameH + " - " + enventInfo.nameG;
