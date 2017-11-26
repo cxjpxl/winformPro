@@ -290,7 +290,7 @@ namespace CxjText
             speak(cid, enventInfo.info);
 
             this.Invoke(new Action(() => {
-                gameText.Text = "比赛：" + enventInfo.nameH + " - " + enventInfo.nameG;
+                gameText.Text = "比赛：" + "(主)" + enventInfo.nameH+ " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
