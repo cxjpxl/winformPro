@@ -60,17 +60,15 @@ namespace CxjText.utlis
                 webSocket.OnError += (ss, ee) => {
                     Console.WriteLine("on OnError");
                     if (isFinish) return;
-                    if (!isError)
-                    {
-                        isError = true;
-                        Thread.Sleep(2000); //休息2s 重新链接
-                        socketInit();
-                    }
+                    isError = true;
+                    Thread.Sleep(2000); //休息2s 重新链接
+                    socketInit();
+                    
                 };
 
                 webSocket.OnMessage += (ss, ee) =>
                 {
-                    
+                    if (isFinish) return;
                     isError = false;
                     if (this.inface != null) {
                         this.inface.OnWebSocketMessAge(ee.Data);
@@ -92,6 +90,7 @@ namespace CxjText.utlis
                 if (!isFinish)
                 { //被动断开
                     Thread.Sleep(2000); //休息2s 重新链接
+                    isError = true;
                     socketInit();
                 }
             }
