@@ -33,7 +33,9 @@ namespace CxjText.utlis
                 webSocket.Send(array);
             }
             catch (Exception e) {
-
+                isError = true;
+                Thread.Sleep(2000); //休息2s 重新链接
+                socketInit();
             }
         }
 
@@ -43,7 +45,6 @@ namespace CxjText.utlis
             try
             {
                 if (isFinish) return;
-                isError = false;
                 if (webSocket != null)
                 {
                     webSocket.Close();
