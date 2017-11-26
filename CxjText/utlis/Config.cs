@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 
 namespace CxjText.utils
@@ -41,6 +42,10 @@ namespace CxjText.utils
         public static void console(String str) {
             if(isDeug) Console.WriteLine(str);
         }
+
+
+
+        public static JObject speakJObject = new JObject();
 
     }
 }

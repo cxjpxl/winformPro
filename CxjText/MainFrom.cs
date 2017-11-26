@@ -8,6 +8,7 @@ using CxjText.iface;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Speech.Synthesis;
 
 namespace CxjText
 {
@@ -19,6 +20,7 @@ namespace CxjText
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
+        private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
 
 
         public MainFrom()
@@ -59,6 +61,7 @@ namespace CxjText
             this.leftPanel.Controls.Add(leftForm);      //添加窗体
             leftForm.Show();
             leftForm.setMainForm(loginForm);
+           
         }
 
 
@@ -235,6 +238,20 @@ namespace CxjText
             if (jObject["game"] == null || jObject["data"] == null) return;
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
+
+
+            try
+            {
+                if (Config.speakJObject[cid] != null) {
+                    String speakStr =(String) Config.speakJObject[cid];
+                    speechSynthesizer.Speak(speakStr);
+                }
+                
+            }
+            catch (Exception e) {
+
+            }
+
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
                 

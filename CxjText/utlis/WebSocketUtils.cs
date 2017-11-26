@@ -64,7 +64,6 @@ namespace CxjText.utlis
                 };
 
                 webSocket.OnError += (ss, ee) => {
-                    Console.WriteLine("on OnError");
                     if (isFinish) return;
                     if (!isError) {
                         contentStatus = 0;
@@ -88,13 +87,10 @@ namespace CxjText.utlis
 
                 webSocket.OnClose += (ss, ee) =>
                 {
-                    Console.WriteLine("on Close");
-                    Console.WriteLine("isFinish:"+isFinish);
                     if ( !isFinish)
                     { //被动断开
                         contentStatus = 0;
                         Thread.Sleep(2000); //休息2s 重新链接
-                        Console.WriteLine("isFinish:" + isFinish);
                         if (isFinish) return;
                         if (contentStatus == 2 || contentStatus == 1) return;
                         socketInit();
