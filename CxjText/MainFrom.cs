@@ -286,9 +286,8 @@ namespace CxjText
                     else {
                         enventText.Text = "事件:"+"未知";
                     }
-
-                    timeText.Text = (String)jObject["curTime"];
-                    lianSaiText.Text = "联赛：";
+                    timeText.Text ="时间: "+ DateTime.Now.ToString(); ;
+                    lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"]; 
 
                 }));
 
