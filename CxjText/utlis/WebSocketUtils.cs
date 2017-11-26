@@ -12,6 +12,7 @@ namespace CxjText.utlis
         private String uri = "";
         private bool isFinish = false;
         private bool isError = false;
+        private bool isContent = false;
         private LoginFormInterface inface = null;
         public WebSocketUtils(String uri)
         {
@@ -27,6 +28,7 @@ namespace CxjText.utlis
             if (webSocket == null) return;
             if (isFinish) return;
             if (isError) return;
+            if (!isContent) return;
             try
             {
                 byte[] array = Encoding.UTF8.GetBytes(message);
@@ -34,6 +36,7 @@ namespace CxjText.utlis
             }
             catch (Exception e) {
                 isError = true;
+                isContent = false;
                 Thread.Sleep(2000); //休息2s 重新链接
                 socketInit();
             }
@@ -52,17 +55,21 @@ namespace CxjText.utlis
                 }
                 webSocket = new WebSocket(uri);
                 webSocket.ConnectAsync();
-
+                isError = false;
                 webSocket.OnOpen += (ss, ee) => {
+                    isContent = true;
                     isError = false;
                 };
 
                 webSocket.OnError += (ss, ee) => {
                     Console.WriteLine("on OnError");
                     if (isFinish) return;
-                    isError = true;
-                    Thread.Sleep(2000); //休息2s 重新链接
-                    socketInit();
+                    if (!isError) {
+                        isError = true;
+                        isContent = false;
+                        Thread.Sleep(2000); //休息2s 重新链接
+                        socketInit();
+                    }
                     
                 };
 
@@ -70,6 +77,7 @@ namespace CxjText.utlis
                 {
                     if (isFinish) return;
                     isError = false;
+                    isContent = true;
                     if (this.inface != null) {
                         this.inface.OnWebSocketMessAge(ee.Data);
                     }
