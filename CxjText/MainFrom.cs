@@ -60,7 +60,7 @@ namespace CxjText
             leftForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
             this.leftPanel.Controls.Add(leftForm);      //添加窗体
             leftForm.Show();
-            leftForm.setMainForm(loginForm);
+            leftForm.setMainForm(loginForm,this);
            
         }
 
@@ -360,6 +360,10 @@ namespace CxjText
             {
                 return 1;
             }
+        }
+
+        public void setTextBox1Text(String str) {
+            textBox1.Text = str.Trim();
         }
     }
 }

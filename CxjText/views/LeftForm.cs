@@ -26,6 +26,7 @@ namespace CxjText.views
         private DataForm dataForm = null;
         private RltForm rltForm = null;
         private LoginForm loginForm = null;
+        private MainFrom mainFrom = null;
         private String searchStr = ""; //搜索的字段
 
 
@@ -35,8 +36,9 @@ namespace CxjText.views
         }
 
 
-        public void setMainForm(LoginForm loginForm) {
+        public void setMainForm(LoginForm loginForm,MainFrom mainFrom) {
             this.loginForm = loginForm;
+            this.mainFrom = mainFrom;
         }
 
 
@@ -327,12 +329,12 @@ namespace CxjText.views
             bool hasData = false;
             String tag = userInfo.tag;
             for (int i = 0; i < Config.userList.Count; i++) {
+              
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-                if (user.inputMoney < user.leastMoney) continue;
-
+               if (user.inputMoney < user.leastMoney) continue;
 
                 if (dataJObject["gameMid"] != null) //判断是否已下
                 {
@@ -341,7 +343,7 @@ namespace CxjText.views
                     AutoData autoData = OrderUtils.autoLists.Find(j =>  j.mid.Equals(gameMid) && j.baseUrl.Equals(baseUrl));
                     if (autoData != null) continue;
                 }
-
+              
 
                 //下单参数的处理
                 String orderParmas = "";
@@ -489,6 +491,16 @@ namespace CxjText.views
             String lianSai = (String)jObject["lianSai"];
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
+            if (mainFrom != null) {
+                if (isH)
+                {
+                    mainFrom.setTextBox1Text(nameH);
+                }
+                else {
+                    mainFrom.setTextBox1Text(nameG);
+                }
+                
+            }
             Console.WriteLine("联赛:" + lianSai + "  --"+ gameMid +
                                 "\n主队:" + nameH + 
                                 "\n客队:" + nameG+
@@ -502,15 +514,18 @@ namespace CxjText.views
                 if (isBanChang)
                 {
                     if (selectDaXiao) {
+                        Console.WriteLine("1");
                         dataForm.OnOrderClick(obj, 0, 8, jObject);
                         return;
                     }
                     if (isH) //主队
                     {
+                        Console.WriteLine("2");
                         dataForm.OnOrderClick(obj, 0, 7, jObject);
                         return;
                     }
                     else { //客队
+                        Console.WriteLine("3");
                         dataForm.OnOrderClick(obj, 1, 7, jObject);
                         return;
                     }
@@ -518,16 +533,19 @@ namespace CxjText.views
                 else {
                     if (selectDaXiao)
                     {
+                        Console.WriteLine("4");
                         dataForm.OnOrderClick(obj, 0, 5, jObject);
                         return;
                     }
                     if (isH) //主队
                     {
+                        Console.WriteLine("5");
                         dataForm.OnOrderClick(obj, 0, 4, jObject);
                         return;
                     }
                     else
                     { //客队
+                        Console.WriteLine("6");
                         dataForm.OnOrderClick(obj, 1, 4, jObject);
                         return;
                     }
@@ -537,10 +555,12 @@ namespace CxjText.views
             {
                 if (isBanChang)
                 {
+                    Console.WriteLine("7");
                     dataForm.OnOrderClick(obj, 0, 8, jObject);
                     return;
                 }
                 else {
+                    Console.WriteLine("8");
                     dataForm.OnOrderClick(obj, 0, 5, jObject);
                     return;
                 }
