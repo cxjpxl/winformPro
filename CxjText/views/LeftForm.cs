@@ -287,10 +287,13 @@ namespace CxjText.views
         private void NameShowGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (!String.IsNullOrEmpty(searchStr)) {
-                this.nameShowGridView.CurrentCell = null;
+                /*this.nameShowGridView.CurrentCell = null;
                 this.selectFlag = null;
                 MessageBox.Show("当前属于搜索状态！");
-                return;
+                return;*/
+                if (mainFrom != null) {
+                    mainFrom.setTextBox1Text("");
+                }
             }
 
             if (this.cJArray == null) return;
