@@ -74,10 +74,11 @@ namespace CxjText
         {
             this.upDateTimer.Stop(); //将定时器停止
             isFinish = true;
-            Application.Exit();
+          
             if (webSocketUtils != null) {
                 webSocketUtils.close();
             }
+            Application.Exit();
         }
 
         //定时器回调   1s一次
