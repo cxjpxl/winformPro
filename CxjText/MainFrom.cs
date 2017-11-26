@@ -223,6 +223,25 @@ namespace CxjText
         }
 
 
+        private void speak(object cidObj) {
+
+            try
+            {
+                String cid = (String)cidObj;
+                if (Config.speakJObject[cid] != null)
+                {
+                    String speakStr = (String)Config.speakJObject[cid];
+                    speechSynthesizer.Speak(speakStr);
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
 
         //收到数据
         public void OnWebSocketMessAge(string message)
@@ -240,17 +259,10 @@ namespace CxjText
             String mid = (String)jObject["data"]["MID"];
 
 
-            try
-            {
-                if (Config.speakJObject[cid] != null) {
-                    String speakStr =(String) Config.speakJObject[cid];
-                    speechSynthesizer.Speak(speakStr);
-                }
-                
-            }
-            catch (Exception e) {
-
-            }
+            //开始更新数据  更新数据后 重新user更新时间 然后打开定时器
+            Thread t = new Thread(new ParameterizedThreadStart(this.speak));
+            t.Start(cid);
+            
 
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
@@ -261,16 +273,27 @@ namespace CxjText
                 enventInfo.mid = mid;
                 enventInfo.nameH = (String)jObject["game"]["nameH"]; 
                 enventInfo.nameG = (String)jObject["game"]["nameG"];
-
-                this.Invoke(new Action(() => {
-                    gameText.Text = "比赛: " + enventInfo.nameH + " - " + enventInfo.nameG;
-                }));
-                
-
-
                 enventInfo.info = (String)jObject["data"]["Info"]; 
                 enventInfo.time = FormUtils.getCurrentTime();
-                enventInfo.T = (String)jObject["data"]["T"]; 
+                enventInfo.T = (String)jObject["data"]["T"];
+
+                this.Invoke(new Action(() => {
+                    gameText.Text = "比赛：" + enventInfo.nameH + " - " + enventInfo.nameG;
+                    if (Config.speakJObject[cid] != null)
+                    {
+                        enventText.Text = "事件:"+(String)Config.speakJObject[cid];
+                    }
+                    else {
+                        enventText.Text = "事件:"+"未知";
+                    }
+
+                    timeText.Text = (String)jObject["curTime"];
+                    lianSaiText.Text = "联赛：";
+
+                }));
+
+
+
                 if (cid.Equals("9926") || cid.Equals("9927")) {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     listEnvets.Add(enventInfo);

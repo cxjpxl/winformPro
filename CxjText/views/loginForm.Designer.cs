@@ -67,7 +67,7 @@
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(249)))), ((int)(((byte)(206)))));
             this.loginDaGridView.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.loginDaGridView.RowTemplate.Height = 23;
-            this.loginDaGridView.Size = new System.Drawing.Size(356, 364);
+            this.loginDaGridView.Size = new System.Drawing.Size(356, 267);
             this.loginDaGridView.TabIndex = 1;
             this.loginDaGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LoginDaGridView_CellMouseClick);
             this.loginDaGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.LoginDaGridView_CellValueChanged);
@@ -149,7 +149,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(356, 364);
+            this.ClientSize = new System.Drawing.Size(356, 267);
             this.Controls.Add(this.loginDaGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LoginForm";

@@ -37,7 +37,10 @@
             this.codeMoneyText = new System.Windows.Forms.Label();
             this.rbRangQiu = new System.Windows.Forms.RadioButton();
             this.rbDaxiao = new System.Windows.Forms.RadioButton();
+            this.lianSaiText = new System.Windows.Forms.Label();
+            this.timeText = new System.Windows.Forms.Label();
             this.gameText = new System.Windows.Forms.Label();
+            this.enventText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -45,7 +48,7 @@
             this.loginPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.loginPanel.Location = new System.Drawing.Point(994, 12);
             this.loginPanel.Name = "loginPanel";
-            this.loginPanel.Size = new System.Drawing.Size(356, 364);
+            this.loginPanel.Size = new System.Drawing.Size(356, 267);
             this.loginPanel.TabIndex = 1;
             // 
             // upDateTimer
@@ -66,7 +69,7 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.ForeColor = System.Drawing.Color.Black;
-            this.textBox1.Location = new System.Drawing.Point(1072, 401);
+            this.textBox1.Location = new System.Drawing.Point(1073, 290);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(179, 26);
             this.textBox1.TabIndex = 5;
@@ -77,7 +80,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(994, 404);
+            this.label1.Location = new System.Drawing.Point(995, 293);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 6;
@@ -87,7 +90,7 @@
             // 
             this.codeMoneyText.AutoSize = true;
             this.codeMoneyText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.codeMoneyText.Location = new System.Drawing.Point(994, 456);
+            this.codeMoneyText.Location = new System.Drawing.Point(995, 334);
             this.codeMoneyText.Name = "codeMoneyText";
             this.codeMoneyText.Size = new System.Drawing.Size(72, 16);
             this.codeMoneyText.TabIndex = 7;
@@ -97,7 +100,7 @@
             // 
             this.rbRangQiu.AutoSize = true;
             this.rbRangQiu.Checked = true;
-            this.rbRangQiu.Location = new System.Drawing.Point(997, 546);
+            this.rbRangQiu.Location = new System.Drawing.Point(998, 550);
             this.rbRangQiu.Name = "rbRangQiu";
             this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
             this.rbRangQiu.TabIndex = 8;
@@ -108,29 +111,63 @@
             // rbDaxiao
             // 
             this.rbDaxiao.AutoSize = true;
-            this.rbDaxiao.Location = new System.Drawing.Point(997, 580);
+            this.rbDaxiao.Location = new System.Drawing.Point(998, 584);
             this.rbDaxiao.Name = "rbDaxiao";
             this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
             this.rbDaxiao.TabIndex = 9;
             this.rbDaxiao.Text = "大小";
             this.rbDaxiao.UseVisualStyleBackColor = true;
             // 
+            // lianSaiText
+            // 
+            this.lianSaiText.AutoSize = true;
+            this.lianSaiText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lianSaiText.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lianSaiText.Location = new System.Drawing.Point(995, 392);
+            this.lianSaiText.Name = "lianSaiText";
+            this.lianSaiText.Size = new System.Drawing.Size(42, 14);
+            this.lianSaiText.TabIndex = 10;
+            this.lianSaiText.Text = "联赛:";
+            // 
+            // timeText
+            // 
+            this.timeText.AutoSize = true;
+            this.timeText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.timeText.Location = new System.Drawing.Point(996, 419);
+            this.timeText.Name = "timeText";
+            this.timeText.Size = new System.Drawing.Size(49, 14);
+            this.timeText.TabIndex = 11;
+            this.timeText.Text = "时间：";
+            // 
             // gameText
             // 
             this.gameText.AutoSize = true;
-            this.gameText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gameText.Location = new System.Drawing.Point(995, 492);
+            this.gameText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.gameText.Location = new System.Drawing.Point(996, 448);
             this.gameText.Name = "gameText";
-            this.gameText.Size = new System.Drawing.Size(56, 16);
-            this.gameText.TabIndex = 10;
+            this.gameText.Size = new System.Drawing.Size(49, 14);
+            this.gameText.TabIndex = 12;
             this.gameText.Text = "比赛：";
+            // 
+            // enventText
+            // 
+            this.enventText.AutoSize = true;
+            this.enventText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.enventText.Location = new System.Drawing.Point(996, 481);
+            this.enventText.Name = "enventText";
+            this.enventText.Size = new System.Drawing.Size(35, 14);
+            this.enventText.TabIndex = 13;
+            this.enventText.Text = "事件";
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.enventText);
             this.Controls.Add(this.gameText);
+            this.Controls.Add(this.timeText);
+            this.Controls.Add(this.lianSaiText);
             this.Controls.Add(this.rbDaxiao);
             this.Controls.Add(this.rbRangQiu);
             this.Controls.Add(this.codeMoneyText);
@@ -157,6 +194,9 @@
         private System.Windows.Forms.Label codeMoneyText;
         private System.Windows.Forms.RadioButton rbRangQiu;
         private System.Windows.Forms.RadioButton rbDaxiao;
+        private System.Windows.Forms.Label lianSaiText;
+        private System.Windows.Forms.Label timeText;
         private System.Windows.Forms.Label gameText;
+        private System.Windows.Forms.Label enventText;
     }
 }
