@@ -75,16 +75,25 @@ namespace CxjText
         //退出整个应用程序
         private void MainFrom_close(object sender, FormClosedEventArgs e)
         {
-            this.upDateTimer.Stop(); //将定时器停止
-            isFinish = true;
-          
-            if (webSocketUtils != null) {
-                webSocketUtils.close();
-            }
+            try
+            {
+                this.upDateTimer.Stop(); //将定时器停止
+                isFinish = true;
 
-            if (speechSynthesizer != null) {
-                speechSynthesizer.SpeakAsyncCancelAll();
+                if (webSocketUtils != null)
+                {
+                    webSocketUtils.close();
+                }
+
+                if (speechSynthesizer != null)
+                {
+                    speechSynthesizer.SpeakAsyncCancelAll();
+                }
             }
+            catch (Exception e1) {
+
+            }
+            
             Application.Exit();
         }
 
