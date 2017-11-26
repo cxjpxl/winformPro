@@ -31,10 +31,11 @@ namespace CxjText.utlis
             if (contentStatus!=1) return;
             try
             {
-                if (this.webSocket.IsAlive)
+                if (webSocket.Ping())
                 {
-                    byte[] array = Encoding.UTF8.GetBytes(message);
-                    webSocket.Send(array);
+                    //  byte[] array = Encoding.UTF8.GetBytes(message);
+                    //  webSocket.Send(array);
+                    webSocket.Ping();
                     Console.WriteLine("发送成功");
                 }
                 else {
