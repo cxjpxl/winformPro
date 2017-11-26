@@ -54,7 +54,7 @@
             // upDateTimer
             // 
             this.upDateTimer.Enabled = true;
-            this.upDateTimer.Interval = 500;
+            this.upDateTimer.Interval = 1000;
             this.upDateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
             // leftPanel
