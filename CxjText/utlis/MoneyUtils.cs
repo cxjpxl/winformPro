@@ -48,17 +48,21 @@ namespace CxjText.utlis
             if (bMoneyRlt.Trim().Equals("")) return -1;
             if (bMoneyRlt.Contains("重新登录")) return -1;
             bMoneyRlt = bMoneyRlt.Trim();
-            if (bMoneyRlt.Contains("<")) {
+            if (bMoneyRlt.Contains("DOCTYPE")) {
                 String[] strs = bMoneyRlt.Split('\n');
                 for (int i = 0; i < strs.Length; i++) {
                     String str = strs[i].Trim();
-                    if (!str.Contains("<")) {
-                        bMoneyRlt = str;
-                        break;
+                    if (i + 1 < strs.Length - 1 && i - 1 >= 0) {
+                        String str1 = strs[i + 1].Trim();
+                        String str2 = strs[i - 1].Trim();
+                        if (str1.Contains("body") && str2.Contains("body")) {
+                            bMoneyRlt = str;
+                            break;
+                        }
                     }
                 }
              }
-            if (bMoneyRlt.Contains("<")) return 0;
+            if (bMoneyRlt.Contains("DOCTYPE")) return 0;
             String[] moneys = bMoneyRlt.Split('|');
             user.money = moneys[0];
             return 1;
