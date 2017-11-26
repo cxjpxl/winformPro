@@ -494,6 +494,15 @@ namespace CxjText.views
             String lianSai = (String)jObject["lianSai"];
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
+
+            Console.WriteLine("联赛:" + lianSai + "  --" + gameMid +
+                       "\n主队:" + nameH +
+                       "\n客队:" + nameG +
+                       "\n是否主队下注:" + isH +
+                       "\n是否半场:" + isBanChang
+                       + "\n是否强制下大小:" + selectDaXiao);
+
+
             if (mainFrom != null) {
                 if (isH)
                 {
@@ -502,14 +511,14 @@ namespace CxjText.views
                 else {
                     mainFrom.setTextBox1Text(nameG);
                 }
-                
+
+                bool autoCheck = mainFrom.isAuto(); //是否自动下注
+                if (!autoCheck) return;
             }
-            Console.WriteLine("联赛:" + lianSai + "  --"+ gameMid +
-                                "\n主队:" + nameH + 
-                                "\n客队:" + nameG+
-                                "\n是否主队下注:"+isH+
-                                "\n是否半场:"+isBanChang
-                                +"\n是否强制下大小:"+selectDaXiao);
+   
+            
+
+
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
             if (enventInfo.inputType == 0)  //让球

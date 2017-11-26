@@ -41,6 +41,7 @@
             this.timeText = new System.Windows.Forms.Label();
             this.gameText = new System.Windows.Forms.Label();
             this.enventText = new System.Windows.Forms.Label();
+            this.autoCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -159,11 +160,22 @@
             this.enventText.TabIndex = 13;
             this.enventText.Text = "事件";
             // 
+            // autoCheck
+            // 
+            this.autoCheck.AutoSize = true;
+            this.autoCheck.Location = new System.Drawing.Point(998, 514);
+            this.autoCheck.Name = "autoCheck";
+            this.autoCheck.Size = new System.Drawing.Size(72, 16);
+            this.autoCheck.TabIndex = 14;
+            this.autoCheck.Text = "自动下注";
+            this.autoCheck.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.autoCheck);
             this.Controls.Add(this.enventText);
             this.Controls.Add(this.gameText);
             this.Controls.Add(this.timeText);
@@ -198,5 +210,6 @@
         private System.Windows.Forms.Label timeText;
         private System.Windows.Forms.Label gameText;
         private System.Windows.Forms.Label enventText;
+        private System.Windows.Forms.CheckBox autoCheck;
     }
 }

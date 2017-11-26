@@ -372,5 +372,9 @@ namespace CxjText
         public void setTextBox1Text(String str) {
             textBox1.Text = str.Trim();
         }
+
+        public bool isAuto() {
+            return autoCheck.Checked;
+        }
     }
 }
