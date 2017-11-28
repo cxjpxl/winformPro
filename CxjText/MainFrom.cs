@@ -110,7 +110,7 @@ namespace CxjText
                 num = 0;
             }
             //删除缓存列表数据
-            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 90 * 60 * 1000));
+            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 100 * 60 * 1000));
 
 
 
@@ -172,6 +172,9 @@ namespace CxjText
                         break;
                     case "G":
                         dataRtlStr = DataPramsUtils.getGData(userInfo);
+                        break;
+                    case "K":
+                        dataRtlStr = DataPramsUtils.getKData(userInfo);
                         break;
                     default:
                         break;
