@@ -35,24 +35,35 @@ namespace CxjText.utlis
                 {
                     //  byte[] array = Encoding.UTF8.GetBytes(message);
                     //  webSocket.Send(array);
-                    webSocket.Ping();
                     Console.WriteLine("发送成功");
                 }
                 else {
                     contentStatus = 0;
-                    Thread.Sleep(2000); //休息2s 重新链接
-                    if (contentStatus == 2 || contentStatus == 1) return;
+                   
                     isError = true;
-                    socketInit();
+                    if (webSocket != null)
+                    {
+                        webSocket.Close();
+                    }
+                    else
+                    {
+                        socketInit();
+                    }
                 }
               
             }
             catch (Exception e) {
                 contentStatus = 0;
-                Thread.Sleep(2000); //休息2s 重新链接
-                if (contentStatus == 2 || contentStatus == 1) return;
+               
                 isError = true;
-                socketInit();
+                if (webSocket != null)
+                {
+                    webSocket.Close();
+                }
+                else {
+                    socketInit();
+                }
+               
             }
         }
 
@@ -62,11 +73,13 @@ namespace CxjText.utlis
             try
             {
                 if (isFinish) return;
-                if (webSocket != null)
-                {
-                    webSocket.Close();
-                    webSocket = null;
-                }
+                 webSocket = null;
+                /* if (webSocket != null)
+                 {
+                     webSocket.Close();
+                     webSocket = null;
+
+                 }*/
                 webSocket = new WebSocket(uri);
                 webSocket.ConnectAsync();
                 contentStatus = 2;
@@ -80,10 +93,15 @@ namespace CxjText.utlis
                     if (isFinish) return;
                     if (!isError) {
                         contentStatus = 0;
-                        Thread.Sleep(2000); //休息2s 重新链接
-                        if (contentStatus == 2 || contentStatus == 1) return;
                         isError = true;
-                        socketInit();
+                        if (webSocket != null)
+                        {
+                            webSocket.Close();
+                        }
+                        else
+                        {
+                            socketInit();
+                        }
                     }
                     
                 };
@@ -115,11 +133,15 @@ namespace CxjText.utlis
                 if (!isFinish)
                 { //被动断开
                     contentStatus = 0;
-                    Thread.Sleep(2000); //休息2s 重新链接
-                    if (isFinish) return;
-                    if (contentStatus == 2 || contentStatus == 1) return;
                     isError = true;
-                    socketInit();
+                    if (webSocket != null)
+                    {
+                        webSocket.Close();
+                    }
+                    else
+                    {
+                        socketInit();
+                    }
                 }
             }
         }
