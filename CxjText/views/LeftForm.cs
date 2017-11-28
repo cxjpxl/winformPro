@@ -484,6 +484,7 @@ namespace CxjText.views
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
             //判断时候要下注   主要返回要下那一队
+            //修改6
             JObject jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
             if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
             bool isBanChang = (bool)jObject["isBanChang"];

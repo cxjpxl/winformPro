@@ -97,13 +97,16 @@ namespace CxjText.views
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "B");
-                     mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
-                else if (userInfo.tag.Equals("I")) {
+                else if (userInfo.tag.Equals("I"))
+                {
                     JArray jObject = (JArray)jArray[i]; //数据格式
                     rltObj = DataUtils.updateUI(jObject, "I");
                     mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                } else if (userInfo.tag.Equals("U")) {
+                }
+                else if (userInfo.tag.Equals("U"))
+                {
                     JArray jObject = (JArray)jArray[i]; //数据格式
                     rltObj = DataUtils.updateUI(jObject, "U");
                     mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
@@ -118,6 +121,11 @@ namespace CxjText.views
                 {
                     JObject jObject = (JObject)jArray[i];
                     rltObj = DataUtils.updateUI(jObject, "G");
+                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                }
+                else if (userInfo.tag.Equals("K")) {
+                    JObject jObject = (JObject)jArray[i];
+                    rltObj = DataUtils.updateUI(jObject, "K");
                     mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                 }
                 else

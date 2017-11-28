@@ -35,7 +35,8 @@ namespace CxjText.utlis
                     rltJArray = new JArray();
                 }
             }
-            else if (userInfo.tag.Equals("U")) {
+            else if (userInfo.tag.Equals("U"))
+            {
                 rltJArray = (JArray)jObject["db"];
                 if (rltJArray == null)
                 {
@@ -44,6 +45,13 @@ namespace CxjText.utlis
             }
             else if (userInfo.tag.Equals("R"))
             {
+                rltJArray = (JArray)jObject["list"];
+                if (rltJArray == null)
+                {
+                    rltJArray = new JArray();
+                }
+            }
+            else if (userInfo.tag.Equals("K")) {
                 rltJArray = (JArray)jObject["list"];
                 if (rltJArray == null)
                 {
@@ -92,7 +100,7 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("B")||userInfo.tag.Equals("G"))
+            else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("G"))
             {
                 JArray jArray = (JArray)jObject["db"];
                 if (jArray == null || jArray.Count == 0)
@@ -214,6 +222,36 @@ namespace CxjText.utlis
                     rltJArray.Add(itemJArray);
                 }
             }
+            else if (userInfo.tag.Equals("K")) {
+                JArray jArray = (JArray)jObject["list"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject itemJObect = (JObject)jArray[i];
+                    JArray itemJArray = new JArray();
+                    itemJArray.Add(itemJObect);
+                    String name = (String)itemJObect["league"];
+                    int j = 0;
+                    for (j = i + 1; j < jArray.Count; j++)
+                    {
+                        JObject itemJObject1 = (JObject)jArray[j];
+                        String name1 = (String)itemJObject1["league"];
+                        if (name.Equals(name1))
+                        {
+                            itemJArray.Add(itemJObject1);
+                            continue;
+                        }
+                        j = j - 1;
+                        break;
+                    }
+                    i = j;
+                    rltJArray.Add(itemJArray);
+                }
+            }
             else
             {
                 Console.WriteLine("系统开发中!");
@@ -228,7 +266,7 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["a26"].ToString();
             }
-            else if (userInfo.tag.Equals("B")|| userInfo.tag.Equals("G"))
+            else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("G"))
             {
                 title = currentArray[0]["Match_Name"].ToString();
             }
@@ -236,12 +274,16 @@ namespace CxjText.utlis
             {
                 title = currentArray[0][1].ToString();
             }
-            else if (userInfo.tag.Equals("U")) {
+            else if (userInfo.tag.Equals("U"))
+            {
                 title = currentArray[0][2].ToString();
             }
             else if (userInfo.tag.Equals("R"))
             {
                 title = currentArray[0]["lianSai"].ToString();
+            }
+            else if (userInfo.tag.Equals("K")) {
+                title = currentArray[0]["league"].ToString();
             }
             else
             {
@@ -272,6 +314,10 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
+            else if (userInfo.tag.Equals("K"))
+            {
+                mid = (String)jArray[index][0]["gid"] + ""; //唯一标识
+            }
             else
             {
                 Config.console("系统开发中！");
@@ -301,7 +347,8 @@ namespace CxjText.utlis
                     return true;
                 }
             }
-            else if (userInfo.tag.Equals("I")) {
+            else if (userInfo.tag.Equals("I"))
+            {
 
             }
             else if (userInfo.tag.Equals("U"))
@@ -312,6 +359,14 @@ namespace CxjText.utlis
             {
                 String nameH = (String)jObject["nameH"];
                 String nameG = (String)jObject["nameG"];
+                if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
+                {
+                    return true;
+                }
+            }
+            else if (userInfo.tag.Equals("K")) {
+                String nameH = (String)jObject["team_h"];
+                String nameG = (String)jObject["team_c"];
                 if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
                 {
                     return true;

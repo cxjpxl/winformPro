@@ -623,6 +623,7 @@ namespace CxjText.utlis
 
             }
             jObject.Add("list", jArray);
+            Console.WriteLine(jObject.ToString());
             return jObject.ToString();
         }
 

@@ -45,6 +45,12 @@ namespace CxjText.utlis
                         c00 = (String)jObjectG["Match_Name"];
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        c00 = (String)jObjectK["league"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -122,6 +128,13 @@ namespace CxjText.utlis
                     }
                     time = time + "\n" + (String)jObjectG["Match_NowScore"];
                     break;
+                case "K":
+                    JObject jObjectK = (JObject)obj;
+                    time = (String)jObjectK["datetime"];
+                    time = time.Replace("<br>", "\n");
+                    time = FormUtils.changeHtml(time);
+                    time = time.Replace("Running Ball", "滚球");
+                    break;
                 default:
                     break;
             }
@@ -157,6 +170,10 @@ namespace CxjText.utlis
                 case "G":
                     JObject jObjectG = (JObject)obj;
                     c02 = (String)jObjectG["Match_Master"];
+                    break;
+                case "K":
+                    JObject jObjectK = (JObject)obj;
+                    c02 = (String)jObjectK["team_h"];
                     break;
                 default:
                     break;
@@ -214,6 +231,14 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_MH = (String)jObjectK["ior_MH"];
+                        c03 = ior_MH;
+                        break;
+
+                    }
                 default:
                     break;
             }
@@ -241,7 +266,7 @@ namespace CxjText.utlis
                         {
                             rgg1 = (String)jObjectB["Match_RGG"];
                         }
-                         c04 = rgg1 + " " + Match_Ho;
+                        c04 = rgg1 + " " + Match_Ho;
                         if (c04.Trim().Equals("0"))
                         {
                             c04 = "";
@@ -314,10 +339,31 @@ namespace CxjText.utlis
                         {
                             rgg1 = (String)jObjectG["Match_RGG"];
                         }
-                         c04 = rgg1 + " " + Match_Ho;
+                        c04 = rgg1 + " " + Match_Ho;
                         if (c04.Trim().Equals("0"))
                         {
                             c04 = "";
+                        }
+                        break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_RH = (String)jObjectK["ior_RH"];
+                        String strong = (String)jObjectK["strong"];
+                        String ratio = (String)jObjectK["ratio"];
+                        if (String.IsNullOrEmpty(ior_RH) || String.IsNullOrEmpty(strong))
+                        {
+                            c04 = "";
+                        }
+                        else {
+                            if (strong.Equals("H"))
+                            {
+                                c04 = ratio.Replace(" ","") + " " + ior_RH;
+                            }
+                            else {
+                                c04 = ior_RH;
+                            }
                         }
                         break;
                     }
@@ -401,6 +447,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ratio_o = (String)jObjectK["ratio_o"];
+                        String ior_OUC = (String)jObjectK["ior_OUC"];
+                        if (String.IsNullOrEmpty(ratio_o) || String.IsNullOrEmpty(ior_OUC))
+                        {
+                            c05 = "";
+                        }
+                        else {
+                            ratio_o = ratio_o.Replace(" ","");
+                            
+                            c05 = ratio_o + " " + ior_OUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -453,6 +515,14 @@ namespace CxjText.utlis
                         c06 = (String)jObjectG["Match_Bmdy"];
                         if (String.IsNullOrEmpty(c06) || c06.Equals("0")) c06 = "";
                         break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_HMH = (String)jObjectK["ior_HMH"];
+                        c06 = ior_HMH;
+                        break;
+
                     }
                 default:
                     break;
@@ -575,6 +645,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_HRH = (String)jObjectK["ior_HRH"];
+                        String hstrong = (String)jObjectK["hstrong"];
+                        String hratio = (String)jObjectK["hratio"];
+                        if (String.IsNullOrEmpty(ior_HRH) || String.IsNullOrEmpty(hstrong))
+                        {
+                            c07 = "";
+                        }
+                        else
+                        {
+                            if (hstrong.Equals("H"))
+                            {
+                                c07 = hratio.Replace(" ", "") + " " + ior_HRH;
+                            }
+                            else
+                            {
+                                c07 = ior_HRH;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -660,6 +753,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String hratio_o = (String)jObjectK["hratio_o"];
+                        String ior_HOUC = (String)jObjectK["ior_HOUC"];
+                        if (String.IsNullOrEmpty(hratio_o) || String.IsNullOrEmpty(ior_HOUC))
+                        {
+                            c08 = "";
+                        }
+                        else
+                        {
+                            hratio_o = hratio_o.Replace(" ", "");
+                            c08 = hratio_o + " " + ior_HOUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -706,6 +815,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectG = (JObject)obj;
                         c12 = (String)jObjectG["Match_Guest"]; //球队名称
+                        break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        c12 = (String)jObjectK["team_c"]; //球队名称
                         break;
                     }
                 default:
@@ -760,6 +875,14 @@ namespace CxjText.utlis
                         String Match_BzG = (String)jObjectG["Match_BzG"];
                          c13 = Match_BzG.Trim().Equals("0") ? "" : Match_BzG;
                         break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_MC = (String)jObjectK["ior_MC"];
+                        c13 = ior_MC;
+                        break;
+
                     }
                 default:
                     break;
@@ -868,6 +991,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_RC = (String)jObjectK["ior_RC"];
+                        String strong = (String)jObjectK["strong"];
+                        String ratio = (String)jObjectK["ratio"];
+                        if (String.IsNullOrEmpty(ior_RC) || String.IsNullOrEmpty(strong))
+                        {
+                            c14 = "";
+                        }
+                        else
+                        {
+                            if (strong.Equals("C"))
+                            {
+                                c14 = ratio.Replace(" ", "") + " "+ior_RC;
+                            }
+                            else
+                            {
+                                c14 = ior_RC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -948,6 +1094,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ratio_u = (String)jObjectK["ratio_u"];
+                        String ior_HRH = (String)jObjectK["ior_HRH"];
+                        if (String.IsNullOrEmpty(ratio_u) || String.IsNullOrEmpty(ior_HRH))
+                        {
+                            c15 = "";
+                        }
+                        else
+                        {
+                            ratio_u = ratio_u.Replace(" ", "");
+                            c15 = ratio_u + " " + ior_HRH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1000,6 +1162,14 @@ namespace CxjText.utlis
                         c16 = (String)jObjectG["Match_Bgdy"];
                         if (String.IsNullOrEmpty(c16) || c16.Equals("0")) c16 = "";
                         break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_HMC = (String)jObjectK["ior_HMC"];
+                        c16 = ior_HMC;
+                        break;
+
                     }
                 default:
                     break;
@@ -1123,6 +1293,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_HRC = (String)jObjectK["ior_HRC"];
+                        String hstrong = (String)jObjectK["hstrong"];
+                        String hratio = (String)jObjectK["hratio"];
+                        if (String.IsNullOrEmpty(ior_HRC) || String.IsNullOrEmpty(hstrong))
+                        {
+                            c17 = "";
+                        }
+                        else
+                        {
+                            if (hstrong.Equals("C"))
+                            {
+                                c17 = hratio.Replace(" ", "") + " " + ior_HRC;
+                            }
+                            else
+                            {
+                                c17 = ior_HRC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1209,6 +1402,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String hratio_u = (String)jObjectK["hratio_u"];
+                        String ior_HOUH = (String)jObjectK["ior_HOUH"];
+                        if (String.IsNullOrEmpty(hratio_u) || String.IsNullOrEmpty(ior_HOUH))
+                        {
+                            c18 = "";
+                        }
+                        else
+                        {
+                            hratio_u = hratio_u.Replace(" ", "");
+                            c18 = hratio_u + " " + ior_HOUH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1269,6 +1478,14 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_MN = (String)jObjectK["ior_MN"];
+                        c23 = ior_MN;
+                        break;
+
+                    }
                 default:
                     break;
             }
@@ -1321,6 +1538,14 @@ namespace CxjText.utlis
                         c26 = (String)jObjectG["Match_Bhdy"];
                         if (String.IsNullOrEmpty(c26) || c26.Equals("0")) c26 = "";
                         break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        String ior_HMN = (String)jObjectK["ior_HMN"];
+                        c26 = ior_HMN;
+                        break;
+
                     }
                 default:
                     break;
@@ -1445,6 +1670,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectG = (JObject)obj;
                          mid = (String)jObjectG["Match_ID"];
+                        break;
+                    }
+                case "K":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        mid = (String)jObjectK["gid"];
                         break;
                     }
                 default:
