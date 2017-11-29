@@ -460,6 +460,7 @@ namespace CxjText.utlis
             //page是由0开始
             String uid = "";
             JObject headJObject = new JObject();
+            CookieContainer cookie = userInfo.cookie;
             if (userInfo.status == 2)
             {
                 uid = userInfo.uid;
@@ -468,10 +469,11 @@ namespace CxjText.utlis
                 headJObject["Host"] = userInfo.baseUrl;
                 headJObject["Referer"] = userInfo.dataUrl;
                 String getUidUrl = userInfo.dataUrl + "/app/member/";
-                if (userInfo.cookie == null) {
-                    userInfo.cookie = new CookieContainer();
+                if (userInfo.cookie1 == null) {
+                    userInfo.cookie1 = new CookieContainer();
                 }
-                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl,"",userInfo.cookie,headJObject);
+                cookie = userInfo.cookie1;
+                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl,"", userInfo.cookie1, headJObject);
                 if (String.IsNullOrEmpty(uidRlt)) return null;
                 if (!uidRlt.Contains("uid=")) {
                     return null;
@@ -481,7 +483,7 @@ namespace CxjText.utlis
             }
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&page_no=0&league_id=";
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&delay=&showtype=3";
-            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.cookie, headJObject);
+            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
             if (String.IsNullOrEmpty(dataRlt)) return null;
             if (!dataRlt.Contains("parent.GameHead")) return null;
             JObject jObject = new JObject();
@@ -561,7 +563,7 @@ namespace CxjText.utlis
             for (int page = 1; page < t_page; page++) {
                 String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&page_no="+page+"&league_id=";
                 headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&delay=&showtype=3";
-                dataRlt = HttpUtils.HttpGetHeader(pageUrl, "", userInfo.cookie, headJObject);
+                dataRlt = HttpUtils.HttpGetHeader(pageUrl, "", cookie, headJObject);
                 if (String.IsNullOrEmpty(dataRlt)) continue; ;
                 if (!dataRlt.Contains("parent.GameHead")) continue; ;
                
@@ -623,7 +625,7 @@ namespace CxjText.utlis
 
             }
             jObject.Add("list", jArray);
-            Console.WriteLine(jObject.ToString());
+            //Console.WriteLine(jObject.ToString());
             return jObject.ToString();
         }
 

@@ -190,6 +190,33 @@ namespace CxjText.utlis
             user.exp = token;
             return 1;
         }
+        //获取K的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetKMoney(UserInfo user)
+        {
+            String uid = user.uid;
+            if (String.IsNullOrEmpty(uid))
+            {
+                return -1;
+            }
+            String moneyUrl = user.dataUrl + "/app/member/ref_money.php?uid="+uid+"&langx=zh-cn";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl ;
+            headJObject["Referer"] = user.dataUrl + "/app/member/index.php?mtype=3&uid=" + uid + "&langx=zh-cn";
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + uid + "&langx=zh-cn", "application/x-www-form-urlencoded",user.cookie,headJObject);
+            if (String.IsNullOrEmpty(moneyRlt)) {
+                return 0;
+            }
+            try
+            {
+                float.Parse(moneyRlt);
+            }
+            catch (Exception e) {
+                return 0;
+            }
+            user.money = moneyRlt;
+            return 1;
+        }
 
     }
 }

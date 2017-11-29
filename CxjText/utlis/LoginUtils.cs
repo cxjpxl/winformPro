@@ -31,6 +31,8 @@ namespace CxjText.utlis
                 case "G": 
                    // timeOffest = 1000 * 60 * 29;
                     break;
+                case "K":
+                    break;
                 default:
                     return false;
             }
@@ -958,6 +960,143 @@ namespace CxjText.utlis
             }
 
         }
+        /**************************K系统登录的处理****************************/
+        public static void loginK(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
 
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String codeUrl = userInfo.loginUrl + "/app/member/mkcode.php?" + FormUtils.getCurrentTime();
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new System.Net.CookieContainer();
+            }
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl+"/app/member/";
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //获取uid用于登录
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl;
+            String getUidUrl = userInfo.dataUrl + "/app/member/";
+            String uidRlt = HttpUtils.HttpGetHeader(getUidUrl, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(uidRlt)||!uidRlt.Contains("uid=")) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            int start = uidRlt.IndexOf("uid=");
+            String uid = uidRlt.Substring(start + 4, 23);
+
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl+ "/app/member/";
+            headJObject["Origin"] = userInfo.dataUrl;
+            String loginUrl = userInfo.dataUrl + "/app/member/login.php?code=first";
+            //获取登录的系统参数 
+            String paramsStr = "uid="+uid+"&langx=zh-cn&username="+userInfo.user+"&password="+userInfo.pwd+"&code="+ codeStrBuf .ToString()+ "&Submit="+ WebUtility.UrlEncode("登录");
+
+            String loginRlt = HttpUtils.HttpPostHeader(loginUrl,paramsStr, "application/x-www-form-urlencoded", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(loginRlt) || !loginRlt.Contains("top.uid = ")) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            Console.WriteLine(loginRlt);
+            String[] strs = loginRlt.Split('\n');
+            if (strs.Length == 0) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (str.Contains("top.uid = ")) {
+                    uid = str.Replace("top.uid = ", "").Replace(" ", "").Replace("'", "").Replace(";","").Trim();
+                    break;
+                }
+            }
+            
+            //获取uid
+            userInfo.uid = uid;
+            //获取money 
+            int moneyStatus = MoneyUtils.GetKMoney(userInfo);
+            if (moneyStatus != 1) {
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            userInfo.updateMoneyTime = userInfo.loginTime;
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            return;
+        }
     }
 }
