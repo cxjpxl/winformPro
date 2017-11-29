@@ -370,6 +370,9 @@ namespace CxjText.views
                     case "G":
                         orderParmas = rltStr + "&uid=" + user.uid + "&token=" + user.exp;
                         break;
+                    case "K":
+                        orderParmas = rltStr + "&uid=" + user.uid;
+                        break;
                     default:
                         continue;
                 }
@@ -411,10 +414,16 @@ namespace CxjText.views
                     jObject["money"] = user.inputMoney;
                     jObject["rString"] = dataJObject["rString"];
                 }
-                else if (user.tag.Equals("R")) {
+                else if (user.tag.Equals("R"))
+                {
                     jObject["money"] = user.inputMoney;
-                } else if (user.tag.Equals("G")) {
+                }
+                else if (user.tag.Equals("G"))
+                {
                     jObject["money"] = user.inputMoney;
+                }
+                else if (user.tag.Equals("K")) {
+                    jObject["reqUrl"] = dataJObject["reqUrl"];
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -456,6 +465,8 @@ namespace CxjText.views
                         break;
                     case "G":
                         OrderUtils.OrderG(jobject, this, loginForm, rltForm);
+                        break;
+                    case "K":
                         break;
                     default:
                         return;
