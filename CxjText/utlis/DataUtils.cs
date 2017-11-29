@@ -1098,7 +1098,7 @@ namespace CxjText.utlis
                     {
                         JObject jObjectK = (JObject)obj;
                         String ratio_u = (String)jObjectK["ratio_u"];
-                        String ior_HRH = (String)jObjectK["ior_HRH"];
+                        String ior_HRH = (String)jObjectK["ior_OUH"];
                         if (String.IsNullOrEmpty(ratio_u) || String.IsNullOrEmpty(ior_HRH))
                         {
                             c15 = "";
