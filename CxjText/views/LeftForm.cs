@@ -424,6 +424,7 @@ namespace CxjText.views
                 }
                 else if (user.tag.Equals("K")) {
                     jObject["reqUrl"] = dataJObject["reqUrl"];
+                    jObject["money"] = user.inputMoney;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -467,6 +468,7 @@ namespace CxjText.views
                         OrderUtils.OrderG(jobject, this, loginForm, rltForm);
                         break;
                     case "K":
+                        OrderUtils.OrderK(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

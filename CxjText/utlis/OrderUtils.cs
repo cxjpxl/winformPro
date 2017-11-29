@@ -925,5 +925,135 @@ namespace CxjText.utlis
                 }));
             }
         }
+        //K下单
+        public static void OrderK(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+            
+            String reqUrl = (String)jobject["reqUrl"];//请求连接地址
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid="+ user.uid + "&langx=zh-cn";
+            String betUrl = user.dataUrl + "/app/member/FT_order/"+reqUrl+"?"+ parmsStr;
+            String betRlt = HttpUtils.HttpGetHeader(betUrl,"",user.cookie,headJObject);
+            if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("确定交易")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "构建订单失败");
+                    }
+                }));
+                return;
+            }
+            //解析订单
+            String[] strs = betRlt.Split('\n');
+            String orderPrams = "";
+            String gmin_single = "";
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
+                { //找到input字段
+                    //获取name的值
+                    int nameIndex = str.IndexOf("name=\"");
+                    String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
+                    nameIndex = str1.IndexOf('"');
+                    String nameKey = str1.Substring(0, nameIndex);
+                    str1 = str1.Substring(nameIndex, str1.Length - nameIndex);
+                    nameIndex = str1.IndexOf("value=\"");
+                    str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
+                    nameIndex = str1.IndexOf('"');
+                    String valueStr = str1.Substring(0, nameIndex);
+
+                    if (nameKey.Equals("gmin_single"))
+                    {
+                        gmin_single = valueStr;
+                    }
+                    //数据解析出来
+                    orderPrams = orderPrams + nameKey + "=" + valueStr + "&";
+                }
+            }
+
+            if (String.IsNullOrEmpty(orderPrams))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+        
+            try
+            {
+                int minMoney = int.Parse(gmin_single);
+                if (minMoney > money)
+                {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "输入金额太小");
+                        }
+                    }));
+                    return;
+                }
+            }
+            catch (SystemException e)
+            {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            orderPrams = orderPrams + "gold=" + money;
+            String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_finish.php";
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "?"+parmsStr;
+            String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(rlt);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("交易成功单号")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetKMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+        }
     }
 }
