@@ -1024,7 +1024,6 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "?"+parmsStr;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("交易成功单号")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)

@@ -140,6 +140,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectG, tag);
                         obj = jObjectG;
                         break;
+                    case "K":
+                        JObject jObjectK = (JObject)jArray[i];
+                        lianSai = (String)jObjectK["league"];
+                        hStr = (String)jObjectK["team_h"];
+                        gStr = (String)jObjectK["team_c"];
+                        mid = DataUtils.getMid(jObjectK, tag);
+                        obj = jObjectK;
+                        break;
                     default:
                         return null;
 
