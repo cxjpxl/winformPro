@@ -1061,7 +1061,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            Console.WriteLine(loginRlt);
             String[] strs = loginRlt.Split('\n');
             if (strs.Length == 0) {
                 userInfo.status = 3;

@@ -14,6 +14,7 @@ namespace CxjText.utlis
         private bool isError = false;
         private int contentStatus = 0; //0未连接  1连接成功  2连接中
         private LoginFormInterface inface = null;
+        private long time = FormUtils.getCurrentTime();
         public WebSocketUtils(String uri)
         {
             this.uri = uri;
@@ -29,17 +30,34 @@ namespace CxjText.utlis
             if (isFinish) return;
             if (isError) return;
             if (contentStatus!=1) return;
-            try
-            {
-                if (webSocket.Ping())
+
+
+            if (FormUtils.getCurrentTime() - time > 5 * 1000 * 60)
+            { //5分钟没有收到数据
+                contentStatus = 0;
+                isError = true;
+                if (webSocket != null)
                 {
-                    //  byte[] array = Encoding.UTF8.GetBytes(message);
-                    //  webSocket.Send(array);
-                    Console.WriteLine("发送成功");
+                    webSocket.Close();
                 }
-                else {
+                else
+                {
+                    socketInit();
+                }
+                return;
+            }
+            else {
+
+                try
+                {
+
+                    byte[] array = Encoding.UTF8.GetBytes(message);
+                    webSocket.Send(array);
+                }
+                catch (Exception e)
+                {
                     contentStatus = 0;
-                   
+
                     isError = true;
                     if (webSocket != null)
                     {
@@ -49,21 +67,9 @@ namespace CxjText.utlis
                     {
                         socketInit();
                     }
+
                 }
-              
-            }
-            catch (Exception e) {
-                contentStatus = 0;
-               
-                isError = true;
-                if (webSocket != null)
-                {
-                    webSocket.Close();
-                }
-                else {
-                    socketInit();
-                }
-               
+
             }
         }
 
@@ -73,15 +79,8 @@ namespace CxjText.utlis
             try
             {
                 if (isFinish) return;
-                 webSocket = null;
-                /* if (webSocket != null)
-                 {
-                     webSocket.Close();
-                     webSocket = null;
-
-                 }*/
+                webSocket = null;
                 webSocket = new WebSocket(uri);
-                webSocket.ConnectAsync();
                 contentStatus = 2;
                 isError = false;
                 webSocket.OnOpen += (ss, ee) => {
@@ -111,8 +110,20 @@ namespace CxjText.utlis
                     if (isFinish) return;
                     isError = false;
                     contentStatus = 1;
+
+                    String message = ee.Data;
+                   
+                    if (message == null || message.Equals("11")) { //服务器回调信号
+                        if (message.Equals("11")) {
+                            time = FormUtils.getCurrentTime();
+                            Console.WriteLine("time:"+ time);
+                        }
+                        return;
+                    }
+
+
                     if (this.inface != null) {
-                        this.inface.OnWebSocketMessAge(ee.Data);
+                        this.inface.OnWebSocketMessAge(message);
                     }
                 };
 
@@ -127,6 +138,7 @@ namespace CxjText.utlis
                         socketInit();
                     }
                 };
+                webSocket.ConnectAsync();
             }
             catch (Exception e)
             {
