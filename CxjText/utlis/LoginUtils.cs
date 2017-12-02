@@ -454,7 +454,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -462,7 +463,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.status = 3;
@@ -493,7 +494,6 @@ namespace CxjText.utlis
             String paramsStr = "username=" + userInfo.user + "&userpassword=" + userInfo.pwd + "&code=" + codeStrBuf.ToString();
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/login";
-            JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl+ "/home";

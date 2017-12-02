@@ -103,8 +103,12 @@ namespace CxjText.utlis
         {
             String uid = userInfo.uid;
             if (String.IsNullOrEmpty(uid)) uid = "";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            // headJObject["Origin"] = userInfo.dataUrl;
+           // headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
-            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+            String rlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null,headJObject);
             List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)||!rlt.Contains("t_page")) return null;
             String[] rltLine = rlt.Split('\n');
