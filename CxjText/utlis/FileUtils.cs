@@ -45,8 +45,18 @@ namespace CxjText.utlis
                     String user = strs[1];//用户
                     String pwd = strs[2];//密码
                     String baseUrl = strs[3];//网址
-                    String loginUrl = strs[4];//登录的链接地址
-                    String dataUrl = strs[5]; //获取数据的接口
+                    String loginUrl = strs[3];//登录的链接地址 
+                    String dataUrl = strs[3]; //获取数据的接口
+                    if (tag.Equals("A"))
+                    {
+                        if (strs.Length >= Config.pramsNum + 1)
+                        {
+                            dataUrl = strs[strs.Length -1]; //下单接口
+                        }
+                        else {
+                            continue;
+                        }
+                    }
 
 
                     if (baseUrl.Contains("http://")) {
@@ -87,6 +97,7 @@ namespace CxjText.utlis
                     {
                         dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
                     }
+
                     //R系统要特殊处理下
                     if (!dataUrl.Contains("www.") && tag.Equals("R"))
                     {
@@ -130,9 +141,9 @@ namespace CxjText.utlis
                     userInfo.tag = tag;
                     userInfo.user = user;
                     userInfo.pwd = pwd;
-                    userInfo.baseUrl = baseUrl;
-                    userInfo.loginUrl = loginUrl;
-                    userInfo.dataUrl = dataUrl;
+                    userInfo.baseUrl = baseUrl.Trim();
+                    userInfo.loginUrl = loginUrl.Trim();
+                    userInfo.dataUrl = dataUrl.Trim();
                     userInfo.loginTime = FormUtils.getCurrentTime();
                     userInfo.updateMoneyTime = userInfo.loginTime;
                     if (tag.Equals("A"))

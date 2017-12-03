@@ -509,6 +509,8 @@ namespace CxjText.views
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
 
+            
+
             Console.WriteLine("联赛:" + lianSai + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +
@@ -529,9 +531,12 @@ namespace CxjText.views
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
             }
-   
-            
 
+
+            if (lianSai.Contains("英格兰") || lianSai.Contains("苏格兰") || lianSai.Contains("球会友谊"))
+            {
+                return;
+            }
 
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];

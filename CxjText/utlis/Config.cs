@@ -13,7 +13,7 @@ namespace CxjText.utils
         //不包含admin  只能使用配置网址
         public static String softUserStr = "admin";
         public static long softTime = -1; //软件使用时间记录
-        public static String urls = "www.y39666.com" + "\t"+
+        public static String urls = "www.80088hg.com" + "\t"+
                                     ""+"\t"+
                                     "";
         public static bool canOrder = true; //是否可以下单  正式版本是true
@@ -33,7 +33,7 @@ namespace CxjText.utils
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
 
         //用户配置登录数据结构
-        public static int pramsNum = 6; //参数个数
+        public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
 
 

@@ -155,6 +155,13 @@ namespace CxjText.utlis
                     return 0;
                 }
             }
+            try
+            {
+                float moneyf = float.Parse(moneyStr);
+            }
+            catch (Exception e) {
+                return 0;
+            }
             userInfo.money = moneyStr;
             return 1;
         }

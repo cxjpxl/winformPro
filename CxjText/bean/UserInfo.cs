@@ -15,8 +15,7 @@ namespace CxjText.bean
         public String pwd = "";//用户密码
         public String baseUrl = "";//用户网址
         public String loginUrl = "";//登录使用接口前缀
-        public String dataUrl = "";//获取数据的接口 订单下单接口
-
+        public String dataUrl = "";//获取数据的接口 
 
         public String uid = "";
         public String exp = "";
