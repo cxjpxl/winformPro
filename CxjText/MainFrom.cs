@@ -247,11 +247,11 @@ namespace CxjText
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
-                    speechSynthesizer.Rate = 6;
                     if (info.Contains("Cancelled"))
                     {
                         speakStr = "点球取消";
                     }
+                    speechSynthesizer.Rate = 3;
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
 
