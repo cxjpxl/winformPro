@@ -133,6 +133,8 @@ namespace CxjText.utlis
                     }
                 }
             }
+          
+
             //分页继续解析数据
             for (int i = 1; i < t_page; i++) {
                 String pageUrl  = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+i+"&league_id=&hot_game=";
@@ -141,7 +143,8 @@ namespace CxjText.utlis
                 String[] pageRltLine = pageRlt.Split('\n');
                 if (pageRltLine.Length == 0) continue;
                 for (int j = 0; j < pageRltLine.Length; j++) {
-                    String lineStr = pageRltLine[i].Trim();
+                    String lineStr = pageRltLine[j].Trim();
+               
                     if (lineStr.Contains("g(") && !lineStr.Contains("//"))
                     {
                         String arrayString = lineStr.Substring(2, lineStr.Length - 4);
@@ -645,7 +648,6 @@ namespace CxjText.utlis
 
             }
             jObject.Add("list", jArray);
-            //Console.WriteLine(jObject.ToString());
             return jObject.ToString();
         }
 
