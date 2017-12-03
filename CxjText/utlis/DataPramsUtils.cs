@@ -501,8 +501,8 @@ namespace CxjText.utlis
                 int start = uidRlt.IndexOf("uid=");
                 uid = uidRlt.Substring(start + 4, 23);
             }
-            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&page_no=0&league_id=";
-            headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&delay=&showtype=3";
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=";
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
             String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
             if (String.IsNullOrEmpty(dataRlt)) return null;
             if (!dataRlt.Contains("parent.GameHead")) return null;
@@ -562,7 +562,7 @@ namespace CxjText.utlis
                     continue;
                 }
                 //获取滚球的数据
-                if (str.Contains("parent.GameFT") && headJArray != null && str.Contains("Running Ball")) {
+                if (str.Contains("parent.GameFT")) {
                     int arrayStart = str.IndexOf("Array(");
                     if (arrayStart < 0) continue;
                     String dataStr = str.Substring(arrayStart, str.Length - arrayStart);
@@ -581,8 +581,8 @@ namespace CxjText.utlis
             }
 
             for (int page = 1; page < t_page; page++) {
-                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&page_no="+page+"&league_id=";
-                headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=r&langx=zh-cn&mtype=3&delay=&showtype=3";
+                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+page+"&league_id=";
+                headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
                 dataRlt = HttpUtils.HttpGetHeader(pageUrl, "", cookie, headJObject);
                 if (String.IsNullOrEmpty(dataRlt)) continue; ;
                 if (!dataRlt.Contains("parent.GameHead")) continue; ;
@@ -606,7 +606,7 @@ namespace CxjText.utlis
                     { //先解析头部
                         String[] dataStrs = str.Split(';');
                         //获取滚球的数据
-                        if (dataStrs.Length > 1 && dataStrs[1].Contains("parent.GameFT") && dataStrs[1].Contains("Running Ball"))
+                        if (dataStrs.Length > 1 && dataStrs[1].Contains("parent.GameFT"))
                         {
                             String data0Str = dataStrs[1];
                             data0Str = data0Str.Replace(")", "]");

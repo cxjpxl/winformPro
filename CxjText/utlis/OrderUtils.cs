@@ -943,7 +943,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid="+ user.uid + "&langx=zh-cn";
-            String betUrl = user.dataUrl + "/app/member/FT_order/"+reqUrl+"?"+ parmsStr;
+            String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl+"?"+ parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl,"",user.cookie,headJObject);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("确定交易")) {
                 leftForm.Invoke(new Action(() => {
@@ -1021,17 +1021,24 @@ namespace CxjText.utlis
                 return;
             }
             orderPrams = orderPrams + "gold=" + money;
-            String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_finish.php";
+            String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_re_finish.php";
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
-            headJObject["Referer"] = user.dataUrl + "?"+parmsStr;
+            headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("交易成功单号")) {
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "下单失败");
+                        if (!String.IsNullOrEmpty(rlt) && rlt.Contains("赛程已关闭"))
+                        {
+                            rltForm.RefershLineData(inputTag, "赛程已关闭");
+                        }
+                        else {
+                            rltForm.RefershLineData(inputTag, "下单失败");
+                        }
+                        
                     }
                 }));
                 return;

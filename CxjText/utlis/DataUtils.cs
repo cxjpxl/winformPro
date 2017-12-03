@@ -130,10 +130,9 @@ namespace CxjText.utlis
                     break;
                 case "K":
                     JObject jObjectK = (JObject)obj;
-                    time = (String)jObjectK["datetime"];
-                    time = time.Replace("<br>", "\n");
+                    time = (String)jObjectK["timer"];
                     time = FormUtils.changeHtml(time);
-                    time = time.Replace("Running Ball", "滚球");
+                    time = time + "\n" + jObjectK["score_h"] +":"+ jObjectK["score_c"];
                     break;
                 default:
                     break;
