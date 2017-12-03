@@ -32,7 +32,7 @@ namespace CxjText.utlis
             if (contentStatus!=1) return;
 
 
-            if (FormUtils.getCurrentTime() - time > 5 * 1000 * 60)
+            if (FormUtils.getCurrentTime() - time > 1000 * 60) //1分钟收不到立马重连
             { //5分钟没有收到数据
                 contentStatus = 0;
                 isError = true;
