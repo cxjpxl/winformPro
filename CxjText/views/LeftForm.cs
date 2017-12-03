@@ -169,7 +169,7 @@ namespace CxjText.views
                 //系统更改 修改1
                 JArray rltJArray = RltDataUtils.explandRlt(userInfo, rltJObject);
                 //系统更改 修改2
-                this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJObject);//原始数据
+                this.dataJArray = RltDataUtils.getRltJArray(userInfo, rltJArray);//原始数据
                 if (rltJArray == null || rltJArray.Count == 0) {
                     this.nameShowGridView.CurrentCell = null;
                     this.selectFlag = "";
