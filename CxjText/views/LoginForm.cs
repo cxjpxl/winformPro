@@ -360,7 +360,9 @@ namespace CxjText.views
                     case "R":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
                         {
-                           
+                            Console.WriteLine("---------------------------");
+                            Console.WriteLine("R准备登陆");
+                             Console.WriteLine("---------------------------");
                             userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;

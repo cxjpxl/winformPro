@@ -535,6 +535,78 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             int money = (int)jobject["money"];
 
+            JObject headJObject = new JObject();
+            /*获取UA*/
+            String UaUrl = user.dataUrl + "/cl/index1.aspx?method=Sunplus";
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Referer"] = user.dataUrl + "/cl/index.aspx";
+            String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(uaRlt) || !uaRlt.Contains("UA="))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "UA地址失败");
+                    }
+                }));
+                return;
+            }
+            String newCookieUrl = "";
+            String[] htmls = uaRlt.Split('\n');
+            for (int i = 0; i < htmls.Length; i++)
+            {
+                String htmlStr = htmls[i].Trim();
+                if (htmlStr.Contains("UA=") && htmlStr.Contains("src=\""))
+                {
+                    int start1 = htmlStr.IndexOf("src=\"") + 5;
+                    htmlStr = htmlStr.Substring(start1, htmlStr.Length - start1);
+                    String[] usrls = htmlStr.Split('"');
+                    newCookieUrl = usrls[0];
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(newCookieUrl))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "cookie地址解析失败");
+                    }
+                }));
+                return;
+            }
+
+            //url处理
+            if (!newCookieUrl.Contains("mkt."))
+            {
+                if (newCookieUrl.Contains("http://"))
+                {
+                    newCookieUrl = "http://" + "mkt." + newCookieUrl.Substring(7, newCookieUrl.Length - 7);
+                }
+                else if (newCookieUrl.Contains("https://"))
+                {
+                    newCookieUrl = "https://" + "mkt." + newCookieUrl.Substring(8, newCookieUrl.Length - 8);
+                }
+                else
+                {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "mkt地址解析失败");
+                        }
+                    }));
+                    return;
+                }
+            }
+      
+            //mkt访问
+            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = user.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
+            headJObject["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+            String mktUrl = newCookieUrl;
+            HttpUtils.HttpGetHeader(mktUrl, "", user.cookie, headJObject);
+            /***************************************************/
+            headJObject = new JObject();
             String[] parms = parmsStr.Split(',');
             if (parms.Length != 4) {
                 leftForm.Invoke(new Action(() => {
@@ -546,7 +618,6 @@ namespace CxjText.utlis
                 return;
             }
 
-            JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = user.dataUrl.Replace("www", "mkt");
             String url1 = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime();
@@ -605,7 +676,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "下单失败");
+                        rltForm.RefershLineData(inputTag, "拼建订单接口失败");
                     }
                 }));
                 return;
@@ -687,14 +758,13 @@ namespace CxjText.utlis
             parmsJArray.Add(orderJObject);
             String orderUrl = user.dataUrl.Replace("www", "mkt") + "/home/submit";
             String ordetRltStr = HttpUtils.HttpPostHeader(orderUrl, parmsJArray.ToString(), "application/json; charset=UTF-8", user.cookie, headJObject);
-
             if (String.IsNullOrEmpty(ordetRltStr)
                 || !FormUtils.IsJsonObject(ordetRltStr)) {
 
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "下单失败");
+                        rltForm.RefershLineData(inputTag, "下单接口失败");
                     }
                 }));
                 return;

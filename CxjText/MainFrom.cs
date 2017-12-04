@@ -9,6 +9,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
+using SpeechLib;
 
 namespace CxjText
 {
@@ -21,6 +22,7 @@ namespace CxjText
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+        //private SpVoice voice = null;//SAPI 5.4  
 
 
         public MainFrom()
@@ -43,6 +45,19 @@ namespace CxjText
             this.upDateTimer.Start(); //启动定时任务器
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
+          /*  try
+            {
+                voice = new SpVoice();
+                voice.Rate = 3;
+                voice.GetVoices(string.Empty, string.Empty).Item(0);
+                voice.Speak("aaaaa", SpeechVoiceSpeakFlags.SVSFlagsAsync);
+            }
+            catch (Exception e1) {
+                Console.WriteLine(e1.ToString());
+
+            }*/
+         
+
         }
 
         private void ViewInit()

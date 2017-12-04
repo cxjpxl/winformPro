@@ -576,7 +576,6 @@ namespace CxjText.utlis
             int status = userInfo.status;
             if (status == -1 || status == 1) return;
 
-
             if (status == 2) //状态是登录状态  要退出登录
             {
                 userInfo.status = 0;
@@ -589,7 +588,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
             int preStatus = status;
             userInfo.status = 1; //请求中 要刷新UI
             loginForm.Invoke(new Action(() =>
@@ -607,7 +605,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -641,7 +638,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
             //获取登录的系统参数 
             String paramsStr = "uid2=guest&SS=&SR=&TS=&act=login&username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&rmNum=" + codeStrBuf.ToString();
             //获取登录的链接地址
@@ -680,7 +676,6 @@ namespace CxjText.utlis
             userInfo.uid = uid;
             //获取别的数据
 
-            
             //获取UA
             //String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus&other=header";
             String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
@@ -697,7 +692,6 @@ namespace CxjText.utlis
             }
 
 
-
             String newCookieUrl = "";
             String[] htmls = uaRlt.Split('\n');
             for (int i= 0; i < htmls.Length; i++) {
@@ -710,7 +704,6 @@ namespace CxjText.utlis
                     break;
                 }
             }
-
             if (String.IsNullOrEmpty(newCookieUrl)) {
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
@@ -739,14 +732,12 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            
             //mkt访问
             headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
-            headJObject["Accept"] = "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+            headJObject["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
             String mktUrl = newCookieUrl;
             HttpUtils.HttpGetHeader(mktUrl, "", userInfo.cookie, headJObject);
-            
 
             //获取钱
             int moneyStatus = MoneyUtils.GetRMoney(userInfo);
