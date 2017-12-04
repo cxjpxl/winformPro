@@ -9,7 +9,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
-using SpeechLib;
+
 
 namespace CxjText
 {
@@ -22,7 +22,7 @@ namespace CxjText
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-        //private SpVoice voice = null;//SAPI 5.4  
+       // private SpVoice voice = null;//SAPI 5.4  
 
 
         public MainFrom()
