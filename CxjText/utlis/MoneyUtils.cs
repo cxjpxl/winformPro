@@ -130,6 +130,60 @@ namespace CxjText.utlis
         {
             //获取钱的处理
             JObject headJObject = new JObject();
+
+
+
+            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
+            String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(uaRlt) || !uaRlt.Contains("UA="))
+            {
+                return 0;
+            }
+            String newCookieUrl = "";
+            String[] htmls = uaRlt.Split('\n');
+            for (int i = 0; i < htmls.Length; i++)
+            {
+                String htmlStr = htmls[i].Trim();
+                if (htmlStr.Contains("UA=") && htmlStr.Contains("src=\""))
+                {
+                    int start1 = htmlStr.IndexOf("src=\"") + 5;
+                    htmlStr = htmlStr.Substring(start1, htmlStr.Length - start1);
+                    String[] usrls = htmlStr.Split('"');
+                    newCookieUrl = usrls[0];
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(newCookieUrl))
+            {
+                return 0;
+            }
+
+            //url处理
+            if (!newCookieUrl.Contains("mkt."))
+            {
+                if (newCookieUrl.Contains("http://"))
+                {
+                    newCookieUrl = "http://" + "mkt." + newCookieUrl.Substring(7, newCookieUrl.Length - 7);
+                }
+                else if (newCookieUrl.Contains("https://"))
+                {
+                    newCookieUrl = "https://" + "mkt." + newCookieUrl.Substring(8, newCookieUrl.Length - 8);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            //mkt访问
+            headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
+            String mktUrl = newCookieUrl;
+            HttpUtils.HttpGetHeader(mktUrl, "", userInfo.cookie, headJObject);
+            
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";

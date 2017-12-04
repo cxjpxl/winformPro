@@ -677,7 +677,7 @@ namespace CxjText.utlis
             //获取别的数据
 
             //获取UA
-            //String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus&other=header";
+          /*
             String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
@@ -735,10 +735,9 @@ namespace CxjText.utlis
             //mkt访问
             headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
-            headJObject["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
             String mktUrl = newCookieUrl;
             HttpUtils.HttpGetHeader(mktUrl, "", userInfo.cookie, headJObject);
-
+            */
             //获取钱
             int moneyStatus = MoneyUtils.GetRMoney(userInfo);
             if (moneyStatus == 1)

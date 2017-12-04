@@ -84,11 +84,14 @@ namespace CxjText.utlis
                 contentStatus = 2;
                 isError = false;
                 webSocket.OnOpen += (ss, ee) => {
+                    Console.WriteLine("OnOpen");
                     contentStatus = 1;
                     isError = false;
+                    send("1111");
                 };
 
                 webSocket.OnError += (ss, ee) => {
+                    Console.WriteLine("Onerror");
                     if (isFinish) return;
                     if (!isError) {
                         contentStatus = 0;
@@ -129,6 +132,7 @@ namespace CxjText.utlis
 
                 webSocket.OnClose += (ss, ee) =>
                 {
+                    Console.WriteLine("OnClose");
                     if ( !isFinish)
                     { //被动断开
                         contentStatus = 0;

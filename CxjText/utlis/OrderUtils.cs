@@ -537,7 +537,7 @@ namespace CxjText.utlis
 
             JObject headJObject = new JObject();
             /*获取UA*/
-            String UaUrl = user.dataUrl + "/cl/index1.aspx?method=Sunplus";
+        /*    String UaUrl = user.dataUrl + "/cl/index1.aspx?method=Sunplus";
             headJObject["Host"] = user.baseUrl;
             headJObject["Referer"] = user.dataUrl + "/cl/index.aspx";
             String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", user.cookie, headJObject);
@@ -602,9 +602,8 @@ namespace CxjText.utlis
             //mkt访问
             headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = user.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
-            headJObject["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
             String mktUrl = newCookieUrl;
-            HttpUtils.HttpGetHeader(mktUrl, "", user.cookie, headJObject);
+            HttpUtils.HttpGetHeader(mktUrl, "", user.cookie, headJObject);*/
             /***************************************************/
             headJObject = new JObject();
             String[] parms = parmsStr.Split(',');
