@@ -22,7 +22,6 @@ namespace CxjText
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-       // private SpVoice voice = null;//SAPI 5.4  
 
 
         public MainFrom()
@@ -45,20 +44,41 @@ namespace CxjText
             this.upDateTimer.Start(); //启动定时任务器
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
-          /*  try
-            {
-                voice = new SpVoice();
-                voice.Rate = 3;
-                voice.GetVoices(string.Empty, string.Empty).Item(0);
-                voice.Speak("aaaaa", SpeechVoiceSpeakFlags.SVSFlagsAsync);
-            }
-            catch (Exception e1) {
-                Console.WriteLine(e1.ToString());
-
-            }*/
-         
-
+            speakInit();
         }
+
+        //初始化语音
+        private void speakInit() {
+            try
+            {
+                if (speechSynthesizer.GetInstalledVoices().Count > 0) {
+                    bool setLily = false;
+                    for (int i = 0; i < speechSynthesizer.GetInstalledVoices().Count; i++)
+                    {
+                        String name = speechSynthesizer.GetInstalledVoices()[i].VoiceInfo.Name;
+                        if (name.Equals("VW Lily"))
+                        {
+                            speechSynthesizer.SelectVoice(name);
+                            setLily = true;
+                            break;
+                        }
+                    }
+
+                    if (!setLily && speechSynthesizer.GetInstalledVoices().Count > 0)
+                    {
+                        speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
+                    }
+
+                    speechSynthesizer.Rate = 1;
+                    speechSynthesizer.SpeakAsync("登录成功");
+                }
+            }
+            catch (Exception e1)
+            {
+               // MessageBox.Show("请安装语音库");
+            }
+        }
+
 
         private void ViewInit()
         {
@@ -103,6 +123,7 @@ namespace CxjText
                 if (speechSynthesizer != null)
                 {
                     speechSynthesizer.SpeakAsyncCancelAll();
+                    speechSynthesizer.Dispose();
                 }
             }
             catch (Exception e1) {
@@ -266,7 +287,6 @@ namespace CxjText
                     {
                         speakStr = "点球取消";
                     }
-                    speechSynthesizer.Rate = 3;
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
 
