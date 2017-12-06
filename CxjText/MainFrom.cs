@@ -8,7 +8,7 @@ using CxjText.iface;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using DotNetSpeech; 
+using System.Speech.Synthesis;
 
 
 namespace CxjText
@@ -21,7 +21,8 @@ namespace CxjText
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
-        private SpVoice speech = new SpVoice();
+        private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+
 
         public MainFrom()
         {
@@ -34,7 +35,8 @@ namespace CxjText
         {
             OrderUtils.autoLists.Clear();
             DataInit(); //读取配置文件
-            if (Config.userList == null || Config.userList.Count == 0) {
+            if (Config.userList == null || Config.userList.Count == 0)
+            {
                 MessageBox.Show("读取配置文件出错");
                 Application.Exit();
                 return;
@@ -47,15 +49,36 @@ namespace CxjText
         }
 
         //初始化语音
-        private void speakInit() {
+        private void speakInit()
+        {
             try
             {
-                speech.Volume = 100;
-                speech.Speak("登录成功"); 
+                if (speechSynthesizer.GetInstalledVoices().Count > 0)
+                {
+                    bool setLily = false;
+                    for (int i = 0; i < speechSynthesizer.GetInstalledVoices().Count; i++)
+                    {
+                        String name = speechSynthesizer.GetInstalledVoices()[i].VoiceInfo.Name;
+                        if (name.Equals("VW Lily"))
+                        {
+                            speechSynthesizer.SelectVoice(name);
+                            setLily = true;
+                            break;
+                        }
+                    }
+
+                    if (!setLily && speechSynthesizer.GetInstalledVoices().Count > 0)
+                    {
+                        speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
+                    }
+
+                    speechSynthesizer.Rate = 1;
+                    speechSynthesizer.SpeakAsync("登录成功");
+                }
             }
             catch (Exception e1)
             {
-                MessageBox.Show("请加入语音文件和安装语音模块");
+                // MessageBox.Show("请安装语音库");
             }
         }
 
@@ -75,8 +98,8 @@ namespace CxjText
             leftForm.FormBorderStyle = FormBorderStyle.None;       //设置窗体为非边框样式
             this.leftPanel.Controls.Add(leftForm);      //添加窗体
             leftForm.Show();
-            leftForm.setMainForm(loginForm,this);
-           
+            leftForm.setMainForm(loginForm, this);
+
         }
 
 
@@ -86,7 +109,7 @@ namespace CxjText
             FileUtils.ReadUserJObject(@"C:\user.txt");
         }
 
-     
+
         //退出整个应用程序
         private void MainFrom_close(object sender, FormClosedEventArgs e)
         {
@@ -100,15 +123,17 @@ namespace CxjText
                     webSocketUtils.close();
                 }
 
-                if (speech != null)
+                if (speechSynthesizer != null)
                 {
-                    
+                    speechSynthesizer.SpeakAsyncCancelAll();
+                    speechSynthesizer.Dispose();
                 }
             }
-            catch (Exception e1) {
+            catch (Exception e1)
+            {
 
             }
-            
+
             Application.Exit();
         }
 
@@ -118,8 +143,10 @@ namespace CxjText
         {
 
             num++;
-            if (num % 10 == 0) {
-                if (webSocketUtils != null) {
+            if (num % 10 == 0)
+            {
+                if (webSocketUtils != null)
+                {
                     webSocketUtils.send("11111");
                 }
                 num = 0;
@@ -131,7 +158,7 @@ namespace CxjText
 
             if (this.loginForm == null) return;
             //获取当前选中的行
-            int index = this.loginForm.getCurrentSelectRow(); 
+            int index = this.loginForm.getCurrentSelectRow();
             if (index == -1) return;
 
             //刷新用户数据界面  A系统1s一次  B系统10s一次  其他未知
@@ -139,15 +166,17 @@ namespace CxjText
 
             //获取当前系统的时间  毫秒
             long currentTime = FormUtils.getCurrentTime();
-            UserInfo userInfo = (UserInfo) Config.userList[index];
-            if (userInfo == null) {
+            UserInfo userInfo = (UserInfo)Config.userList[index];
+            if (userInfo == null)
+            {
                 this.upDateTimer.Start();
                 return;
             }
             long userTime = userInfo.updateTime;//获取用户上一次刷新的时间
             //刷新修改 1  时间的处理
-            bool canUpdate = FormUtils.canUpdateData(userInfo.tag,userTime,currentTime);
-            if (!canUpdate) {
+            bool canUpdate = FormUtils.canUpdateData(userInfo.tag, userTime, currentTime);
+            if (!canUpdate)
+            {
                 this.upDateTimer.Start();
                 return;
             }
@@ -158,9 +187,11 @@ namespace CxjText
         }
 
         //获取数据接口 在线程里面
-        private void GetData(object positionObj) {
+        private void GetData(object positionObj)
+        {
             int position = (int)positionObj;
-            try {
+            try
+            {
                 UserInfo userInfo = (UserInfo)Config.userList[position];
                 if (userInfo == null)
                 {
@@ -169,7 +200,8 @@ namespace CxjText
                 }
                 //获取数据请求接口的url
                 String dataRtlStr = null;
-                switch (userInfo.tag) {
+                switch (userInfo.tag)
+                {
                     case "A":
                         dataRtlStr = DataPramsUtils.getAData(userInfo);
                         break;
@@ -195,7 +227,8 @@ namespace CxjText
                         break;
                 }
                 //返回数据是空表示获取数据失败
-                if (String.IsNullOrEmpty(dataRtlStr)) {
+                if (String.IsNullOrEmpty(dataRtlStr))
+                {
                     this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
@@ -203,16 +236,17 @@ namespace CxjText
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
                 {
-                   // this.Invoke(new Action(() => { upDateTimer.Start(); }));
+                    // this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
                 //获取数据成功
                 this.Invoke(new Action(() => {
-                   leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
+                    leftForm.SetCurrentData(dataRtlStr, position); //将数据传给界面处理
                     upDateTimer.Start();
                 }));
             }
-            catch (SystemException e) {
+            catch (SystemException e)
+            {
                 Console.WriteLine(e.ToString());
                 if (this.isFinish) return;
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
@@ -239,14 +273,16 @@ namespace CxjText
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             String str = textBox1.Text.ToString().Trim();
-            if (this.leftForm != null) {
+            if (this.leftForm != null)
+            {
                 this.leftForm.SetSeaechStr(str);
             }
         }
 
         public void getCodeMoneyStatus(string moneyStr)
         {
-            if (String.IsNullOrEmpty(moneyStr)) {
+            if (String.IsNullOrEmpty(moneyStr))
+            {
                 return;
             }
 
@@ -254,14 +290,12 @@ namespace CxjText
         }
 
 
-        private void speak(object obj) {
-
-            JObject jObect = (JObject)obj;
-            String cid = (String)jObect["cid"];
-            String info = (String)jObect["info"];
+        private void speak(String cid, String info)
+        {
 
             try
             {
+                //  String cid = (String)cidObj;
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
@@ -269,7 +303,7 @@ namespace CxjText
                     {
                         speakStr = "点球取消";
                     }
-                    speech.Speak(speakStr);
+                    speechSynthesizer.SpeakAsync(speakStr);
                 }
 
             }
@@ -284,7 +318,8 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-            if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message)) {
+            if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
+            {
                 return;
             }
 
@@ -307,14 +342,10 @@ namespace CxjText
             enventInfo.time = FormUtils.getCurrentTime();
             enventInfo.T = (String)jObject["data"]["T"];
 
-            JObject speakJObject = new JObject();
-            speakJObject["cid"] = cid;
-            speakJObject["info"] = enventInfo.info;
-            Thread t = new Thread(new ParameterizedThreadStart(this.speak));
-            t.Start(speakJObject);
+            speak(cid, enventInfo.info);
 
             this.Invoke(new Action(() => {
-                gameText.Text = "比赛：" + "(主)" + enventInfo.nameH+ " - " + enventInfo.nameG;
+                gameText.Text = "比赛：" + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
@@ -339,8 +370,9 @@ namespace CxjText
 
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
-                
-                if (cid.Equals("9926") || cid.Equals("9927")) {
+
+                if (cid.Equals("9926") || cid.Equals("9927"))
+                {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     listEnvets.Add(enventInfo);
                     return;
@@ -348,7 +380,8 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled")) {
+                if (enventInfo.info.Contains("Cancelled"))
+                {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
                 }
@@ -357,11 +390,13 @@ namespace CxjText
                 if (enventInfo1 == null) return;
                 if (cid.Equals("2055")) //客队点球
                 {
-                    if (!enventInfo1.cid.Equals("9927")) {
+                    if (!enventInfo1.cid.Equals("9927"))
+                    {
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                         return;
                     }
-                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000) {
+                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
+                    {
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                         return;
                     }
@@ -371,7 +406,8 @@ namespace CxjText
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
                 }
-                else if (cid.Equals("1031")) {  //主队点球
+                else if (cid.Equals("1031"))
+                {  //主队点球
                     if (!enventInfo1.cid.Equals("9926"))
                     {
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
@@ -384,12 +420,13 @@ namespace CxjText
                     }
                     //主队可以下注
                     this.Invoke(new Action(() => {
-                        leftForm.setComplete(enventInfo); 
+                        leftForm.setComplete(enventInfo);
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
                 }
             }
-            else {
+            else
+            {
                 if (listEnvets.Count == 0) return;
                 listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                 return;
@@ -409,11 +446,13 @@ namespace CxjText
             }
         }
 
-        public void setTextBox1Text(String str) {
+        public void setTextBox1Text(String str)
+        {
             textBox1.Text = str.Trim();
         }
 
-        public bool isAuto() {
+        public bool isAuto()
+        {
             return autoCheck.Checked;
         }
     }
