@@ -8,7 +8,7 @@ using CxjText.iface;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Speech.Synthesis;
+using DotNetSpeech; 
 
 
 namespace CxjText
@@ -21,8 +21,7 @@ namespace CxjText
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
-        private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-
+        private SpVoice speech = new SpVoice();
 
         public MainFrom()
         {
@@ -51,31 +50,12 @@ namespace CxjText
         private void speakInit() {
             try
             {
-                if (speechSynthesizer.GetInstalledVoices().Count > 0) {
-                    bool setLily = false;
-                    for (int i = 0; i < speechSynthesizer.GetInstalledVoices().Count; i++)
-                    {
-                        String name = speechSynthesizer.GetInstalledVoices()[i].VoiceInfo.Name;
-                        if (name.Equals("VW Lily"))
-                        {
-                            speechSynthesizer.SelectVoice(name);
-                            setLily = true;
-                            break;
-                        }
-                    }
-
-                    if (!setLily && speechSynthesizer.GetInstalledVoices().Count > 0)
-                    {
-                        speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
-                    }
-
-                    speechSynthesizer.Rate = 1;
-                    speechSynthesizer.SpeakAsync("登录成功");
-                }
+                speech.Volume = 100;
+                speech.Speak("登录成功"); 
             }
             catch (Exception e1)
             {
-               // MessageBox.Show("请安装语音库");
+                MessageBox.Show("请加入语音文件和安装语音模块");
             }
         }
 
@@ -120,10 +100,9 @@ namespace CxjText
                     webSocketUtils.close();
                 }
 
-                if (speechSynthesizer != null)
+                if (speech != null)
                 {
-                    speechSynthesizer.SpeakAsyncCancelAll();
-                    speechSynthesizer.Dispose();
+                    
                 }
             }
             catch (Exception e1) {
@@ -275,11 +254,14 @@ namespace CxjText
         }
 
 
-        private void speak(String cid,String info) {
+        private void speak(object obj) {
+
+            JObject jObect = (JObject)obj;
+            String cid = (String)jObect["cid"];
+            String info = (String)jObect["info"];
 
             try
             {
-              //  String cid = (String)cidObj;
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
@@ -287,7 +269,7 @@ namespace CxjText
                     {
                         speakStr = "点球取消";
                     }
-                    speechSynthesizer.SpeakAsync(speakStr);
+                    speech.Speak(speakStr);
                 }
 
             }
@@ -325,7 +307,11 @@ namespace CxjText
             enventInfo.time = FormUtils.getCurrentTime();
             enventInfo.T = (String)jObject["data"]["T"];
 
-            speak(cid, enventInfo.info);
+            JObject speakJObject = new JObject();
+            speakJObject["cid"] = cid;
+            speakJObject["info"] = enventInfo.info;
+            Thread t = new Thread(new ParameterizedThreadStart(this.speak));
+            t.Start(speakJObject);
 
             this.Invoke(new Action(() => {
                 gameText.Text = "比赛：" + "(主)" + enventInfo.nameH+ " - " + enventInfo.nameG;
