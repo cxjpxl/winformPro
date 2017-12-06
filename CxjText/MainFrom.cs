@@ -345,7 +345,26 @@ namespace CxjText
             speak(cid, enventInfo.info);
 
             this.Invoke(new Action(() => {
-                gameText.Text = "比赛：" + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
+
+                String str = "比赛(全场) :";
+                try
+                {
+                    int time = int.Parse(enventInfo.T);
+                    if (time <= 2700000)
+                    { //半场
+                        str = "比赛(上半场) :";
+                    }
+                    else
+                    {
+                        str = "比赛(全场) :";
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                gameText.Text = str + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
@@ -362,7 +381,9 @@ namespace CxjText
                 {
                     enventText.Text = "事件:" + "未知";
                 }
-                timeText.Text = "时间: " + DateTime.Now.ToString(); ;
+               
+
+                timeText.Text = "时间: " + DateTime.Now.ToString(); 
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
 
             }));
