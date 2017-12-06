@@ -30,8 +30,8 @@ namespace CxjText
                 Application.Exit();
                 return;
             }
-            codeUserEdit.Text = "cxj81886404";
-           codePwdEdit.Text = "cxj13580127662";
+           // codeUserEdit.Text = "cxj81886404";
+         //  codePwdEdit.Text = "cxj13580127662";
         }
 
 
