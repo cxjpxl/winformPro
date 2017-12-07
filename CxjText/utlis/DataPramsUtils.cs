@@ -13,8 +13,15 @@ namespace CxjText.utlis
     {
         /************************A系统的获取数据********************/
         public static String getAData(UserInfo userInfo) {
+
+            String pUrl = "https://a58hg.lq2222.org";
+            if (userInfo.dataUrl.Contains("org"))
+            {
+                pUrl = userInfo.dataUrl;
+
+            }
             //page是由1开始
-           String getDataUrl= "https://a58hg.lq2222.org/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime(); 
+           String getDataUrl= pUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime(); 
             String  rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null; 
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
@@ -29,7 +36,7 @@ namespace CxjText.utlis
             int totalpage = (int)jObject["totalpage"];
             //循环获取当前数据
             for (int i = 1; i < totalpage; i++) {
-                String pageUrl  = "https://a58hg.lq2222.org/sport/football.aspx?data=json&action=re&page=" + (i+1)+"&keyword=&sort=&uid=&_=" + (FormUtils.getCurrentTime()+i);
+                String pageUrl  = pUrl + "/sport/football.aspx?data=json&action=re&page=" + (i+1)+"&keyword=&sort=&uid=&_=" + (FormUtils.getCurrentTime()+i);
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
