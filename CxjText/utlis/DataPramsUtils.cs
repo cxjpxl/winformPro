@@ -15,10 +15,9 @@ namespace CxjText.utlis
         public static String getAData(UserInfo userInfo) {
 
             String pUrl = "https://a58hg.lq2222.org";
-            if (userInfo.dataUrl.Contains("org"))
+            if (userInfo.status == 2)
             {
                 pUrl = userInfo.dataUrl;
-
             }
             //page是由1开始
            String getDataUrl= pUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime(); 
