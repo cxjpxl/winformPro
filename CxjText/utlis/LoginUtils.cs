@@ -151,12 +151,22 @@ namespace CxjText.utlis
             }
             //解析
             String uid = "";
-            if (uidRlt.IndexOf("uid=") > 0)
-            {
-                int start = uidRlt.IndexOf("uid=");
-                uid = uidRlt.Substring(start + 4, 32);
+            String[] strs = uidRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (str.Contains("uid=") && str.Contains("mainFrame")&& str.Contains("src")) {
+                    int startIndex = str.IndexOf("src=");
+                    int endIndex = str.IndexOf("allowtransparency");
+                    String dataUrl = str.Substring(startIndex,endIndex - startIndex);
+                    int start = str.IndexOf("uid=");
+                    uid = str.Substring(start + 4, 32);
+                    dataUrl = dataUrl.Replace("src=\"", "").Replace("\"", "").Replace("/sport/sport.aspx?", "");
+                    dataUrl = dataUrl.Replace("uid=" + uid, "").Trim();
+                    userInfo.dataUrl = dataUrl;
+                    userInfo.uid = uid;
+                }
             }
-
+            
             if (String.IsNullOrEmpty(uid))
             {
                 userInfo.status = 3;

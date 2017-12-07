@@ -47,7 +47,7 @@ namespace CxjText.utlis
                     String baseUrl = strs[3];//网址
                     String loginUrl = strs[3];//登录的链接地址 
                     String dataUrl = strs[3]; //获取数据的接口
-                    if (tag.Equals("A"))
+                   /* if (tag.Equals("A"))
                     {
                         if (strs.Length >= Config.pramsNum + 1)
                         {
@@ -56,7 +56,7 @@ namespace CxjText.utlis
                         else {
                             continue;
                         }
-                    }
+                    }*/
 
 
                     if (baseUrl.Contains("http://")) {
