@@ -35,13 +35,20 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.codeMoneyText = new System.Windows.Forms.Label();
-            this.rbRangQiu = new System.Windows.Forms.RadioButton();
-            this.rbDaxiao = new System.Windows.Forms.RadioButton();
             this.lianSaiText = new System.Windows.Forms.Label();
             this.timeText = new System.Windows.Forms.Label();
             this.gameText = new System.Windows.Forms.Label();
             this.enventText = new System.Windows.Forms.Label();
             this.autoCheck = new System.Windows.Forms.CheckBox();
+            this.rbRangQiu = new System.Windows.Forms.RadioButton();
+            this.rbDaxiao = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.AutoBanChang = new System.Windows.Forms.RadioButton();
+            this.bangCRadio = new System.Windows.Forms.RadioButton();
+            this.quanCRadio = new System.Windows.Forms.RadioButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -97,28 +104,6 @@
             this.codeMoneyText.TabIndex = 7;
             this.codeMoneyText.Text = "打码平台";
             // 
-            // rbRangQiu
-            // 
-            this.rbRangQiu.AutoSize = true;
-            this.rbRangQiu.Checked = true;
-            this.rbRangQiu.Location = new System.Drawing.Point(1093, 514);
-            this.rbRangQiu.Name = "rbRangQiu";
-            this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
-            this.rbRangQiu.TabIndex = 8;
-            this.rbRangQiu.TabStop = true;
-            this.rbRangQiu.Text = "让球";
-            this.rbRangQiu.UseVisualStyleBackColor = true;
-            // 
-            // rbDaxiao
-            // 
-            this.rbDaxiao.AutoSize = true;
-            this.rbDaxiao.Location = new System.Drawing.Point(1146, 514);
-            this.rbDaxiao.Name = "rbDaxiao";
-            this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
-            this.rbDaxiao.TabIndex = 9;
-            this.rbDaxiao.Text = "大小";
-            this.rbDaxiao.UseVisualStyleBackColor = true;
-            // 
             // lianSaiText
             // 
             this.lianSaiText.AutoSize = true;
@@ -170,18 +155,93 @@
             this.autoCheck.Text = "自动下注";
             this.autoCheck.UseVisualStyleBackColor = true;
             // 
+            // rbRangQiu
+            // 
+            this.rbRangQiu.AutoSize = true;
+            this.rbRangQiu.Checked = true;
+            this.rbRangQiu.Location = new System.Drawing.Point(13, 9);
+            this.rbRangQiu.Name = "rbRangQiu";
+            this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
+            this.rbRangQiu.TabIndex = 8;
+            this.rbRangQiu.TabStop = true;
+            this.rbRangQiu.Text = "让球";
+            this.rbRangQiu.UseVisualStyleBackColor = true;
+            // 
+            // rbDaxiao
+            // 
+            this.rbDaxiao.AutoSize = true;
+            this.rbDaxiao.Location = new System.Drawing.Point(66, 10);
+            this.rbDaxiao.Name = "rbDaxiao";
+            this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
+            this.rbDaxiao.TabIndex = 9;
+            this.rbDaxiao.Text = "大小";
+            this.rbDaxiao.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rbDaxiao);
+            this.panel1.Controls.Add(this.rbRangQiu);
+            this.panel1.Location = new System.Drawing.Point(1073, 504);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(128, 28);
+            this.panel1.TabIndex = 15;
+            // 
+            // AutoBanChang
+            // 
+            this.AutoBanChang.AutoSize = true;
+            this.AutoBanChang.Checked = true;
+            this.AutoBanChang.Location = new System.Drawing.Point(3, 15);
+            this.AutoBanChang.Name = "AutoBanChang";
+            this.AutoBanChang.Size = new System.Drawing.Size(47, 16);
+            this.AutoBanChang.TabIndex = 16;
+            this.AutoBanChang.TabStop = true;
+            this.AutoBanChang.Text = "默认";
+            this.AutoBanChang.UseVisualStyleBackColor = true;
+            // 
+            // bangCRadio
+            // 
+            this.bangCRadio.AutoSize = true;
+            this.bangCRadio.Location = new System.Drawing.Point(53, 15);
+            this.bangCRadio.Name = "bangCRadio";
+            this.bangCRadio.Size = new System.Drawing.Size(47, 16);
+            this.bangCRadio.TabIndex = 17;
+            this.bangCRadio.TabStop = true;
+            this.bangCRadio.Text = "半场";
+            this.bangCRadio.UseVisualStyleBackColor = true;
+            // 
+            // quanCRadio
+            // 
+            this.quanCRadio.AutoSize = true;
+            this.quanCRadio.Location = new System.Drawing.Point(106, 15);
+            this.quanCRadio.Name = "quanCRadio";
+            this.quanCRadio.Size = new System.Drawing.Size(47, 16);
+            this.quanCRadio.TabIndex = 18;
+            this.quanCRadio.TabStop = true;
+            this.quanCRadio.Text = "全场";
+            this.quanCRadio.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.AutoBanChang);
+            this.panel2.Controls.Add(this.quanCRadio);
+            this.panel2.Controls.Add(this.bangCRadio);
+            this.panel2.Location = new System.Drawing.Point(996, 538);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(166, 34);
+            this.panel2.TabIndex = 19;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.autoCheck);
             this.Controls.Add(this.enventText);
             this.Controls.Add(this.gameText);
             this.Controls.Add(this.timeText);
             this.Controls.Add(this.lianSaiText);
-            this.Controls.Add(this.rbDaxiao);
-            this.Controls.Add(this.rbRangQiu);
             this.Controls.Add(this.codeMoneyText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -192,6 +252,10 @@
             this.Text = "数据界面";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFrom_close);
             this.Load += new System.EventHandler(this.MainFrom_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,12 +268,17 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label codeMoneyText;
-        private System.Windows.Forms.RadioButton rbRangQiu;
-        private System.Windows.Forms.RadioButton rbDaxiao;
         private System.Windows.Forms.Label lianSaiText;
         private System.Windows.Forms.Label timeText;
         private System.Windows.Forms.Label gameText;
         private System.Windows.Forms.Label enventText;
         private System.Windows.Forms.CheckBox autoCheck;
+        private System.Windows.Forms.RadioButton rbRangQiu;
+        private System.Windows.Forms.RadioButton rbDaxiao;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton AutoBanChang;
+        private System.Windows.Forms.RadioButton bangCRadio;
+        private System.Windows.Forms.RadioButton quanCRadio;
+        private System.Windows.Forms.Panel panel2;
     }
 }

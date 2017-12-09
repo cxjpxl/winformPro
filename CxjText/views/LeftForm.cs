@@ -538,10 +538,78 @@ namespace CxjText.views
                 return;
             }
 
-            Console.WriteLine(lianSai);
-
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
+
+            if (enventInfo.bangchangType == 1) //用户选半场
+            {
+                if (!isBanChang) return; 
+            }
+            else if (enventInfo.bangchangType == 2) //用户选全场
+            {
+                if (isBanChang) return;
+            }
+            else {  //用户选自动
+                if (isBanChang) {  //半场数据为空的情况
+                    if (enventInfo.inputType == 0)//让球的情况下
+                    {
+                        if (isH)
+                        {
+                            //大小且大小数据也为空的情况下
+                            if (selectDaXiao && String.IsNullOrEmpty(DataUtils.get_c08_data(obj, userInfo.tag)))
+                            {
+                                //获取主队全场让球
+                                String str04 = DataUtils.get_c04_data(obj, userInfo.tag);
+                                try
+                                {
+                                    float dataRate = float.Parse(str04);
+                                    if (dataRate > 0.7)
+                                    {
+                                        selectDaXiao = false;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                   
+                                }
+                                isBanChang = false;
+                            }
+                        }
+                        else {
+                            //大小且大小数据也为空的情况下
+                            if (selectDaXiao && String.IsNullOrEmpty(DataUtils.get_c08_data(obj, userInfo.tag)))
+                            {
+                                //获取客队全场让球
+                                String str14 = DataUtils.get_c14_data(obj, userInfo.tag);
+                                try
+                                {
+                                    float dataRate = float.Parse(str14);
+                                    if (dataRate > 0.7)
+                                    {
+                                        selectDaXiao = false;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+                                isBanChang = false;
+                            }
+                        }
+                    }
+                    else { //大小的情况下
+                        if ( String.IsNullOrEmpty(DataUtils.get_c08_data(obj, userInfo.tag)))
+                        {
+                            isBanChang = false;
+                        }
+                    }
+                }
+            }
+
+
+
+
+     
             if (enventInfo.inputType == 0)  //让球
             {
                 if (isBanChang)

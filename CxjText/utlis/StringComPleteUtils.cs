@@ -198,6 +198,7 @@ namespace CxjText.utlis
                         //半场
                         return null;
                     }
+
                     selectDaXiao = selectDaxiaoFlag(obj, userInfo.tag, isH, isBanChang);
                     jObject.Add("isH", isH); //是否主队
                     jObject.Add("isBanChang", isBanChang); //是否半场
@@ -264,7 +265,7 @@ namespace CxjText.utlis
         }
 
 
-        private static bool selectDaxiaoFlag(object obj,String tag,bool isH,bool isBanChang) {
+        public static bool selectDaxiaoFlag(object obj,String tag,bool isH,bool isBanChang) {
             String str = "";
             if (isH)
             {

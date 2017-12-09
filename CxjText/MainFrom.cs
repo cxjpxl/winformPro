@@ -341,6 +341,7 @@ namespace CxjText
             enventInfo.info = (String)jObject["data"]["Info"];
             enventInfo.time = FormUtils.getCurrentTime();
             enventInfo.T = (String)jObject["data"]["T"];
+            enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
             speak(cid, enventInfo.info);
 
@@ -482,15 +483,33 @@ namespace CxjText
                 return 1;
             }
         }
-
+        //获取搜索的内容
         public void setTextBox1Text(String str)
         {
             textBox1.Text = str.Trim();
         }
-
+        //是否自动下注
         public bool isAuto()
         {
             return autoCheck.Checked;
+        }
+        //获取半场选择  默认返回0   半场返回1   全场返回2
+        public int GetBanChangSelected()
+        {
+            if (AutoBanChang.Checked) {
+                return 0;
+            }
+
+            if (bangCRadio.Checked)
+            {
+                return 1;
+            }
+
+            if (quanCRadio.Checked)
+            {
+                return 2;
+            }
+            return 0;
         }
     }
 }
