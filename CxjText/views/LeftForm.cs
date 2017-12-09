@@ -605,11 +605,7 @@ namespace CxjText.views
                     }
                 }
             }
-
-
-
-
-     
+            
             if (enventInfo.inputType == 0)  //让球
             {
                 if (isBanChang)
