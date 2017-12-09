@@ -524,7 +524,7 @@ namespace CxjText
             }
             else if (rbAmount_1_4.Checked)
             {
-                return 2;
+                return 3;
             }
             else
             {

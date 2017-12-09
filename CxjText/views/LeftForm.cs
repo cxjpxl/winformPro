@@ -337,7 +337,31 @@ namespace CxjText.views
                 if (user == null) continue;
                 if (!user.tag.Equals(tag)) continue;
                 if (user.status != 2) continue;
-               if (user.inputMoney < user.leastMoney) continue;
+                if (mainFrom == null) return;
+                int inputMoney = user.inputMoney;
+                if (mainFrom.isAuto()&& mainFrom.GetAmountSelected() != 0) {
+                    try
+                    {
+                        float moneyAll = float.Parse(user.money);
+                        if (mainFrom.GetAmountSelected() == 1) //1/2
+                        {
+                            inputMoney = (int)moneyAll / 2;
+                        }
+                        else if (mainFrom.GetAmountSelected() == 2)//1/3
+                        {
+                            inputMoney = (int)moneyAll / 3;
+                        }
+                        else if (mainFrom.GetAmountSelected() == 3)//1/4
+                        {
+                            inputMoney = (int)moneyAll / 4;
+                        }
+                    }
+                    catch (Exception e) {
+                        inputMoney = user.inputMoney;
+                    }
+                }
+                
+               if (inputMoney < user.leastMoney) continue;
 
                 if (dataJObject["gameMid"] != null) //判断是否已下
                 {
@@ -353,7 +377,7 @@ namespace CxjText.views
 
                 switch (tag) {
                     case "A":
-                        orderParmas = rltStr + "&money=" + user.inputMoney;
+                        orderParmas = rltStr + "&money=" + inputMoney;
                         break;
                     case "B":
                         orderParmas = rltStr;
@@ -386,7 +410,7 @@ namespace CxjText.views
                 inputInfo.gameTeam = gameTeam;
                 inputInfo.bateStr = bateStr;
                 inputInfo.inputType = inputType;
-                inputInfo.inputMoney = user.inputMoney;
+                inputInfo.inputMoney = inputMoney;
                 if (this.rltForm != null) {
                     this.rltForm.AddLineInHead(inputInfo);
                 }
@@ -407,24 +431,24 @@ namespace CxjText.views
                 }
                 else if (user.tag.Equals("I"))
                 {
-                    jObject["money"] = user.inputMoney;
+                    jObject["money"] = inputMoney;
                 }
                 else if (user.tag.Equals("U"))
                 {
-                    jObject["money"] = user.inputMoney;
+                    jObject["money"] = inputMoney;
                     jObject["rString"] = dataJObject["rString"];
                 }
                 else if (user.tag.Equals("R"))
                 {
-                    jObject["money"] = user.inputMoney;
+                    jObject["money"] = inputMoney;
                 }
                 else if (user.tag.Equals("G"))
                 {
-                    jObject["money"] = user.inputMoney;
+                    jObject["money"] = inputMoney;
                 }
                 else if (user.tag.Equals("K")) {
                     jObject["reqUrl"] = dataJObject["reqUrl"];
-                    jObject["money"] = user.inputMoney;
+                    jObject["money"] = inputMoney;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;

@@ -293,7 +293,6 @@
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "下注金額";
-            this.groupBox1.Visible = false;
             // 
             // MainFrom
             // 
