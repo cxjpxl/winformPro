@@ -532,11 +532,13 @@ namespace CxjText.views
                 if (!autoCheck) return;
             }
 
-
-            if (lianSai.Contains("英格兰") || lianSai.Contains("苏格兰") || lianSai.Contains("球会友谊"))
-            {
+            //判断是否能主动下注
+            if (!StringComPleteUtils.canAutoPut(lianSai)) {
+                Console.WriteLine("条件不满足，不能自动下注，--" + lianSai);
                 return;
             }
+
+            Console.WriteLine(lianSai);
 
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];

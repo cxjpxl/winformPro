@@ -448,6 +448,22 @@ namespace CxjText
             }
             else
             {
+                //直接下注的类型 判断
+                if (cid.Equals("2086") || cid.Equals("1062")) { 
+                    if (cid.Equals("2086"))
+                    {
+                        enventInfo.cid = "2055";//客队点球
+                    }
+                    else {
+                        enventInfo.cid = "1031";//主队点球
+                    }
+                    this.Invoke(new Action(() => {
+                        leftForm.setComplete(enventInfo);
+                        if (listEnvets.Count == 0) return;
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                    }));
+                    return;
+                }
                 if (listEnvets.Count == 0) return;
                 listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                 return;

@@ -101,7 +101,7 @@
             // 
             this.rbRangQiu.AutoSize = true;
             this.rbRangQiu.Checked = true;
-            this.rbRangQiu.Location = new System.Drawing.Point(998, 550);
+            this.rbRangQiu.Location = new System.Drawing.Point(1093, 514);
             this.rbRangQiu.Name = "rbRangQiu";
             this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
             this.rbRangQiu.TabIndex = 8;
@@ -112,7 +112,7 @@
             // rbDaxiao
             // 
             this.rbDaxiao.AutoSize = true;
-            this.rbDaxiao.Location = new System.Drawing.Point(998, 584);
+            this.rbDaxiao.Location = new System.Drawing.Point(1146, 514);
             this.rbDaxiao.Name = "rbDaxiao";
             this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
             this.rbDaxiao.TabIndex = 9;

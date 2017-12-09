@@ -313,6 +313,75 @@ namespace CxjText.utlis
             return false;
         }
 
+        //判断是否能自动下注
+        public static bool canAutoPut(String lianSai) {
+            if (lianSai.Contains("青年")|| lianSai.Contains("后备")||lianSai.Contains("後备")) {
+                return false;
+            }
+
+            if (lianSai.Contains("U") || lianSai.Contains("u")) {
+                return false;
+            }
+
+            if (lianSai.Contains("女子")|| lianSai.Contains("瑞典")|| lianSai.Contains("瑞士")|| lianSai.Contains("爱尔兰")) {
+                return false;
+            }
+            if (lianSai.Contains("比利时")||lianSai.Contains("国际友谊")||lianSai.Contains("球会友谊")|| lianSai.Contains("苏格兰")) {
+                return false;
+            }
+
+            if (lianSai.Contains("波兰")&& lianSai.Contains("甲"))
+            {
+                return false;
+            }
+
+            if (lianSai.Contains("西班牙") && lianSai.Contains("丙"))
+            {
+                return false;
+            }
+
+            if (lianSai.Contains("塞尔维亚") && lianSai.Contains("甲"))
+            {
+                return false;
+            }
+
+        
+
+            if (lianSai.Contains("英格兰"))
+            {
+                if (lianSai.Contains("超")) {
+                    return true;
+                }
+
+                if (lianSai.Contains("冠")) {
+                    return true;
+                }
+                return false;
+            }
+
+
+            if (lianSai.Contains("德国") && lianSai.Contains("丙"))
+            {
+                return false;
+            }
+
+            if (lianSai.Contains("德国东南西北"))
+            {
+                return false;
+            }
+            //乙组联赛
+            if (lianSai.Contains("乙")) {
+                if (lianSai.Contains("以色列") || lianSai.Contains("德国") || lianSai.Contains("意大利") || lianSai.Contains("法国")) {
+
+                    return true;
+                }
+                return false;
+            }
+
+
+            return true;
+        }
+
     }
 
 }
