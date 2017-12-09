@@ -47,14 +47,14 @@
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.rbShiDuan_MoRen = new System.Windows.Forms.RadioButton();
-            this.rbShiDuan_1_3 = new System.Windows.Forms.RadioButton();
-            this.rbShiDuan_1_2 = new System.Windows.Forms.RadioButton();
-            this.rbShiDuan_1_4 = new System.Windows.Forms.RadioButton();
+            this.rbAmount_MoRen = new System.Windows.Forms.RadioButton();
+            this.rbAmount_1_3 = new System.Windows.Forms.RadioButton();
+            this.rbAmount_1_2 = new System.Windows.Forms.RadioButton();
+            this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -236,68 +236,71 @@
             this.panel2.Size = new System.Drawing.Size(166, 34);
             this.panel2.TabIndex = 19;
             // 
-            // panel3
+            // rbAmount_MoRen
             // 
-            this.panel3.Controls.Add(this.rbShiDuan_1_4);
-            this.panel3.Controls.Add(this.rbShiDuan_MoRen);
-            this.panel3.Controls.Add(this.rbShiDuan_1_3);
-            this.panel3.Controls.Add(this.rbShiDuan_1_2);
-            this.panel3.Location = new System.Drawing.Point(996, 578);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(205, 34);
-            this.panel3.TabIndex = 20;
+            this.rbAmount_MoRen.AutoSize = true;
+            this.rbAmount_MoRen.Checked = true;
+            this.rbAmount_MoRen.Location = new System.Drawing.Point(6, 22);
+            this.rbAmount_MoRen.Name = "rbAmount_MoRen";
+            this.rbAmount_MoRen.Size = new System.Drawing.Size(47, 16);
+            this.rbAmount_MoRen.TabIndex = 16;
+            this.rbAmount_MoRen.TabStop = true;
+            this.rbAmount_MoRen.Text = "默认";
+            this.rbAmount_MoRen.UseVisualStyleBackColor = true;
             // 
-            // rbShiDuan_MoRen
+            // rbAmount_1_3
             // 
-            this.rbShiDuan_MoRen.AutoSize = true;
-            this.rbShiDuan_MoRen.Checked = true;
-            this.rbShiDuan_MoRen.Location = new System.Drawing.Point(3, 15);
-            this.rbShiDuan_MoRen.Name = "rbShiDuan_MoRen";
-            this.rbShiDuan_MoRen.Size = new System.Drawing.Size(47, 16);
-            this.rbShiDuan_MoRen.TabIndex = 16;
-            this.rbShiDuan_MoRen.TabStop = true;
-            this.rbShiDuan_MoRen.Text = "默认";
-            this.rbShiDuan_MoRen.UseVisualStyleBackColor = true;
+            this.rbAmount_1_3.AutoSize = true;
+            this.rbAmount_1_3.Location = new System.Drawing.Point(106, 22);
+            this.rbAmount_1_3.Name = "rbAmount_1_3";
+            this.rbAmount_1_3.Size = new System.Drawing.Size(41, 16);
+            this.rbAmount_1_3.TabIndex = 18;
+            this.rbAmount_1_3.TabStop = true;
+            this.rbAmount_1_3.Text = "1/3";
+            this.rbAmount_1_3.UseVisualStyleBackColor = true;
             // 
-            // rbShiDuan_1_3
+            // rbAmount_1_2
             // 
-            this.rbShiDuan_1_3.AutoSize = true;
-            this.rbShiDuan_1_3.Location = new System.Drawing.Point(105, 15);
-            this.rbShiDuan_1_3.Name = "rbShiDuan_1_3";
-            this.rbShiDuan_1_3.Size = new System.Drawing.Size(41, 16);
-            this.rbShiDuan_1_3.TabIndex = 18;
-            this.rbShiDuan_1_3.TabStop = true;
-            this.rbShiDuan_1_3.Text = "1/3";
-            this.rbShiDuan_1_3.UseVisualStyleBackColor = true;
+            this.rbAmount_1_2.AutoSize = true;
+            this.rbAmount_1_2.Location = new System.Drawing.Point(59, 22);
+            this.rbAmount_1_2.Name = "rbAmount_1_2";
+            this.rbAmount_1_2.Size = new System.Drawing.Size(41, 16);
+            this.rbAmount_1_2.TabIndex = 17;
+            this.rbAmount_1_2.TabStop = true;
+            this.rbAmount_1_2.Text = "1/2";
+            this.rbAmount_1_2.UseVisualStyleBackColor = true;
             // 
-            // rbShiDuan_1_2
+            // rbAmount_1_4
             // 
-            this.rbShiDuan_1_2.AutoSize = true;
-            this.rbShiDuan_1_2.Location = new System.Drawing.Point(57, 15);
-            this.rbShiDuan_1_2.Name = "rbShiDuan_1_2";
-            this.rbShiDuan_1_2.Size = new System.Drawing.Size(41, 16);
-            this.rbShiDuan_1_2.TabIndex = 17;
-            this.rbShiDuan_1_2.TabStop = true;
-            this.rbShiDuan_1_2.Text = "1/2";
-            this.rbShiDuan_1_2.UseVisualStyleBackColor = true;
+            this.rbAmount_1_4.AutoSize = true;
+            this.rbAmount_1_4.Location = new System.Drawing.Point(153, 22);
+            this.rbAmount_1_4.Name = "rbAmount_1_4";
+            this.rbAmount_1_4.Size = new System.Drawing.Size(41, 16);
+            this.rbAmount_1_4.TabIndex = 19;
+            this.rbAmount_1_4.TabStop = true;
+            this.rbAmount_1_4.Text = "1/4";
+            this.rbAmount_1_4.UseVisualStyleBackColor = true;
             // 
-            // rbShiDuan_1_4
+            // groupBox1
             // 
-            this.rbShiDuan_1_4.AutoSize = true;
-            this.rbShiDuan_1_4.Location = new System.Drawing.Point(153, 15);
-            this.rbShiDuan_1_4.Name = "rbShiDuan_1_4";
-            this.rbShiDuan_1_4.Size = new System.Drawing.Size(41, 16);
-            this.rbShiDuan_1_4.TabIndex = 19;
-            this.rbShiDuan_1_4.TabStop = true;
-            this.rbShiDuan_1_4.Text = "1/4";
-            this.rbShiDuan_1_4.UseVisualStyleBackColor = true;
+            this.groupBox1.Controls.Add(this.rbAmount_1_4);
+            this.groupBox1.Controls.Add(this.rbAmount_MoRen);
+            this.groupBox1.Controls.Add(this.rbAmount_1_3);
+            this.groupBox1.Controls.Add(this.rbAmount_1_2);
+            this.groupBox1.Location = new System.Drawing.Point(995, 578);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(206, 44);
+            this.groupBox1.TabIndex = 21;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "下注金額";
+            this.groupBox1.Visible = false;
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.autoCheck);
@@ -319,8 +322,8 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -345,10 +348,10 @@
         private System.Windows.Forms.RadioButton bangCRadio;
         private System.Windows.Forms.RadioButton quanCRadio;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.RadioButton rbShiDuan_MoRen;
-        private System.Windows.Forms.RadioButton rbShiDuan_1_3;
-        private System.Windows.Forms.RadioButton rbShiDuan_1_2;
-        private System.Windows.Forms.RadioButton rbShiDuan_1_4;
+        private System.Windows.Forms.RadioButton rbAmount_MoRen;
+        private System.Windows.Forms.RadioButton rbAmount_1_3;
+        private System.Windows.Forms.RadioButton rbAmount_1_2;
+        private System.Windows.Forms.RadioButton rbAmount_1_4;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
