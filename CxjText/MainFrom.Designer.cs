@@ -242,7 +242,7 @@
             this.panel3.Controls.Add(this.rbShiDuan_MoRen);
             this.panel3.Controls.Add(this.rbShiDuan_1_3);
             this.panel3.Controls.Add(this.rbShiDuan_1_2);
-            this.panel3.Location = new System.Drawing.Point(996, 594);
+            this.panel3.Location = new System.Drawing.Point(996, 578);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(205, 34);
             this.panel3.TabIndex = 20;
