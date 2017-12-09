@@ -47,8 +47,14 @@
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rbShiDuan_MoRen = new System.Windows.Forms.RadioButton();
+            this.rbShiDuan_1_3 = new System.Windows.Forms.RadioButton();
+            this.rbShiDuan_1_2 = new System.Windows.Forms.RadioButton();
+            this.rbShiDuan_1_4 = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -230,11 +236,68 @@
             this.panel2.Size = new System.Drawing.Size(166, 34);
             this.panel2.TabIndex = 19;
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rbShiDuan_1_4);
+            this.panel3.Controls.Add(this.rbShiDuan_MoRen);
+            this.panel3.Controls.Add(this.rbShiDuan_1_3);
+            this.panel3.Controls.Add(this.rbShiDuan_1_2);
+            this.panel3.Location = new System.Drawing.Point(996, 594);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(205, 34);
+            this.panel3.TabIndex = 20;
+            // 
+            // rbShiDuan_MoRen
+            // 
+            this.rbShiDuan_MoRen.AutoSize = true;
+            this.rbShiDuan_MoRen.Checked = true;
+            this.rbShiDuan_MoRen.Location = new System.Drawing.Point(3, 15);
+            this.rbShiDuan_MoRen.Name = "rbShiDuan_MoRen";
+            this.rbShiDuan_MoRen.Size = new System.Drawing.Size(47, 16);
+            this.rbShiDuan_MoRen.TabIndex = 16;
+            this.rbShiDuan_MoRen.TabStop = true;
+            this.rbShiDuan_MoRen.Text = "默认";
+            this.rbShiDuan_MoRen.UseVisualStyleBackColor = true;
+            // 
+            // rbShiDuan_1_3
+            // 
+            this.rbShiDuan_1_3.AutoSize = true;
+            this.rbShiDuan_1_3.Location = new System.Drawing.Point(105, 15);
+            this.rbShiDuan_1_3.Name = "rbShiDuan_1_3";
+            this.rbShiDuan_1_3.Size = new System.Drawing.Size(41, 16);
+            this.rbShiDuan_1_3.TabIndex = 18;
+            this.rbShiDuan_1_3.TabStop = true;
+            this.rbShiDuan_1_3.Text = "1/3";
+            this.rbShiDuan_1_3.UseVisualStyleBackColor = true;
+            // 
+            // rbShiDuan_1_2
+            // 
+            this.rbShiDuan_1_2.AutoSize = true;
+            this.rbShiDuan_1_2.Location = new System.Drawing.Point(57, 15);
+            this.rbShiDuan_1_2.Name = "rbShiDuan_1_2";
+            this.rbShiDuan_1_2.Size = new System.Drawing.Size(41, 16);
+            this.rbShiDuan_1_2.TabIndex = 17;
+            this.rbShiDuan_1_2.TabStop = true;
+            this.rbShiDuan_1_2.Text = "1/2";
+            this.rbShiDuan_1_2.UseVisualStyleBackColor = true;
+            // 
+            // rbShiDuan_1_4
+            // 
+            this.rbShiDuan_1_4.AutoSize = true;
+            this.rbShiDuan_1_4.Location = new System.Drawing.Point(153, 15);
+            this.rbShiDuan_1_4.Name = "rbShiDuan_1_4";
+            this.rbShiDuan_1_4.Size = new System.Drawing.Size(41, 16);
+            this.rbShiDuan_1_4.TabIndex = 19;
+            this.rbShiDuan_1_4.TabStop = true;
+            this.rbShiDuan_1_4.Text = "1/4";
+            this.rbShiDuan_1_4.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.autoCheck);
@@ -256,6 +319,8 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -280,5 +345,10 @@
         private System.Windows.Forms.RadioButton bangCRadio;
         private System.Windows.Forms.RadioButton quanCRadio;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RadioButton rbShiDuan_MoRen;
+        private System.Windows.Forms.RadioButton rbShiDuan_1_3;
+        private System.Windows.Forms.RadioButton rbShiDuan_1_2;
+        private System.Windows.Forms.RadioButton rbShiDuan_1_4;
     }
 }

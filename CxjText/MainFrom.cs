@@ -511,5 +511,25 @@ namespace CxjText
             }
             return 0;
         }
+        //获取球赛时段选择  默认返回0  1/2返回1   1/3返回2  1/4返回3
+        public int GetShiDuanSelected()
+        {
+             if (rbShiDuan_1_2.Checked)
+            {
+                return 1;
+            }
+            else if (rbShiDuan_1_3.Checked)
+            {
+                return 2;
+            }
+            else if (rbShiDuan_1_4.Checked)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }
