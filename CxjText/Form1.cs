@@ -30,7 +30,7 @@ namespace CxjText
                 Application.Exit();
                 return;
             }
-           // codeUserEdit.Text = "cxj81886404";
+         //  codeUserEdit.Text = "cxj81886404";
          //  codePwdEdit.Text = "cxj13580127662";
         }
 
@@ -64,6 +64,30 @@ namespace CxjText
             Config.speakJObject["146"] = "点球取消";
             Config.speakJObject["1062"] = "可能主队点球";
             Config.speakJObject["142"] = "可能点球";
+
+            Config.changeSaiNameJObject = new JObject();
+            Config.changeSaiNameJObject.Add("切禾", "基尔禾");
+            Config.changeSaiNameJObject.Add("洛达JC", "洛达");
+            Config.changeSaiNameJObject.Add("希尔克堡", "施克堡");
+            Config.changeSaiNameJObject.Add("阿蘭亞斯堡", "阿兰亚士邦");
+            Config.changeSaiNameJObject.Add("多瑙河鲁塞", "多恼");
+            Config.changeSaiNameJObject.Add("普夫迪夫火車頭", "普夫迪夫火车头");
+            Config.changeSaiNameJObject.Add("亚历山德里亚足球俱乐部", "阿拉卡森德里亚");
+            Config.changeSaiNameJObject.Add("圣塞瓦斯蒂安德洛斯雷耶斯", "圣瑟巴斯提安雷耶斯");
+            Config.changeSaiNameJObject.Add("伊布罗", "伊波罗");
+            Config.changeSaiNameJObject.Add("柯尼拉", "科诺拉");
+            Config.changeSaiNameJObject.Add("福门特拉", "福汶特拉");
+            Config.changeSaiNameJObject.Add("艾斯查", "艾西加");
+            Config.changeSaiNameJObject.Add("毕尔包", "毕尔巴鄂竞技");
+            Config.changeSaiNameJObject.Add("S.維尔瓦(女)", "斯波盯维尔瓦");
+            Config.changeSaiNameJObject.Add("格罗兹尼艾哈迈德 U21", "阿科马特 U21");
+            Config.changeSaiNameJObject.Add("阿韦亚内达竞赛俱乐部 (后)", "竞赛会");
+            Config.changeSaiNameJObject.Add("辛特侯逊", "桑德豪森");
+            Config.changeSaiNameJObject.Add("卡维哈拉", "科维拉");
+            Config.changeSaiNameJObject.Add("維多利亞柏林", "维多利亚柏林");
+            Config.changeSaiNameJObject.Add("纳普里达克克鲁舍瓦茨", "纳普里达克");
+            Config.changeSaiNameJObject.Add("阿里斯", "阿里斯塞萨洛尼基");
+            Config.changeSaiNameJObject.Add("潘塞拉高斯", "邦萨拉高斯");
         }
 
 
