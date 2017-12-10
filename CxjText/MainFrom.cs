@@ -343,6 +343,17 @@ namespace CxjText
             enventInfo.T = (String)jObject["data"]["T"];
             enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
+            /**************************球队名字过滤转化*******************************/
+            if (Config.changeSaiNameJObject[enventInfo.nameH] != null) {
+                enventInfo.nameH = (String)Config.changeSaiNameJObject[enventInfo.nameH];
+            }
+
+            if (Config.changeSaiNameJObject[enventInfo.nameG] != null)
+            {
+                enventInfo.nameG = (String)Config.changeSaiNameJObject[enventInfo.nameG];
+            }
+
+
             speak(cid, enventInfo.info);
 
             this.Invoke(new Action(() => {

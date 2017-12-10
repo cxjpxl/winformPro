@@ -46,6 +46,7 @@ namespace CxjText.utils
 
 
         public static JObject speakJObject = new JObject();
+        public static JObject changeSaiNameJObject = new JObject();
 
     }
 }
