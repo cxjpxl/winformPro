@@ -339,7 +339,7 @@ namespace CxjText.views
                 if (user.status != 2) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
-                if (mainFrom.isAuto()&& mainFrom.GetAmountSelected() != 0) {
+                if (dataJObject["gameMid"] != null&&mainFrom.isAuto()&& mainFrom.GetAmountSelected() != 0) {
                     try
                     {
                         float moneyAll = float.Parse(user.money);
