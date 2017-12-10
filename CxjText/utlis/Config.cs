@@ -48,5 +48,15 @@ namespace CxjText.utils
         public static JObject speakJObject = new JObject();
         public static JObject changeSaiNameJObject = new JObject();
 
+        public static void addSaiName(String key ,String value) {
+            if (changeSaiNameJObject == null) {
+                changeSaiNameJObject = new JObject();
+            }
+
+            if (changeSaiNameJObject[key] == null) {
+                changeSaiNameJObject.Add(key, value);
+            }
+        }
+
     }
 }
