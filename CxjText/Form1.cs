@@ -30,8 +30,11 @@ namespace CxjText
                 Application.Exit();
                 return;
             }
-         //  codeUserEdit.Text = "cxj81886404";
-         //  codePwdEdit.Text = "cxj13580127662";
+            if (Config.softUserStr.Equals("admin")) {
+                  codeUserEdit.Text = "cxj81886404";
+                  codePwdEdit.Text = "cxj13580127662";
+            }
+
         }
 
 
@@ -88,6 +91,9 @@ namespace CxjText
             Config.changeSaiNameJObject.Add("纳普里达克克鲁舍瓦茨", "纳普里达克");
             Config.changeSaiNameJObject.Add("阿里斯", "阿里斯塞萨洛尼基");
             Config.changeSaiNameJObject.Add("潘塞拉高斯", "邦萨拉高斯");
+            Config.changeSaiNameJObject.Add("邦萨拉高斯", "喜百年");
+            Config.changeSaiNameJObject.Add("斯洛云布拉迪斯拉发", "斯洛云");
+            
         }
 
 
