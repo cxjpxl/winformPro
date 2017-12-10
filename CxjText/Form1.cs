@@ -94,7 +94,10 @@ namespace CxjText
             Config.changeSaiNameJObject.Add("邦萨拉高斯", "喜百年");
             Config.changeSaiNameJObject.Add("斯洛云布拉迪斯拉发", "斯洛云");
             Config.changeSaiNameJObject.Add("侯布洛", "霍布罗");
-             
+            Config.changeSaiNameJObject.Add("曼希恩", "曼海姆");
+            Config.changeSaiNameJObject.Add("济拉", "兹拉");
+            Config.changeSaiNameJObject.Add("尼菲治", "巴库尼菲治");
+            Config.changeSaiNameJObject.Add("Argentinos Juniors U20", "小阿根廷人");
 
         }
 
