@@ -123,6 +123,10 @@ namespace CxjText
             Config.addSaiName("歷索斯", "雷克斯欧斯");
             Config.addSaiName("歐力維倫斯", "奥利维伦斯");
             Config.addSaiName("卡拉奥华", "CS卡拉奥华大学");
+            Config.addSaiName("马德里竞技", "马德里");
+            Config.addSaiName("洛桑競技", "洛桑体育");
+            Config.addSaiName("沃尔夫斯贝格", "禾夫斯堡");
+            Config.addSaiName("波根沙斯辛", "沙斯辛");
         }
 
 
