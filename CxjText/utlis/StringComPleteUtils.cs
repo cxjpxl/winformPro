@@ -336,18 +336,6 @@ namespace CxjText.utlis
                 return false;
             }
 
-            if (lianSai.Contains("西班牙") && lianSai.Contains("丙"))
-            {
-                return false;
-            }
-
-            if (lianSai.Contains("塞尔维亚") && lianSai.Contains("甲"))
-            {
-                return false;
-            }
-
-        
-
             if (lianSai.Contains("英格兰"))
             {
                 if (lianSai.Contains("超")) {
@@ -361,8 +349,11 @@ namespace CxjText.utlis
             }
 
 
-            if (lianSai.Contains("德国") && lianSai.Contains("丙"))
+            if (lianSai.Contains("丙"))
             {
+                if (lianSai.Contains("意大利")) {
+                    return true;
+                }
                 return false;
             }
 
