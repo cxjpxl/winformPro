@@ -112,6 +112,17 @@ namespace CxjText
             Config.addSaiName("艾里斯利馬斯素爾", "艾里斯");
             Config.addSaiName("阿尔塔亚文布赖达", "塔亚文布莱达");
             Config.addSaiName("伊蒂法克", "伊地法格");
+            Config.addSaiName("卢高", "卢戈");
+            Config.addSaiName("波根沙斯辛", "沙斯辛");
+            Config.addSaiName("维斯瓦克拉科夫", "克拉科夫");
+            Config.addSaiName("安东米度士", "亚图米图斯");
+            Config.addSaiName("利瓦迪亚高斯", "利云达高斯");
+            Config.addSaiName("伊安尼那", "基亚连拿");
+            Config.addSaiName("拉密亚", "拉米亚");
+            Config.addSaiName("艾路卡", "阿鲁卡");
+            Config.addSaiName("歷索斯", "雷克斯欧斯");
+            Config.addSaiName("歐力維倫斯", "奥利维伦斯");
+            Config.addSaiName("卡拉奥华", "CS卡拉奥华大学");
         }
 
 
