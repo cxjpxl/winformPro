@@ -186,7 +186,6 @@ namespace CxjText.utlis
             int apiStart = mktUrl.IndexOf("api");
             if (apiStart <= 0) return 0;
             mktUrl = mktUrl.Substring(0, apiStart-1);
-            Console.WriteLine(mktUrl);
             userInfo.dataUrl = FileUtils.changeDataUrl(mktUrl.Replace("mkt", "www"));
             userInfo.loginUrl = userInfo.dataUrl;
             baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
