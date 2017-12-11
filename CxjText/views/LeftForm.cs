@@ -584,17 +584,22 @@ namespace CxjText.views
                             {
                                 //获取主队全场让球
                                 String str04 = DataUtils.get_c04_data(obj, userInfo.tag);
-                                try
+                                String[] data = str04.Split(' ');
+                                str04 = data[data.Length - 1];
+                                if (!String.IsNullOrEmpty(str04))
                                 {
-                                    float dataRate = float.Parse(str04);
-                                    if (dataRate > 0.7)
+                                    try
                                     {
-                                        selectDaXiao = false;
+                                        float dataRate = float.Parse(str04);
+                                        if (dataRate > 0.7)
+                                        {
+                                            selectDaXiao = false;
+                                        }
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                   
+                                    catch (Exception e)
+                                    {
+
+                                    }
                                 }
                                 isBanChang = false;
                             }
@@ -605,17 +610,22 @@ namespace CxjText.views
                             {
                                 //获取客队全场让球
                                 String str14 = DataUtils.get_c14_data(obj, userInfo.tag);
-                                try
+                                String[] data = str14.Split(' ');
+                                str14 = data[data.Length - 1];
+                                if (!String.IsNullOrEmpty(str14))
                                 {
-                                    float dataRate = float.Parse(str14);
-                                    if (dataRate > 0.7)
+                                    try
                                     {
-                                        selectDaXiao = false;
+                                        float dataRate = float.Parse(str14);
+                                        if (dataRate > 0.7)
+                                        {
+                                            selectDaXiao = false;
+                                        }
                                     }
-                                }
-                                catch (Exception e)
-                                {
+                                    catch (Exception e)
+                                    {
 
+                                    }
                                 }
                                 isBanChang = false;
                             }
