@@ -536,76 +536,6 @@ namespace CxjText.utlis
             int money = (int)jobject["money"];
 
             JObject headJObject = new JObject();
-            /*获取UA*/
-        /*    String UaUrl = user.dataUrl + "/cl/index1.aspx?method=Sunplus";
-            headJObject["Host"] = user.baseUrl;
-            headJObject["Referer"] = user.dataUrl + "/cl/index.aspx";
-            String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(uaRlt) || !uaRlt.Contains("UA="))
-            {
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        rltForm.RefershLineData(inputTag, "UA地址失败");
-                    }
-                }));
-                return;
-            }
-            String newCookieUrl = "";
-            String[] htmls = uaRlt.Split('\n');
-            for (int i = 0; i < htmls.Length; i++)
-            {
-                String htmlStr = htmls[i].Trim();
-                if (htmlStr.Contains("UA=") && htmlStr.Contains("src=\""))
-                {
-                    int start1 = htmlStr.IndexOf("src=\"") + 5;
-                    htmlStr = htmlStr.Substring(start1, htmlStr.Length - start1);
-                    String[] usrls = htmlStr.Split('"');
-                    newCookieUrl = usrls[0];
-                    break;
-                }
-            }
-            if (String.IsNullOrEmpty(newCookieUrl))
-            {
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        rltForm.RefershLineData(inputTag, "cookie地址解析失败");
-                    }
-                }));
-                return;
-            }
-
-            //url处理
-            if (!newCookieUrl.Contains("mkt."))
-            {
-                if (newCookieUrl.Contains("http://"))
-                {
-                    newCookieUrl = "http://" + "mkt." + newCookieUrl.Substring(7, newCookieUrl.Length - 7);
-                }
-                else if (newCookieUrl.Contains("https://"))
-                {
-                    newCookieUrl = "https://" + "mkt." + newCookieUrl.Substring(8, newCookieUrl.Length - 8);
-                }
-                else
-                {
-                    leftForm.Invoke(new Action(() => {
-                        if (rltForm != null)
-                        {
-                            rltForm.RefershLineData(inputTag, "mkt地址解析失败");
-                        }
-                    }));
-                    return;
-                }
-            }
-      
-            //mkt访问
-            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
-            headJObject["Referer"] = user.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
-            String mktUrl = newCookieUrl;
-            HttpUtils.HttpGetHeader(mktUrl, "", user.cookie, headJObject);*/
-            /***************************************************/
-            headJObject = new JObject();
             String[] parms = parmsStr.Split(',');
             if (parms.Length != 4) {
                 leftForm.Invoke(new Action(() => {
@@ -616,8 +546,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
-            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
+            String baseUrl = FileUtils.changeBaseUrl(user.dataUrl);
+            headJObject["Host"] = baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = user.dataUrl.Replace("www", "mkt");
             String url1 = user.dataUrl.Replace("www", "mkt") + "/home/order?ran=" + FormUtils.getCurrentTime();
             String rlt = HttpUtils.HttpGetHeader(url1, "", user.cookie, headJObject);
@@ -661,7 +591,7 @@ namespace CxjText.utlis
             parmsJObject.Add("bType", bType);
             parmsJArray.Add(parmsJObject);
             String bOrderParmsStr = parmsJArray.ToString();
-            headJObject["Host"] = user.baseUrl.Replace("www", "mkt");
+            headJObject["Host"] = baseUrl.Replace("www", "mkt");
             headJObject["Referer"] = url1;
             headJObject["Origin"] = user.dataUrl.Replace("www", "mkt");
             String betUrl = user.dataUrl.Replace("www", "mkt") + "/home/order";

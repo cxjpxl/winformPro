@@ -131,10 +131,9 @@ namespace CxjText.utlis
             //获取钱的处理
             JObject headJObject = new JObject();
 
-
-
-            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
-            headJObject["Host"] = userInfo.baseUrl;
+            String baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
+           String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
+            headJObject["Host"] = baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(uaRlt) || !uaRlt.Contains("UA="))
@@ -179,13 +178,21 @@ namespace CxjText.utlis
 
             //mkt访问
             headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
-            headJObject["Referer"] = userInfo.baseUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
+            headJObject["Host"] = baseUrl.Replace("www", "mkt");
+            headJObject["Referer"] = userInfo.dataUrl.Replace("www", "mkt") + "/cl/index1.aspx?method=Sunplus&other=header";
             String mktUrl = newCookieUrl;
             HttpUtils.HttpGetHeader(mktUrl, "", userInfo.cookie, headJObject);
-            
+
+            int apiStart = mktUrl.IndexOf("api");
+            if (apiStart <= 0) return 0;
+            mktUrl = mktUrl.Substring(0, apiStart-1);
+            Console.WriteLine(mktUrl);
+            userInfo.dataUrl = FileUtils.changeDataUrl(mktUrl.Replace("mkt", "www"));
+            userInfo.loginUrl = userInfo.dataUrl;
+            baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
+
             headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Host"] = baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t=" + FormUtils.getCurrentTime();
             String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie, headJObject);

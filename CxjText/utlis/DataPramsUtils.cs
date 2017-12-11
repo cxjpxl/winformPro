@@ -176,7 +176,8 @@ namespace CxjText.utlis
             //循环获取分页数据
             String getDataUrl = userInfo.dataUrl.Replace("www", "mkt") + "/foot/redata/";
             JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl.Replace("www", "mkt");
+            String baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Host"] = baseUrl.Replace("www", "mkt");
             headJObject["Origin"] = userInfo.dataUrl.Replace("www", "mkt");
             headJObject["Referer"] = userInfo.dataUrl.Replace("www", "mkt") + "/foot/re";
 
