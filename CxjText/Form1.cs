@@ -126,8 +126,6 @@ namespace CxjText
             Config.addSaiName("马德里竞技", "马德里");
             Config.addSaiName("洛桑競技", "洛桑体育");
             Config.addSaiName("沃尔夫斯贝格", "禾夫斯堡");
-            Config.addSaiName("波根沙斯辛", "沙斯辛");
-
             Config.addSaiName("东孟加拉 U18", "翠鸟东孟加拉");
             Config.addSaiName("United SC U18", "联竞技加尔各答");
             Config.addSaiName("巴甘莫哈 U18", "莫亨巴根");
@@ -153,9 +151,7 @@ namespace CxjText
             Config.addSaiName("利伯泰德桑查尔斯", "利伯泰迪桑察勒斯");
             Config.addSaiName("贝尔格拉诺体育", "斯伯迪沃贝尔格拉诺");
             Config.addSaiName("貝爾格拉諾防衛隊若瑪羅", "贝尔格拉诺防卫队若玛罗");
-            Config.addSaiName("吉姆纳西亚", "甘拿斯亚康塞普森");
-
-             
+            Config.addSaiName("吉姆纳西亚", "甘拿斯亚康塞普森");   
         }
 
 

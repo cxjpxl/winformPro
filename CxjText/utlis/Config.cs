@@ -53,8 +53,12 @@ namespace CxjText.utils
                 changeSaiNameJObject = new JObject();
             }
 
-            if (changeSaiNameJObject[key] == null) {
+            if (changeSaiNameJObject[key] == null)
+            {
                 changeSaiNameJObject.Add(key, value);
+            }
+            else {
+                Console.WriteLine("有重复:"+key);
             }
         }
 
