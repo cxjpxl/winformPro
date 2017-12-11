@@ -127,6 +127,35 @@ namespace CxjText
             Config.addSaiName("洛桑競技", "洛桑体育");
             Config.addSaiName("沃尔夫斯贝格", "禾夫斯堡");
             Config.addSaiName("波根沙斯辛", "沙斯辛");
+
+            Config.addSaiName("东孟加拉 U18", "翠鸟东孟加拉");
+            Config.addSaiName("United SC U18", "联竞技加尔各答");
+            Config.addSaiName("巴甘莫哈 U18", "莫亨巴根");
+            Config.addSaiName("托斯諾", "图斯諾");
+            Config.addSaiName("卡拉布基斯普", "卡拉布克士邦");
+            Config.addSaiName("布隆迪", "蒲隆地共和国");
+            Config.addSaiName("加巴拉PFC", "卡巴拉");
+            Config.addSaiName("南德阿美利加(后)", "苏阿美利加");
+            Config.addSaiName("罗比沙奇拉夏普尔", "海法罗比沙普拉");
+            Config.addSaiName("泊列勃理", "柏斯波利斯");
+            Config.addSaiName("桑納特纳夫特阿巴丹", "纳夫特");
+            Config.addSaiName("丹蒙迪谢赫", "贾马尔");
+            Config.addSaiName("尤文提度(后) ", "尤文都德彼德拉斯");
+            Config.addSaiName("保卫者队(后)", "德丰索体育队");
+            Config.addSaiName("沃伦塔里", "沃鲁塔瑞");
+            Config.addSaiName("菲伦斯", "费伦斯");
+            Config.addSaiName("托奧斯", "奧斯");
+            Config.addSaiName("史查福豪森", "沙夫豪森");
+            Config.addSaiName("马卡比特拉维夫", "特拉维夫马卡比");
+            Config.addSaiName("锡耶纳", "若布斯恩纳");
+            Config.addSaiName("赫罗纳", "基罗纳");
+            Config.addSaiName("桑塔马里纳", "坦迪尔");
+            Config.addSaiName("利伯泰德桑查尔斯", "利伯泰迪桑察勒斯");
+            Config.addSaiName("贝尔格拉诺体育", "斯伯迪沃贝尔格拉诺");
+            Config.addSaiName("貝爾格拉諾防衛隊若瑪羅", "贝尔格拉诺防卫队若玛罗");
+            Config.addSaiName("吉姆纳西亚", "甘拿斯亚康塞普森");
+
+             
         }
 
 
