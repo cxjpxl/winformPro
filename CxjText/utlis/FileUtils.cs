@@ -47,34 +47,11 @@ namespace CxjText.utlis
                     String baseUrl = strs[3];//网址
                     String loginUrl = strs[3];//登录的链接地址 
                     String dataUrl = strs[3]; //获取数据的接口
-                   /* if (tag.Equals("A"))
-                    {
-                        if (strs.Length >= Config.pramsNum + 1)
-                        {
-                            dataUrl = strs[strs.Length -1]; //下单接口
-                        }
-                        else {
-                            continue;
-                        }
-                    }*/
+
+                    baseUrl = changeBaseUrl(baseUrl);
+                    dataUrl = changeDataUrl(dataUrl);
 
 
-                    if (baseUrl.Contains("http://")) {
-                        baseUrl = baseUrl.Remove(0,7);
-                    }
-                    if (baseUrl.Contains("https://")) {
-                        baseUrl = baseUrl.Remove(0, 8);
-                    }
-                    if (baseUrl.EndsWith("/"))
-                    {
-                        baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
-                    }
-
-                    if (!baseUrl.Contains("www.")) {
-                        baseUrl = "www." + baseUrl;
-                    }
-
-                    
                     if (loginUrl.EndsWith("/")) {
                         loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
                     }
@@ -91,27 +68,7 @@ namespace CxjText.utlis
                             loginUrl = "https://" + "www." + loginUrl.Substring(8, loginUrl.Length - 8);
                         }
                     }
-
-
-                    if (dataUrl.EndsWith("/"))
-                    {
-                        dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
-                    }
-
-                    //R系统要特殊处理下
-                    if (!dataUrl.Contains("www.") && tag.Equals("R"))
-                    {
-                        if (dataUrl.Contains("http://"))
-                        {
-                            dataUrl = "http://" + "www." + dataUrl.Substring(7, dataUrl.Length - 7);
-                        }
-                        else if (loginUrl.Contains("https://"))
-                        {
-                            dataUrl = "https://" + "www." + dataUrl.Substring(8, dataUrl.Length - 8);
-                        }
-                    }
-
-
+                    
                     if (list.Contains(baseUrl))
                     { //过滤重复的网址
                         break;
@@ -204,5 +161,46 @@ namespace CxjText.utlis
               return code;  ;
 
         }
+
+        public static String changeBaseUrl(String baseUrl) {
+            if (baseUrl.Contains("http://"))
+            {
+                baseUrl = baseUrl.Remove(0, 7);
+            }
+            if (baseUrl.Contains("https://"))
+            {
+                baseUrl = baseUrl.Remove(0, 8);
+            }
+            if (baseUrl.EndsWith("/"))
+            {
+                baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
+            }
+
+            if (!baseUrl.Contains("www."))
+            {
+                baseUrl = "www." + baseUrl;
+            }
+
+            return baseUrl;
+        }
+
+        public static String changeDataUrl(String dataUrl) {
+            if (dataUrl.EndsWith("/"))
+            {
+                dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
+            }
+            if (!dataUrl.Contains("www."))
+            {
+                if (dataUrl.Contains("http://"))
+                {
+                    dataUrl = "http://" + "www." + dataUrl.Substring(7, dataUrl.Length - 7);
+                }else if (dataUrl.Contains("https://"))
+                {
+                    dataUrl = "https://" + "www." + dataUrl.Substring(8, dataUrl.Length - 8);
+                }
+            }
+            return dataUrl;
+        }
+
     }
 }
