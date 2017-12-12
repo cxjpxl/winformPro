@@ -191,7 +191,7 @@ namespace CxjText
             Config.addSaiName("波德诺内", "波代诺内");
             Config.addSaiName("艾华尼斯", "恩华利斯");
             Config.addSaiName("切尔西", "车路士");
-
+            Config.addSaiName("安格斯", "昂热");
         }
 
 
