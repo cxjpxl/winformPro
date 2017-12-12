@@ -151,7 +151,18 @@ namespace CxjText
             Config.addSaiName("利伯泰德桑查尔斯", "利伯泰迪桑察勒斯");
             Config.addSaiName("贝尔格拉诺体育", "斯伯迪沃贝尔格拉诺");
             Config.addSaiName("貝爾格拉諾防衛隊若瑪羅", "贝尔格拉诺防卫队若玛罗");
-            Config.addSaiName("吉姆纳西亚", "甘拿斯亚康塞普森");   
+            Config.addSaiName("吉姆纳西亚", "甘拿斯亚康塞普森");
+            Config.addSaiName("卢多格德斯.拉兹格勒", "卢多格瑞特拉兹格勒");
+            Config.addSaiName("格罗兹尼艾哈迈德", "阿科马特");
+            Config.addSaiName("伊蒂哈德伊斯坎达利(中)", "伊蒂哈德亚历山大");
+            Config.addSaiName("阿富拉夏普爾", "阿福拉哈普尔");
+            Config.addSaiName("拉馬特甘夏普爾", "夏普尔拉马甘吉夫塔伊姆");
+            Config.addSaiName("克法尔萨巴哈普尔", "法萨巴夏普尔");
+            Config.addSaiName("RS拜尔坎", "贝尔卡勒");
+            Config.addSaiName("彼達迪華馬卡比", "彼达迪华马卡比");
+            Config.addSaiName("修咸顿 U23", "南安普敦");
+            Config.addSaiName("斯劳镇", "斯洛格镇");
+ 
         }
 
 

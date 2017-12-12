@@ -447,7 +447,6 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             JObject rltJObject = JObject.Parse(rlt);
             JArray jArray = new JArray();
-
             try
             {
                 if (((String)rltJObject["db"]).Equals(""))
@@ -475,13 +474,71 @@ namespace CxjText.utlis
                         continue;
                     }
                 }
-                rltJObject["db"] = jArray;
-                rlt = rltJObject.ToString().Trim();
+                
             }
             catch (SystemException e) {
                 //这里会抛出 System.InvalidCastException 转化异常  
                 //可以忽略掉 这个是为了区分那个array和object格式的数据的处理
+                jArray =(JArray) rltJObject["db"];
             }
+
+
+
+
+            if (rltJObject["page"] != null) {
+                int page = (int)rltJObject["page"];
+                if (page > 1) {
+                    for (int i = 1; i < page; i++) {
+                        int curPage = i + 1;
+                        getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
+                        p = "p="+curPage+ "&oddpk=H&leg=";
+                        rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
+                        if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) continue;
+                        rltJObject = JObject.Parse(rlt);
+                        try
+                        {
+                            if (((String)rltJObject["db"]).Equals(""))
+                            {
+                                continue;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+
+
+                        try
+                        {
+                            JObject dbJObjecct = (JObject)rltJObject["db"];
+                            for (int j = 0; j < dbJObjecct.Count; j++)
+                            {
+                                try
+                                {
+                                    JObject jObject = (JObject)dbJObjecct["" + (j + 1)];
+                                    if (jObject != null)
+                                    {
+                                        jArray.Add(jObject);
+                                    }
+                                }
+                                catch (SystemException e)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                        catch (SystemException e)
+                        {
+                            JArray tempArray = (JArray)rltJObject["db"];
+                            for (int index = 0; index < tempArray.Count; index++) {
+                                jArray.Add(tempArray[index]);
+                            }
+                        }
+                    }
+                }
+            }
+            rltJObject["db"] = jArray;
+            rlt = rltJObject.ToString().Trim();
             return rlt;
         }
         /***********************K系统获取数据*************************/
