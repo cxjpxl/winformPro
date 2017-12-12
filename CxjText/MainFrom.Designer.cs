@@ -158,11 +158,11 @@
             // autoCheck
             // 
             this.autoCheck.AutoSize = true;
-            this.autoCheck.Location = new System.Drawing.Point(6, 20);
+            this.autoCheck.Location = new System.Drawing.Point(14, 20);
             this.autoCheck.Name = "autoCheck";
-            this.autoCheck.Size = new System.Drawing.Size(72, 16);
+            this.autoCheck.Size = new System.Drawing.Size(48, 16);
             this.autoCheck.TabIndex = 14;
-            this.autoCheck.Text = "自动下注";
+            this.autoCheck.Text = "启动";
             this.autoCheck.UseVisualStyleBackColor = true;
             // 
             // rbRangQiu
@@ -191,7 +191,7 @@
             // 
             this.panel1.Controls.Add(this.rbDaxiao);
             this.panel1.Controls.Add(this.rbRangQiu);
-            this.panel1.Location = new System.Drawing.Point(84, 10);
+            this.panel1.Location = new System.Drawing.Point(76, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(128, 28);
             this.panel1.TabIndex = 15;
@@ -281,9 +281,9 @@
             this.groupBox1.Controls.Add(this.rbAmount_MoRen);
             this.groupBox1.Controls.Add(this.rbAmount_1_3);
             this.groupBox1.Controls.Add(this.rbAmount_1_2);
-            this.groupBox1.Location = new System.Drawing.Point(6, 99);
+            this.groupBox1.Location = new System.Drawing.Point(11, 99);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(206, 44);
+            this.groupBox1.Size = new System.Drawing.Size(200, 44);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "金額";
@@ -299,14 +299,14 @@
             this.groupBox2.Size = new System.Drawing.Size(226, 154);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "自动区域";
+            this.groupBox2.Text = "自动下注";
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.quanCRadio);
             this.groupBox3.Controls.Add(this.AutoBanChang);
             this.groupBox3.Controls.Add(this.bangCRadio);
-            this.groupBox3.Location = new System.Drawing.Point(6, 44);
+            this.groupBox3.Location = new System.Drawing.Point(11, 44);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 50);
             this.groupBox3.TabIndex = 23;
