@@ -101,8 +101,8 @@ namespace CxjText.utlis
                     userInfo.baseUrl = baseUrl.Trim();
                     userInfo.loginUrl = loginUrl.Trim();
                     userInfo.dataUrl = dataUrl.Trim();
-                    userInfo.loginTime = FormUtils.getCurrentTime();
-                    userInfo.updateMoneyTime = userInfo.loginTime;
+                    userInfo.loginTime = -1;
+                    userInfo.updateMoneyTime = FormUtils.getCurrentTime();
                     userInfo.leastMoney = 10;
 
 

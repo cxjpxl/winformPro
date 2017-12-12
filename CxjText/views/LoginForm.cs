@@ -184,8 +184,8 @@ namespace CxjText.views
                 userInfo.status = 3;
                 userInfo.cookie = null;
                 userInfo.uid = "";
-                userInfo.loginTime = -1;
-                userInfo.updateMoneyTime = -1;
+               // userInfo.loginTime = -1;
+              //  userInfo.updateMoneyTime = -1;
                 AddToListToUpDate(position);
             }
         }
@@ -281,6 +281,12 @@ namespace CxjText.views
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
+                //R系统的情况 且登录失败的情况下
+                if (user.tag.Equals("R")&&user.status == 3 && user.loginTime != -1) {  
+                    Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
+                    t1.Start(i);
+                    continue;
+                }
                 if (user.status != 2) continue;
                 if (!LoginUtils.canRestLogin(user.updateMoneyTime, user.tag)) continue;
                 user.updateMoneyTime = FormUtils.getCurrentTime();

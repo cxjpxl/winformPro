@@ -589,6 +589,8 @@ namespace CxjText.utlis
             if (status == 2) //状态是登录状态  要退出登录
             {
                 userInfo.status = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime  = -1;
                 userInfo.uid = "";
                 userInfo.cookie = null;
                 userInfo.cookie = new System.Net.CookieContainer();
