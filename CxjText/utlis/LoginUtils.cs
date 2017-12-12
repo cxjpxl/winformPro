@@ -208,6 +208,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.loginFailTime = 0 ;
                 userInfo.uid = "";
                 userInfo.status = 0;
                 loginForm.Invoke(new Action(() => {
@@ -228,6 +229,7 @@ namespace CxjText.utlis
             int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
             if (codeMoney <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -244,6 +246,7 @@ namespace CxjText.utlis
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -259,6 +262,7 @@ namespace CxjText.utlis
                               1004, 20, codeStrBuf);
             if (num <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -274,6 +278,7 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
             if (rltStr == null)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -284,6 +289,7 @@ namespace CxjText.utlis
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -294,6 +300,7 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetBMoney(userInfo);
             if (moneyStatus == 1)
             {
+                userInfo.loginFailTime=0;
                 userInfo.status = 2; //成功
                 userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 userInfo.updateMoneyTime = userInfo.loginTime;
@@ -303,6 +310,7 @@ namespace CxjText.utlis
                 return;
             }
             else {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -588,6 +596,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.loginFailTime = 0;
                 userInfo.status = 0;
                 userInfo.loginTime = -1;
                 userInfo.updateMoneyTime  = -1;
@@ -611,6 +620,7 @@ namespace CxjText.utlis
             int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
             if (codeMoney <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -627,6 +637,7 @@ namespace CxjText.utlis
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
                 {
@@ -643,6 +654,7 @@ namespace CxjText.utlis
                               1004, 20, codeStrBuf);
             if (num <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
                 {
@@ -663,6 +675,7 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr))
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
                 {
@@ -673,6 +686,7 @@ namespace CxjText.utlis
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
                 {
@@ -692,6 +706,7 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetRMoney(userInfo);
             if (moneyStatus == 1)
             {
+                userInfo.loginFailTime = 0;
                 userInfo.status = 2;
                 userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 userInfo.updateMoneyTime = userInfo.loginTime;
@@ -701,6 +716,7 @@ namespace CxjText.utlis
                 }));
             }
             else {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() =>
                 {
@@ -719,6 +735,7 @@ namespace CxjText.utlis
 
             if (status == 2) //状态是登录状态  要退出登录
             {
+                userInfo.loginFailTime=0;
                 userInfo.uid = "";
                 userInfo.status = 0;
                 loginForm.Invoke(new Action(() => {
@@ -739,6 +756,7 @@ namespace CxjText.utlis
             int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
             if (codeMoney <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -757,6 +775,7 @@ namespace CxjText.utlis
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -772,6 +791,7 @@ namespace CxjText.utlis
                               1004, 20, codeStrBuf);
             if (num <= 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -789,6 +809,7 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
             if (rltStr == null)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -798,6 +819,7 @@ namespace CxjText.utlis
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -808,6 +830,7 @@ namespace CxjText.utlis
             //获取token  和 uid
             List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (list == null || list.Count == 0) {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -828,6 +851,7 @@ namespace CxjText.utlis
 
             if (String.IsNullOrEmpty(uid))
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -842,6 +866,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/index.php/Index/module_sports";
             String sportRlt = HttpUtils.HttpGetHeader(sportsUrl,"",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(sportRlt)||!sportRlt.Contains("uid="+uid)) {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -865,6 +890,7 @@ namespace CxjText.utlis
                 }
             }
             if (String.IsNullOrEmpty(token)) {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
@@ -879,6 +905,7 @@ namespace CxjText.utlis
             //到时候要变成获钱和uid token
             if (moneyStatus == 1)
             {
+                userInfo.loginFailTime=0;
                 userInfo.status = 2; //成功
                 userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 userInfo.updateMoneyTime = userInfo.loginTime;
@@ -889,6 +916,7 @@ namespace CxjText.utlis
             }
             else
             {
+                userInfo.loginFailTime++;
                 userInfo.status = 3;
                 userInfo.uid = "";
                 userInfo.exp = "";

@@ -192,6 +192,14 @@ namespace CxjText
             Config.addSaiName("艾华尼斯", "恩华利斯");
             Config.addSaiName("切尔西", "车路士");
             Config.addSaiName("安格斯", "昂热");
+            Config.addSaiName("AL雷恩", "艾尔雷恩");
+            Config.addSaiName("USM 阿爾及爾", "USM阿尔格");
+            Config.addSaiName("大都會警察", "麦罗波利塔诺波利斯");
+            Config.addSaiName("格茨海德", "凯兹海得");
+            Config.addSaiName("托基聯", "托基联");
+            Config.addSaiName("福克斯顿", "佛克斯通");
+            Config.addSaiName("维森", "沃辛");
+            Config.addSaiName("Hanwell Town FC ", "汉威尔城");   
         }
 
 
