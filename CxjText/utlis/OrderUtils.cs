@@ -111,7 +111,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "构建订单失败");
                     }
                 }));
                 return;
@@ -167,7 +167,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "赔率计算失败");
                     }
                 }));
                 return;
@@ -185,7 +185,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "下单检查失败");
                     }
                 }));
                 return;
@@ -197,7 +197,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "下单检查失败");
                     }
                 }));
                 return;
@@ -209,7 +209,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "下单检查失败");
                     }
                 }));
                 return;
@@ -226,7 +226,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "下单失败");
                     }
                 }));
                 return;
