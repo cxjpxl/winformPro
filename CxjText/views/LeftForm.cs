@@ -2,7 +2,6 @@
 using CxjText.iface;
 using CxjText.utils;
 using CxjText.utlis;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

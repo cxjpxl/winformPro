@@ -27,6 +27,7 @@ namespace CxjText.views
 
         //添加到头部
         public void AddLineInHead(InputInfo inputInfo) {
+            inputInfo.time = DateTime.Now.ToString();
             list.Insert(0, inputInfo);
             customersBindingSource.ResetBindings(true);
         }

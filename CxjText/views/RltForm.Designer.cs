@@ -38,6 +38,7 @@
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.RltDgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,8 @@
             this.Column5,
             this.Column6,
             this.Column7,
-            this.Column8});
+            this.Column8,
+            this.Column10});
             this.RltDgv.Location = new System.Drawing.Point(0, 0);
             this.RltDgv.Margin = new System.Windows.Forms.Padding(0);
             this.RltDgv.MultiSelect = false;
@@ -65,7 +67,7 @@
             this.RltDgv.ReadOnly = true;
             this.RltDgv.RowHeadersVisible = false;
             this.RltDgv.RowTemplate.Height = 23;
-            this.RltDgv.Size = new System.Drawing.Size(815, 199);
+            this.RltDgv.Size = new System.Drawing.Size(815, 153);
             this.RltDgv.TabIndex = 0;
             // 
             // Column9
@@ -148,6 +150,15 @@
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column8.Width = 50;
             // 
+            // Column10
+            // 
+            this.Column10.DataPropertyName = "time";
+            this.Column10.HeaderText = "时间";
+            this.Column10.Name = "Column10";
+            this.Column10.ReadOnly = true;
+            this.Column10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column10.Width = 150;
+            // 
             // RltForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -175,5 +186,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
     }
 }

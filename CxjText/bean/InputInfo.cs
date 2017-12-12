@@ -30,5 +30,8 @@ namespace CxjText.bean
 
         //下注金额
         public int inputMoney { get; set; }
+
+        //下注时间
+        public String time { get; set; }
     }
 }
