@@ -162,7 +162,36 @@ namespace CxjText
             Config.addSaiName("彼達迪華馬卡比", "彼达迪华马卡比");
             Config.addSaiName("修咸顿 U23", "南安普敦");
             Config.addSaiName("斯劳镇", "斯洛格镇");
- 
+            Config.addSaiName("布萨斯堡", "柏萨士邦");
+            Config.addSaiName("亚丹纳斯堡", "艾丹拿斯堡");
+            Config.addSaiName("波卢斯堡", "布鲁斯堡");
+            Config.addSaiName("特拉布宗斯波尔", "特拉布宗");
+            Config.addSaiName("埃尔祖鲁姆士邦", "普野社希尔埃尔祖鲁姆士邦");
+            Config.addSaiName("甘美奧", "甘美奥RS");
+            Config.addSaiName("乔治罗尼亚比亚韦斯托克", "乔治罗尼亚");
+            Config.addSaiName("历基亚华沙", "历基亚");
+            Config.addSaiName("布雷达", "比达");
+            Config.addSaiName("阿雅克肖加泽莱克", "加泽莱克阿些斯奥");
+            Config.addSaiName("KAA真特", "真特");
+            Config.addSaiName("美因玆", "美因茨05");
+            Config.addSaiName("多蒙特", "多特蒙德");
+            Config.addSaiName("慕遜加柏", "门兴格拉德巴赫");
+            Config.addSaiName("尼切萨", "布鲁克贝特马利卡纳斯萨");
+            Config.addSaiName("斯拉斯克弗罗茨瓦夫", "斯拉斯克");
+            Config.addSaiName("阿卡格丁尼亚", "阿卡");
+            // Config.addSaiName("", "");
+            Config.addSaiName("伯恩利", "般尼");
+            Config.addSaiName("布莱克本流浪", "布力般流浪");
+            Config.addSaiName("卡莱尔", "卡素尔");
+            Config.addSaiName("埃克塞特", "艾斯特城");
+            Config.addSaiName("格兰森林", "格连森林");
+            Config.addSaiName("弗莱德", "菲尔德");
+            Config.addSaiName("坚士波罗", "真斯布洛治");
+            Config.addSaiName("乔利", "乔勒伊");
+            Config.addSaiName("波德诺内", "波代诺内");
+            Config.addSaiName("艾华尼斯", "恩华利斯");
+            Config.addSaiName("切尔西", "车路士");
+
         }
 
 
