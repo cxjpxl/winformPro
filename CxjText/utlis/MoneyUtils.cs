@@ -48,6 +48,7 @@ namespace CxjText.utlis
             if (bMoneyRlt.Trim().Equals("")) return -1;
             if (bMoneyRlt.Contains("重新登录")) return -1;
             bMoneyRlt = bMoneyRlt.Trim();
+            Console.WriteLine(bMoneyRlt);
             if (bMoneyRlt.Contains("DOCTYPE")) {
                 String[] strs = bMoneyRlt.Split('\n');
                 for (int i = 0; i < strs.Length; i++) {
@@ -64,7 +65,16 @@ namespace CxjText.utlis
              }
             if (bMoneyRlt.Contains("DOCTYPE")) return 0;
             String[] moneys = bMoneyRlt.Split('|');
-            user.money = moneys[0];
+            String moneyStr = moneys[0];
+            try
+            {
+                float.Parse(moneyStr);
+            }
+            catch (Exception e) {
+                return 0;
+            }
+
+            user.money = moneyStr;
             return 1;
         }
         //获取I的money 1表示还在登录   0获取获取失败  小于0表示登录失效
