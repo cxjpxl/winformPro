@@ -200,7 +200,7 @@ namespace CxjText.utlis
                 return 0;
             }
             JObject reJObject = JObject.Parse(referDataStr);
-            if (reJObject["code"] != null && ((int)reJObject["code"]) > 0)
+            if (reJObject["code"] != null && ((String)reJObject["code"]).Equals("100"))
             {
 
             }
