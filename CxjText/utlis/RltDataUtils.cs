@@ -207,7 +207,7 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("K")) {
+            else if (userInfo.tag.Equals("K")|| userInfo.tag.Equals("C")) {
                 JArray jArray = (JArray)jObject["list"];
                 if (jArray == null || jArray.Count == 0)
                 {
@@ -274,7 +274,7 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["lianSai"].ToString();
             }
-            else if (userInfo.tag.Equals("K")) {
+            else if (userInfo.tag.Equals("K")||userInfo.tag.Equals("C")) {
                 title = currentArray[0]["league"].ToString();
             }
             else
@@ -306,7 +306,7 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("K"))
+            else if (userInfo.tag.Equals("K")||userInfo.tag.Equals("C"))
             {
                 mid = (String)jArray[index][0]["gid"] + ""; //唯一标识
             }
@@ -356,7 +356,7 @@ namespace CxjText.utlis
                     return true;
                 }
             }
-            else if (userInfo.tag.Equals("K")) {
+            else if (userInfo.tag.Equals("K")|| userInfo.tag.Equals("C")) {
                 String nameH = (String)jObject["team_h"];
                 String nameG = (String)jObject["team_c"];
                 if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)

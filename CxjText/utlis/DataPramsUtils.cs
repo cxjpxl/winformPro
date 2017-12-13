@@ -714,6 +714,135 @@ namespace CxjText.utlis
             jObject.Add("list", jArray);
             return jObject.ToString();
         }
+        /***********************C系统获取数据*************************/
+        public static String getCData(UserInfo userInfo)
+        {
+            //page是由0开始
+            String uid = "";
+            JObject headJObject = new JObject();
+            JObject jObject = new JObject();
+            JArray jArray = new JArray();
+            CookieContainer cookie = userInfo.cookie;
+            if (userInfo.status != 2)
+            {
+                jObject.Add("list", jArray);
+                return jObject.ToString();
+                
+            }
+            uid = userInfo.uid;
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=&sort_type=undefined&zbreload=1";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
+            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
+            if (String.IsNullOrEmpty(dataRlt)) return null;
+            if (!dataRlt.Contains("parent.GameHead")) return null;
+            
+            if (!dataRlt.Contains("parent.GameFT["))
+            {
+                jObject.Add("list", jArray);
+                return jObject.ToString();
+            }
+            String[] strs = dataRlt.Split('\n');
+            JArray headJArray = null;
+            int t_page = 1;
+
+            for (int index = 0; index < strs.Length; index++)
+            {
+                String str = strs[index].Trim();
+                if (String.IsNullOrEmpty(str)) continue;
+
+                //获取总页码数
+                if (str.Contains("parent.t_page="))
+                {
+                    int indexStart = str.IndexOf("parent.t_page=");
+                    str = str.Substring(indexStart, str.Length - indexStart);
+                    String numStr = str.Replace("parent.t_page=", "").Replace(";", "").Trim();
+                    try
+                    {
+                        t_page = int.Parse(numStr);
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
+                }
+
+                if (!str.Contains("new Array") && !str.Contains("parent"))
+                {
+                    continue;
+                }
+
+                if (str.Contains("parent.GameHead"))
+                { //先解析头部
+                    String[] dataStrs = str.Split(';');
+                    String headStr = dataStrs[1];
+                    headStr = headStr.Replace(")", "]");
+                    headStr = headStr.Replace("parent.GameHead=new Array(", "[");
+                    if (!FormUtils.IsJsonArray(headStr)) return null;
+                    headJArray = JArray.Parse(headStr);
+                    if (headJArray == null) return null;
+                    continue;
+                }
+                //获取滚球的数据
+                if (str.Contains("parent.GameFT")&& str.Contains("new Array"))
+                {
+                    int arrayStart = str.IndexOf("Array(");
+                    if (arrayStart < 0) continue;
+                    String dataStr = str.Substring(arrayStart, str.Length - arrayStart);
+                    dataStr = dataStr.Replace("Array(", "[");
+                    dataStr = dataStr.Replace(");", "]");
+                    if (!FormUtils.IsJsonArray(dataStr)) continue;
+                    JArray data0JArray = JArray.Parse(dataStr);
+                    if (data0JArray == null) continue;
+                    JObject itemObj = new JObject();
+                    for (int i = 0; i < headJArray.Count; i++)
+                    {
+                        itemObj.Add((String)headJArray[i], data0JArray[i]);
+                    }
+                    jArray.Add(itemObj);
+                }
+            }
+
+            if (t_page > 1 && headJArray!=null) {
+                for (int t = 1; t < t_page; t++) {
+
+                    getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+t+"&league_id=&hot_game=&sort_type=undefined&zbreload=1";
+                    dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
+                    if (String.IsNullOrEmpty(dataRlt)) continue;
+                    if (!dataRlt.Contains("parent.GameHead")) continue;
+                    if (!dataRlt.Contains("parent.GameFT[")) continue;
+                    strs = dataRlt.Split('\n');
+                    for (int index = 0; index < strs.Length; index++)
+                    {
+                        String str = strs[index].Trim();
+                        if (String.IsNullOrEmpty(str)) continue;
+                        if (str.Contains("parent.t_page=")) continue;
+                        if (!str.Contains("new Array") && !str.Contains("parent")) continue;
+                        if (str.Contains("parent.GameHead")) continue;
+                        //获取滚球的数据
+                        if (str.Contains("parent.GameFT") && str.Contains("new Array"))
+                        {
+                            int arrayStart = str.IndexOf("Array(");
+                            if (arrayStart < 0) continue;
+                            String dataStr = str.Substring(arrayStart, str.Length - arrayStart);
+                            dataStr = dataStr.Replace("Array(", "[");
+                            dataStr = dataStr.Replace(");", "]");
+                            if (!FormUtils.IsJsonArray(dataStr)) continue;
+                            JArray data0JArray = JArray.Parse(dataStr);
+                            if (data0JArray == null) continue;
+                            JObject itemObj = new JObject();
+                            for (int i = 0; i < headJArray.Count; i++)
+                            {
+                                itemObj.Add((String)headJArray[i], data0JArray[i]);
+                            }
+                            jArray.Add(itemObj);
+                        }
+                    }
+                }
+            }
+            jObject.Add("list", jArray);
+            return jObject.ToString();
+        }
 
     }
 }

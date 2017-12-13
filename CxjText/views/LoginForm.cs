@@ -175,6 +175,9 @@ namespace CxjText.views
                     case "K":
                         LoginUtils.loginK(this, position);
                         break;
+                    case "C":
+                        LoginUtils.loginC(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -396,6 +399,9 @@ namespace CxjText.views
                         }
                     case "K":
                         moneyStatus = MoneyUtils.GetKMoney(userInfo);
+                        break;
+                    case "C":
+                        moneyStatus = MoneyUtils.GetCMoney(userInfo);
                         break;
                     default:
                         break;

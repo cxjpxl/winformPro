@@ -302,6 +302,38 @@ namespace CxjText.utlis
             user.money = moneyRlt;
             return 1;
         }
-
+        //获取K的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetCMoney(UserInfo user)
+        {
+            String uid = user.uid;
+            if (String.IsNullOrEmpty(uid))
+            {
+                return -1;
+            }
+            String moneyUrl = user.dataUrl + "/app/member/reloadCredit.php?uid="+uid+"&langx=zh-cn";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/app/member/FT_header.php?uid="+uid+"&showtype=&langx=zh-cn&mtype=3";
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt)||!moneyRlt.Contains("parent.reloadCredit")) {
+                return 0;
+            }
+            moneyRlt = moneyRlt.Replace(";","").Replace("</script>","").Trim();
+            int start = moneyRlt.IndexOf("parent.reloadCredit");
+            moneyRlt = moneyRlt.Substring(start, moneyRlt.Length - start);
+            String moneyStr = moneyRlt.Replace("parent.reloadCredit(", "")
+                .Replace("'", "").Replace("RMB：", "").Replace(")", "").Trim();
+            try
+            {
+                float.Parse(moneyStr);
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+            user.money = moneyStr;
+            return 1;
+        }
     }
 }

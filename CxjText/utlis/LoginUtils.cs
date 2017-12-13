@@ -1112,5 +1112,105 @@ namespace CxjText.utlis
             }));
             return;
         }
+        /**************************C系统登录的处理****************************/
+        public static void loginC(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));     
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            userInfo.cookie = new CookieContainer();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            headJObject["Origin"] = userInfo.dataUrl;
+            String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
+            //获取登录的系统参数 
+            String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
+
+            String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, paramsStr, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            JObject rltJObject = JObject.Parse(checkLoginRlt);
+            if (((String)rltJObject["login_result"]).Equals("10") && (((String)rltJObject["code"]).Equals("102") || ((String)rltJObject["code"]).Equals("101")))
+            {
+
+            }
+            else {
+                //其他原因可能账号异常
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //现在要登录处理
+            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
+            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&username="+userInfo.user+"&password="+userInfo.pwd+"&checkbox=on";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid="))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+           
+            int uidStart = rltStr.IndexOf("uid=");
+            rltStr = rltStr.Substring(uidStart, rltStr.Length - uidStart);
+            int start = rltStr.IndexOf("&");
+            rltStr = rltStr.Substring(0,  start);
+            String uid  = rltStr.Replace("uid=","");
+            userInfo.uid = uid;
+            //获取money 
+            int moneyStatus = MoneyUtils.GetCMoney(userInfo);
+            if (moneyStatus != 1)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            userInfo.loginFailTime = 0;
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            userInfo.updateMoneyTime = userInfo.loginTime;
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            return;
+        }
     }
 }

@@ -394,6 +394,7 @@ namespace CxjText.views
                         orderParmas = rltStr + "&uid=" + user.uid + "&token=" + user.exp;
                         break;
                     case "K":
+                    case "C":
                         orderParmas = rltStr + "&uid=" + user.uid;
                         break;
                     default:
@@ -445,7 +446,7 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                 }
-                else if (user.tag.Equals("K")) {
+                else if (user.tag.Equals("K")|| user.tag.Equals("C")) {
                     jObject["reqUrl"] = dataJObject["reqUrl"];
                     jObject["money"] = inputMoney;
                 }
@@ -492,6 +493,9 @@ namespace CxjText.views
                         break;
                     case "K":
                         OrderUtils.OrderK(jobject, this, loginForm, rltForm);
+                        break;
+                    case "C":
+                        OrderUtils.OrderC(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;
@@ -552,15 +556,11 @@ namespace CxjText.views
                 }
 
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
+                Console.WriteLine("是否启动自动下注：" + autoCheck);
                 if (!autoCheck) return;
             }
 
-            //判断是否能主动下注
-            if (!StringComPleteUtils.canAutoPut(lianSai)) {
-                Console.WriteLine("条件不满足，不能自动下注，--" + lianSai);
-                return;
-            }
-
+          
             if (indexNum > this.dataJArray.Count) return;
             object obj = this.dataJArray[indexNum];
 
@@ -638,7 +638,15 @@ namespace CxjText.views
                     }
                 }
             }
-            
+            Console.WriteLine("转化后的值：半场" + isBanChang + "\n大小:" + selectDaXiao);
+            //判断是否能主动下注
+            if (!StringComPleteUtils.canAutoPut(lianSai))
+            {
+                Console.WriteLine("条件不满足，不能自动下注，--" + lianSai);
+                return;
+            }
+            Console.WriteLine("满足，自动下注，--" + lianSai);
+
             if (enventInfo.inputType == 0)  //让球
             {
                 if (isBanChang)

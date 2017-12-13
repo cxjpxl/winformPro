@@ -68,7 +68,7 @@ namespace CxjText
             Config.speakJObject["1062"] = "可能主队点球";
             Config.speakJObject["142"] = "可能点球";
 
-           
+           /*
             Config.addSaiName("切禾", "基尔禾");
             Config.addSaiName("洛达JC", "洛达");
             Config.addSaiName("希尔克堡", "施克堡");
@@ -215,7 +215,7 @@ namespace CxjText
             Config.addSaiName("李斯特城", "莱斯特城");
             Config.addSaiName("史云斯", "斯旺西城");
             Config.addSaiName("般尼茅夫", "伯恩茅斯");
-            Config.addSaiName("特尔斯", "托尔司");
+            Config.addSaiName("特尔斯", "托尔司");*/
             // Config.addSaiName("", "");
         }
 
@@ -301,11 +301,21 @@ namespace CxjText
             Config.codeMoneyStr = codeMoney + "";
 
             //获取联赛数据
-           /* String lianSaiStrs = HttpUtils.httpGet("http://47.88.168.99:8500/cxj/lianSai","",null);
-            if (!String.IsNullOrEmpty(lianSaiStrs) && FormUtils.IsJsonObject(lianSaiStrs)) {
+            String lianSaiStrs = HttpUtils.httpGet("http://47.88.168.99:8500/cxj/lianSai","",null);
+            if (!String.IsNullOrEmpty(lianSaiStrs) && FormUtils.IsJsonObject(lianSaiStrs))
+            {
                 JObject lianSaiObject = JObject.Parse(lianSaiStrs);
-                Config.changeSaiNameJObject =(JObject) lianSaiObject["data"];
-            }*/
+                Config.changeSaiNameJObject = (JObject)lianSaiObject["data"];
+            }
+            else {
+                Invoke(new Action(() =>
+                {
+                    loginSysBtn.Enabled = true;
+                    loginSysBtn.Text = "登录";
+                    MessageBox.Show("连接服务器失败，请检查下网络!");
+                }));
+                return;
+            }
             //登录成功
             Invoke(new Action(() =>
             {

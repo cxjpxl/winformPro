@@ -46,6 +46,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         c00 = (String)jObjectK["league"];
@@ -129,6 +130,7 @@ namespace CxjText.utlis
                     time = time + "\n" + (String)jObjectG["Match_NowScore"];
                     break;
                 case "K":
+                case "C":
                     JObject jObjectK = (JObject)obj;
                     time = (String)jObjectK["timer"];
                     time = FormUtils.changeHtml(time);
@@ -171,6 +173,7 @@ namespace CxjText.utlis
                     c02 = (String)jObjectG["Match_Master"];
                     break;
                 case "K":
+                case "C":
                     JObject jObjectK = (JObject)obj;
                     c02 = (String)jObjectK["team_h"];
                     break;
@@ -231,6 +234,7 @@ namespace CxjText.utlis
 
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_MH = (String)jObjectK["ior_MH"];
@@ -346,6 +350,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_RH = (String)jObjectK["ior_RH"];
@@ -447,6 +452,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ratio_o = (String)jObjectK["ratio_o"];
@@ -516,6 +522,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_HMH = (String)jObjectK["ior_HMH"];
@@ -645,6 +652,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_HRH = (String)jObjectK["ior_HRH"];
@@ -753,6 +761,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String hratio_o = (String)jObjectK["hratio_o"];
@@ -817,6 +826,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         c12 = (String)jObjectK["team_c"]; //球队名称
@@ -876,6 +886,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_MC = (String)jObjectK["ior_MC"];
@@ -991,6 +1002,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_RC = (String)jObjectK["ior_RC"];
@@ -1094,6 +1106,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ratio_u = (String)jObjectK["ratio_u"];
@@ -1163,6 +1176,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_HMC = (String)jObjectK["ior_HMC"];
@@ -1293,6 +1307,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_HRC = (String)jObjectK["ior_HRC"];
@@ -1402,6 +1417,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String hratio_u = (String)jObjectK["hratio_u"];
@@ -1478,6 +1494,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_MN = (String)jObjectK["ior_MN"];
@@ -1539,6 +1556,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ior_HMN = (String)jObjectK["ior_HMN"];
@@ -1675,6 +1693,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectK = (JObject)obj;
                         mid = (String)jObjectK["gid"];
+                        break;
+                    }
+                case "C":
+                    {
+                        JObject jObjectC = (JObject)obj;
+                        mid = (String)jObjectC["gid"];
                         break;
                     }
                 default:
