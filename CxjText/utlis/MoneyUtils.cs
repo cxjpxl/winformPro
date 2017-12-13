@@ -190,8 +190,26 @@ namespace CxjText.utlis
             userInfo.loginUrl = userInfo.dataUrl;
             baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
 
-            headJObject["Origin"] = userInfo.dataUrl;
+
+            /********************更新登录***************************/
+            String refershUrl = userInfo.dataUrl+"/app/member/login.ashx?act=refresh&UID=" + userInfo.uid;
             headJObject["Host"] = baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/upupFlash.htm?UID=" + userInfo.uid;
+            String referDataStr = HttpUtils.HttpGetHeader(refershUrl, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(referDataStr) || !FormUtils.IsJsonObject(referDataStr)) {
+                return 0;
+            }
+            JObject reJObject = JObject.Parse(referDataStr);
+            if (reJObject["code"] != null && ((int)reJObject["code"]) > 0)
+            {
+
+            }
+            else {
+                return -1;
+            }
+
+
+            headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t=" + FormUtils.getCurrentTime();
             String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie, headJObject);

@@ -365,7 +365,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
                         break;
                     case "R":
-                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 35)
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 100)
                         {
                             Console.WriteLine("---------------------------");
                             Console.WriteLine("R准备登陆");
