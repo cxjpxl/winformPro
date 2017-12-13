@@ -477,11 +477,16 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_" + rString.Replace("r", "R");
             headJObject["Referer"] = brtUrl;
             String orderRltStr = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(orderRltStr);
             if (String.IsNullOrEmpty(orderRltStr) || !orderRltStr.Contains("成功提交注单")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "提交失败");
+                        String str = "提交失败";
+                        if (!String.IsNullOrEmpty(orderRltStr) && orderRltStr.Contains("下注金额大于当前额度")) {
+                            str = "下注金额大于当前额度";
+                        }
+                        rltForm.RefershLineData(inputTag, str);
                     }
                 }));
                 return;
