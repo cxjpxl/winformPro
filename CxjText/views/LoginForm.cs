@@ -419,7 +419,7 @@ namespace CxjText.views
                 AddToListToUpDate(position);
             }
             else if (moneyStatus == -1) {
-                userInfo.status = 0; //下线
+                userInfo.status = 3; //下线
                 userInfo.uid = "";
                 userInfo.cookie = null;
                 AddToListToUpDate(position);
