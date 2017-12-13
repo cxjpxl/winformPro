@@ -279,7 +279,7 @@ namespace CxjText.views
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
-                //R系统的情况 且登录失败的情况下
+              
                 if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 20) {  
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);
