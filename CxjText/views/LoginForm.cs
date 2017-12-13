@@ -342,7 +342,7 @@ namespace CxjText.views
                     case "B": //B特殊处理下
                         if (currentTime - userInfo.loginTime >= 60 * 1000 * 29)
                         {
-                            userInfo.loginTime = currentTime;
+                         //   userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
@@ -367,7 +367,7 @@ namespace CxjText.views
                             Console.WriteLine("---------------------------");
                             Console.WriteLine("R准备登陆");
                              Console.WriteLine("---------------------------");
-                            userInfo.loginTime = currentTime;
+                          //  userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
@@ -382,7 +382,7 @@ namespace CxjText.views
                     case "G":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
                         {
-                            userInfo.loginTime = currentTime;
+                           // userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
