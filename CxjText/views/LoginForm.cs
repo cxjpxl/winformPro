@@ -283,7 +283,7 @@ namespace CxjText.views
                 if (user == null) continue;
                 //R系统的情况 且登录失败的情况下
                 if ((user.tag.Equals("R") || user.tag.Equals("B")|| user.tag.Equals("G"))
-                    &&user.status == 3 && user.loginTime != -1&&user.loginFailTime < 20) {  
+                    &&user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 20) {  
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);
                     continue;

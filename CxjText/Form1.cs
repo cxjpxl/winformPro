@@ -179,7 +179,6 @@ namespace CxjText
             Config.addSaiName("尼切萨", "布鲁克贝特马利卡纳斯萨");
             Config.addSaiName("斯拉斯克弗罗茨瓦夫", "斯拉斯克");
             Config.addSaiName("阿卡格丁尼亚", "阿卡");
-            // Config.addSaiName("", "");
             Config.addSaiName("伯恩利", "般尼");
             Config.addSaiName("布莱克本流浪", "布力般流浪");
             Config.addSaiName("卡莱尔", "卡素尔");
@@ -199,7 +198,25 @@ namespace CxjText
             Config.addSaiName("托基聯", "托基联");
             Config.addSaiName("福克斯顿", "佛克斯通");
             Config.addSaiName("维森", "沃辛");
-            Config.addSaiName("Hanwell Town FC ", "汉威尔城");   
+            Config.addSaiName("Hanwell Town FC ", "汉威尔城");
+            Config.addSaiName("圣塔克莱拉", "辛达卡拉");
+            Config.addSaiName("埃尔维斯", "阿维斯");
+            Config.addSaiName("阿尔贾兹拉阿布扎比", "詹辛拉");
+            Config.addSaiName("列吉亚格但斯克", "列治亚");
+            Config.addSaiName("莱赫波茲南", "莱克");
+            Config.addSaiName("费内巴切", "费伦巴治");
+            Config.addSaiName("史特加", "斯图加特");
+            Config.addSaiName("艾比路內費", "艾宾奴列夫");
+            Config.addSaiName("克拉科维亚克拉科夫", "克拉科夫");
+            Config.addSaiName("桑德克亚", "桑德西亚");
+            Config.addSaiName("史浩克零四", "沙尔克04");
+            Config.addSaiName("阿巴甸", "阿伯丁");
+            Config.addSaiName("修咸顿", "南安普敦");
+            Config.addSaiName("李斯特城", "莱斯特城");
+            Config.addSaiName("史云斯", "斯旺西城");
+            Config.addSaiName("般尼茅夫", "伯恩茅斯");
+            Config.addSaiName("特尔斯", "托尔司");
+            // Config.addSaiName("", "");
         }
 
 
