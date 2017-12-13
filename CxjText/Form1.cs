@@ -299,6 +299,13 @@ namespace CxjText
             }
 
             Config.codeMoneyStr = codeMoney + "";
+
+            //获取联赛数据
+           /* String lianSaiStrs = HttpUtils.httpGet("http://47.88.168.99:8500/cxj/lianSai","",null);
+            if (!String.IsNullOrEmpty(lianSaiStrs) && FormUtils.IsJsonObject(lianSaiStrs)) {
+                JObject lianSaiObject = JObject.Parse(lianSaiStrs);
+                Config.changeSaiNameJObject =(JObject) lianSaiObject["data"];
+            }*/
             //登录成功
             Invoke(new Action(() =>
             {
