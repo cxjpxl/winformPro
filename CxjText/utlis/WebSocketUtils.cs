@@ -32,7 +32,7 @@ namespace CxjText.utlis
             if (contentStatus!=1) return;
 
 
-            if (FormUtils.getCurrentTime() - time > 1000 * 60*5) //1分钟收不到立马重连
+            if (FormUtils.getCurrentTime() - time > 1000 * 60*5) //5分钟收不到立马重连
             { //5分钟没有收到数据
                 contentStatus = 0;
                 isError = true;
@@ -118,8 +118,7 @@ namespace CxjText.utlis
                    
                     if (message == null || message.Equals("11")) { //服务器回调信号
                         if (message.Equals("11")) {
-                            time = FormUtils.getCurrentTime();
-                            Console.WriteLine("time:"+ time);
+                            Console.WriteLine("时间: " + DateTime.Now.ToString());
                         }
                         return;
                     }
