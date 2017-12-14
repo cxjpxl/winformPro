@@ -340,14 +340,6 @@ namespace CxjText.views
                 switch (userInfo.tag)
                 {
                     case "A":
-                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 120)
-                        {
-                            userInfo.status = 0; //下线
-                            userInfo.cookie = null;
-                            userInfo.uid = "";
-                            GoLogin(position); //A2个小时登录一次
-                            return;
-                        }
                         moneyStatus =  MoneyUtils.GetAMoney(userInfo);
                         break;
                     case "B": //B特殊处理下
@@ -368,14 +360,6 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetIMoney(userInfo);
                         break;
                     case "U":
-                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 100)
-                        {
-                            userInfo.status = 0; //下线
-                            userInfo.cookie = null;
-                            userInfo.uid = "";
-                            GoLogin(position); //U2个小时登录一次
-                            return;
-                        }
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
                         break;
                     case "R":

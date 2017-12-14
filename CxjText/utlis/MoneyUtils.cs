@@ -26,7 +26,7 @@ namespace CxjText.utlis
                         user.money = money;
                         return 1;
                     } else if (result.Equals("0")) {
-                        return 0; //没有登录
+                        return -1; //没有登录
                     }
                 }
                 catch (SystemException e)
@@ -124,7 +124,7 @@ namespace CxjText.utlis
             {
                 float money = float.Parse(moneyRltStr.Replace("\"", ""));
                 if (money < 0) {   //小于0表示没有登录
-                    return 0;
+                    return -1;
                 }
                 userInfo.money = money + ""; //获取钱成功
             }
