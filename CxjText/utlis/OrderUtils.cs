@@ -86,7 +86,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
@@ -261,7 +261,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
@@ -381,7 +381,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
@@ -521,7 +521,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
@@ -745,7 +745,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         user.cookie = null;
                         loginForm.AddToListToUpDate(index);
                     }
@@ -796,7 +796,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         user.cookie = null;
                         loginForm.AddToListToUpDate(index);
                         rltForm.RefershLineData(inputTag, "G系统登录失败，请重新登录");
@@ -860,7 +860,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         user.cookie = null;
                         loginForm.AddToListToUpDate(index);
                         rltForm.RefershLineData(inputTag, "G系统登录失败，请重新登录");
@@ -872,7 +872,7 @@ namespace CxjText.utlis
             if (String.IsNullOrEmpty(msg)) {
                 if (rltForm != null)
                 {
-                    user.status = 0; //登录失效
+                    user.status = 3; //登录失效
                     user.cookie = null;
                     loginForm.AddToListToUpDate(index);
                     rltForm.RefershLineData(inputTag, "失败");
@@ -921,7 +921,7 @@ namespace CxjText.utlis
                 {
                     if (rltForm != null)
                     {
-                        user.status = 0; //登录失效
+                        user.status = 3; //登录失效
                         user.cookie = null;
                         loginForm.AddToListToUpDate(index);
                     }
