@@ -331,6 +331,7 @@ namespace CxjText.utlis
             }
             moneyRlt = moneyRlt.Replace(";","").Replace("</script>","").Trim();
             int start = moneyRlt.IndexOf("parent.reloadCredit");
+            if (start == -1) return 0;
             moneyRlt = moneyRlt.Substring(start, moneyRlt.Length - start);
             String moneyStr = moneyRlt.Replace("parent.reloadCredit(", "")
                 .Replace("'", "").Replace("RMB：", "").Replace(")", "").Trim();
