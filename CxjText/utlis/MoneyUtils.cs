@@ -44,6 +44,7 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             String bMoneyRlt = HttpUtils.HttpGetHeader(user.loginUrl + "/top_money_data.php", "", user.cookie, headJObject);
+            Console.WriteLine("系统：" + user.tag + "\n" + bMoneyRlt);
             if (bMoneyRlt == null) return 0;
             if (bMoneyRlt.Trim().Equals("")) return -1;
             if (bMoneyRlt.Contains("重新登录")) return -1;
@@ -108,14 +109,13 @@ namespace CxjText.utlis
         public static int GetUMoney(UserInfo userInfo)
         {
             //获取钱的处理
-
-
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/Home";
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
+            Console.WriteLine("系统："+userInfo.tag +"\n"+moneyRltStr);
             if (String.IsNullOrEmpty(moneyRltStr))
             {
                 return 0;
@@ -124,7 +124,7 @@ namespace CxjText.utlis
             {
                 float money = float.Parse(moneyRltStr.Replace("\"", ""));
                 if (money < 0) {   //小于0表示没有登录
-                    return -1;
+                    return 0;
                 }
                 userInfo.money = money + ""; //获取钱成功
             }
@@ -223,6 +223,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t=" + FormUtils.getCurrentTime();
             String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie, headJObject);
+            Console.WriteLine("系统："+ userInfo.tag +"\n"+moneyStr);
             if (String.IsNullOrEmpty(moneyStr))
             {
                 return 0;
