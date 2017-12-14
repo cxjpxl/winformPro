@@ -283,7 +283,7 @@ namespace CxjText.views
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
               
-                if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 20) {  
+                if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 10) {  
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);
                     continue;
@@ -422,7 +422,7 @@ namespace CxjText.views
                 AddToListToUpDate(position);
             }
             else if (moneyStatus == -1) {
-                if (userInfo.loginFailTime > 20)
+                if (userInfo.loginFailTime > 10)
                 {
                     userInfo.status = 0;//下线
                 }
