@@ -340,12 +340,19 @@ namespace CxjText.views
                 switch (userInfo.tag)
                 {
                     case "A":
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 120)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position); //A2个小时登录一次
+                            return;
+                        }
                         moneyStatus =  MoneyUtils.GetAMoney(userInfo);
                         break;
                     case "B": //B特殊处理下
                         if (currentTime - userInfo.loginTime >= 60 * 1000 * 29)
                         {
-                         //   userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
@@ -361,16 +368,19 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetIMoney(userInfo);
                         break;
                     case "U":
-                        
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 100)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position); //U2个小时登录一次
+                            return;
+                        }
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
                         break;
                     case "R":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
                         {
-                            Console.WriteLine("---------------------------");
-                            Console.WriteLine("R准备登陆");
-                             Console.WriteLine("---------------------------");
-                          //  userInfo.loginTime = currentTime;
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
@@ -385,7 +395,7 @@ namespace CxjText.views
                     case "G":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
                         {
-                           // userInfo.loginTime = currentTime;
+                           
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
                             userInfo.uid = "";
@@ -398,9 +408,27 @@ namespace CxjText.views
                             break;
                         }
                     case "K":
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 120)
+                        {
+                            
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
                         moneyStatus = MoneyUtils.GetKMoney(userInfo);
                         break;
                     case "C":
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 120)
+                        {
+                         
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
                         moneyStatus = MoneyUtils.GetCMoney(userInfo);
                         break;
                     default:
