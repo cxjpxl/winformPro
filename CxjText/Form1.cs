@@ -68,8 +68,8 @@ namespace CxjText
             Config.speakJObject["1062"] = "可能主队点球";
             Config.speakJObject["142"] = "可能点球";
 
-           /*
-            Config.addSaiName("切禾", "基尔禾");
+           
+          /*  Config.addSaiName("切禾", "基尔禾");
             Config.addSaiName("洛达JC", "洛达");
             Config.addSaiName("希尔克堡", "施克堡");
             Config.addSaiName("阿蘭亞斯堡", "阿兰亚士邦");
@@ -215,8 +215,82 @@ namespace CxjText
             Config.addSaiName("李斯特城", "莱斯特城");
             Config.addSaiName("史云斯", "斯旺西城");
             Config.addSaiName("般尼茅夫", "伯恩茅斯");
-            Config.addSaiName("特尔斯", "托尔司");*/
+            Config.addSaiName("特尔斯", "托尔司");
+            Config.addSaiName("伊斯坦堡(中)", "伊斯坦堡士邦[中]");
+            Config.addSaiName("卡拉布基斯普(中)", "卡拉布克士邦");
+            Config.addSaiName("班加罗尔", "班加鲁鲁");
+            Config.addSaiName("史特加Am", "斯图加特青年队");
+            Config.addSaiName("拉素", "拉齐奥");
+            Config.addSaiName("乐克雷拉联", "尤尼昂");
+            Config.addSaiName("悉尼 FC", "悉尼");
+            Config.addSaiName("恩高斯达", "印戈斯塔德");
+            Config.addSaiName("贝德邦", "派特博恩");
+            Config.addSaiName("尼姆斯", "奈梅斯");
+            Config.addSaiName("艾马", "埃曼");
+            Config.addSaiName("巴黎足球俱乐部", "巴黎");
+            Config.addSaiName("保格柏隆拿斯", "布尔格布雷斯普瑞兰斯");
+            Config.addSaiName("尚布利", "切姆步莱");
+            Config.addSaiName("哥尔维利", "克维伊鲁昂");
+            Config.addSaiName("马赛康索拉特", "康索拉特");
+            Config.addSaiName("阿雅克肖", "阿些斯奧");
+            Config.addSaiName("阿尔默勒", "阿梅尔城");
+            Config.addSaiName("查特亚罗斯", "沙特鲁");
+            Config.addSaiName("苗斯干匹卢维兹", "皇家艾克斯尔梅斯干");
+            Config.addSaiName("威尼斯", "威尼基亚");
+            Config.addSaiName("圣伊天", "圣埃蒂安");
+            Config.addSaiName("巴塞隆拿 B", "巴塞罗那B队");
+            Config.addSaiName("巴塞隆拿", "巴塞罗那");
+            Config.addSaiName("西维尔", "塞维利亚");
+            Config.addSaiName("新城堡聯", "纽卡斯托");
+            Config.addSaiName("中部海岸海员", "中央海岸");
+            Config.addSaiName("耶拿", "卡尔斯耶拿");
+            Config.addSaiName("维尔茨堡", "维尔茨堡踢球者");
+            Config.addSaiName("梅佩恩", "梅彭");
+            Config.addSaiName("洛特", "罗塔");
+            Config.addSaiName("馬格德堡", "马德堡");
+            Config.addSaiName("苏迪路", "苏达迪罗尔");
+            Config.addSaiName("艾宾奴列夫", "艾比路內費");
+            Config.addSaiName("布拉圖", "普拉托");
+            Config.addSaiName("瓦朗谢讷", "华伦西恩斯");
+            Config.addSaiName("卡比", "卡皮");
+            Config.addSaiName("维切利", "维塞利");
+            Config.addSaiName("克雷特伊", "贾特尔");
+            Config.addSaiName("毕士图路华", "布里斯托流浪");
+            Config.addSaiName("里斯本竞技 B", "士砵亭B队");
+            Config.addSaiName("奥沙辛拿", "奥萨苏纳");
+            Config.addSaiName("温布顿", "威布雷登");
+            Config.addSaiName("巴恩斯利", "班士利");
+            Config.addSaiName("安南競技", "安南体育会");
+            Config.addSaiName("彼得赫特", "彼得克");
+            Config.addSaiName("波尔图B队", "波图B队");
+            Config.addSaiName("布拉德福德公园", "布拉德福德派克大街");
+            Config.addSaiName("艾迪尔人", "艾积尔奈恩斯");
+            Config.addSaiName("克森艾斯顿", "柯尔松阿什顿");
+            Config.addSaiName("科瓦达皮耶达迪", "科瓦皮耶达迪");
+            Config.addSaiName("伊汀堡(中)", "爱丁堡城");
+            Config.addSaiName("考文垂", "高云地利");
+            Config.addSaiName("希美咸史特城", "赫默尔亨普斯特德城");
+            Config.addSaiName("连高尔", "林肯城");
+            Config.addSaiName("富咸", "富勒姆");
+            Config.addSaiName("布莱克浦", "黑池");
+            Config.addSaiName("洛達咸联", "洛达咸");
+            Config.addSaiName("锡菲联", "谢菲尔德联");
+            Config.addSaiName("伊斯特拉1961", "艾斯特拉");
+            Config.addSaiName("雷乌斯", "瑞厄斯");
+            Config.addSaiName("哥瑞纳达", "格拉纳达");
+            Config.addSaiName("拖连奴", "都灵");
+            Config.addSaiName("伊巴", "埃瓦尔");
+            Config.addSaiName("赫尔城", "侯城");
+            Config.addSaiName("雷真亚拿", "雷吉亚那");
+            Config.addSaiName("锡永", "锡昂");
+            Config.addSaiName("吉英坎", "甘冈");
+            Config.addSaiName("马斯梅克林", "梅赫伦");
+            Config.addSaiName("迪卓恩", "第戎");
+            Config.addSaiName("科尔多瓦", "哥杜巴");
+            Config.addSaiName("拉温那", "拉文纳");
             // Config.addSaiName("", "");
+            */
+
         }
 
 
