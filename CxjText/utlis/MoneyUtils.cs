@@ -202,7 +202,7 @@ namespace CxjText.utlis
 
 
             /********************更新登录***************************/
-            String refershUrl = userInfo.dataUrl+"/app/member/login.ashx?act=refresh&UID=" + userInfo.uid;
+            /*String refershUrl = userInfo.dataUrl+"/app/member/login.ashx?act=refresh&UID=" + userInfo.uid;
             headJObject["Host"] = baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/upupFlash.htm?UID=" + userInfo.uid;
             String referDataStr = HttpUtils.HttpGetHeader(refershUrl, "", userInfo.cookie, headJObject);
@@ -216,7 +216,7 @@ namespace CxjText.utlis
             }
             else {
                 return -1;
-            }
+            }*/
 
 
             headJObject["Origin"] = userInfo.dataUrl;
