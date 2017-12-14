@@ -35,6 +35,7 @@ namespace CxjText.utils
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
+        public static String vString = "V1.0";
 
 
         public static bool isDeug = false;  //控制打印

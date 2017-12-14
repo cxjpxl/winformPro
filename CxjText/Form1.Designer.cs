@@ -43,7 +43,7 @@
             this.userText.AutoSize = true;
             this.userText.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.userText.ForeColor = System.Drawing.Color.Brown;
-            this.userText.Location = new System.Drawing.Point(53, 19);
+            this.userText.Location = new System.Drawing.Point(15, 19);
             this.userText.Name = "userText";
             this.userText.Size = new System.Drawing.Size(250, 24);
             this.userText.TabIndex = 0;

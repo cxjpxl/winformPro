@@ -41,6 +41,7 @@ namespace CxjText
         //数据初始化
         private void dataInit()
         {
+            userText.Text = userText.Text.ToString().Trim() + "(" + Config.vString + ")";
             Config.codeMoneyStr = "";
             if (Config.softUserStr.Contains("admin")) {
                 this.userContact.Text = Config.softUserStr + "  -  多系统支持版本"; 
