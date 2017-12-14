@@ -1174,7 +1174,7 @@ namespace CxjText.utlis
             }
             orderPrams = orderPrams + "gold=" + money;
 
-            Console.WriteLine(orderPrams);
+          
             String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_rb_finish.php";
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;

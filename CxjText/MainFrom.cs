@@ -239,7 +239,6 @@ namespace CxjText
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
                 {
-                    // this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
                 //获取数据成功
@@ -255,7 +254,6 @@ namespace CxjText
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
                 {
-                    // this.Invoke(new Action(() => { upDateTimer.Start(); }));
                     return;
                 }
                 this.Invoke(new Action(() => { upDateTimer.Start(); }));
