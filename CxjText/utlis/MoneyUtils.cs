@@ -26,7 +26,7 @@ namespace CxjText.utlis
                         user.money = money;
                         return 1;
                     } else if (result.Equals("0")) {
-                        return -1; //没有登录
+                        return 0; //没有登录
                     }
                 }
                 catch (SystemException e)
@@ -46,7 +46,7 @@ namespace CxjText.utlis
             String bMoneyRlt = HttpUtils.HttpGetHeader(user.loginUrl + "/top_money_data.php", "", user.cookie, headJObject);
             Console.WriteLine("系统：" + user.tag + "\n" + bMoneyRlt);
             if (bMoneyRlt == null) return 0;
-            if (bMoneyRlt.Trim().Equals("")) return -1;
+            if (bMoneyRlt.Trim().Equals("")) return 0;
             if (bMoneyRlt.Contains("重新登录")) return -1;
             bMoneyRlt = bMoneyRlt.Trim();
             Console.WriteLine(bMoneyRlt);

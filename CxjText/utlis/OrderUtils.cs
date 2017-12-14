@@ -80,7 +80,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            } else if (moneyStatus == -1) {
+            } /*else if (moneyStatus == -1) {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>
                 {
@@ -91,7 +91,7 @@ namespace CxjText.utlis
                     }
                 }));
 
-            }
+            }*/
 
 
         }
@@ -514,7 +514,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            } else if (moneyStatus == -1)
+            } /*else if (moneyStatus == -1)
             {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>
@@ -525,7 +525,7 @@ namespace CxjText.utlis
                         loginForm.AddToListToUpDate(index);
                     }
                 }));
-            }
+            }*/
 
         }
         //R下单
