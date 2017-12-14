@@ -885,6 +885,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
+
                         rltForm.RefershLineData(inputTag, msg);
                     }
                 }));
@@ -1048,6 +1049,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
@@ -1198,6 +1203,10 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                    }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
