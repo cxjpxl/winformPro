@@ -1047,42 +1047,49 @@ namespace CxjText.utlis
             String gameName = "";
             String gameTeam = "";
             String reqUrl = "";
+            String orderUrl = "";
             if (numRow == 0)
             {
                 inputType = "主队";
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         rltStr = "gid="+ jObject["gid"]+ "&odd_f_type=H&type=H&gnum="+jObject["gnum_h"] +"&langx=zh-cn";
                         bateStr = DataUtils.get_c03_data(jObject, tag);
                         break;
                     case 4:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_re.php";
                         inputType = inputType + "-让球";
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum="+ jObject["gnum_h"] + "&strong="+jObject["strong"] +"&langx=zh-cn";
                         bateStr = DataUtils.get_c04_data(jObject, tag);
                         break;
                     case 5:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rou.php";
                         inputType = inputType + "-大小";
                         rltStr = "gid="+ jObject["gid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_h"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c05_data(jObject, tag);
                         break;
                     case 6:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=H&gnum="+jObject["gnum_h"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c06_data(jObject, tag);
                         break;
                     case 7:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hre.php";
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c07_data(jObject, tag);
                         rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=H&gnum="+ jObject["gnum_h"] + "&strong="+ jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hrou.php";
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c08_data(jObject, tag);
@@ -1099,36 +1106,42 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c13_data(jObject, tag);
                         rltStr = "gid="+jObject["gid"]+"&odd_f_type=H&type=C&gnum="+jObject["gnum_c"] +"&langx=zh-cn";
                         break;
                     case 4:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_re.php";
                         inputType = inputType + "-让球";
                         bateStr = DataUtils.get_c14_data(jObject, tag);
                         rltStr = "gid="+ jObject["gid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_c"] + "&strong="+ jObject["strong"] + "&langx=zh-cn";
                         break;
                     case 5:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rou.php";
                         inputType = inputType + "-大小";
                         bateStr = DataUtils.get_c15_data(jObject, tag);
                         rltStr = "gid="+jObject["gid"] + "&odd_f_type=H&type=H&gnum="+ jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 6:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c16_data(jObject, tag);
                         rltStr = "gid="+jObject["hgid"] +"&odd_f_type=H&type=C&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 7:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hre.php";
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c17_data(jObject, tag);
                         rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_c"] + "&strong="+ jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hrou.php";
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c18_data(jObject, tag);
@@ -1144,12 +1157,14 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c23_data(jObject, tag);
                         rltStr = "gid="+jObject["gid"]+"&odd_f_type=H&type=N&gnum="+jObject["gnum_c"]+ "&langx=zh-cn";
                         break;
                     case 6:
+                        orderUrl = "FT_order_hre_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c26_data(jObject, tag);
@@ -1169,6 +1184,7 @@ namespace CxjText.utlis
             }
 
             dataJObject["reqUrl"] = reqUrl;
+            dataJObject["orderUrl"] = orderUrl;
             gameName = (String)jObject["league"]; //获取赛事
             gameTeam = (String)jObject["team_h"] + "-" + (String)jObject["team_c"]; //球队名称
 
@@ -1193,42 +1209,49 @@ namespace CxjText.utlis
             String gameName = "";
             String gameTeam = "";
             String reqUrl = "";
+            String orderUrl = "";
             if (numRow == 0)
             {
                 inputType = "主队";
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c03_data(jObject, tag);
                         break;
                     case 4:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_re.php";
                         inputType = inputType + "-让球";
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_h"] + "&strong=" + jObject["strong"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c04_data(jObject, tag);
                         break;
                     case 5:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rou.php";
                         inputType = inputType + "-大小";
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c05_data(jObject, tag);
                         break;
                     case 6:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
                         bateStr = DataUtils.get_c06_data(jObject, tag);
                         break;
                     case 7:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hre.php";
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c07_data(jObject, tag);
                         rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_h"] + "&strong=" + jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hrou.php";
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c08_data(jObject, tag);
@@ -1245,36 +1268,42 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c13_data(jObject, tag);
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 4:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_re.php";
                         inputType = inputType + "-让球";
                         bateStr = DataUtils.get_c14_data(jObject, tag);
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_c"] + "&strong=" + jObject["strong"] + "&langx=zh-cn";
                         break;
                     case 5:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rou.php";
                         inputType = inputType + "-大小";
                         bateStr = DataUtils.get_c15_data(jObject, tag);
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 6:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c16_data(jObject, tag);
                         rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 7:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hre.php";
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c17_data(jObject, tag);
                         rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_c"] + "&strong=" + jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hrou.php";
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c18_data(jObject, tag);
@@ -1290,12 +1319,14 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
+                        orderUrl = "FT_order_re_finish.php";
                         reqUrl = "FT_order_rm.php";
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c23_data(jObject, tag);
                         rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=N&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
                         break;
                     case 6:
+                        orderUrl = "FT_order_hrb_finish.php";
                         reqUrl = "FT_order_hrm.php";
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c26_data(jObject, tag);
@@ -1315,6 +1346,7 @@ namespace CxjText.utlis
             }
 
             dataJObject["reqUrl"] = reqUrl;
+            dataJObject["orderUrl"] = orderUrl;
             gameName = (String)jObject["league"]; //获取赛事
             gameTeam = (String)jObject["team_h"] + "-" + (String)jObject["team_c"]; //球队名称
 

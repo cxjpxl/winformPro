@@ -1021,14 +1021,17 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            orderPrams = orderPrams + "gold=" + money;
+            orderPrams = orderPrams + "gold=" + money+ "&autoOdd=Y";
             Console.WriteLine(orderPrams);
-            String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_re_finish.php";
+            //半场的连接地址是FT_order_hre_finish
+            String orderUrl1 =(String) jobject["orderUrl"];
+            String orderUrl = user.dataUrl + "/app/member/FT_order/"+ orderUrl1;
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1173,9 +1176,8 @@ namespace CxjText.utlis
                 return;
             }
             orderPrams = orderPrams + "gold=" + money;
-
-          
-            String orderUrl = user.dataUrl + "/app/member/FT_order/FT_order_rb_finish.php";
+            String orderUrl1 = (String)jobject["orderUrl"];
+            String orderUrl = user.dataUrl + "/app/member/FT_order/" + orderUrl1;
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;

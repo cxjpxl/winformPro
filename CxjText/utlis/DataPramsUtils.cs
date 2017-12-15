@@ -556,11 +556,8 @@ namespace CxjText.utlis
                 headJObject["Host"] = userInfo.baseUrl;
                 headJObject["Referer"] = userInfo.dataUrl;
                 String getUidUrl = userInfo.dataUrl + "/app/member/";
-                if (userInfo.cookie1 == null) {
-                    userInfo.cookie1 = new CookieContainer();
-                }
-                cookie = userInfo.cookie1;
-                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl,"", userInfo.cookie1, headJObject);
+                cookie = new CookieContainer();
+                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl,"", cookie, headJObject);
                 if (String.IsNullOrEmpty(uidRlt)) return null;
                 if (!uidRlt.Contains("uid=")) {
                     return null;
