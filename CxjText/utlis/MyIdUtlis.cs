@@ -27,7 +27,7 @@ namespace CxjText.utlis
                 {
                     try
                     {
-                        result = mo[wmiProperty].ToString();
+                        result = mo[wmiProperty].ToString().Trim();
                         break;
                     }
                     catch

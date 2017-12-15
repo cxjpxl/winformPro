@@ -24,6 +24,7 @@ namespace CxjText
             dataInit();
             speakInit();
             uuid = FileUtils.getOnlyFlag()+"-"+ MyIdUtlis.Value();
+            Console.WriteLine(uuid);
             if (String.IsNullOrEmpty(uuid) &&!Config.softUserStr.Equals("admin"))
             {
                 MessageBox.Show("获取设备信息错误!");
