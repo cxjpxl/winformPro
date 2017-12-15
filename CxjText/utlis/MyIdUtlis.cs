@@ -9,7 +9,7 @@ namespace CxjText.utlis
         {
             if (string.IsNullOrEmpty(fingerPrint))
             {
-                fingerPrint = cpuId()  +biosId() + baseId()+videoId() ;
+                fingerPrint = cpuId()  +biosId() + baseId() ;
             }
             return fingerPrint;
         }
@@ -87,12 +87,6 @@ namespace CxjText.utlis
             + identifier("Win32_BaseBoard", "Manufacturer")
             + identifier("Win32_BaseBoard", "Name")
             + identifier("Win32_BaseBoard", "SerialNumber");
-        }
-       
-        private static string videoId()
-        {
-            return identifier("Win32_VideoController", "DriverVersion")
-            + identifier("Win32_VideoController", "Name");
         }
 
     }
