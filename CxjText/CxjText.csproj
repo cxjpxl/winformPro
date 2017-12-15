@@ -144,6 +144,7 @@
     <Compile Include="utlis\FormUtils.cs" />
     <Compile Include="utlis\LoginUtils.cs" />
     <Compile Include="utlis\MoneyUtils.cs" />
+    <Compile Include="utlis\MyIdUtlis.cs" />
     <Compile Include="utlis\OrderUtils.cs" />
     <Compile Include="utlis\RltDataUtils.cs" />
     <Compile Include="utlis\StringComPleteUtils.cs" />
