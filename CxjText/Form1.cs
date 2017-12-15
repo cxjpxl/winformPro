@@ -308,6 +308,7 @@ namespace CxjText
             Config.addSaiName("华历简奴", "瓦莱卡诺");*/
 
             // Config.addSaiName("", "");
+            
         }
 
 
