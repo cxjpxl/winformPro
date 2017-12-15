@@ -335,7 +335,7 @@ namespace CxjText.utlis
             if (start == -1) return 0;
             moneyRlt = moneyRlt.Substring(start, moneyRlt.Length - start);
             String moneyStr = moneyRlt.Replace("parent.reloadCredit(", "")
-                .Replace("'", "").Replace("RMB：", "").Replace(")", "").Trim();
+                .Replace("'", "").Replace("RMB", "").Replace(")", "").Replace("：","").Trim();
             try
             {
                 float.Parse(moneyStr);

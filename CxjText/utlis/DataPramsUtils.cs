@@ -727,7 +727,7 @@ namespace CxjText.utlis
                 
             }
             uid = userInfo.uid;
-            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=&sort_type=undefined&zbreload=1";
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=";
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
             String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
@@ -771,10 +771,13 @@ namespace CxjText.utlis
 
                 if (str.Contains("parent.GameHead"))
                 { //先解析头部
+                    int startHead = str.IndexOf("Array");
+                    if (startHead < 0) return null;
+                    str = str.Substring(startHead,str.Length - startHead);
                     String[] dataStrs = str.Split(';');
-                    String headStr = dataStrs[1];
+                    String headStr = dataStrs[0];
                     headStr = headStr.Replace(")", "]");
-                    headStr = headStr.Replace("parent.GameHead=new Array(", "[");
+                    headStr = headStr.Replace("Array(", "[");
                     if (!FormUtils.IsJsonArray(headStr)) return null;
                     headJArray = JArray.Parse(headStr);
                     if (headJArray == null) return null;
@@ -803,7 +806,7 @@ namespace CxjText.utlis
             if (t_page > 1 && headJArray!=null) {
                 for (int t = 1; t < t_page; t++) {
 
-                    getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+t+"&league_id=&hot_game=&sort_type=undefined&zbreload=1";
+                    getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+t+"&league_id=";
                     dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
                     if (String.IsNullOrEmpty(dataRlt)) continue;
                     if (!dataRlt.Contains("parent.GameHead")) continue;

@@ -1147,8 +1147,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = userInfo.dataUrl;
             String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
             //获取登录的系统参数 
-            String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
-
+          /*  String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
             String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, paramsStr, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt)) {
                 userInfo.loginFailTime++;
@@ -1171,7 +1170,7 @@ namespace CxjText.utlis
                     loginForm.AddToListToUpDate(position);
                 }));
                 return;
-            }
+            }*/
             //现在要登录处理
             String loginUrl = userInfo.dataUrl + "/app/member/login.php";
             String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&username="+userInfo.user+"&password="+userInfo.pwd+"&checkbox=on";
