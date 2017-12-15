@@ -415,9 +415,23 @@ namespace CxjText.utlis
             String[] strs = betStr.Split('\n');
             String orderPrams = "";
             String gmin_single = "";
+            String orderUrl1 = "";
             for (int i = 0; i < strs.Length; i++)
             {
                 String str = strs[i].Trim();
+
+
+                if (str.Contains("<form") && str.Contains("action=\""))
+                {
+                    int startIndex = str.IndexOf("action=\"");
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
+                    startIndex = str.IndexOf("\"");
+                    str = str.Substring(0, startIndex);
+                    orderUrl1 = str.Trim();
+                    continue;
+                }
+
+
                 if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
                 { //找到input字段
                     //获取name的值
@@ -475,6 +489,10 @@ namespace CxjText.utlis
 
             orderPrams = orderPrams + "autoOdd=Y&gold=" + money;
             String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_" + rString.Replace("r", "R");
+            if (!String.IsNullOrEmpty(orderUrl1))
+            {
+                orderUrl = user.dataUrl + orderUrl1;
+            }
             headJObject["Referer"] = brtUrl;
             String orderRltStr = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
             Console.WriteLine(orderRltStr);
