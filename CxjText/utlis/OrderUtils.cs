@@ -959,9 +959,22 @@ namespace CxjText.utlis
             String[] strs = betRlt.Split('\n');
             String orderPrams = "";
             String gmin_single = "";
+            String orderUrl1 = "";
             for (int i = 0; i < strs.Length; i++)
             {
                 String str = strs[i].Trim();
+
+
+                if (str.Contains("<form") && str.Contains("action=\""))
+                {
+                    int startIndex = str.IndexOf("action=\"");
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
+                    startIndex = str.IndexOf("\"");
+                    str = str.Substring(0, startIndex);
+                    orderUrl1 = str.Trim();
+                    continue;
+                }
+
                 if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
                 { //找到input字段
                     //获取name的值
@@ -1022,16 +1035,21 @@ namespace CxjText.utlis
                 return;
             }
             orderPrams = orderPrams + "gold=" + money+ "&autoOdd=Y";
-            Console.WriteLine(orderPrams);
-            //半场的连接地址是FT_order_hre_finish
-            String orderUrl1 =(String) jobject["orderUrl"];
-            String orderUrl = user.dataUrl + "/app/member/FT_order/"+ orderUrl1;
+            if (String.IsNullOrEmpty(orderUrl1)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "动态订单地址失败");
+                    }
+                }));
+                return;
+            }
+            String orderUrl = user.dataUrl + orderUrl1;
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)

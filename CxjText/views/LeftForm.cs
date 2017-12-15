@@ -448,7 +448,6 @@ namespace CxjText.views
                 }
                 else if (user.tag.Equals("K")|| user.tag.Equals("C")) {
                     jObject["reqUrl"] = dataJObject["reqUrl"];
-                    jObject["orderUrl"] = dataJObject["orderUrl"];
                     jObject["money"] = inputMoney;
                 }
                 //开线程并发去下注
