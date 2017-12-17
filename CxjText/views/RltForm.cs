@@ -46,7 +46,7 @@ namespace CxjText.views
                     }
                 }
             }
-            catch (SystemException e) {
+            catch (Exception e) {
               
             }
             

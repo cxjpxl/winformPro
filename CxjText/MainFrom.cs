@@ -78,6 +78,7 @@ namespace CxjText
             }
             catch (Exception e1)
             {
+               
                 // MessageBox.Show("请安装语音库");
             }
         }
@@ -247,9 +248,9 @@ namespace CxjText
                     upDateTimer.Start();
                 }));
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("获取数据:"+e.ToString());
                 if (this.isFinish) return;
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
@@ -310,7 +311,7 @@ namespace CxjText
             }
             catch (Exception e)
             {
-
+                Console.WriteLine(e.ToString());
             }
         }
 

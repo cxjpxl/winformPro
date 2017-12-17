@@ -118,7 +118,7 @@ namespace CxjText.utils
                 request = null;
                 return strValue;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
        
                 if (response != null)
@@ -234,7 +234,7 @@ namespace CxjText.utils
                 request = null;
                 return strValue;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
                
                 if (response != null)
@@ -316,7 +316,7 @@ namespace CxjText.utils
                 request = null;
                 return strValue;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
              
                 if (response != null)
@@ -391,7 +391,7 @@ namespace CxjText.utils
                 request = null;
                 return strValue;
             }
-            catch (SystemException e) {
+            catch (Exception e) {
                 
                 if (response != null)
                 {
@@ -457,7 +457,7 @@ namespace CxjText.utils
                 request = null;
                 return strValue;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
               
                 if (response != null)
@@ -556,9 +556,9 @@ namespace CxjText.utils
                 reader = null;
                 request = null;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("发成异常:"+e.ToString());
                 if (response != null)
                 {
                     response.Close();

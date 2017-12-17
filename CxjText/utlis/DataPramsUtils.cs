@@ -470,13 +470,13 @@ namespace CxjText.utlis
                         if (jObject != null) {
                             jArray.Add(jObject);
                         }
-                    } catch (SystemException e) {
+                    } catch (Exception e) {
                         continue;
                     }
                 }
                 
             }
-            catch (SystemException e) {
+            catch (Exception e) {
                 //这里会抛出 System.InvalidCastException 转化异常  
                 //可以忽略掉 这个是为了区分那个array和object格式的数据的处理
                 jArray =(JArray) rltJObject["db"];
@@ -521,7 +521,7 @@ namespace CxjText.utlis
                                         jArray.Add(jObject);
                                     }
                                 }
-                                catch (SystemException e)
+                                catch (Exception e)
                                 {
                                     continue;
                                 }

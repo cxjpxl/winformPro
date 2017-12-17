@@ -121,7 +121,7 @@ namespace CxjText.utlis
                 }
 
             }
-            catch (SystemException e) {
+            catch (Exception e) {
                
                 Config.userList = null;
             }

@@ -33,7 +33,7 @@ namespace CxjText.utlis
                             return 1;
                         }
                     }
-                    catch (SystemException e)
+                    catch (Exception e)
                     {
                        
                         return -1;
@@ -258,7 +258,7 @@ namespace CxjText.utlis
                             return 1;
                         }  //0没有登录
                     }
-                    catch (SystemException e)
+                    catch (Exception e)
                     {
                    
                         return -1;

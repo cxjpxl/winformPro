@@ -158,7 +158,7 @@ namespace CxjText.utlis
                 }
 
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
                
                 //请求失败处理 UI处理
@@ -475,7 +475,7 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            catch (SystemException e) {
+            catch (Exception e) {
               
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -595,7 +595,7 @@ namespace CxjText.utlis
                 rType = int.Parse(parms[2]);
                 bType = int.Parse(parms[3]);
             }
-            catch (SystemException e) {
+            catch (Exception e) {
                
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1041,7 +1041,7 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
 
                 leftForm.Invoke(new Action(() => {
@@ -1210,7 +1210,7 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
 
                 leftForm.Invoke(new Action(() => {

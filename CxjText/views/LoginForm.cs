@@ -76,7 +76,7 @@ namespace CxjText.views
                         num = 0;
                     } 
                 }
-                catch (SystemException e1) {
+                catch (Exception e1) {
                  
                     num = 0;
                 }
@@ -182,7 +182,7 @@ namespace CxjText.views
                         break;
                 }
             }
-            catch (SystemException e) {
+            catch (Exception e) {
           
                 userInfo.status = 3;
                 userInfo.cookie = null;
@@ -247,7 +247,7 @@ namespace CxjText.views
                     }
                 }
             }
-            catch (SystemException e) {
+            catch (Exception e) {
                
                 Console.WriteLine(e.ToString());
             }
@@ -419,7 +419,7 @@ namespace CxjText.views
                         break;
                 }
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
                
                 Console.WriteLine(e.ToString());

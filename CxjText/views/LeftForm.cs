@@ -187,7 +187,7 @@ namespace CxjText.views
                 this.cJArray = rltJArray; //保存当前的数据源
                 changeStrUi();  //更新数据界面
             }
-            catch (SystemException e) {
+            catch (Exception e) {
 
                 Console.WriteLine(e.ToString());
             }
@@ -502,7 +502,7 @@ namespace CxjText.views
                 }
 
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
 
                 Console.WriteLine(e.ToString());

@@ -29,7 +29,7 @@ namespace CxjText.utlis
                         return -1; //没有登录
                     }
                 }
-                catch (SystemException e)
+                catch (Exception e)
                 {
                   
                     return 0;
@@ -115,7 +115,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/Home";
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
-            Console.WriteLine("系统："+userInfo.tag +"\n"+moneyRltStr);
+            Console.WriteLine("系统："+userInfo.tag+"-"+userInfo.baseUrl +"\n"+moneyRltStr);
             if (String.IsNullOrEmpty(moneyRltStr))
             {
                 return 0;
@@ -128,7 +128,7 @@ namespace CxjText.utlis
                 }
                 userInfo.money = money + ""; //获取钱成功
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
                 
                 return 0;
