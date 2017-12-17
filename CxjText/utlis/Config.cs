@@ -13,9 +13,7 @@ namespace CxjText.utils
         //不包含admin  只能使用配置网址
         public static String softUserStr = "admin";
         public static long softTime = -1; //软件使用时间记录
-        public static String urls = "www.80088hg.com" + "\t"+
-                                    ""+"\t"+
-                                    "";
+        public static String urls = "";
         public static bool canOrder = true; //是否可以下单  正式版本是true
 
         public static String webSocketUrl = "ws://47.88.168.99:8600/";

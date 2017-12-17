@@ -371,13 +371,25 @@ namespace CxjText.utlis
             }
             //乙组联赛
             if (lianSai.Contains("乙")) {
-                if (lianSai.Contains("以色列") || lianSai.Contains("德国") || lianSai.Contains("意大利") || lianSai.Contains("法国")) {
+                if (lianSai.Contains("以色列") || lianSai.Contains("德国") || lianSai.Contains("意大利") || lianSai.Contains("法国")||lianSai.Contains("阿根廷")) {
 
                     return true;
                 }
                 return false;
             }
-
+            //巴西 阿根廷 秘鲁 墨西哥  智利 玻利维亚 委内瑞拉   
+            //哥斯达黎加 哥伦比亚  厄瓜多尔 巴拉圭 乌拉圭 危地马拉 洪都拉斯 美国
+            if (lianSai.Contains("巴西") || lianSai.Contains("阿根廷") || lianSai.Contains("秘鲁")
+                || lianSai.Contains("墨西哥") || lianSai.Contains("智利") || lianSai.Contains("玻利维亚")
+                || lianSai.Contains("委内瑞拉") || lianSai.Contains("哥斯达黎加") || lianSai.Contains("哥伦比亚")
+                || lianSai.Contains("厄瓜多尔")
+                || lianSai.Contains("巴拉圭")
+                || lianSai.Contains("乌拉圭")
+                || lianSai.Contains("危地马拉")
+                || lianSai.Contains("洪都拉斯")
+                || lianSai.Contains("美国")) {
+                return false;
+            }
 
             return true;
         }
