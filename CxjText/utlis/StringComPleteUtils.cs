@@ -324,8 +324,15 @@ namespace CxjText.utlis
 
         //判断是否能自动下注
         public static bool canAutoPut(String lianSai) {
+
+           
+
             if (lianSai.Contains("青年")|| lianSai.Contains("后备")||lianSai.Contains("後备")) {
                 return false;
+            }
+
+            if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
+                return true;
             }
 
             if (lianSai.Contains("U") || lianSai.Contains("u")) {
