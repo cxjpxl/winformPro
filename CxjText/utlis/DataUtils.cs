@@ -110,6 +110,7 @@ namespace CxjText.utlis
                             time = bc + "\n" + data48 + "\n" + ((String)jObjectU[18]).Trim() + " - " + ((String)jObjectU[19]).Trim();
                         }
                         catch(Exception e) {
+                            Console.WriteLine(e.ToString());
                             time = (String)jObjectU[1];
                         }
                     }

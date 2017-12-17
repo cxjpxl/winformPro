@@ -115,7 +115,7 @@ namespace CxjText.utlis
            // headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
             String rlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null,headJObject);
-            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+           // List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (String.IsNullOrEmpty(rlt)||!rlt.Contains("t_page")) return null;
             String[] rltLine = rlt.Split('\n');
             if (rltLine.Length == 0) return null;
