@@ -241,6 +241,11 @@ namespace CxjText.views
             if (autoJObject != null) { //判断是否是自动下注
                 dataJObject["gameMid"] = autoJObject["mid"]; //mid记录
             }
+
+            String saiKuang = DataUtils.get_c01_data(obj, userInfo.tag); 
+            saiKuang = saiKuang.Replace("\n", "|");
+            dataJObject["saiKuang"] = saiKuang;
+
             this.inface.OnClickLisenter(rltStr, dataJObject, userInfo);
         }
 

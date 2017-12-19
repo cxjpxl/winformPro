@@ -411,6 +411,7 @@ namespace CxjText.views
                 inputInfo.bateStr = bateStr;
                 inputInfo.inputType = inputType;
                 inputInfo.inputMoney = inputMoney;
+                inputInfo.saiKuang = (String)dataJObject["saiKuang"];
                 if (this.rltForm != null) {
                     this.rltForm.AddLineInHead(inputInfo);
                 }

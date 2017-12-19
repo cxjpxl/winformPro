@@ -39,6 +39,7 @@
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.RltDgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +60,8 @@
             this.Column6,
             this.Column7,
             this.Column8,
-            this.Column10});
+            this.Column10,
+            this.Column11});
             this.RltDgv.Location = new System.Drawing.Point(0, 0);
             this.RltDgv.Margin = new System.Windows.Forms.Padding(0);
             this.RltDgv.MultiSelect = false;
@@ -159,6 +161,14 @@
             this.Column10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column10.Width = 150;
             // 
+            // Column11
+            // 
+            this.Column11.DataPropertyName = "saiKuang";
+            this.Column11.HeaderText = "赛况";
+            this.Column11.Name = "Column11";
+            this.Column11.ReadOnly = true;
+            this.Column11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // RltForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -187,5 +197,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
     }
 }

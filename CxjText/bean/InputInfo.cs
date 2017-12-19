@@ -33,5 +33,9 @@ namespace CxjText.bean
 
         //下注时间
         public String time { get; set; }
+
+        //赛况
+        public String saiKuang { get; set; }
+        
     }
 }
