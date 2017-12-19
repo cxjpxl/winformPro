@@ -33,7 +33,7 @@ namespace CxjText.utils
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
-        public static String vString = "V1.1";
+        public static String vString = "V1.2";
 
 
         public static bool isDeug = false;  //控制打印
@@ -45,21 +45,7 @@ namespace CxjText.utils
 
 
         public static JObject speakJObject = new JObject();
-        public static JObject changeSaiNameJObject = new JObject();
-
-        public static void addSaiName(String key ,String value) {
-            if (changeSaiNameJObject == null) {
-                changeSaiNameJObject = new JObject();
-            }
-
-            if (changeSaiNameJObject[key] == null)
-            {
-                changeSaiNameJObject.Add(key, value);
-            }
-            else {
-                Console.WriteLine("有重复:"+key);
-            }
-        }
+       
 
     }
 }

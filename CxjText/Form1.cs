@@ -68,7 +68,6 @@ namespace CxjText
             Config.speakJObject["146"] = "点球取消";
             Config.speakJObject["1062"] = "可能主队点球";
             Config.speakJObject["142"] = "可能点球";
-           // Console.WriteLine(MyIdUtlis.Value());
         }
 
 
@@ -152,22 +151,7 @@ namespace CxjText
 
             Config.codeMoneyStr = codeMoney + "";
 
-            //获取联赛数据
-            String lianSaiStrs = HttpUtils.httpGet("http://47.88.168.99:8500/cxj/lianSai","",null);
-            if (!String.IsNullOrEmpty(lianSaiStrs) && FormUtils.IsJsonObject(lianSaiStrs))
-            {
-                JObject lianSaiObject = JObject.Parse(lianSaiStrs);
-                Config.changeSaiNameJObject = (JObject)lianSaiObject["data"];
-            }
-            else {
-                Invoke(new Action(() =>
-                {
-                    loginSysBtn.Enabled = true;
-                    loginSysBtn.Text = "登录";
-                    MessageBox.Show("连接服务器失败，请检查下网络!");
-                }));
-                return;
-            }
+           
             //登录成功
             Invoke(new Action(() =>
             {

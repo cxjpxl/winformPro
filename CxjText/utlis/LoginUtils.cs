@@ -663,6 +663,7 @@ namespace CxjText.utlis
                 return;
             }
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
+            Console.WriteLine(codeUrl);
             //下载图片
             //登录请求
             if (userInfo.cookie == null)
@@ -670,6 +671,7 @@ namespace CxjText.utlis
                 userInfo.cookie = new System.Net.CookieContainer();
             }
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
+            Console.WriteLine(codeNum);
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -687,6 +689,8 @@ namespace CxjText.utlis
                               Config.codeAppId, Config.codeSerect,
                               AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
                               1004, 20, codeStrBuf);
+            Console.WriteLine(codeStrBuf.ToString());
+            Console.WriteLine(num);
             if (num <= 0)
             {
                 userInfo.loginFailTime++;
