@@ -117,7 +117,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "B":
-                    if (currentTime - userTime >= 15 * 1000) 
+                    if (currentTime - userTime >= 10 * 1000) 
                     {
                         isUpdate = true;
                     }
@@ -141,7 +141,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "G":
-                    if (currentTime - userTime >= 5 * 1000)
+                    if (currentTime - userTime >= 10 * 1000)
                     {
                         isUpdate = true;
                     }

@@ -11,7 +11,7 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static String softUserStr = "admin-tai";
+        public static String softUserStr = "admin";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "";
         public static bool canOrder = true; //是否可以下单  正式版本是true
@@ -33,7 +33,7 @@ namespace CxjText.utils
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
-        public static String vString = "V1.2";
+        public static String vString = "V1.21";
 
 
         public static bool isDeug = false;  //控制打印

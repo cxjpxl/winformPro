@@ -801,9 +801,28 @@ namespace CxjText.utlis
                 betJObject["data"] == null || betJObject["data"]["pk"] == null ||
                 betJObject["data"]["data"] == null) {
                 leftForm.Invoke(new Action(() => {
+
+                    String str = "获取数据失败";
+                    if (betJObject["login"] == null)
+                    {
+                        str = "login的信息为null";
+                    }
+                    else if (betJObject["data"] == null)
+                    {
+                        str = "data为null";
+                    }
+                    else if (betJObject["data"]["pk"] == null)
+                    {
+                        str = "pk为null";
+                    }
+                    else if (betJObject["data"]["data"] == null)
+                    {
+                        str = "data.data为null";
+                    }
+                    Console.WriteLine(str);
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "获取数据失败");
+                        rltForm.RefershLineData(inputTag, str);
                     }
                 }));
                 return;
