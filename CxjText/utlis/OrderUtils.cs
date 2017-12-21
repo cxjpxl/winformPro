@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 
 namespace CxjText.utlis
 {
@@ -799,35 +800,63 @@ namespace CxjText.utlis
             JObject betJObject = JObject.Parse(betRlt);
             if (betJObject == null || betJObject["login"] == null ||
                 betJObject["data"] == null || betJObject["data"]["pk"] == null ||
-                betJObject["data"]["data"] == null) {
-                leftForm.Invoke(new Action(() => {
+                betJObject["data"]["data"] == null)
+            {
 
-                    String str = "获取数据失败";
-                    if (betJObject["login"] == null)
+                String str = "获取数据失败";
+                if (betJObject != null && betJObject["msg"] != null)
+                {
+                    str = (String)betJObject["msg"];
+                }
+                if (!str.Contains("刷新太快"))
+                {
+                    leftForm.Invoke(new Action(() =>
                     {
-                        str = "login的信息为null";
-                    }
-                    else if (betJObject["data"] == null)
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, str);
+                        }
+                    }));
+                    return;
+
+                }
+
+                //延时大概500ms继续下注
+                Thread.Sleep(800);
+                betUrl = user.dataUrl + "/index.php/sports/bet/makebetshow";
+                betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+                if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt))
+                {
+                    leftForm.Invoke(new Action(() =>
                     {
-                        str = "data为null";
-                    }
-                    else if (betJObject["data"]["pk"] == null)
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "构建订单失败");
+                        }
+                    }));
+                    return;
+                }
+                betJObject = JObject.Parse(betRlt);
+                if (betJObject == null || betJObject["login"] == null ||
+                    betJObject["data"] == null || betJObject["data"]["pk"] == null ||
+                    betJObject["data"]["data"] == null)
+                {
+                    str = "获取数据失败";
+                    if (betJObject != null && betJObject["msg"] != null)
                     {
-                        str = "pk为null";
+                        str = (String)betJObject["msg"];
                     }
-                    else if (betJObject["data"]["data"] == null)
+                    leftForm.Invoke(new Action(() =>
                     {
-                        str = "data.data为null";
-                    }
-                    Console.WriteLine(str);
-                    if (rltForm != null)
-                    {
-                        rltForm.RefershLineData(inputTag, str);
-                    }
-                }));
-                return;
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, str);
+                        }
+                    }));
+                    return;
+
+                }
             }
-
             int login = (int)betJObject["login"];
             if (login != 1) {
                 leftForm.Invoke(new Action(() => {

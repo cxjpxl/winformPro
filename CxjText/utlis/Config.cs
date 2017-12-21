@@ -29,7 +29,7 @@ namespace CxjText.utils
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
-
+        public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3269.3 Safari/537.36";
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
@@ -37,7 +37,7 @@ namespace CxjText.utils
 
 
         public static bool isDeug = false;  //控制打印
-        public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3269.3 Safari/537.36";              
+                  
         public static void console(String str) {
             if(isDeug) Console.WriteLine(str);
         }
