@@ -20,10 +20,20 @@ namespace CxjText
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
             dataInit();
             speakInit();
-            uuid = FileUtils.getOnlyFlag()+"-"+ MyIdUtlis.Value();
+            /* Version currentVersion = Environment.OSVersion.Version;
+             Version compareToVersion = new Version("6.2");
+             if (currentVersion.CompareTo(compareToVersion) >= 0)  //win7以上版本
+             {
+                 uuid = FileUtils.getOnlyFlag();
+             }
+             else //win 7 
+             {
+              uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
+             }*/
+            uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
             if (String.IsNullOrEmpty(uuid) &&!Config.softUserStr.Equals("admin"))
             {
                 MessageBox.Show("获取设备信息错误!");
