@@ -305,15 +305,15 @@ namespace CxjText
                     {
                         if (cid.Equals("1031"))
                         {
-                            speakStr = "炸弹类型，主队点球取消";
+                            speakStr = "主队点球取消";
                         }
                         else if (cid.Equals("2055"))
                         {
-                            speakStr = "炸弹类型，客队点球取消";
+                            speakStr = "客队点球取消";
                         }
                         
                     }
-                    else if (info.Equals("Penalty Home")) {
+                    else if (info.Contains("Confirmed")) {
                         if (cid.Equals("1031"))
                         {
                             speakStr = "主队点球";
@@ -393,18 +393,18 @@ namespace CxjText
                     {
                         if (cid.Equals("1031"))
                         {
-                            enventText.Text = "事件:炸弹类型，主队点球取消";
+                            enventText.Text = "事件:主队点球取消";
                         }
                         else if (cid.Equals("2055"))
                         {
-                            enventText.Text = "事件:炸弹类型，客队点球取消";
+                            enventText.Text = "事件:客队点球取消";
                         }
                         else {
                             enventText.Text = "事件:" + (String)Config.speakJObject[cid];
                         }
 
                     }
-                    else if (enventInfo.info.Equals("Penalty Home"))
+                    else if (enventInfo.info.Contains("Confirmed"))
                     {
                         if (cid.Equals("1031"))
                         {
@@ -446,7 +446,7 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Equals("Penalty Home"))
+                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed"))
                 {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
