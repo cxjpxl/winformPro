@@ -313,7 +313,7 @@ namespace CxjText
                         }
                         
                     }
-                    else if (info.Contains("Confirmed")) {
+                    else if (info.Contains("Confirmed")||info.Equals("Penalty Home")) {
                         if (cid.Equals("1031"))
                         {
                             speakStr = "主队点球";
@@ -404,7 +404,7 @@ namespace CxjText
                         }
 
                     }
-                    else if (enventInfo.info.Contains("Confirmed"))
+                    else if (enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
                     {
                         if (cid.Equals("1031"))
                         {
@@ -446,7 +446,7 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed"))
+                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
                 {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
