@@ -391,13 +391,36 @@ namespace CxjText
                 {
                     if (enventInfo.info.Contains("Cancelled"))
                     {
-                        enventText.Text = "事件:点球取消";
+                        if (cid.Equals("1031"))
+                        {
+                            enventText.Text = "事件:炸弹类型，主队点球取消";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            enventText.Text = "事件:炸弹类型，客队点球取消";
+                        }
+                        else {
+                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                        }
+
                     }
-                    else
+                    else if (enventInfo.info.Equals("Penalty Home"))
                     {
+                        if (cid.Equals("1031"))
+                        {
+                            enventText.Text = "事件:主队点球";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            enventText.Text = "事件:客队点球";
+                        }
+                        else {
+                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                        }
+                    }
+                    else {
                         enventText.Text = "事件:" + (String)Config.speakJObject[cid];
                     }
-
                 }
                 else
                 {
