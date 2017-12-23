@@ -303,7 +303,15 @@ namespace CxjText
                     String speakStr = (String)Config.speakJObject[cid];
                     if (info.Contains("Cancelled"))
                     {
-                        speakStr = "炸弹类型，点球取消";
+                        if (cid.Equals("1031"))
+                        {
+                            speakStr = "炸弹类型，主队点球取消";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            speakStr = "炸弹类型，客队点球取消";
+                        }
+                        
                     }
                     else if (info.Equals("Penalty Home")) {
                         if (cid.Equals("1031"))
