@@ -173,7 +173,7 @@ namespace CxjText.utlis
             if (webSocket == null) return;
             try
             {
-                webSocket.CloseAsync();
+                webSocket.Close();
             }
             catch (Exception e)
             {

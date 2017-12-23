@@ -303,7 +303,16 @@ namespace CxjText
                     String speakStr = (String)Config.speakJObject[cid];
                     if (info.Contains("Cancelled"))
                     {
-                        speakStr = "点球取消";
+                        speakStr = "炸弹类型，点球取消";
+                    }
+                    else if (info.Equals("Penalty Home")) {
+                        if (cid.Equals("1031"))
+                        {
+                            speakStr = "主队点球";
+                        }
+                        else if (cid.Equals("2055")) {
+                            speakStr = "客队点球";
+                        }
                     }
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
@@ -406,7 +415,7 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled"))
+                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Equals("Penalty Home"))
                 {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
