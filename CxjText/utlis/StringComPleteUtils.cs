@@ -205,6 +205,7 @@ namespace CxjText.utlis
                     jObject.Add("isBanChang", isBanChang); //是否半场
                     jObject.Add("nameH", hStr);//主队名字
                     jObject.Add("nameG", gStr);//客队名字
+                    jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
 
@@ -248,6 +249,7 @@ namespace CxjText.utlis
                     jObject.Add("isBanChang", isBanChang); //是否半场
                     jObject.Add("nameH", hStr);//主队名字
                     jObject.Add("nameG", gStr);//客队名字
+                    jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
               

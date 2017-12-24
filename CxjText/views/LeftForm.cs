@@ -534,6 +534,7 @@ namespace CxjText.views
             bool isH = (bool)jObject["isH"]; //是否主队
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
+            String lianSai = (String)jObject["lianSai"];
             //先将数据搜索出来
             if (mainFrom != null)
             {
@@ -549,6 +550,11 @@ namespace CxjText.views
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
             }
+
+            if (!StringComPleteUtils.canAutoPut(lianSai)) {
+                return;
+            }
+
 
             //自动下注要处理的算法 搜索出全部的结果出来
             JArray searchArray = new JArray();
