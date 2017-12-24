@@ -15,11 +15,12 @@ namespace CxjText.utlis
         public static List<AutoData> autoLists = new List<AutoData>();
 
 
-        public static void addAutoData(String baseUrl,String mid ,long time) {
+        public static void addAutoData(String baseUrl,String mid ,long time, String gameTeam) {
             AutoData autoData = new AutoData();
             autoData.baseUrl = baseUrl;
             autoData.mid = mid;
             autoData.time = time;
+            autoData.gameTeam = gameTeam;
             autoLists.Add(autoData);
         }
 
@@ -64,7 +65,7 @@ namespace CxjText.utlis
                 if (rltForm != null)
                 {
                     if (jobject["gameMid"] != null) {
-                        addAutoData(user.baseUrl,(String) jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl,(String) jobject["gameMid"], FormUtils.getCurrentTime(),(String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -240,7 +241,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -358,7 +359,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -516,7 +517,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -739,7 +740,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -963,7 +964,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -1138,7 +1139,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -1309,7 +1310,7 @@ namespace CxjText.utlis
                 {
                     if (jobject["gameMid"] != null)
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime());
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
