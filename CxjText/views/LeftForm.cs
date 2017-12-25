@@ -269,6 +269,9 @@ namespace CxjText.views
                     selectPosition = i;
                 }
             }
+
+            //nameList.Sort((x, y) => string.Compare(x.name, y.name));
+            
             customersBindingSource.ResetBindings(true);
 
             if (selectPosition == -1)

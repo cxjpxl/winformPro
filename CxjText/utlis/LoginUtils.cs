@@ -671,7 +671,6 @@ namespace CxjText.utlis
                 userInfo.cookie = new System.Net.CookieContainer();
             }
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
-            Console.WriteLine(codeNum);
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
