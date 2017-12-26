@@ -100,12 +100,17 @@ namespace CxjText.utlis
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
+         
             String parmsStr = (String)jobject["rlt"];//B系统里面参数
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             String C_Str = (String)jobject["C_Str"];
-            String bRlt = HttpUtils.HttpPost(user.dataUrl + "/ajaxleft/bet_match.php", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie);
+
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            String bRlt = HttpUtils.HttpPostHeader(user.dataUrl + "/ajaxleft/bet_match.php", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球滚球") < 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -178,7 +183,7 @@ namespace CxjText.utlis
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
-            String rlt = HttpUtils.httpGet(checkMoneyrUrl, "", user.cookie);
+            String rlt = HttpUtils.HttpGetHeader(checkMoneyrUrl, "", user.cookie,headJObject);
             if (!FormUtils.IsJsonObject(rlt))
             {
                 //请求失败处理 UI处理
@@ -219,8 +224,11 @@ namespace CxjText.utlis
 
 
             //下单接口的请求
-            String orderRlt = HttpUtils.HttpPostB_Order(user.dataUrl + "/bet.php", orderStr,
-                "application/x-www-form-urlencoded", user);
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/left.php";
+            String orderRlt = HttpUtils.HttpPostHeader(user.dataUrl + "/bet.php", orderStr,
+                "application/x-www-form-urlencoded",user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -1173,7 +1181,7 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("确定交易"))
+            if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1232,6 +1240,18 @@ namespace CxjText.utlis
                    
                 }
             }
+            if (String.IsNullOrEmpty(orderUrl1))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "动态订单地址失败");
+                    }
+                }));
+                return;
+            }
+
+
 
             if (String.IsNullOrEmpty(orderPrams))
             {
@@ -1271,15 +1291,6 @@ namespace CxjText.utlis
                 return;
             }
             orderPrams = orderPrams + "gold=" + money;
-            if (String.IsNullOrEmpty(orderUrl1)) {
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        rltForm.RefershLineData(inputTag, "动态订单地址失败");
-                    }
-                }));
-                return;
-            }
             String orderUrl = user.dataUrl + orderUrl1;
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
