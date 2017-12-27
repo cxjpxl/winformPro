@@ -1181,6 +1181,7 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
+            Console.WriteLine(betRlt);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1297,6 +1298,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
                 leftForm.Invoke(new Action(() => {

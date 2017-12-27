@@ -52,11 +52,15 @@
             this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.putZaDan = new System.Windows.Forms.RadioButton();
+            this.putAuto = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +68,7 @@
             // loginPanel
             // 
             this.loginPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.loginPanel.Location = new System.Drawing.Point(994, 12);
+            this.loginPanel.Location = new System.Drawing.Point(994, 3);
             this.loginPanel.Name = "loginPanel";
             this.loginPanel.Size = new System.Drawing.Size(356, 267);
             this.loginPanel.TabIndex = 1;
@@ -87,7 +91,7 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.ForeColor = System.Drawing.Color.Black;
-            this.textBox1.Location = new System.Drawing.Point(1073, 290);
+            this.textBox1.Location = new System.Drawing.Point(1073, 275);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(179, 26);
             this.textBox1.TabIndex = 5;
@@ -98,7 +102,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(995, 293);
+            this.label1.Location = new System.Drawing.Point(995, 278);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 6;
@@ -108,7 +112,7 @@
             // 
             this.codeMoneyText.AutoSize = true;
             this.codeMoneyText.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.codeMoneyText.Location = new System.Drawing.Point(995, 327);
+            this.codeMoneyText.Location = new System.Drawing.Point(995, 308);
             this.codeMoneyText.Name = "codeMoneyText";
             this.codeMoneyText.Size = new System.Drawing.Size(72, 16);
             this.codeMoneyText.TabIndex = 7;
@@ -290,16 +294,51 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox5);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.autoCheck);
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.panel1);
-            this.groupBox2.Location = new System.Drawing.Point(999, 488);
+            this.groupBox2.Location = new System.Drawing.Point(999, 453);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(226, 154);
+            this.groupBox2.Size = new System.Drawing.Size(226, 203);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "自动下注";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.putZaDan);
+            this.groupBox5.Controls.Add(this.putAuto);
+            this.groupBox5.Location = new System.Drawing.Point(12, 149);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(199, 48);
+            this.groupBox5.TabIndex = 24;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "自动下注类型";
+            // 
+            // putZaDan
+            // 
+            this.putZaDan.AutoSize = true;
+            this.putZaDan.Location = new System.Drawing.Point(65, 20);
+            this.putZaDan.Name = "putZaDan";
+            this.putZaDan.Size = new System.Drawing.Size(47, 16);
+            this.putZaDan.TabIndex = 1;
+            this.putZaDan.TabStop = true;
+            this.putZaDan.Text = "炸弹";
+            this.putZaDan.UseVisualStyleBackColor = true;
+            // 
+            // putAuto
+            // 
+            this.putAuto.AutoSize = true;
+            this.putAuto.Checked = true;
+            this.putAuto.Location = new System.Drawing.Point(10, 20);
+            this.putAuto.Name = "putAuto";
+            this.putAuto.Size = new System.Drawing.Size(47, 16);
+            this.putAuto.TabIndex = 0;
+            this.putAuto.TabStop = true;
+            this.putAuto.Text = "默认";
+            this.putAuto.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -319,7 +358,7 @@
             this.groupBox4.Controls.Add(this.lianSaiText);
             this.groupBox4.Controls.Add(this.enventText);
             this.groupBox4.Controls.Add(this.gameText);
-            this.groupBox4.Location = new System.Drawing.Point(994, 363);
+            this.groupBox4.Location = new System.Drawing.Point(994, 331);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(361, 117);
             this.groupBox4.TabIndex = 23;
@@ -348,6 +387,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -383,5 +424,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.RadioButton putZaDan;
+        private System.Windows.Forms.RadioButton putAuto;
     }
 }

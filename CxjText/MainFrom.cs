@@ -493,7 +493,7 @@ namespace CxjText
             }
             else
             {
-                //直接下注的类型 判断
+                //默认选项且为直接下注的类型
                 if (cid.Equals("2086") || cid.Equals("1062")) { 
                     if (cid.Equals("2086"))
                     {
@@ -503,6 +503,7 @@ namespace CxjText
                         enventInfo.cid = "1031";//主队点球
                     }
                     this.Invoke(new Action(() => {
+                        enventInfo.isDriect = true;  //直接下注类型
                         leftForm.setComplete(enventInfo);
                         if (listEnvets.Count == 0) return;
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
@@ -574,6 +575,19 @@ namespace CxjText
             {
                 return 0;
             }
+        }
+        //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
+        public int GetAutoPutType()
+        {
+            if (putAuto.Checked) //默认
+            {
+                return 1;
+            }
+            else  //炸弹类型
+            {
+                return 2;
+            }
+           
         }
     }
 }

@@ -552,6 +552,12 @@ namespace CxjText.views
 
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
+
+                //只下炸弹的时候出现直接下注类型  直接返回
+                if (mainFrom.GetAutoPutType() == 2 && enventInfo.isDriect) {
+                    return;
+                }
+
             }
 
             if (!StringComPleteUtils.canAutoPut(lianSai)) {
