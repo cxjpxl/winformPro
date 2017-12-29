@@ -2,6 +2,8 @@
 using CxjText.utils;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace CxjText.utlis
 {
@@ -108,6 +110,21 @@ namespace CxjText.utlis
         //获取U的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetUMoney(UserInfo userInfo)
         {
+
+            String uid = null;
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            for (int i = 0; i < list.Count; i++)
+            {
+                Cookie c = list[i];
+                if (c.Name.Equals("Cookie_LoginId"))
+                {
+                    uid = c.Value;
+                }
+            }
+            if (!String.IsNullOrEmpty(uid))
+            {
+                userInfo.uid = uid;
+            }
             //获取钱的处理
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
