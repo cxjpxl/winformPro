@@ -362,30 +362,33 @@ namespace CxjText
             enventInfo.T = (String)jObject["data"]["T"];
             enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
-           
-
             speak(cid, enventInfo.info);
-
             this.Invoke(new Action(() => {
-
+                EnventShowInfo enventShowInfo = new EnventShowInfo();
                 String str = "比赛(全场) :";
+                String gameTimeStr = "全场";
                 try
                 {
                     int time = int.Parse(enventInfo.T);
+                    enventShowInfo.gameTime = time;
                     if (time <= 2700000)
                     { //半场
                         str = "比赛(上半场) :";
+                        gameTimeStr = "上半场";
                     }
                     else
                     {
                         str = "比赛(全场) :";
+                        gameTimeStr = "全场";
                     }
                 }
                 catch (Exception e)
                 {
 
                 }
-
+                enventShowInfo.gameTimeStr = gameTimeStr;
+                enventShowInfo.gameH = enventInfo.nameH;
+                enventShowInfo.gameG = enventInfo.nameG;
                 gameText.Text = str + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
@@ -426,11 +429,24 @@ namespace CxjText
                 {
                     enventText.Text = "事件:" + "未知";
                 }
-               
 
+
+                if (cid.Equals("9926") || cid.Equals("1031")|| cid.Equals("1062")) //主队
+                {
+                    enventShowInfo.gameTeamColor = 1;
+                }
+                else if (cid.Equals("9927") || cid.Equals("2055") || cid.Equals("2086"))//客队
+                {
+                    enventShowInfo.gameTeamColor = 2;
+                }
+                else {
+                    enventShowInfo.gameTeamColor = 0;
+                }
                 timeText.Text = "时间: " + DateTime.Now.ToString(); 
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
-
+                enventShowInfo.text = enventText.Text.ToString();
+                enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
+                //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
             }));
 
 
