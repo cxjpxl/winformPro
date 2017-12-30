@@ -14,7 +14,7 @@ namespace CxjText.utlis
         //重新登录获取cookie的时间处理
         public static bool canRestLogin(long time,String tag) {
             long cTime = FormUtils.getCurrentTime();
-            int timeOffest = 1000 * 60 * 5;
+            int timeOffest = 1000 * 60 * 3;
             switch (tag) {
                 case "A":
                     break;

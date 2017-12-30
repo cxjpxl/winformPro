@@ -112,15 +112,22 @@ namespace CxjText.utlis
         {
 
             String uid = null;
-            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
-            for (int i = 0; i < list.Count; i++)
+            try
             {
-                Cookie c = list[i];
-                if (c.Name.Equals("Cookie_LoginId"))
+                List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+                for (int i = 0; i < list.Count; i++)
                 {
-                    uid = c.Value;
+                    Cookie c = list[i];
+                    if (c.Name.Equals("Cookie_LoginId"))
+                    {
+                        uid = c.Value;
+                    }
                 }
             }
+            catch (Exception e) {
+
+            }
+          
             if (!String.IsNullOrEmpty(uid))
             {
                 userInfo.uid = uid;
@@ -133,13 +140,13 @@ namespace CxjText.utlis
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
             Console.WriteLine("系统："+userInfo.tag+"-"+userInfo.baseUrl +"\n"+moneyRltStr);
-            if (String.IsNullOrEmpty(moneyRltStr))
+            if (moneyRltStr == null)
             {
                 return 0;
             }
             try
             {
-                float money = float.Parse(moneyRltStr.Replace("\"", ""));
+                float money = float.Parse(moneyRltStr.Trim().Replace("\"", ""));
                 if (money < 0) {   //小于0表示没有登录
                     return -1;
                 }
@@ -147,7 +154,10 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                
+                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 3 * 60 * 1000)
+                {
+                    return -1;
+                }
                 return 0;
             }
             return 1;

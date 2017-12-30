@@ -83,6 +83,7 @@ namespace CxjText.utlis
                 case "U":
                     JArray jObjectU = (JArray)obj;
                     String bc = (String)jObjectU[1];
+                  //  Console.WriteLine(bc);
                     if (bc.Contains("半场"))
                     {
                         bc = "半场";
