@@ -151,6 +151,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectC, tag);
                         obj = jObjectC;
                         break;
+                    case "F":
+                        JObject jObjectF = (JObject)jArray[i];
+                        lianSai = (String)jObjectF["mname"];
+                        hStr = (String)jObjectF["hteam"];
+                        gStr = (String)jObjectF["gteam"];
+                        mid = DataUtils.getMid(jObjectF, tag);
+                        obj = jObjectF;
+                        break;
                     default:
                         return null;
 

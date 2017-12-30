@@ -33,6 +33,10 @@ namespace CxjText.utlis
                     break;
                 case "K":
                     break;
+                case "C":
+                    break;
+                case "F":
+                    break;
                 default:
                     return false;
             }
@@ -1011,10 +1015,8 @@ namespace CxjText.utlis
 
             String codeUrl = userInfo.loginUrl + "/app/member/mkcode.php?" + FormUtils.getCurrentTime();
             //登录请求
-            if (userInfo.cookie == null)
-            {
-                userInfo.cookie = new System.Net.CookieContainer();
-            }
+           
+            userInfo.cookie = new System.Net.CookieContainer();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl+"/app/member/";
@@ -1213,6 +1215,142 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
             return;
+        }
+        /*********************F系统登录的处理**********************************/
+        public static void loginF(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            userInfo.cookie = new System.Net.CookieContainer();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String codeUrl = userInfo.dataUrl + "/validCode?t=" + FormUtils.getCurrentTime();
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String checkLoginUrl = userInfo.dataUrl + "/member/member";
+            String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
+            String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
+            Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            JObject jObject = JObject.Parse(rltStr);
+            if (!(bool)jObject["success"]) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String loginMenUrl = userInfo.dataUrl + "/jsp/member/loginProtocol.jsp";
+            rltStr = HttpUtils.HttpGetHeader(loginMenUrl,"",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("游戏协议"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //真正调用登录接口
+            String loginUrl = userInfo.dataUrl + "/member/member";
+            pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=denglu&rmNum=" + codeStrBuf.ToString();
+            rltStr = HttpUtils.HttpPostHeader(loginUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            jObject = JObject.Parse(rltStr);
+            if (!(bool)jObject["success"])
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取money 
+            int moneyStatus = MoneyUtils.GetFMoney(userInfo);
+            if (moneyStatus != 1)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            userInfo.loginFailTime = 0;
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            userInfo.updateMoneyTime = userInfo.loginTime;
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
         }
     }
 }

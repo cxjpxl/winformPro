@@ -25,30 +25,37 @@ namespace CxjText.utlis
             if (userInfo.tag.Equals("A"))
             {
                 JArray jArray = (JArray)jObject["results"];
-                if (jArray == null || jArray.Count == 0) {
+                if (jArray == null || jArray.Count == 0)
+                {
                     return rltJArray;
                 }
-                for (int i = 0; i < jArray.Count; i++) {
+                for (int i = 0; i < jArray.Count; i++)
+                {
                     JObject itemJObject = (JObject)jArray[i];
                     String lianSai = (String)itemJObject["a26"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
-                    for (int resultIndex = 0; resultIndex < rltJArray.Count; resultIndex++) {
+                    for (int resultIndex = 0; resultIndex < rltJArray.Count; resultIndex++)
+                    {
                         String lianSai1 = (String)rltJArray[resultIndex][0]["a26"];
-                        if (lianSai1.Equals(lianSai)) {
+                        if (lianSai1.Equals(lianSai))
+                        {
                             hasLianSai = true;
                         }
                     }
                     if (hasLianSai) continue;
                     JArray itemJArray = new JArray();
-                    for (int j = i; j < jArray.Count; j++) {
+                    for (int j = i; j < jArray.Count; j++)
+                    {
                         JObject itemJObject1 = (JObject)jArray[j];
                         String lianSai2 = (String)itemJObject1["a26"];
-                        if (lianSai2.Equals(lianSai)) {
+                        if (lianSai2.Equals(lianSai))
+                        {
                             itemJArray.Add(itemJObject1);
                         }
                     }
-                    if (itemJArray.Count > 0) {
+                    if (itemJArray.Count > 0)
+                    {
                         rltJArray.Add(itemJArray);
                     }
                 }
@@ -207,7 +214,8 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("K")|| userInfo.tag.Equals("C")) {
+            else if (userInfo.tag.Equals("K") || userInfo.tag.Equals("C"))
+            {
                 JArray jArray = (JArray)jObject["list"];
                 if (jArray == null || jArray.Count == 0)
                 {
@@ -233,6 +241,44 @@ namespace CxjText.utlis
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
                         String lianSai2 = (String)itemJObject1["league"];
+                        if (lianSai2.Equals(lianSai))
+                        {
+                            itemJArray.Add(itemJObject1);
+                        }
+                    }
+                    if (itemJArray.Count > 0)
+                    {
+                        rltJArray.Add(itemJArray);
+                    }
+                }
+            }
+            else if (userInfo.tag.Equals("F"))
+            {
+                JArray jArray = (JArray)jObject["list"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject itemJObject = (JObject)jArray[i];
+                    String lianSai = (String)itemJObject["mname"];
+                    if (String.IsNullOrEmpty(lianSai)) continue;
+                    bool hasLianSai = false;
+                    for (int resultIndex = 0; resultIndex < rltJArray.Count; resultIndex++)
+                    {
+                        String lianSai1 = (String)rltJArray[resultIndex][0]["mname"];
+                        if (lianSai1.Equals(lianSai))
+                        {
+                            hasLianSai = true;
+                        }
+                    }
+                    if (hasLianSai) continue;
+                    JArray itemJArray = new JArray();
+                    for (int j = i; j < jArray.Count; j++)
+                    {
+                        JObject itemJObject1 = (JObject)jArray[j];
+                        String lianSai2 = (String)itemJObject1["mname"];
                         if (lianSai2.Equals(lianSai))
                         {
                             itemJArray.Add(itemJObject1);
@@ -274,8 +320,12 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["lianSai"].ToString();
             }
-            else if (userInfo.tag.Equals("K")||userInfo.tag.Equals("C")) {
+            else if (userInfo.tag.Equals("K") || userInfo.tag.Equals("C"))
+            {
                 title = currentArray[0]["league"].ToString();
+            }
+            else if (userInfo.tag.Equals("F")) {
+                title = currentArray[0]["mname"].ToString();
             }
             else
             {
@@ -299,16 +349,20 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0][0] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("U")) {
+            else if (userInfo.tag.Equals("U"))
+            {
                 mid = (String)jArray[index][0][0] + ""; //唯一标识
             }
             else if (userInfo.tag.Equals("R"))
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("K")||userInfo.tag.Equals("C"))
+            else if (userInfo.tag.Equals("K") || userInfo.tag.Equals("C"))
             {
                 mid = (String)jArray[index][0]["gid"] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("F")) {
+                mid = (String)jArray[index][0]["matchesDetailId"] + ""; //唯一标识
             }
             else
             {
@@ -356,9 +410,16 @@ namespace CxjText.utlis
                     return true;
                 }
             }
-            else if (userInfo.tag.Equals("K")|| userInfo.tag.Equals("C")) {
+            else if (userInfo.tag.Equals("K") || userInfo.tag.Equals("C")) {
                 String nameH = (String)jObject["team_h"];
                 String nameG = (String)jObject["team_c"];
+                if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
+                {
+                    return true;
+                }
+            } else if (userInfo.tag.Equals("F")) {
+                String nameH = (String)jObject["hteam"];
+                String nameG = (String)jObject["gteam"];
                 if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
                 {
                     return true;

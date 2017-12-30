@@ -9,7 +9,7 @@ using System.Net;
 
 namespace CxjText.utlis
 {
-   public class DataPramsUtils
+    public class DataPramsUtils
     {
         /************************A系统的获取数据********************/
         public static String getAData(UserInfo userInfo) {
@@ -20,9 +20,9 @@ namespace CxjText.utlis
                 pUrl = userInfo.dataUrl;
             }
             //page是由1开始
-           String getDataUrl= pUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime(); 
-            String  rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
-            if (String.IsNullOrEmpty(rlt)) return null; 
+            String getDataUrl = pUrl + "/sport/football.aspx?data=json&action=re&page=1&keyword=&sort=&uid=&_=" + FormUtils.getCurrentTime();
+            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+            if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
             if (!FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
@@ -35,7 +35,7 @@ namespace CxjText.utlis
             int totalpage = (int)jObject["totalpage"];
             //循环获取当前数据
             for (int i = 1; i < totalpage; i++) {
-                String pageUrl  = pUrl + "/sport/football.aspx?data=json&action=re&page=" + (i+1)+"&keyword=&sort=&uid=&_=" + (FormUtils.getCurrentTime()+i);
+                String pageUrl = pUrl + "/sport/football.aspx?data=json&action=re&page=" + (i + 1) + "&keyword=&sort=&uid=&_=" + (FormUtils.getCurrentTime() + i);
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
@@ -43,13 +43,13 @@ namespace CxjText.utlis
                 if (!FormUtils.IsJsonObject(pageRlt)) return null;
                 JObject pageJObject = JObject.Parse(pageRlt);
                 if (pageJObject == null) continue;
-                JArray pageJArry =(JArray)pageJObject["results"];
-                if (pageJArry == null||pageJArry.Count == 0) continue;
+                JArray pageJArry = (JArray)pageJObject["results"];
+                if (pageJArry == null || pageJArry.Count == 0) continue;
                 for (int j = 0; j < pageJArry.Count; j++) {
                     jArry.Add(pageJArry[j]);
                 }
             }
-            return jObject.ToString(); 
+            return jObject.ToString();
         }
         /***********************B系统获取数据*************************/
         public static String getBData(UserInfo userInfo)
@@ -59,11 +59,11 @@ namespace CxjText.utlis
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
-            if (String.IsNullOrEmpty(rlt)||!FormUtils.IsJsonObject(rlt)) return null;
+            if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             JArray jArry = (JArray)jObject["db"];
-            if (jArry == null||jArry.Count == 0)
+            if (jArry == null || jArry.Count == 0)
             {
                 return rlt;
             }
@@ -74,8 +74,8 @@ namespace CxjText.utlis
             //循环获取当前数据
             for (int i = 1; i < p_page; i++)
             {
-                String pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i+"&_=" + FormUtils.getCurrentTime();
-                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2?userInfo.cookie:null);
+                String pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
+                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt) || !FormUtils.IsJsonObject(pageRlt)) continue;
@@ -88,7 +88,7 @@ namespace CxjText.utlis
                     jArry.Add(pageJArry[j]);
                 }
             }
-            return jObject.ToString() ;
+            return jObject.ToString();
         }
         /***************I系统获取数据 num传大点就一次性把数据全部取回来**********/
         public static String getIData(UserInfo userInfo) {
@@ -112,11 +112,11 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             // headJObject["Origin"] = userInfo.dataUrl;
-           // headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
-            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid="+uid+"&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
-            String rlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null,headJObject);
-           // List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
-            if (String.IsNullOrEmpty(rlt)||!rlt.Contains("t_page")) return null;
+            // headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/index?rtype=re&uid="+uid+"&langx=zh-cn&mtype=3&showtype=&league_id=&hot_game=";
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
+            String rlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
+            // List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("t_page")) return null;
             String[] rltLine = rlt.Split('\n');
             if (rltLine.Length == 0) return null;
             int t_page = 1;
@@ -124,33 +124,33 @@ namespace CxjText.utlis
             //解析数据
             for (int i = 0; i < rltLine.Length; i++)
             {
-                String lineStr = rltLine[i].Trim() ;
-                if (lineStr.Contains("t_page")&&lineStr.Contains("=")) {
+                String lineStr = rltLine[i].Trim();
+                if (lineStr.Contains("t_page") && lineStr.Contains("=")) {
                     String t_pageStr = lineStr.Split('=')[1].Trim();
                     t_page = int.Parse(t_pageStr);
                     continue;
                 }
 
                 if (lineStr.Contains("g(") && !lineStr.Contains("//")) {
-                    String arrayString = lineStr.Substring(2,lineStr.Length - 4);
+                    String arrayString = lineStr.Substring(2, lineStr.Length - 4);
                     if (FormUtils.IsJsonArray(arrayString)) {
                         JArray itemArray = JArray.Parse(arrayString);
                         jarray.Add(itemArray);
                     }
                 }
             }
-          
+
 
             //分页继续解析数据
             for (int i = 1; i < t_page; i++) {
-                String pageUrl  = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+i+"&league_id=&hot_game=";
+                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=" + i + "&league_id=&hot_game=";
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt) || !pageRlt.Contains("t_page")) continue;
                 String[] pageRltLine = pageRlt.Split('\n');
                 if (pageRltLine.Length == 0) continue;
                 for (int j = 0; j < pageRltLine.Length; j++) {
                     String lineStr = pageRltLine[j].Trim();
-               
+
                     if (lineStr.Contains("g(") && !lineStr.Contains("//"))
                     {
                         String arrayString = lineStr.Substring(2, lineStr.Length - 4);
@@ -163,7 +163,7 @@ namespace CxjText.utlis
                 }
             }
             JObject jObject = new JObject();
-            jObject.Add("db",jarray);
+            jObject.Add("db", jarray);
             return jObject.ToString();
         }
         /*******************R系统获取数据***********************************/
@@ -172,7 +172,7 @@ namespace CxjText.utlis
 
             JArray jArray = new JArray(); // 存储球赛赛事
 
-            
+
             //循环获取分页数据
             String getDataUrl = userInfo.dataUrl.Replace("www", "mkt") + "/foot/redata/";
             JObject headJObject = new JObject();
@@ -429,7 +429,7 @@ namespace CxjText.utlis
         public static String getGData(UserInfo userInfo)
         {
             //page是由0开始
-             String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
+            String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
@@ -443,7 +443,7 @@ namespace CxjText.utlis
             }
             String p = "p=1&oddpk=H&leg=";
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
-            
+
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             JObject rltJObject = JObject.Parse(rlt);
             JArray jArray = new JArray();
@@ -459,14 +459,14 @@ namespace CxjText.utlis
             catch (Exception e) {
 
             }
-            
+
             try
             {
 
                 JObject dbJObjecct = (JObject)rltJObject["db"];
                 for (int i = 0; i < dbJObjecct.Count; i++) {
                     try {
-                        JObject jObject = (JObject)dbJObjecct["" + (i+1)];
+                        JObject jObject = (JObject)dbJObjecct["" + (i + 1)];
                         if (jObject != null) {
                             jArray.Add(jObject);
                         }
@@ -474,12 +474,12 @@ namespace CxjText.utlis
                         continue;
                     }
                 }
-                
+
             }
             catch (Exception e) {
                 //这里会抛出 System.InvalidCastException 转化异常  
                 //可以忽略掉 这个是为了区分那个array和object格式的数据的处理
-                jArray =(JArray) rltJObject["db"];
+                jArray = (JArray)rltJObject["db"];
             }
 
 
@@ -491,7 +491,7 @@ namespace CxjText.utlis
                     for (int i = 1; i < page; i++) {
                         int curPage = i + 1;
                         getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
-                        p = "p="+curPage+ "&oddpk=H&leg=";
+                        p = "p=" + curPage + "&oddpk=H&leg=";
                         rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
                         if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) continue;
                         rltJObject = JObject.Parse(rlt);
@@ -557,7 +557,7 @@ namespace CxjText.utlis
                 headJObject["Referer"] = userInfo.dataUrl;
                 String getUidUrl = userInfo.dataUrl + "/app/member/";
                 cookie = new CookieContainer();
-                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl,"", cookie, headJObject);
+                String uidRlt = HttpUtils.HttpGetHeader(getUidUrl, "", cookie, headJObject);
                 if (String.IsNullOrEmpty(uidRlt)) return null;
                 if (!uidRlt.Contains("uid=")) {
                     return null;
@@ -595,14 +595,14 @@ namespace CxjText.utlis
                     }
                 }
 
-                if (!str.Contains("parent.GameFT")&& !str.Contains("parent.GameHead")) {
+                if (!str.Contains("parent.GameFT") && !str.Contains("parent.GameHead")) {
                     continue;
                 }
 
                 if (str.Contains("parent.GameHead")) { //先解析头部
                     String[] dataStrs = str.Split(';');
                     String headStr = dataStrs[0];
-                    headStr =headStr.Replace(")", "]");
+                    headStr = headStr.Replace(")", "]");
                     headStr = headStr.Replace("parent.GameHead = new Array(", "[");
                     if (!FormUtils.IsJsonArray(headStr)) return null;
                     headJArray = JArray.Parse(headStr);
@@ -645,12 +645,12 @@ namespace CxjText.utlis
             }
 
             for (int page = 1; page < t_page; page++) {
-                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+page+"&league_id=";
+                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=" + page + "&league_id=";
                 headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
                 dataRlt = HttpUtils.HttpGetHeader(pageUrl, "", cookie, headJObject);
                 if (String.IsNullOrEmpty(dataRlt)) continue; ;
                 if (!dataRlt.Contains("parent.GameHead")) continue; ;
-               
+
                 if (!dataRlt.Contains("parent.GameFT"))
                 {
                     continue;
@@ -724,7 +724,7 @@ namespace CxjText.utlis
             {
                 jObject.Add("list", jArray);
                 return jObject.ToString();
-                
+
             }
             uid = userInfo.uid;
             String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=0&league_id=";
@@ -733,7 +733,7 @@ namespace CxjText.utlis
             String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
             if (String.IsNullOrEmpty(dataRlt)) return null;
             if (!dataRlt.Contains("parent.GameHead")) return null;
-            
+
             if (!dataRlt.Contains("parent.GameFT["))
             {
                 jObject.Add("list", jArray);
@@ -773,7 +773,7 @@ namespace CxjText.utlis
                 { //先解析头部
                     int startHead = str.IndexOf("Array");
                     if (startHead < 0) return null;
-                    str = str.Substring(startHead,str.Length - startHead);
+                    str = str.Substring(startHead, str.Length - startHead);
                     String[] dataStrs = str.Split(';');
                     String headStr = dataStrs[0];
                     headStr = headStr.Replace(")", "]");
@@ -784,7 +784,7 @@ namespace CxjText.utlis
                     continue;
                 }
                 //获取滚球的数据
-                if (str.Contains("parent.GameFT")&& str.Contains("new Array"))
+                if (str.Contains("parent.GameFT") && str.Contains("new Array"))
                 {
                     int arrayStart = str.IndexOf("Array(");
                     if (arrayStart < 0) continue;
@@ -803,10 +803,10 @@ namespace CxjText.utlis
                 }
             }
 
-            if (t_page > 1 && headJArray!=null) {
+            if (t_page > 1 && headJArray != null) {
                 for (int t = 1; t < t_page; t++) {
 
-                    getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no="+t+"&league_id=";
+                    getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=" + t + "&league_id=";
                     dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
                     if (String.IsNullOrEmpty(dataRlt)) continue;
                     if (!dataRlt.Contains("parent.GameHead")) continue;
@@ -840,6 +840,50 @@ namespace CxjText.utlis
                     }
                 }
             }
+            jObject.Add("list", jArray);
+            return jObject.ToString();
+        }
+        /***********************F系统获取数据*************************/
+        public static String getFData(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            String dataUrl = userInfo.dataUrl + "/MatchInfoServlet?task=matches";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            String pStr = "task=matches&Type=3020000&pageNo=1&Live=1&Lsids=&special=";
+            String rltStr = HttpUtils.HttpPostHeader(dataUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+            {
+                return null;
+            }
+
+            JObject jObject = JObject.Parse(rltStr);
+            JArray jArray = new JArray();
+            if (jObject["pageSize"] == null || jObject["zqInfo"] == null) {
+                jObject = new JObject();
+                jObject.Add("list", jArray);
+                return jObject.ToString();
+            }
+            int pageSize = (int)jObject["pageSize"];
+            jArray = (JArray)jObject["zqInfo"];
+
+            for (int i = 2; i <= pageSize; i++) {
+                 pStr = "task=matches&Type=3020000&pageNo="+i+"&Live=1&Lsids=&special=";
+                 rltStr = HttpUtils.HttpPostHeader(dataUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+                {
+                    continue;
+                }
+                JObject tempJObject = JObject.Parse(rltStr);
+                if (tempJObject["zqInfo"] == null) continue;
+                JArray tempJArry = (JArray)tempJObject["zqInfo"];
+                if (tempJArry.Count > 0) {
+                    for (int j = 0; j < tempJArry.Count; j++) {
+                        jArray.Add(tempJArry[i]);
+                    }
+                }
+            }
+            jObject = new JObject();
             jObject.Add("list", jArray);
             return jObject.ToString();
         }

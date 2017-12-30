@@ -1325,5 +1325,219 @@ namespace CxjText.utlis
             dataJObject["inputType"] = inputType; //下注类型
             return rltStr;
         }
+
+        //F系统点击处理
+        public static String DataSysFClick(JObject dataJObject, object obj,
+            int numRow, int clickNum, String tag
+            )
+        {
+
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            String limitPar ="";
+            int isWho = 0;
+            JObject orderObj = new JObject();
+            orderObj["matches"] = jObject["matchesDetailId"];
+            orderObj["league"] = jObject["matchesId"];
+            orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
+            orderObj["plate"] = "H";
+    
+            if (numRow == 0)
+            {
+             
+                inputType = "主队"; 
+                switch (clickNum)
+                {
+                    case 3:
+                      
+                        isWho = 0;
+                        //data: matches 1602976,betType 3020012,betOdds 0.85,showOdds 0.85,betDetail 0.5,betWho 0,money 10,league 66046,isToday 2,plate H, liveGoals 1:0
+                        orderObj["betType"] = "3020011";
+                        inputType = inputType + "-独赢";
+                        limitPar = "task=limit&Type=3020011&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix="+jObject["isMix"] +"&type=3020011&matid="+jObject["matchesDetailId"] +"&plate=H&isWho="+isWho;
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        break;
+                    case 4:
+                        isWho = 0;
+                        bool isH = (bool)jObject["concede"];
+                        if (!isH)
+                        {
+                            isWho = 2;
+                        }
+                        orderObj["betType"] = "3020012";
+                        limitPar = "task=limit&Type=3020012&Lsid="+ jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020012&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        break;
+                    case 5:
+                        isWho = 0;
+                        orderObj["betType"] = "3020013";
+                        limitPar = "task=limit&Type=3020013&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020013&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        break;
+                    case 6:
+                        isWho = 0;
+                        orderObj["betType"] = "3020021";
+                        limitPar = "task=limit&Type=3020021&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020021&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        break;
+                    case 7:
+                        isWho = 0;
+                        bool isH1 = (bool)jObject["concede"];
+                        if (!isH1)
+                        {
+                            isWho = 2;
+                        }
+                        orderObj["betType"] = "3020022";
+                        limitPar = "task=limit&Type=3020022&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020022&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        break;
+                    case 8:
+                        isWho = 0;
+                        orderObj["betType"] = "3020023";
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        limitPar = "task=limit&Type=3020023&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020023&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+               
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        isWho = 1;
+                        orderObj["betType"] = "3020011";
+                        limitPar = "task=limit&Type=3020011&Lsid=" + jObject["matchesId"];
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020011&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    case 4:
+                        isWho = 1;
+                        orderObj["betWho"] = "1";
+                        bool isH = (bool)jObject["concede"];
+                        if (!isH)
+                        {
+                            isWho = 3;
+                        }
+                        orderObj["liveGoals"] = (String)jObject["gscore"] + ":" + (String)jObject["hscore"];
+                        orderObj["betType"] = "3020012";
+                        limitPar = "task=limit&Type=3020012&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020012&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho="+ isWho;
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        break;
+                    case 5:
+                        isWho = 1;
+                        orderObj["betWho"] = "1";
+                        orderObj["betType"] = "3020013";
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        limitPar = "task=limit&Type=3020013&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020013&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    case 6:
+                        isWho = 1;
+                        orderObj["betWho"] = "1";
+                        orderObj["betType"] = "3020021";
+                        limitPar = "task=limit&Type=3020021&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020021&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        break;
+                    case 7:
+                        isWho = 1;
+                        bool isH1 = (bool)jObject["concede"];
+                        if (!isH1)
+                        {
+                            isWho = 3;
+                            orderObj["betWho"] = "3";
+                        }
+                        orderObj["liveGoals"] = (String)jObject["gscore"] + ":" + (String)jObject["hscore"];
+                        orderObj["betType"] = "3020022";
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        limitPar = "task=limit&Type=3020022&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020022&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    case 8:
+                        isWho = 1;
+                        orderObj["betType"] = "3020023";
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        limitPar = "task=limit&Type=3020023&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020023&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        isWho = 2;
+                        orderObj["betType"] = "3020011";
+                        limitPar = "task=limit&Type=3020011&Lsid=" + jObject["matchesId"];
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020011&matid=" +jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    case 6:
+                        isWho = 2;
+                        orderObj["betType"] = "3020021";
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        limitPar = "task=limit&Type=3020021&Lsid=" + jObject["matchesId"];
+                        rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020021&matid=" + jObject["matchesDetailId"] + "&plate=H&isWho=" + isWho;
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+
+            orderObj["betWho"] = ""+isWho;
+            dataJObject["orderObj"] = orderObj;
+            dataJObject["limitPar"] = limitPar;
+            gameName = (String)jObject["mname"]; //获取赛事
+            gameTeam = (String)jObject["hteam"] + "-" + (String)jObject["gteam"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
     }
 }
