@@ -1394,9 +1394,6 @@ namespace CxjText.utlis
                 return;
             }
 
-            String blcUrl = user.dataUrl + "/member/member?type=getAccountBalance";
-            HttpUtils.HttpPostHeader(blcUrl, "", "", user.cookie, headJObject);
-
             String betUrl = user.dataUrl + "/MatchInfoServlet";
             String betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
           //  Console.WriteLine(betRlt);
@@ -1414,7 +1411,7 @@ namespace CxjText.utlis
                     }));
                     return;
                 }
-                Console.WriteLine(betRlt);
+              //  Console.WriteLine(betRlt);
 
             }
 
