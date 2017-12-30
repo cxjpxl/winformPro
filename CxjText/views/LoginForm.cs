@@ -418,6 +418,18 @@ namespace CxjText.views
                         }
                         moneyStatus = MoneyUtils.GetCMoney(userInfo);
                         break;
+                    case "F":
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 120)
+                        {
+
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetFMoney(userInfo);
+                        break;
                     default:
                         break;
                 }
