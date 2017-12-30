@@ -879,7 +879,7 @@ namespace CxjText.utlis
                 JArray tempJArry = (JArray)tempJObject["zqInfo"];
                 if (tempJArry.Count > 0) {
                     for (int j = 0; j < tempJArry.Count; j++) {
-                        jArray.Add(tempJArry[i]);
+                        jArray.Add(tempJArry[j]);
                     }
                 }
             }
