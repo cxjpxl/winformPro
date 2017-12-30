@@ -382,11 +382,11 @@ namespace CxjText.utlis
         public static int GetFMoney(UserInfo user)
         {
 
-            String moneyUrl = user.dataUrl + "/member/member?type=updateSessionMoney&api=1";
+            String moneyUrl = user.dataUrl + "/member/member?type=getAccountBalance";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
-            headJObject["Referer"] = user.dataUrl + "/FootBall";
+          //  headJObject["Referer"] = user.dataUrl + "/FootBall";
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "", user.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
                 return 0;
@@ -396,7 +396,7 @@ namespace CxjText.utlis
             {
                 return -1;
             }
-            String moneyStr =(String) jObject["totalMoney"];
+            String moneyStr =(String) jObject["money"];
             user.money = moneyStr;
             return 1;
         }
