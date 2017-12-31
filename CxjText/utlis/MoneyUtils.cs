@@ -154,7 +154,7 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 3 * 60 * 1000)
+                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 5 * 60 * 1000)
                 {
                     return -1;
                 }
