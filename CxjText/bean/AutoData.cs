@@ -11,6 +11,7 @@ namespace CxjText.bean
     {
         public String baseUrl = "";
         public String mid = "";
+        public String gameTeam = "";
         public long time = -1;
     }
 }

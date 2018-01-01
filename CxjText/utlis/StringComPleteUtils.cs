@@ -1,11 +1,6 @@
 ﻿using CxjText.bean;
-using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CxjText.utlis
 {
@@ -156,18 +151,26 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectC, tag);
                         obj = jObjectC;
                         break;
+                    case "F":
+                        JObject jObjectF = (JObject)jArray[i];
+                        lianSai = (String)jObjectF["mname"];
+                        hStr = (String)jObjectF["hteam"];
+                        gStr = (String)jObjectF["gteam"];
+                        mid = DataUtils.getMid(jObjectF, tag);
+                        obj = jObjectF;
+                        break;
                     default:
                         return null;
 
                 }
-
-
-                bool selectDaXiao = false; //是否直接下大小
+                
                 String pHstr = hStr;
                 String pGStr = gStr;
                 if (hStr.Contains("角球") || gStr.Contains("角球")) {
                     continue;
                 }
+
+                if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
                 String gameT = enventInfo.T;//当前比赛时间
                 String cid = enventInfo.cid;//当前比赛事件
 
@@ -206,16 +209,11 @@ namespace CxjText.utlis
                         //半场
                         return null;
                     }
-
-                    selectDaXiao = selectDaxiaoFlag(obj, userInfo.tag, isH, isBanChang);
                     jObject.Add("isH", isH); //是否主队
                     jObject.Add("isBanChang", isBanChang); //是否半场
-                    jObject.Add("selectDaXiao", selectDaXiao);//是否强制下大小
-                    jObject.Add("index", i); //当前索引
                     jObject.Add("nameH", hStr);//主队名字
                     jObject.Add("nameG", gStr);//客队名字
-                    jObject.Add("lianSai", lianSai);//联赛名字
-                    jObject.Add("mid", mid); //比赛唯一id
+                    jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
 
@@ -255,15 +253,11 @@ namespace CxjText.utlis
                         //半场
                         return null;
                     }
-                    selectDaXiao = selectDaxiaoFlag(obj, userInfo.tag, isH, isBanChang);
                     jObject.Add("isH", isH); //是否主队
                     jObject.Add("isBanChang", isBanChang); //是否半场
-                    jObject.Add("selectDaXiao", selectDaXiao);//是否强制下大小
-                    jObject.Add("index", i); //当前索引
                     jObject.Add("nameH", hStr);//主队名字
                     jObject.Add("nameG", gStr);//客队名字
-                    jObject.Add("lianSai", lianSai);//联赛名字
-                    jObject.Add("mid", mid); //比赛唯一id
+                    jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
               
@@ -401,6 +395,66 @@ namespace CxjText.utlis
             return true;
         }
 
+
+        public static bool isDa07(String data) {
+
+            if (data != null) {
+                data = data.Trim();
+            }
+            if (!String.IsNullOrEmpty(data)&&!data.Equals(""))
+            {
+
+                String[] datas = data.Split(' ');
+
+                if (datas.Length > 2) return false;
+
+
+                if (datas.Length == 1)
+                {
+                    data = datas[0];
+                }
+                else if(datas.Length == 2){ 
+                    String pangKou = datas[0].Replace(" ", "").Trim();
+                    data = datas[1].Trim();
+
+                    if (pangKou != null &&(pangKou.Equals("0") || pangKou.Equals("0.5") || pangKou.Equals("0/0.5")||pangKou.Equals("")))
+                    {
+
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                if (String.IsNullOrEmpty(data)) return false;
+
+                try
+                {
+                    float dataRate = float.Parse(data);
+                    if (dataRate > 0.7)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public static bool daXiaoIsEmpty(String data)
+        {
+            if (data != null)
+            {
+                data = data.Trim();
+            }
+            if (String.IsNullOrEmpty(data) || data.Equals(""))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
 }

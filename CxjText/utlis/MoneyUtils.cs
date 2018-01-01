@@ -2,6 +2,8 @@
 using CxjText.utils;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace CxjText.utlis
 {
@@ -31,7 +33,7 @@ namespace CxjText.utlis
                 }
                 catch (Exception e)
                 {
-                  
+
                     return 0;
                 }
             }
@@ -63,7 +65,7 @@ namespace CxjText.utlis
                         }
                     }
                 }
-             }
+            }
             if (bMoneyRlt.Contains("DOCTYPE")) return 0;
             String[] moneys = bMoneyRlt.Split('|');
             String moneyStr = moneys[0];
@@ -94,7 +96,7 @@ namespace CxjText.utlis
             if (((String)jObject["info"]).Contains("重新登录")) {
                 return -1;
             }
-            if ( !((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["uid"] == null)
+            if (!((String)jObject["info"]).Equals("正常") || jObject["list"] == null || jObject["uid"] == null)
             {
                 return 0;
             }
@@ -108,6 +110,28 @@ namespace CxjText.utlis
         //获取U的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetUMoney(UserInfo userInfo)
         {
+
+            String uid = null;
+            try
+            {
+                List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Cookie c = list[i];
+                    if (c.Name.Equals("Cookie_LoginId"))
+                    {
+                        uid = c.Value;
+                    }
+                }
+            }
+            catch (Exception e) {
+
+            }
+
+            if (!String.IsNullOrEmpty(uid))
+            {
+                userInfo.uid = uid;
+            }
             //获取钱的处理
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
@@ -115,14 +139,14 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/Home";
             String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
             String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
-            Console.WriteLine("系统："+userInfo.tag+"-"+userInfo.baseUrl +"\n"+moneyRltStr);
-            if (String.IsNullOrEmpty(moneyRltStr))
+            Console.WriteLine("系统：" + userInfo.tag + "-" + userInfo.baseUrl + "\n" + moneyRltStr);
+            if (moneyRltStr == null)
             {
                 return 0;
             }
             try
             {
-                float money = float.Parse(moneyRltStr.Replace("\"", ""));
+                float money = float.Parse(moneyRltStr.Trim().Replace("\"", ""));
                 if (money < 0) {   //小于0表示没有登录
                     return -1;
                 }
@@ -130,7 +154,10 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                
+                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 5 * 60 * 1000)
+                {
+                    return -1;
+                }
                 return 0;
             }
             return 1;
@@ -142,7 +169,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
 
             String baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
-           String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
+            String UaUrl = userInfo.dataUrl + "/cl/index1.aspx?method=Sunplus";
             headJObject["Host"] = baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String uaRlt = HttpUtils.HttpGetHeader(UaUrl, "", userInfo.cookie, headJObject);
@@ -195,7 +222,7 @@ namespace CxjText.utlis
 
             int apiStart = mktUrl.IndexOf("api");
             if (apiStart <= 0) return 0;
-            mktUrl = mktUrl.Substring(0, apiStart-1);
+            mktUrl = mktUrl.Substring(0, apiStart - 1);
             userInfo.dataUrl = FileUtils.changeDataUrl(mktUrl.Replace("mkt", "www"));
             userInfo.loginUrl = userInfo.dataUrl;
             baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
@@ -223,7 +250,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t=" + FormUtils.getCurrentTime();
             String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie, headJObject);
-            Console.WriteLine("系统："+ userInfo.tag +"\n"+moneyStr);
+            Console.WriteLine("系统：" + userInfo.tag + "\n" + moneyStr);
             if (String.IsNullOrEmpty(moneyStr))
             {
                 return 0;
@@ -235,7 +262,7 @@ namespace CxjText.utlis
                     return 0;
                 }
 
-                bool isSuccess =(bool) jObject["success"];
+                bool isSuccess = (bool)jObject["success"];
                 if (!isSuccess)
                 {
                     return -1;
@@ -260,13 +287,13 @@ namespace CxjText.utlis
             String uid = user.uid;
             String token = user.exp;
 
-            if (String.IsNullOrEmpty(uid) || String.IsNullOrEmpty(token)){
+            if (String.IsNullOrEmpty(uid) || String.IsNullOrEmpty(token)) {
                 return -1;
             }
             String moneyUrl = user.dataUrl + "/index.php/sports/user/getuserinfo";
             JObject headJObject = new JObject();
             headJObject["Origin"] = user.dataUrl;
-            headJObject["Referer"] = user.dataUrl + "/index.php/sports/main?token="+token+"&uid="+uid;
+            headJObject["Referer"] = user.dataUrl + "/index.php/sports/main?token=" + token + "&uid=" + uid;
             String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "token=" + token + "&uid=" + uid, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt)) {
                 return 0;
@@ -294,12 +321,12 @@ namespace CxjText.utlis
             {
                 return -1;
             }
-            String moneyUrl = user.dataUrl + "/app/member/ref_money.php?uid="+uid+"&langx=zh-cn";
+            String moneyUrl = user.dataUrl + "/app/member/ref_money.php?uid=" + uid + "&langx=zh-cn";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["Origin"] = user.dataUrl ;
+            headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/app/member/index.php?mtype=3&uid=" + uid + "&langx=zh-cn";
-            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + uid + "&langx=zh-cn", "application/x-www-form-urlencoded",user.cookie,headJObject);
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + uid + "&langx=zh-cn", "application/x-www-form-urlencoded", user.cookie, headJObject);
             if (String.IsNullOrEmpty(moneyRlt)) {
                 return 0;
             }
@@ -313,7 +340,7 @@ namespace CxjText.utlis
             user.money = moneyRlt;
             return 1;
         }
-        //获取K的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        //获取C的money   1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetCMoney(UserInfo user)
         {
             String uid = user.uid;
@@ -321,21 +348,21 @@ namespace CxjText.utlis
             {
                 return -1;
             }
-            String moneyUrl = user.dataUrl + "/app/member/reloadCredit.php?uid="+uid+"&langx=zh-cn";
+            String moneyUrl = user.dataUrl + "/app/member/reloadCredit.php?uid=" + uid + "&langx=zh-cn";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
-            headJObject["Referer"] = user.dataUrl + "/app/member/FT_header.php?uid="+uid+"&showtype=&langx=zh-cn&mtype=3";
+            headJObject["Referer"] = user.dataUrl + "/app/member/FT_header.php?uid=" + uid + "&showtype=&langx=zh-cn&mtype=3";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(moneyRlt)||!moneyRlt.Contains("parent.reloadCredit")) {
+            if (String.IsNullOrEmpty(moneyRlt) || !moneyRlt.Contains("parent.reloadCredit")) {
                 return 0;
             }
-            moneyRlt = moneyRlt.Replace(";","").Replace("</script>","").Trim();
+            moneyRlt = moneyRlt.Replace(";", "").Replace("</script>", "").Trim();
             int start = moneyRlt.IndexOf("parent.reloadCredit");
             if (start == -1) return 0;
             moneyRlt = moneyRlt.Substring(start, moneyRlt.Length - start);
             String moneyStr = moneyRlt.Replace("parent.reloadCredit(", "")
-                .Replace("'", "").Replace("RMB", "").Replace(")", "").Replace("：","").Trim();
+                .Replace("'", "").Replace("RMB", "").Replace(")", "").Replace("：", "").Trim();
             try
             {
                 float.Parse(moneyStr);
@@ -344,6 +371,32 @@ namespace CxjText.utlis
             {
                 return 0;
             }
+            user.money = moneyStr;
+            return 1;
+        }
+
+
+
+
+        //获取F的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetFMoney(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/member/member?type=getAccountBalance";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+          //  headJObject["Referer"] = user.dataUrl + "/FootBall";
+            String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
+                return 0;
+            }
+            JObject jObject = JObject.Parse(rltStr);
+            if (!(bool)jObject["success"])
+            {
+                return -1;
+            }
+            String moneyStr =(String) jObject["money"];
             user.money = moneyStr;
             return 1;
         }

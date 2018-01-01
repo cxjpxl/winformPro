@@ -20,10 +20,20 @@ namespace CxjText
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
             dataInit();
             speakInit();
-            uuid = FileUtils.getOnlyFlag()+"-"+ MyIdUtlis.Value();
+            /* Version currentVersion = Environment.OSVersion.Version;
+             Version compareToVersion = new Version("6.2");
+             if (currentVersion.CompareTo(compareToVersion) >= 0)  //win7以上版本
+             {
+                 uuid = FileUtils.getOnlyFlag();
+             }
+             else //win 7 
+             {
+              uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
+             }*/
+            uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
             if (String.IsNullOrEmpty(uuid) &&!Config.softUserStr.Equals("admin"))
             {
                 MessageBox.Show("获取设备信息错误!");
@@ -59,8 +69,8 @@ namespace CxjText
             Config.speakJObject = new JObject();
             Config.speakJObject["9926"] = "可能主队炸弹";
             Config.speakJObject["9927"] = "可能客队炸弹";
-            Config.speakJObject["2055"] = "下注类型，客队点球";
-            Config.speakJObject["1031"] = "下注类型，主队点球";
+            Config.speakJObject["2055"] = "炸弹类型，客队可能点球";
+            Config.speakJObject["1031"] = "炸弹类型，主队可能点球";
             Config.speakJObject["9966"] = "点球失误";
             Config.speakJObject["9965"] = "点球失误";
             Config.speakJObject["144"] = "可能点球";

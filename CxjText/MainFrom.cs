@@ -227,6 +227,9 @@ namespace CxjText
                     case "C":
                         dataRtlStr = DataPramsUtils.getCData(userInfo);
                         break;
+                    case "F":
+                        dataRtlStr = DataPramsUtils.getFData(userInfo);
+                        break;
                     default:
                         break;
                 }
@@ -303,7 +306,24 @@ namespace CxjText
                     String speakStr = (String)Config.speakJObject[cid];
                     if (info.Contains("Cancelled"))
                     {
-                        speakStr = "点球取消";
+                        if (cid.Equals("1031"))
+                        {
+                            speakStr = "主队点球取消";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            speakStr = "客队点球取消";
+                        }
+                        
+                    }
+                    else if (info.Contains("Confirmed")||info.Equals("Penalty Home")) {
+                        if (cid.Equals("1031"))
+                        {
+                            speakStr = "主队点球";
+                        }
+                        else if (cid.Equals("2055")) {
+                            speakStr = "客队点球";
+                        }
                     }
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
@@ -345,52 +365,91 @@ namespace CxjText
             enventInfo.T = (String)jObject["data"]["T"];
             enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
-           
-
             speak(cid, enventInfo.info);
-
             this.Invoke(new Action(() => {
-
+                EnventShowInfo enventShowInfo = new EnventShowInfo();
                 String str = "比赛(全场) :";
+                String gameTimeStr = "全场";
                 try
                 {
                     int time = int.Parse(enventInfo.T);
+                    enventShowInfo.gameTime = time;
                     if (time <= 2700000)
                     { //半场
                         str = "比赛(上半场) :";
+                        gameTimeStr = "上半场";
                     }
                     else
                     {
                         str = "比赛(全场) :";
+                        gameTimeStr = "全场";
                     }
                 }
                 catch (Exception e)
                 {
 
                 }
-
+                enventShowInfo.gameTimeStr = gameTimeStr;
+                enventShowInfo.gameH = enventInfo.nameH;
+                enventShowInfo.gameG = enventInfo.nameG;
                 gameText.Text = str + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
                     {
-                        enventText.Text = "事件:点球取消";
+                        if (cid.Equals("1031"))
+                        {
+                            enventText.Text = "事件:主队点球取消";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            enventText.Text = "事件:客队点球取消";
+                        }
+                        else {
+                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                        }
+
                     }
-                    else
+                    else if (enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
                     {
+                        if (cid.Equals("1031"))
+                        {
+                            enventText.Text = "事件:主队点球";
+                        }
+                        else if (cid.Equals("2055"))
+                        {
+                            enventText.Text = "事件:客队点球";
+                        }
+                        else {
+                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                        }
+                    }
+                    else {
                         enventText.Text = "事件:" + (String)Config.speakJObject[cid];
                     }
-
                 }
                 else
                 {
                     enventText.Text = "事件:" + "未知";
                 }
-               
 
+
+                if (cid.Equals("9926") || cid.Equals("1031")|| cid.Equals("1062")) //主队
+                {
+                    enventShowInfo.gameTeamColor = 1;
+                }
+                else if (cid.Equals("9927") || cid.Equals("2055") || cid.Equals("2086"))//客队
+                {
+                    enventShowInfo.gameTeamColor = 2;
+                }
+                else {
+                    enventShowInfo.gameTeamColor = 0;
+                }
                 timeText.Text = "时间: " + DateTime.Now.ToString(); 
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
-
+                enventShowInfo.text = enventText.Text.ToString();
+                enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
+                //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
             }));
 
 
@@ -406,7 +465,7 @@ namespace CxjText
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled"))
+                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
                 {
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
@@ -453,7 +512,7 @@ namespace CxjText
             }
             else
             {
-                //直接下注的类型 判断
+                //默认选项且为直接下注的类型
                 if (cid.Equals("2086") || cid.Equals("1062")) { 
                     if (cid.Equals("2086"))
                     {
@@ -463,6 +522,7 @@ namespace CxjText
                         enventInfo.cid = "1031";//主队点球
                     }
                     this.Invoke(new Action(() => {
+                        enventInfo.isDriect = true;  //直接下注类型
                         leftForm.setComplete(enventInfo);
                         if (listEnvets.Count == 0) return;
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
@@ -534,6 +594,19 @@ namespace CxjText
             {
                 return 0;
             }
+        }
+        //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
+        public int GetAutoPutType()
+        {
+            if (putAuto.Checked) //默认
+            {
+                return 1;
+            }
+            else  //炸弹类型
+            {
+                return 2;
+            }
+           
         }
     }
 }
