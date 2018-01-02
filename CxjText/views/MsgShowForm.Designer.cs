@@ -40,7 +40,7 @@
             // 
             this.lbShiduan.AutoSize = true;
             this.lbShiduan.ForeColor = System.Drawing.Color.Red;
-            this.lbShiduan.Location = new System.Drawing.Point(18, 31);
+            this.lbShiduan.Location = new System.Drawing.Point(12, 9);
             this.lbShiduan.Name = "lbShiduan";
             this.lbShiduan.Size = new System.Drawing.Size(41, 12);
             this.lbShiduan.TabIndex = 1;
@@ -49,7 +49,7 @@
             // lbLiansai
             // 
             this.lbLiansai.AutoSize = true;
-            this.lbLiansai.Location = new System.Drawing.Point(18, 91);
+            this.lbLiansai.Location = new System.Drawing.Point(12, 38);
             this.lbLiansai.Name = "lbLiansai";
             this.lbLiansai.Size = new System.Drawing.Size(95, 12);
             this.lbLiansai.TabIndex = 2;
@@ -58,7 +58,7 @@
             // lbGameH
             // 
             this.lbGameH.AutoSize = true;
-            this.lbGameH.Location = new System.Drawing.Point(18, 151);
+            this.lbGameH.Location = new System.Drawing.Point(12, 67);
             this.lbGameH.Name = "lbGameH";
             this.lbGameH.Size = new System.Drawing.Size(29, 12);
             this.lbGameH.TabIndex = 3;
@@ -67,7 +67,7 @@
             // lbConst
             // 
             this.lbConst.AutoSize = true;
-            this.lbConst.Location = new System.Drawing.Point(102, 151);
+            this.lbConst.Location = new System.Drawing.Point(83, 67);
             this.lbConst.Name = "lbConst";
             this.lbConst.Size = new System.Drawing.Size(11, 12);
             this.lbConst.TabIndex = 4;
@@ -76,7 +76,7 @@
             // lbGameG
             // 
             this.lbGameG.AutoSize = true;
-            this.lbGameG.Location = new System.Drawing.Point(168, 151);
+            this.lbGameG.Location = new System.Drawing.Point(144, 67);
             this.lbGameG.Name = "lbGameG";
             this.lbGameG.Size = new System.Drawing.Size(29, 12);
             this.lbGameG.TabIndex = 5;
@@ -85,7 +85,7 @@
             // lbEvent
             // 
             this.lbEvent.AutoSize = true;
-            this.lbEvent.Location = new System.Drawing.Point(18, 211);
+            this.lbEvent.Location = new System.Drawing.Point(12, 98);
             this.lbEvent.Name = "lbEvent";
             this.lbEvent.Size = new System.Drawing.Size(53, 12);
             this.lbEvent.TabIndex = 6;
@@ -95,7 +95,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(223, 126);
             this.Controls.Add(this.lbEvent);
             this.Controls.Add(this.lbGameG);
             this.Controls.Add(this.lbConst);
