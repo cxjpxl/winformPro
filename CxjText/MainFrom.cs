@@ -449,7 +449,14 @@ namespace CxjText
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
                 enventShowInfo.text = enventText.Text.ToString();
                 enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
+
                 //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
+                if (Config.isShowEvent)
+                {
+                    Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+                    t.Start(enventShowInfo);
+                }
+
             }));
 
 
@@ -607,6 +614,13 @@ namespace CxjText
                 return 2;
             }
            
+        }
+        
+        private void ShowEventInfo(Object positionObj)
+        {
+            EnventShowInfo enventShowInfo = (EnventShowInfo)positionObj;
+            MsgShowForm msgShowForm = new MsgShowForm();
+            msgShowForm.ShowEvent(enventShowInfo);
         }
     }
 }
