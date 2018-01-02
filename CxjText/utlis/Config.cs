@@ -47,7 +47,7 @@ namespace CxjText.utils
         public static JObject speakJObject = new JObject();
 
 
-        public static bool isShowEvent = true;// 是否显示事件
+        public static bool isShowEvent = false;// 是否显示事件
        
 
     }
