@@ -23,24 +23,14 @@ namespace CxjText
             
             dataInit();
             speakInit();
-            /* Version currentVersion = Environment.OSVersion.Version;
-             Version compareToVersion = new Version("6.2");
-             if (currentVersion.CompareTo(compareToVersion) >= 0)  //win7以上版本
-             {
-                 uuid = FileUtils.getOnlyFlag();
-             }
-             else //win 7 
-             {
-              uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
-             }*/
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
-            if (String.IsNullOrEmpty(uuid) &&!Config.softUserStr.Equals("admin"))
+            if (String.IsNullOrEmpty(uuid) &&(!Config.softUserStr.Equals("admin")|| !Config.softUserStr.Equals("admin-client")))
             {
                 MessageBox.Show("获取设备信息错误!");
                 Application.Exit();
                 return;
             }
-            if (Config.softUserStr.Equals("admin")) {
+            if (Config.softUserStr.Equals("admin")|| Config.softUserStr.Equals("admin-client")) {
                   codeUserEdit.Text = "cxj81886404";
                   codePwdEdit.Text = "cxj13580127662";
             }
@@ -88,7 +78,7 @@ namespace CxjText
             String codePwdStr = (String)jObject["codePwdStr"];
 
             //登录验证软件是否过期
-            if (!Config.softUserStr.Equals("admin")) {
+            if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
                 JObject loginObj = new JObject();
                 loginObj.Add("userName", Config.softUserStr);
                 loginObj.Add("comId", uuid);
