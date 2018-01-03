@@ -43,7 +43,7 @@
             this.userText.AutoSize = true;
             this.userText.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.userText.ForeColor = System.Drawing.Color.Brown;
-            this.userText.Location = new System.Drawing.Point(15, 19);
+            this.userText.Location = new System.Drawing.Point(111, 19);
             this.userText.Name = "userText";
             this.userText.Size = new System.Drawing.Size(250, 24);
             this.userText.TabIndex = 0;
@@ -54,7 +54,7 @@
             this.userLable.AutoSize = true;
             this.userLable.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.userLable.ForeColor = System.Drawing.Color.Red;
-            this.userLable.Location = new System.Drawing.Point(54, 62);
+            this.userLable.Location = new System.Drawing.Point(124, 62);
             this.userLable.Name = "userLable";
             this.userLable.Size = new System.Drawing.Size(40, 16);
             this.userLable.TabIndex = 1;
@@ -65,7 +65,7 @@
             this.userContact.AutoSize = true;
             this.userContact.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.userContact.ForeColor = System.Drawing.Color.Red;
-            this.userContact.Location = new System.Drawing.Point(122, 62);
+            this.userContact.Location = new System.Drawing.Point(177, 62);
             this.userContact.Name = "userContact";
             this.userContact.Size = new System.Drawing.Size(88, 16);
             this.userContact.TabIndex = 2;
@@ -76,7 +76,7 @@
             this.codeUserLable.AutoSize = true;
             this.codeUserLable.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.codeUserLable.ForeColor = System.Drawing.Color.Red;
-            this.codeUserLable.Location = new System.Drawing.Point(54, 118);
+            this.codeUserLable.Location = new System.Drawing.Point(114, 118);
             this.codeUserLable.Name = "codeUserLable";
             this.codeUserLable.Size = new System.Drawing.Size(72, 16);
             this.codeUserLable.TabIndex = 3;
@@ -85,7 +85,7 @@
             // codeUserEdit
             // 
             this.codeUserEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.codeUserEdit.Location = new System.Drawing.Point(141, 113);
+            this.codeUserEdit.Location = new System.Drawing.Point(201, 113);
             this.codeUserEdit.Name = "codeUserEdit";
             this.codeUserEdit.Size = new System.Drawing.Size(172, 26);
             this.codeUserEdit.TabIndex = 4;
@@ -93,7 +93,7 @@
             // codePwdEdit
             // 
             this.codePwdEdit.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.codePwdEdit.Location = new System.Drawing.Point(141, 157);
+            this.codePwdEdit.Location = new System.Drawing.Point(201, 157);
             this.codePwdEdit.Name = "codePwdEdit";
             this.codePwdEdit.PasswordChar = '*';
             this.codePwdEdit.Size = new System.Drawing.Size(172, 26);
@@ -104,7 +104,7 @@
             this.codePwdlable.AutoSize = true;
             this.codePwdlable.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.codePwdlable.ForeColor = System.Drawing.Color.Red;
-            this.codePwdlable.Location = new System.Drawing.Point(54, 162);
+            this.codePwdlable.Location = new System.Drawing.Point(114, 162);
             this.codePwdlable.Name = "codePwdlable";
             this.codePwdlable.Size = new System.Drawing.Size(72, 16);
             this.codePwdlable.TabIndex = 5;
@@ -112,7 +112,7 @@
             // 
             // loginSysBtn
             // 
-            this.loginSysBtn.Location = new System.Drawing.Point(57, 221);
+            this.loginSysBtn.Location = new System.Drawing.Point(117, 221);
             this.loginSysBtn.Name = "loginSysBtn";
             this.loginSysBtn.Size = new System.Drawing.Size(246, 29);
             this.loginSysBtn.TabIndex = 7;
@@ -124,7 +124,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 277);
+            this.ClientSize = new System.Drawing.Size(495, 277);
             this.Controls.Add(this.loginSysBtn);
             this.Controls.Add(this.codePwdEdit);
             this.Controls.Add(this.codePwdlable);

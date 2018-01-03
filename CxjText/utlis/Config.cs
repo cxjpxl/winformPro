@@ -33,7 +33,7 @@ namespace CxjText.utils
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
-        public static String vString = "V1.3";
+        public static String vString = "V1.4";
 
 
         public static bool isDeug = false;  //控制打印
@@ -44,11 +44,7 @@ namespace CxjText.utils
 
 
 
-        public static JObject speakJObject = new JObject();
-
-
-        public static bool isShowEvent = false;// 是否显示事件
-       
+        public static JObject speakJObject = new JObject();   
 
     }
 }

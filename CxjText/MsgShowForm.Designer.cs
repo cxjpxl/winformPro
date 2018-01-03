@@ -102,9 +102,10 @@
             this.Controls.Add(this.lbGameH);
             this.Controls.Add(this.lbLiansai);
             this.Controls.Add(this.lbShiduan);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MsgShowForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "MsgShowForm";
+            this.Text = "消息提示";
             this.ResumeLayout(false);
             this.PerformLayout();
 
