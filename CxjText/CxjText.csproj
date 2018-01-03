@@ -172,10 +172,10 @@
     <Compile Include="views\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="views\MsgShowForm.cs">
+    <Compile Include="MsgShowForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="views\MsgShowForm.Designer.cs">
+    <Compile Include="MsgShowForm.Designer.cs">
       <DependentUpon>MsgShowForm.cs</DependentUpon>
     </Compile>
     <Compile Include="views\RltForm.cs">
@@ -215,7 +215,7 @@
       <DependentUpon>LoginForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="views\MsgShowForm.resx">
+    <EmbeddedResource Include="MsgShowForm.resx">
       <DependentUpon>MsgShowForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\RltForm.resx">
