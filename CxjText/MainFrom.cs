@@ -294,6 +294,19 @@ namespace CxjText
             this.Invoke(new Action(() => { codeMoneyText.Text = moneyStr; }));
         }
 
+        private void speakStr(String str) {
+            try
+            {
+                if (isFinish) return;
+                if (speechSynthesizer != null) {
+                    speechSynthesizer.SpeakAsync(str);
+                }
+            }
+            catch (Exception e) {
+
+            }
+        }
+
 
         private void speak(String cid, String info)
         {
@@ -494,6 +507,7 @@ namespace CxjText
                     }
                     //客队可以下注 
                     this.Invoke(new Action(() => {
+                        speakStr("可以下注");
                         leftForm.setComplete(enventInfo);
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
@@ -512,6 +526,7 @@ namespace CxjText
                     }
                     //主队可以下注
                     this.Invoke(new Action(() => {
+                        speakStr("可以下注");
                         leftForm.setComplete(enventInfo);
                         listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
