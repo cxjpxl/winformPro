@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lbShiduan = new System.Windows.Forms.Label();
             this.lbLiansai = new System.Windows.Forms.Label();
             this.lbGameH = new System.Windows.Forms.Label();
             this.lbConst = new System.Windows.Forms.Label();
             this.lbGameG = new System.Windows.Forms.Label();
             this.lbEvent = new System.Windows.Forms.Label();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // lbShiduan
@@ -67,7 +69,7 @@
             // lbConst
             // 
             this.lbConst.AutoSize = true;
-            this.lbConst.Location = new System.Drawing.Point(83, 39);
+            this.lbConst.Location = new System.Drawing.Point(191, 39);
             this.lbConst.Name = "lbConst";
             this.lbConst.Size = new System.Drawing.Size(11, 12);
             this.lbConst.TabIndex = 4;
@@ -76,7 +78,7 @@
             // lbGameG
             // 
             this.lbGameG.AutoSize = true;
-            this.lbGameG.Location = new System.Drawing.Point(144, 39);
+            this.lbGameG.Location = new System.Drawing.Point(274, 39);
             this.lbGameG.Name = "lbGameG";
             this.lbGameG.Size = new System.Drawing.Size(29, 12);
             this.lbGameG.TabIndex = 5;
@@ -90,6 +92,11 @@
             this.lbEvent.Size = new System.Drawing.Size(53, 12);
             this.lbEvent.TabIndex = 6;
             this.lbEvent.Text = "事件显示";
+            // 
+            // timer
+            // 
+            this.timer.Interval = 60000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // MsgShowForm
             // 
@@ -106,6 +113,7 @@
             this.Name = "MsgShowForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "消息提示";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MsgShowForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +126,6 @@
         private System.Windows.Forms.Label lbConst;
         private System.Windows.Forms.Label lbGameG;
         private System.Windows.Forms.Label lbEvent;
+        private System.Windows.Forms.Timer timer;
     }
 }

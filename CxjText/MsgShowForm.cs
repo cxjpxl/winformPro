@@ -46,6 +46,20 @@ namespace CxjText.views
             this.lbEvent.Text = info.text;
 
             this.ShowDialog();
+
+            this.timer.Start();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            this.timer.Stop();
+            this.timer.Dispose();
+            this.Close();
+        }
+
+        private void MsgShowForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Dispose();
         }
     }
 }
