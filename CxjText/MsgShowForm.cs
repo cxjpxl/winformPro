@@ -20,6 +20,7 @@ namespace CxjText.views
 
         public void ShowEvent(EnventShowInfo info)
         {
+        
             // 时段
             this.lbShiduan.Text = info.gameTimeStr;
             // 比赛事件和联赛
@@ -44,22 +45,30 @@ namespace CxjText.views
             }
             // 事件
             this.lbEvent.Text = info.text;
-
             this.ShowDialog();
-
             this.timer.Start();
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            this.timer.Stop();
-            this.timer.Dispose();
-            this.Close();
+            try
+            {
+                
+                this.timer.Stop();
+                this.timer.Dispose();
+                this.Invoke(new Action(() => {
+                    this.Close();
+                }));
+            }
+            catch (Exception e1) {
+
+            }
+           
         }
 
         private void MsgShowForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Dispose();
+           // this.Dispose();
         }
     }
 }

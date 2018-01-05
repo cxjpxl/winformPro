@@ -142,7 +142,7 @@ namespace CxjText
         private int num = 0;
         private void updateTimer_Tick(object sender, EventArgs e)
         {
-
+            
             num++;
             if (num % 10 == 0)
             {
@@ -152,6 +152,9 @@ namespace CxjText
                 }
                 num = 0;
             }
+
+
+
             //删除缓存列表数据
             OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 100 * 60 * 1000));
 
