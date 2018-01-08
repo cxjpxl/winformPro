@@ -1345,6 +1345,7 @@ namespace CxjText.utlis
         //F下单
         public static void OrderF(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
+            
             JObject orderObj = (JObject)jobject["orderObj"];
             String limitPar = (String)jobject["limitPar"];//请求连接地址
             String parmsStr = (String)jobject["rlt"];
@@ -1353,12 +1354,61 @@ namespace CxjText.utlis
             UserInfo user = (UserInfo)Config.userList[index];
             int money = (int)jobject["money"];
 
+
+            String hcode = (String)orderObj["hcode"];
+            String dataRlt = DataPramsUtils.getFData(user);
+            if (String.IsNullOrEmpty(dataRlt) || !FormUtils.IsJsonObject(dataRlt)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取数据失败");
+                    }
+                }));
+                return;
+            }
+
+            JObject dataJObject = JObject.Parse(dataRlt);
+            JArray dataJArray = (JArray)dataJObject["list"];
+            if (dataJArray.Count == 0) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "该网站无数据");
+                    }
+                }));
+                return;
+            }
+            JObject curJObject = null;
+            for(int  i = 0; i < dataJArray.Count; i++)
+            {
+                JObject temp = (JObject)dataJArray[i];
+                if (((String)(temp["hcode"])).Equals(hcode)) {
+                    curJObject = temp;
+                    break;
+                }
+            }
+            if (curJObject == null|| curJObject["matchesDetailId"]==null) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "该网站无该比赛数据");
+                    }
+                }));
+                return;
+            }
+
+
+
+            orderObj["matches"] = curJObject["matchesDetailId"];
+            orderObj["league"] = curJObject["matchesId"];
+            limitPar = limitPar + "&Lsid="+ curJObject["matchesId"];
+            parmsStr = parmsStr + "&matid=" + curJObject["matchesDetailId"];
+
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["Origin"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
             String limitUrl = user.dataUrl + "/MatchInfoServlet?task=limit";
             String limitRlt = HttpUtils.HttpPostHeader(limitUrl, limitPar, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-          //  Console.WriteLine(limitRlt);
             if (String.IsNullOrEmpty(limitRlt) || !FormUtils.IsJsonObject(limitRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1394,29 +1444,25 @@ namespace CxjText.utlis
                 return;
             }
 
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/jsp/member/sports/sportsLeft.jsp";
             String betUrl = user.dataUrl + "/MatchInfoServlet";
             String betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-          //  Console.WriteLine(betRlt);
             if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt))
             {
-
-                betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-                if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt))
-                {
-                    leftForm.Invoke(new Action(() => {
-                        if (rltForm != null)
-                        {
-                            rltForm.RefershLineData(inputTag, "获取订单数据失败");
-                        }
-                    }));
-                    return;
-                }
-              //  Console.WriteLine(betRlt);
-
+              
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败");
+                    }
+                }));
+                return;
             }
 
             JObject betJObject = JObject.Parse(betRlt);
-
             String matches =(String)  orderObj["matches"] ;
             String league = (String)orderObj["league"];
             String liveGoals = (String)orderObj["liveGoals"] ;
@@ -1448,10 +1494,13 @@ namespace CxjText.utlis
                             +",money "+money+",league "+league
                             +",isToday 2,plate "+plate
                             +",liveGoals "+liveGoals;
-
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
             String orderParStr = "data=" + WebUtility.UrlEncode(dataStr) + "&Mix=0&Live=1&autoAccept=1&task=bet&matchType=2";
             String orderUrl = user.dataUrl + "/MatchInfoServlet";
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl,orderParStr, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
+        //    Console.WriteLine(orderRlt);
             if (String.IsNullOrEmpty(orderRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)

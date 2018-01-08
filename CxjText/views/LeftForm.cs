@@ -462,6 +462,7 @@ namespace CxjText.views
                     jObject["limitPar"] = dataJObject["limitPar"];
                     jObject["money"] = inputMoney;
                     jObject["orderObj"] = dataJObject["orderObj"];
+                    jObject["cIndex"] = this.cIndex;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;

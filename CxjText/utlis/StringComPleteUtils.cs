@@ -328,6 +328,16 @@ namespace CxjText.utlis
             if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
                 return true;
             }
+            if (lianSai.Contains("U23") || lianSai.Contains("u23"))
+            {
+                return true;
+            }
+
+            if (lianSai.Contains("U22") || lianSai.Contains("u22"))
+            {
+                return true;
+            }
+
 
             if (lianSai.Contains("U") || lianSai.Contains("u")) {
                 return false;

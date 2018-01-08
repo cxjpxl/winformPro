@@ -1235,7 +1235,7 @@ namespace CxjText.utlis
                     loginForm.AddToListToUpDate(position);
                 }));
                 userInfo.cookie = null;
-                userInfo.cookie = new System.Net.CookieContainer();
+                userInfo.cookie = new CookieContainer();
                 return;
             }
 
@@ -1244,7 +1244,7 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
-            userInfo.cookie = new System.Net.CookieContainer();
+            userInfo.cookie = new CookieContainer();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.dataUrl + "/validCode?t=" + FormUtils.getCurrentTime();
