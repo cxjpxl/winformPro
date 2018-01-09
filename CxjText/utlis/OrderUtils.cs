@@ -1181,7 +1181,7 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
-            Console.WriteLine(betRlt);
+           // Console.WriteLine(betRlt);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
