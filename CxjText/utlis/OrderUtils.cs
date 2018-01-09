@@ -1401,11 +1401,11 @@ namespace CxjText.utlis
 
             orderObj["matches"] = curJObject["matchesDetailId"];
             orderObj["league"] = curJObject["matchesId"];
-            limitPar = limitPar + "&Lsid="+ curJObject["matchesId"];
+       //     limitPar = limitPar + "&Lsid="+ curJObject["matchesId"];
             parmsStr = parmsStr + "&matid=" + curJObject["matchesDetailId"];
 
-            JObject headJObject = new JObject();
-            headJObject["Host"] = user.baseUrl;
+           JObject headJObject = new JObject();
+        /*     headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             String limitUrl = user.dataUrl + "/MatchInfoServlet?task=limit";
             String limitRlt = HttpUtils.HttpPostHeader(limitUrl, limitPar, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
@@ -1442,7 +1442,7 @@ namespace CxjText.utlis
                     }
                 }));
                 return;
-            }
+            }*/
 
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
