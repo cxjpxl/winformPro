@@ -325,7 +325,7 @@ namespace CxjText.utlis
                 return false;
             }
 
-            if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
+           /* if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
                 return true;
             }
             if (lianSai.Contains("U23") || lianSai.Contains("u23"))
@@ -341,7 +341,7 @@ namespace CxjText.utlis
 
             if (lianSai.Contains("U") || lianSai.Contains("u")) {
                 return false;
-            }
+            }*/
 
             if (lianSai.Contains("女子")|| lianSai.Contains("瑞典")|| lianSai.Contains("瑞士")|| lianSai.Contains("爱尔兰")) {
                 return false;
