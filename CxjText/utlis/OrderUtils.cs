@@ -1181,7 +1181,7 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
-           // Console.WriteLine(betRlt);
+            Console.WriteLine(betRlt);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1259,7 +1259,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "下单参数失败");
                     }
                 }));
                 return;
@@ -1286,7 +1286,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "限制金额获取失败");
                     }
                 }));
                 return;
@@ -1298,7 +1298,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-          //  Console.WriteLine(rlt);
+            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
                 leftForm.Invoke(new Action(() => {
