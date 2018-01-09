@@ -163,14 +163,26 @@ namespace CxjText.utlis
                         return null;
 
                 }
+                if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
+                if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
+
+                if (hStr.Contains("(中)")) hStr = hStr.Replace("(中)", "");
+                if (hStr.Contains("[中]")) hStr = hStr.Replace("[中]", "");
+                if (hStr.Contains("[后]")) hStr = hStr.Replace("[后]", "");
+                if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
+                if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
+                hStr = hStr.Trim();
+                if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
+                if (gStr.Contains("[中]")) gStr = gStr.Replace("[中]", "");
+                if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
+                if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
+                if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
+                gStr = gStr.Trim();
+
                 
                 String pHstr = hStr;
                 String pGStr = gStr;
-                if (hStr.Contains("角球") || gStr.Contains("角球")) {
-                    continue;
-                }
-
-                if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
+                
                 String gameT = enventInfo.T;//当前比赛时间
                 String cid = enventInfo.cid;//当前比赛事件
 
