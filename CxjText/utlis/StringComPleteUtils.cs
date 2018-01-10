@@ -315,21 +315,27 @@ namespace CxjText.utlis
 
 
 
-            if (lianSai.Contains("青年")|| lianSai.Contains("后备")||lianSai.Contains("後备")) {
+            if (lianSai.Contains("青年")|| lianSai.Contains("后备")||lianSai.Contains("後备")|| lianSai.Contains("女子")) {
                 return false;
             }
 
             //巴西 阿根廷 秘鲁 墨西哥  智利 玻利维亚 委内瑞拉   
             //哥斯达黎加 哥伦比亚  厄瓜多尔 巴拉圭 乌拉圭 危地马拉 洪都拉斯 美国
-            if (lianSai.Contains("巴西") || lianSai.Contains("阿根廷") || lianSai.Contains("秘鲁")
-                || lianSai.Contains("墨西哥") || lianSai.Contains("智利") || lianSai.Contains("玻利维亚")
-                || lianSai.Contains("委内瑞拉") || lianSai.Contains("哥斯达黎加") || lianSai.Contains("哥伦比亚")
-                || lianSai.Contains("厄瓜多尔")
-                || lianSai.Contains("巴拉圭")
-                || lianSai.Contains("乌拉圭")
-                || lianSai.Contains("危地马拉")
-                || lianSai.Contains("洪都拉斯")
-                || lianSai.Contains("美国"))
+            if (lianSai.Contains("巴西") ||
+                lianSai.Contains("阿根廷") ||
+                lianSai.Contains("秘鲁") ||
+                lianSai.Contains("墨西哥") ||
+                lianSai.Contains("智利") || 
+                lianSai.Contains("玻利维亚")|| 
+                lianSai.Contains("委内瑞拉") || 
+                lianSai.Contains("哥斯达黎加") ||
+                lianSai.Contains("哥伦比亚")||
+                lianSai.Contains("厄瓜多尔")||
+                lianSai.Contains("巴拉圭")|| 
+                lianSai.Contains("乌拉圭")|| 
+                lianSai.Contains("危地马拉")||
+                lianSai.Contains("洪都拉斯")||
+                lianSai.Contains("美国"))
             {
                 return true;
             }
@@ -353,13 +359,16 @@ namespace CxjText.utlis
                  return false;
              }*/
 
-            if (lianSai.Contains("女子")|| lianSai.Contains("瑞典")|| lianSai.Contains("瑞士")|| lianSai.Contains("爱尔兰")) {
+            if ( lianSai.Contains("瑞典")|| 
+                lianSai.Contains("瑞士")|| 
+                lianSai.Contains("爱尔兰")||
+                lianSai.Contains("比利时") ||
+                lianSai.Contains("国际友谊") || 
+                lianSai.Contains("球会友谊") || 
+                lianSai.Contains("苏格兰")||
+                lianSai.Contains("德国东南西北")) {
                 return false;
             }
-            if (lianSai.Contains("比利时")||lianSai.Contains("国际友谊")||lianSai.Contains("球会友谊")|| lianSai.Contains("苏格兰")) {
-                return false;
-            }
-
            
 
             if (lianSai.Contains("甲")) {
@@ -390,10 +399,6 @@ namespace CxjText.utlis
                 return false;
             }
 
-            if (lianSai.Contains("德国东南西北"))
-            {
-                return false;
-            }
             //乙组联赛
             if (lianSai.Contains("乙")) {
                 if (lianSai.Contains("以色列") || lianSai.Contains("德国") || lianSai.Contains("意大利") || lianSai.Contains("法国")||lianSai.Contains("阿根廷")) {
