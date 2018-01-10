@@ -110,7 +110,7 @@ namespace CxjText
 
 
             //登录云打码账号
-            int uid = utlis.YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
+            int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
             if (uid < 0) {
                 Invoke(new Action(() =>
                 {
@@ -121,7 +121,7 @@ namespace CxjText
                 return;
             }
             //获取云代码账号金额
-            int codeMoney = utlis.YDMWrapper.YDM_GetBalance(codeUserStr,codePwdStr);
+            int codeMoney = YDMWrapper.YDM_GetBalance(codeUserStr,codePwdStr);
             if (codeMoney <= 0) {
                 Invoke(new Action(() =>
                 {
