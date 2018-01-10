@@ -10,26 +10,16 @@ namespace CxjText.utlis
         //字符串相识度比较算法
         public static decimal SpeedyCompute(String str1,String str2)
         {
-
             if (String.IsNullOrEmpty(str1) || String.IsNullOrEmpty(str2)) {
                 return 0;
             }
-
-
             if (str1.Equals(str2)) return 1;
             if (str1.Contains(str2) || str2.Contains(str1))
             {
                 return (decimal)0.9;
             }
-
-
             str1 = str1.Trim().Replace(" ","").Replace("[","").Replace("]","").Replace("(","").Replace(")","");
             str2 = str2.Trim().Replace(" ", "").Replace("[", "").Replace("]", "").Replace("(", "").Replace(")", "");
-            
-
-           
-
-
             //将其都转化为简体
             str1 = Microsoft.VisualBasic.Strings.StrConv(str1, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, 0);
             str2 = Microsoft.VisualBasic.Strings.StrConv(str2, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, 0);
