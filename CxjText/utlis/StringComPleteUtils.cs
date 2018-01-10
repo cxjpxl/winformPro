@@ -308,82 +308,50 @@ namespace CxjText.utlis
             return null;
         }
 
-
-        public static bool selectDaxiaoFlag(object obj,String tag,bool isH,bool isBanChang) {
-            String str = "";
-            if (isH)
-            {
-                if (isBanChang)
-                {
-                    str = DataUtils.get_c07_data(obj, tag);
-                }
-                else {
-                    str = DataUtils.get_c04_data(obj, tag);
-                }
-            }
-            else {
-                if (isBanChang)
-                {
-                    str = DataUtils.get_c17_data(obj, tag);
-                }
-                else
-                {
-                    str = DataUtils.get_c14_data(obj, tag);
-                }
-            }
-
-            if (String.IsNullOrEmpty(str))
-            {
-                return true;
-            }
-
-            String[] data = str.Split(' ');
-            str = data[data.Length - 1];
-            if (String.IsNullOrEmpty(str))
-            {
-                return true;
-            }
-
-            try
-            {
-                float dataRate = float.Parse(str);
-                if (dataRate < 0.7) {
-                    return true;
-                }
-            }
-            catch (Exception e) {
-                return true;
-            }
-
-            return false;
-        }
+        
 
         //判断是否能自动下注
         public static bool canAutoPut(String lianSai) {
 
-           
+
 
             if (lianSai.Contains("青年")|| lianSai.Contains("后备")||lianSai.Contains("後备")) {
                 return false;
             }
 
-           /* if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
-                return true;
-            }
-            if (lianSai.Contains("U23") || lianSai.Contains("u23"))
+            //巴西 阿根廷 秘鲁 墨西哥  智利 玻利维亚 委内瑞拉   
+            //哥斯达黎加 哥伦比亚  厄瓜多尔 巴拉圭 乌拉圭 危地马拉 洪都拉斯 美国
+            if (lianSai.Contains("巴西") || lianSai.Contains("阿根廷") || lianSai.Contains("秘鲁")
+                || lianSai.Contains("墨西哥") || lianSai.Contains("智利") || lianSai.Contains("玻利维亚")
+                || lianSai.Contains("委内瑞拉") || lianSai.Contains("哥斯达黎加") || lianSai.Contains("哥伦比亚")
+                || lianSai.Contains("厄瓜多尔")
+                || lianSai.Contains("巴拉圭")
+                || lianSai.Contains("乌拉圭")
+                || lianSai.Contains("危地马拉")
+                || lianSai.Contains("洪都拉斯")
+                || lianSai.Contains("美国"))
             {
                 return true;
             }
 
-            if (lianSai.Contains("U22") || lianSai.Contains("u22"))
-            {
-                return true;
-            }
+
+            /* if (lianSai.Contains("U19") || lianSai.Contains("u19")) {
+                 return true;
+             }
+             if (lianSai.Contains("U23") || lianSai.Contains("u23"))
+             {
+                 return true;
+             }
+
+             if (lianSai.Contains("U22") || lianSai.Contains("u22"))
+             {
+                 return true;
+             }
 
 
-            if (lianSai.Contains("U") || lianSai.Contains("u")) {
-                return false;
-            }*/
+             if (lianSai.Contains("U") || lianSai.Contains("u")) {
+                 return false;
+             }*/
 
             if (lianSai.Contains("女子")|| lianSai.Contains("瑞典")|| lianSai.Contains("瑞士")|| lianSai.Contains("爱尔兰")) {
                 return false;
@@ -392,11 +360,15 @@ namespace CxjText.utlis
                 return false;
             }
 
-            if (lianSai.Contains("波兰")&& lianSai.Contains("甲"))
-            {
-                return false;
-            }
+           
 
+            if (lianSai.Contains("甲")) {
+                if (lianSai.Contains("波兰")||lianSai.Contains("塞尔维亚")) {
+                    return false;
+                }
+
+            }
+            
             if (lianSai.Contains("英格兰"))
             {
                 if (lianSai.Contains("超")) {
@@ -430,19 +402,7 @@ namespace CxjText.utlis
                 }
                 return false;
             }
-            //巴西 阿根廷 秘鲁 墨西哥  智利 玻利维亚 委内瑞拉   
-            //哥斯达黎加 哥伦比亚  厄瓜多尔 巴拉圭 乌拉圭 危地马拉 洪都拉斯 美国
-            if (lianSai.Contains("巴西") || lianSai.Contains("阿根廷") || lianSai.Contains("秘鲁")
-                || lianSai.Contains("墨西哥") || lianSai.Contains("智利") || lianSai.Contains("玻利维亚")
-                || lianSai.Contains("委内瑞拉") || lianSai.Contains("哥斯达黎加") || lianSai.Contains("哥伦比亚")
-                || lianSai.Contains("厄瓜多尔")
-                || lianSai.Contains("巴拉圭")
-                || lianSai.Contains("乌拉圭")
-                || lianSai.Contains("危地马拉")
-                || lianSai.Contains("洪都拉斯")
-                || lianSai.Contains("美国")) {
-                return false;
-            }
+          
 
             return true;
         }
