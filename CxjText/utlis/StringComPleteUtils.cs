@@ -165,6 +165,12 @@ namespace CxjText.utlis
                         return null;
 
                 }
+
+
+                String zhuName = hStr;//原始数据
+                String geName = gStr;//原始数据
+
+
                 if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
                 if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
 
@@ -209,7 +215,6 @@ namespace CxjText.utlis
 
                     }
                 }
-
                 String pHstr = hStr;
                 String pGStr = gStr;
                 
@@ -253,8 +258,8 @@ namespace CxjText.utlis
                     }
                     jObject.Add("isH", isH); //是否主队
                     jObject.Add("isBanChang", isBanChang); //是否半场
-                    jObject.Add("nameH", hStr);//主队名字
-                    jObject.Add("nameG", gStr);//客队名字
+                    jObject.Add("nameH", zhuName);//主队名字
+                    jObject.Add("nameG", geName);//客队名字
                     jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
@@ -297,8 +302,8 @@ namespace CxjText.utlis
                     }
                     jObject.Add("isH", isH); //是否主队
                     jObject.Add("isBanChang", isBanChang); //是否半场
-                    jObject.Add("nameH", hStr);//主队名字
-                    jObject.Add("nameG", gStr);//客队名字
+                    jObject.Add("nameH", zhuName);//主队名字
+                    jObject.Add("nameG", geName);//客队名字
                     jObject.Add("lianSai", lianSai);
                     return jObject;
                 }
@@ -310,7 +315,7 @@ namespace CxjText.utlis
 
         
 
-        //判断是否能自动下注
+        //判断是属于过滤的联赛
         public static bool canAutoPut(String lianSai) {
 
 

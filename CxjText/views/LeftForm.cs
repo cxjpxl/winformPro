@@ -572,11 +572,11 @@ namespace CxjText.views
 
             }
 
-            if (!StringComPleteUtils.canAutoPut(lianSai)) {
+            //是否属于过滤的球队
+            bool canPut = StringComPleteUtils.canAutoPut(lianSai);
+            if (!canPut) {
                 return;
             }
-
-
             //自动下注要处理的算法 搜索出全部的结果出来
             JArray searchArray = new JArray();
             if (this.dataJArray == null) return;
