@@ -172,14 +172,42 @@ namespace CxjText.utlis
                 if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
                 if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
                 hStr = hStr.Trim();
+                String[] hStrs = hStr.Split('U');
+                if (hStrs.Length > 1) {
+                    String hNum = hStrs[hStrs.Length-1];
+                    try
+                    {
+                        int num = int.Parse(hNum);
+                        hStr = hStr.Replace("U"+num, "").Trim();
+                    }
+                    catch(Exception e) {
+
+                    }
+                }
+
+
+
                 if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
                 if (gStr.Contains("[中]")) gStr = gStr.Replace("[中]", "");
                 if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
                 if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
                 if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
                 gStr = gStr.Trim();
+                String[] gStrs = gStr.Split('U');
+                if (gStrs.Length > 1)
+                {
+                    String gNum = gStrs[gStrs.Length - 1];
+                    try
+                    {
+                        int num = int.Parse(gNum);
+                        gStr = gStr.Replace("U" + num, "").Trim();
+                    }
+                    catch (Exception e)
+                    {
 
-                
+                    }
+                }
+
                 String pHstr = hStr;
                 String pGStr = gStr;
                 
@@ -189,7 +217,7 @@ namespace CxjText.utlis
                 decimal hRate = SpeedyCompute(enventInfo.nameH, pHstr);
                 decimal gRate = SpeedyCompute(enventInfo.nameG, pGStr);
                 //正着比较
-                if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
+                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                         JObject jObject = new JObject();
                         bool isH = true;
@@ -233,7 +261,7 @@ namespace CxjText.utlis
                 hRate = SpeedyCompute(enventInfo.nameH, pGStr);
                 gRate = SpeedyCompute(enventInfo.nameG, pHstr);
                 //反着比较
-                if ( hRate > (decimal)0.5 && gRate > (decimal)0.5)
+                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                         JObject jObject = new JObject();
                         bool isH = true;
