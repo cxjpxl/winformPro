@@ -534,6 +534,7 @@ namespace CxjText.views
         }
 
         //自动下单
+        private AutoData lastAutoData = new AutoData();
         public void setComplete(EnventInfo enventInfo) {
             if (enventInfo.inputType < 0) return;
             if (this.cIndex < 0) return;
@@ -542,8 +543,9 @@ namespace CxjText.views
             //判断时候要下注   主要返回要下那一队
             //修改6
             JObject jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
+         
             if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
-
+            Console.WriteLine(jObject.ToString());
 
             bool isBanChang = (bool)jObject["isBanChang"];
             bool isH = (bool)jObject["isH"]; //是否主队
@@ -898,6 +900,16 @@ namespace CxjText.views
                        "\n是否主队下注:" + isH +
                        "\n是否半场:" + isBanChang
                        + "\n是否强制下大小:" + selectDaXiao);
+
+
+            //判断是2s前保存的队伍
+            String gameTeamStr = nameH + "-" + nameG;
+            if (lastAutoData.gameTeam.Equals(gameTeamStr) && FormUtils.getCurrentTime() - lastAutoData.time < 2000) {
+                return;
+            }
+            //记录当前下单队伍和时间
+            lastAutoData.gameTeam = gameTeamStr;
+            lastAutoData.time = FormUtils.getCurrentTime();
 
 
             if (enventInfo.inputType == 0)  //让球
