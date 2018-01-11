@@ -215,9 +215,7 @@ namespace CxjText.utlis
 
                     }
                 }
-
-                Console.WriteLine("hStr:" + hStr);
-                Console.WriteLine("gStr:" + gStr);
+                
 
                 String pHstr = hStr;
                 String pGStr = gStr;
@@ -228,12 +226,11 @@ namespace CxjText.utlis
                 decimal hRate = SpeedyCompute(enventInfo.nameH, pHstr);
                 decimal gRate = SpeedyCompute(enventInfo.nameG, pGStr);
 
-                Console.WriteLine("hRate:" + hRate);
-                Console.WriteLine("gRate:" + gRate);
+           
                 //正着比较
                 if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
-                    Console.WriteLine("在正面");
+                  
                     JObject jObject = new JObject();
                         bool isH = true;
                     if (cid.Equals("1031"))//主队
@@ -277,12 +274,11 @@ namespace CxjText.utlis
                 gRate = SpeedyCompute(enventInfo.nameG, pHstr);
 
 
-                Console.WriteLine("hRate:"+ hRate);
-                Console.WriteLine("gRate:" + gRate);
+                
                 //反着比较
                 if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
-                    Console.WriteLine("在反里面:");
+                  
                     JObject jObject = new JObject();
                         bool isH = true;
                         if (cid.Equals("1031"))//主队变成这边数据的客队

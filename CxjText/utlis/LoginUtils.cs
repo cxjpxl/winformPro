@@ -667,7 +667,6 @@ namespace CxjText.utlis
                 return;
             }
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
-            Console.WriteLine(codeUrl);
             //下载图片
             //登录请求
             if (userInfo.cookie == null)
@@ -692,8 +691,6 @@ namespace CxjText.utlis
                               Config.codeAppId, Config.codeSerect,
                               AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
                               1004, 20, codeStrBuf);
-            Console.WriteLine(codeStrBuf.ToString());
-            Console.WriteLine(num);
             if (num <= 0)
             {
                 userInfo.loginFailTime++;
@@ -708,7 +705,6 @@ namespace CxjText.utlis
             String paramsStr = "uid2=guest&SS=&SR=&TS=&act=login&username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&rmNum=" + codeStrBuf.ToString();
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/app/member/login.ashx";
-            Console.WriteLine(loginUrlStr);
             JObject headJObject = new JObject();
             String baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Host"] = baseUrl;
@@ -1278,7 +1274,6 @@ namespace CxjText.utlis
             String checkLoginUrl = userInfo.dataUrl + "/member/member";
             String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1313,7 +1308,6 @@ namespace CxjText.utlis
             String loginUrl = userInfo.dataUrl + "/member/member";
             pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=denglu&rmNum=" + codeStrBuf.ToString();
             rltStr = HttpUtils.HttpPostHeader(loginUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {
                 userInfo.loginFailTime++;
