@@ -228,7 +228,7 @@ namespace CxjText.utlis
 
            
                 //正着比较
-                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
+                if ( hRate > (decimal)0.55 && gRate > (decimal)0.55)
                 {
                   
                     JObject jObject = new JObject();
@@ -276,7 +276,7 @@ namespace CxjText.utlis
 
                 
                 //反着比较
-                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
+                if ( hRate > (decimal)0.55 && gRate > (decimal)0.55)
                 {
                   
                     JObject jObject = new JObject();
@@ -386,7 +386,8 @@ namespace CxjText.utlis
            
 
             if (lianSai.Contains("甲")) {
-                if (lianSai.Contains("波兰")||lianSai.Contains("塞尔维亚")) {
+                if (lianSai.Contains("波兰")||
+                    lianSai.Contains("塞尔维亚")) {
                     return false;
                 }
 
@@ -394,11 +395,8 @@ namespace CxjText.utlis
             
             if (lianSai.Contains("英格兰"))
             {
-                if (lianSai.Contains("超")) {
-                    return true;
-                }
-
-                if (lianSai.Contains("冠")) {
+                if (lianSai.Contains("超")|| 
+                    lianSai.Contains("冠")) {
                     return true;
                 }
                 return false;
@@ -415,7 +413,10 @@ namespace CxjText.utlis
 
             //乙组联赛
             if (lianSai.Contains("乙")) {
-                if (lianSai.Contains("以色列") || lianSai.Contains("德国") || lianSai.Contains("意大利") || lianSai.Contains("法国")||lianSai.Contains("阿根廷")) {
+                if (lianSai.Contains("以色列") ||
+                    lianSai.Contains("德国") || 
+                    lianSai.Contains("意大利") ||
+                    lianSai.Contains("法国")) {
 
                     return true;
                 }

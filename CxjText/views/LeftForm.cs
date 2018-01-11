@@ -586,9 +586,9 @@ namespace CxjText.views
             for (int i = 0; i < this.dataJArray.Count; i++)
             {
                 String nameH1 = DataUtils.get_c02_data(this.dataJArray[i],userInfo.tag);
+                if (nameH1.Contains("角球") || nameH1.Contains("点球")) continue;
                 String nameG1 = DataUtils.get_c12_data(this.dataJArray[i], userInfo.tag);
-                if (nameH1.Contains("角球") || nameG1.Contains("角球")) continue;
-                if (nameH1.Contains("点球") || nameG1.Contains("点球")) continue;
+                if (nameG1.Contains("角球") || nameG1.Contains("点球")) continue;
                 if (nameH1.Equals(nameH)&&nameG1.Equals(nameG)) {  //找出名字一样的所有比赛
                     searchArray.Add(this.dataJArray[i]);
                 }
