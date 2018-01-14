@@ -73,100 +73,113 @@ namespace CxjText.views
                 this.isUpdate = false;
                 return;
             }
-            int sPosition = 0;
-            // 若改变网站或者联赛 则需要将滚动条置零
-            if (this.cIndex == -1 || this.selectFlag != selectFlag || !preTag.Equals(currentTag))
+            try
             {
-                this.currMid = null;
-                sPosition = 0;
+                int sPosition = 0;
+                // 若改变网站或者联赛 则需要将滚动条置零
+                if (this.cIndex == -1 || this.selectFlag != selectFlag || !preTag.Equals(currentTag))
+                {
+                    this.currMid = null;
+                    sPosition = 0;
+                }
+                this.cIndex = index; // 当前是的哪一个网址 index 应该是确定的不变的
+                this.selectFlag = selectFlag; //当前是哪一个联赛 null:当前网站的所有联赛  
+                this.dt.Clear();
+
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject rltObj = null;
+                    String mid = "";
+                    if (userInfo.tag.Equals("A"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "A");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("B"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "B");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("I"))
+                    {
+                        JArray jObject = (JArray)jArray[i]; //数据格式
+                        rltObj = DataUtils.updateUI(jObject, "I");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("U"))
+                    {
+                        JArray jObject = (JArray)jArray[i]; //数据格式
+                        rltObj = DataUtils.updateUI(jObject, "U");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("R"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "R");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("G"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "G");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("K"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "K");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("C"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "C");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("F"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "F");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else
+                    {
+                        mid = "";
+                    }
+
+                    if (rltObj != null)
+                    {
+                        // 渲染UI
+                        dt.Rows.Add(rltObj["c00"].ToString(), rltObj["c01"].ToString(), rltObj["c02"].ToString(), rltObj["c03"].ToString(), rltObj["c04"].ToString(), rltObj["c05"].ToString(), rltObj["c06"].ToString(), rltObj["c07"].ToString(), rltObj["c08"].ToString());
+                        dt.Rows.Add(rltObj["c10"].ToString(), rltObj["c11"].ToString(), rltObj["c12"].ToString(), rltObj["c13"].ToString(), rltObj["c14"].ToString(), rltObj["c15"].ToString(), rltObj["c16"].ToString(), rltObj["c17"].ToString(), rltObj["c18"].ToString());
+                        dt.Rows.Add(rltObj["c20"].ToString(), rltObj["c21"].ToString(), rltObj["c22"].ToString(), rltObj["c23"].ToString(), rltObj["c24"].ToString(), rltObj["c25"].ToString(), rltObj["c26"].ToString(), rltObj["c27"].ToString(), rltObj["c28"].ToString());
+
+                    }
+
+                    // 判断刷新数据前的当前UI的最顶部的单元格所属于那一场球赛
+                    if (this.currMid != null && mid == this.currMid)
+                    {
+                        sPosition = i * 3 + this.locationIndex; // 最顶部的单元格应该属于currMid球赛的locationIndex行
+                    }
+                }
+                this.dgvSA.DataSource = dt;
+                if (sPosition >= this.cJArray.Count * 3) //若是当前单元格的行数小于定位到的单元格行  则回滚到起始位
+                {
+                    sPosition = 0;
+                }
+                this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition; // 滚动到具体的单元格行
+                this.isUpdate = false;
             }
-            this.cIndex = index; // 当前是的哪一个网址 index 应该是确定的不变的
-            this.selectFlag = selectFlag; //当前是哪一个联赛 null:当前网站的所有联赛  
-            this.dt.Clear();
-
-            for (int i = 0; i < jArray.Count; i++) {
-                JObject rltObj = null;
-                String mid = "";
-                if (userInfo.tag.Equals("A"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "A");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("B"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "B");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("I"))
-                {
-                    JArray jObject = (JArray)jArray[i]; //数据格式
-                    rltObj = DataUtils.updateUI(jObject, "I");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("U"))
-                {
-                    JArray jObject = (JArray)jArray[i]; //数据格式
-                    rltObj = DataUtils.updateUI(jObject, "U");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("R"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "R");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("G"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "G");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("K")) {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "K");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("C"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "C");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else if (userInfo.tag.Equals("F"))
-                {
-                    JObject jObject = (JObject)jArray[i];
-                    rltObj = DataUtils.updateUI(jObject, "F");
-                    mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
-                }
-                else
-                {
-                    mid = "";
-                }
-
-                if (rltObj != null)
-                {
-                    // 渲染UI
-                    dt.Rows.Add(rltObj["c00"].ToString(), rltObj["c01"].ToString(), rltObj["c02"].ToString(), rltObj["c03"].ToString(), rltObj["c04"].ToString(), rltObj["c05"].ToString(), rltObj["c06"].ToString(), rltObj["c07"].ToString(), rltObj["c08"].ToString());
-                    dt.Rows.Add(rltObj["c10"].ToString(), rltObj["c11"].ToString(), rltObj["c12"].ToString(), rltObj["c13"].ToString(), rltObj["c14"].ToString(), rltObj["c15"].ToString(), rltObj["c16"].ToString(), rltObj["c17"].ToString(), rltObj["c18"].ToString());
-                    dt.Rows.Add(rltObj["c20"].ToString(), rltObj["c21"].ToString(), rltObj["c22"].ToString(), rltObj["c23"].ToString(), rltObj["c24"].ToString(), rltObj["c25"].ToString(), rltObj["c26"].ToString(), rltObj["c27"].ToString(), rltObj["c28"].ToString());
-
-                }
-
-                // 判断刷新数据前的当前UI的最顶部的单元格所属于那一场球赛
-                if (this.currMid != null && mid == this.currMid)
-                {
-                    sPosition = i * 3 + this.locationIndex; // 最顶部的单元格应该属于currMid球赛的locationIndex行
-                }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                this.dt.Clear();
+                this.dgvSA.DataSource = dt;
+                this.isUpdate = false;
+                return;
             }
-            this.dgvSA.DataSource = dt;
-            if (sPosition >= this.cJArray.Count * 3) //若是当前单元格的行数小于定位到的单元格行  则回滚到起始位
-            {
-                sPosition = 0;
-            }
-            this.dgvSA.FirstDisplayedScrollingRowIndex = sPosition; // 滚动到具体的单元格行
-            this.isUpdate = false;
+           
         }
 
 

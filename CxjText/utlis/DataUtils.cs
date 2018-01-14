@@ -89,39 +89,48 @@ namespace CxjText.utlis
                 case "U":
                     JArray jObjectU = (JArray)obj;
                     String bc = (String)jObjectU[1];
-                  //  Console.WriteLine(bc);
-                    if (bc.Contains("半场"))
-                    {
-                        bc = "半场";
-                    }
-                    else
-                    {
                         try
                         {
-                            int time1 = int.Parse(bc);
-                            if (time1 < 45)
+                            if (bc.Contains("半场"))
                             {
-                                bc = "上半场";
-                            }
-                            else
-                            {
-                                bc = "下半场";
-                            }
+                                    bc = "半场休息";
+                            }else {
+                                int time1 = int.Parse(bc);
+                                if (time1 < 45)
+                                {
+                                    bc = "上半场";
+                                }
+                                else
+                                {
+                                    bc = "下半场";
+                                }
 
-
-                            String data48 = (String)jObjectU[48];
-                            if (data48.Contains("半场"))
-                            {
-                                data48 = "";
                             }
-                            time = bc + "\n" + data48 + "\n" + ((String)jObjectU[18]).Trim() + " - " + ((String)jObjectU[19]).Trim();
+                            
                         }
                         catch(Exception e) {
-                            Console.WriteLine(e.ToString());
-                            time = (String)jObjectU[1];
+                        bc = "";
                         }
+                    String data48 = (String)jObjectU[48];
+                    try
+                    {
+                        if (data48.Contains("半场"))
+                        {
+                            data48 = "";
+                        }
+                        if (String.IsNullOrEmpty(bc))
+                        {
+                            data48 =((String)jObjectU[18]).Trim() + " - " + ((String)jObjectU[19]).Trim();
+                        }
+                        else {
+                            data48 = data48 + "\n" + ((String)jObjectU[18]).Trim() + " - " + ((String)jObjectU[19]).Trim();
+                        }
+                        
                     }
-
+                    catch (Exception e) {
+                        data48 = "";
+                    }
+                    time = bc + "\n" + data48;
                     break;
                 case "R":
                     JObject jObjectR = (JObject)obj;
