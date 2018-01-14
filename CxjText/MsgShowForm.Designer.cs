@@ -56,7 +56,6 @@
             this.InfoDgv.Margin = new System.Windows.Forms.Padding(0);
             this.InfoDgv.MultiSelect = false;
             this.InfoDgv.Name = "InfoDgv";
-            this.InfoDgv.ReadOnly = true;
             this.InfoDgv.RowHeadersVisible = false;
             this.InfoDgv.RowTemplate.Height = 23;
             this.InfoDgv.Size = new System.Drawing.Size(621, 165);
@@ -67,7 +66,6 @@
             this.Column6.DataPropertyName = "shiDuan";
             this.Column6.HeaderText = "时段";
             this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
             this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column6.Width = 50;
             // 
@@ -76,7 +74,6 @@
             this.Column1.DataPropertyName = "gameTimeStr";
             this.Column1.HeaderText = "时间";
             this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column1.Width = 70;
             // 
@@ -85,7 +82,6 @@
             this.Column2.DataPropertyName = "lianSaiStr";
             this.Column2.HeaderText = "联赛";
             this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Column3
@@ -93,7 +89,6 @@
             this.Column3.DataPropertyName = "gameH";
             this.Column3.HeaderText = "主队";
             this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
             this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column3.Width = 130;
             // 
@@ -102,7 +97,6 @@
             this.Column4.DataPropertyName = "gameG";
             this.Column4.HeaderText = "客队";
             this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column4.Width = 130;
             // 
@@ -111,7 +105,6 @@
             this.Column5.DataPropertyName = "text";
             this.Column5.HeaderText = "事件";
             this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
             this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Column5.Width = 125;
             // 

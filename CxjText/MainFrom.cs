@@ -23,10 +23,7 @@ namespace CxjText
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-
-        private int numTest = 1;
-
-
+        
         public MainFrom()
         {
             InitializeComponent();
@@ -654,6 +651,14 @@ namespace CxjText
         private void MsgShowFormInit()
         {
             Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+            //EnventShowInfo enventShowInfo = new EnventShowInfo();
+            //enventShowInfo.gameTime = 5700000;
+            //enventShowInfo.gameTimeStr = DateUtils.GetTimeFormMs(enventShowInfo.gameTime);
+            //enventShowInfo.shiDuan = "下半场";
+            //enventShowInfo.lianSaiStr  = "超级联赛";
+            //enventShowInfo.gameH = "主队";
+            //enventShowInfo.gameG = "客队";
+            //enventShowInfo.text = "可能主队炸弹";
             t.Start(null);
         }
         // 消息列表 显示消息
@@ -661,7 +666,7 @@ namespace CxjText
         {
             EnventShowInfo enventShowInfo = (EnventShowInfo)positionObj;
 
-            if (msgShowForm == null || msgShowForm.IsDisposed)
+            if (msgShowForm == null || !msgShowForm.Visible || msgShowForm.IsDisposed)
             {
                 msgShowForm = null;
                 msgShowForm = new MsgShowForm();
@@ -669,7 +674,7 @@ namespace CxjText
             }
             else 
             {
-                msgShowForm.AddLineInHead(enventShowInfo, true);
+                msgShowForm.AddLineInHead(enventShowInfo);
             }
         }
     }

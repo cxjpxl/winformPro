@@ -42,11 +42,19 @@ namespace CxjText.views
         // 数据展示
         public void ShowEvent(EnventShowInfo enventShowInfo)
         {
-            this.ShowDialog();
-            this.AddLineInHead(enventShowInfo, false);
+            try
+            {
+                this.AddLineInHead(enventShowInfo);
+                this.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("历史消息崩溃了:"+ e);
+                this.Close();
+            }
         }
         //添加到头部
-        public void AddLineInHead(EnventShowInfo enventShowInfo,bool isNew)
+        public void AddLineInHead(EnventShowInfo enventShowInfo)
         {
             if (enventShowInfo != null)
             {
