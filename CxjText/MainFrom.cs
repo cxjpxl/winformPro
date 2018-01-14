@@ -18,10 +18,13 @@ namespace CxjText
 
         private LoginForm loginForm = null; //登录的界面
         private LeftForm leftForm = null; //左边的界面
+        private MsgShowForm msgShowForm = null;// 消息列表的界面
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+
+        private int numTest = 1;
 
 
         public MainFrom()
@@ -41,11 +44,17 @@ namespace CxjText
                 Application.Exit();
                 return;
             }
+            // 消息列表 初始化
+            if (Config.softUserStr.Contains("client"))
+            {
+                this.MsgShowFormInit();
+            }
             ViewInit();
             this.upDateTimer.Start(); //启动定时任务器
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
             speakInit();
+
         }
 
         //初始化语音
@@ -118,6 +127,11 @@ namespace CxjText
             {
                 this.upDateTimer.Stop(); //将定时器停止
                 isFinish = true;
+                
+                if (this.msgShowForm != null)
+                {
+                    this.msgShowForm.Close();
+                }
 
                 if (webSocketUtils != null)
                 {
@@ -135,7 +149,7 @@ namespace CxjText
 
             }
 
-            Application.Exit();
+            System.Environment.Exit(0);
         }
 
         //定时器回调   1s一次
@@ -385,27 +399,28 @@ namespace CxjText
             this.Invoke(new Action(() => {
                 EnventShowInfo enventShowInfo = new EnventShowInfo();
                 String str = "比赛(全场) :";
-                String gameTimeStr = "全场";
+                String shiDuan = "全场";
                 try
                 {
                     int time = int.Parse(enventInfo.T);
                     enventShowInfo.gameTime = time;
+                    enventShowInfo.gameTimeStr = DateUtils.GetTimeFormMs(time);
                     if (time <= 2700000)
                     { //半场
                         str = "比赛(上半场) :";
-                        gameTimeStr = "上半场";
+                        shiDuan = "上半场";
                     }
                     else
                     {
                         str = "比赛(全场) :";
-                        gameTimeStr = "全场";
+                        shiDuan = "全场";
                     }
                 }
                 catch (Exception e)
                 {
 
                 }
-                enventShowInfo.gameTimeStr = gameTimeStr;
+                enventShowInfo.shiDuan = shiDuan;
                 enventShowInfo.gameH = enventInfo.nameH;
                 enventShowInfo.gameG = enventInfo.nameG;
                 gameText.Text = str + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
@@ -623,6 +638,7 @@ namespace CxjText
         //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
         public int GetAutoPutType()
         {
+
             if (putAuto.Checked) //默认
             {
                 return 1;
@@ -633,12 +649,28 @@ namespace CxjText
             }
            
         }
-        
+
+        // 消息列表 初始化
+        private void MsgShowFormInit()
+        {
+            Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+            t.Start(null);
+        }
+        // 消息列表 显示消息
         private void ShowEventInfo(Object positionObj)
         {
             EnventShowInfo enventShowInfo = (EnventShowInfo)positionObj;
-            MsgShowForm msgShowForm = new MsgShowForm();
-            msgShowForm.ShowEvent(enventShowInfo);
+
+            if (msgShowForm == null || msgShowForm.IsDisposed)
+            {
+                msgShowForm = null;
+                msgShowForm = new MsgShowForm();
+                msgShowForm.ShowEvent(enventShowInfo);
+            }
+            else 
+            {
+                msgShowForm.AddLineInHead(enventShowInfo, true);
+            }
         }
     }
 }

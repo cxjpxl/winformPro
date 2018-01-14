@@ -28,105 +28,119 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.lbShiduan = new System.Windows.Forms.Label();
-            this.lbLiansai = new System.Windows.Forms.Label();
-            this.lbGameH = new System.Windows.Forms.Label();
-            this.lbConst = new System.Windows.Forms.Label();
-            this.lbGameG = new System.Windows.Forms.Label();
-            this.lbEvent = new System.Windows.Forms.Label();
-            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.InfoDgv = new System.Windows.Forms.DataGridView();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.InfoDgv)).BeginInit();
             this.SuspendLayout();
             // 
-            // lbShiduan
+            // InfoDgv
             // 
-            this.lbShiduan.AutoSize = true;
-            this.lbShiduan.ForeColor = System.Drawing.Color.Red;
-            this.lbShiduan.Location = new System.Drawing.Point(12, 3);
-            this.lbShiduan.Name = "lbShiduan";
-            this.lbShiduan.Size = new System.Drawing.Size(41, 12);
-            this.lbShiduan.TabIndex = 1;
-            this.lbShiduan.Text = "上半场";
+            this.InfoDgv.AllowUserToAddRows = false;
+            this.InfoDgv.AllowUserToDeleteRows = false;
+            this.InfoDgv.AllowUserToResizeColumns = false;
+            this.InfoDgv.AllowUserToResizeRows = false;
+            this.InfoDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.InfoDgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column6,
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4,
+            this.Column5});
+            this.InfoDgv.Location = new System.Drawing.Point(0, 0);
+            this.InfoDgv.Margin = new System.Windows.Forms.Padding(0);
+            this.InfoDgv.MultiSelect = false;
+            this.InfoDgv.Name = "InfoDgv";
+            this.InfoDgv.ReadOnly = true;
+            this.InfoDgv.RowHeadersVisible = false;
+            this.InfoDgv.RowTemplate.Height = 23;
+            this.InfoDgv.Size = new System.Drawing.Size(621, 165);
+            this.InfoDgv.TabIndex = 1;
             // 
-            // lbLiansai
+            // Column6
             // 
-            this.lbLiansai.AutoSize = true;
-            this.lbLiansai.Location = new System.Drawing.Point(12, 22);
-            this.lbLiansai.Name = "lbLiansai";
-            this.lbLiansai.Size = new System.Drawing.Size(95, 12);
-            this.lbLiansai.TabIndex = 2;
-            this.lbLiansai.Text = "比赛时间 - 联赛";
+            this.Column6.DataPropertyName = "shiDuan";
+            this.Column6.HeaderText = "时段";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column6.Width = 50;
             // 
-            // lbGameH
+            // Column1
             // 
-            this.lbGameH.AutoSize = true;
-            this.lbGameH.Location = new System.Drawing.Point(12, 39);
-            this.lbGameH.Name = "lbGameH";
-            this.lbGameH.Size = new System.Drawing.Size(29, 12);
-            this.lbGameH.TabIndex = 3;
-            this.lbGameH.Text = "主队";
+            this.Column1.DataPropertyName = "gameTimeStr";
+            this.Column1.HeaderText = "时间";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 70;
             // 
-            // lbConst
+            // Column2
             // 
-            this.lbConst.AutoSize = true;
-            this.lbConst.Location = new System.Drawing.Point(191, 39);
-            this.lbConst.Name = "lbConst";
-            this.lbConst.Size = new System.Drawing.Size(11, 12);
-            this.lbConst.TabIndex = 4;
-            this.lbConst.Text = "-";
+            this.Column2.DataPropertyName = "lianSaiStr";
+            this.Column2.HeaderText = "联赛";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // lbGameG
+            // Column3
             // 
-            this.lbGameG.AutoSize = true;
-            this.lbGameG.Location = new System.Drawing.Point(274, 39);
-            this.lbGameG.Name = "lbGameG";
-            this.lbGameG.Size = new System.Drawing.Size(29, 12);
-            this.lbGameG.TabIndex = 5;
-            this.lbGameG.Text = "客队";
+            this.Column3.DataPropertyName = "gameH";
+            this.Column3.HeaderText = "主队";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column3.Width = 130;
             // 
-            // lbEvent
+            // Column4
             // 
-            this.lbEvent.AutoSize = true;
-            this.lbEvent.Location = new System.Drawing.Point(12, 57);
-            this.lbEvent.Name = "lbEvent";
-            this.lbEvent.Size = new System.Drawing.Size(53, 12);
-            this.lbEvent.TabIndex = 6;
-            this.lbEvent.Text = "事件显示";
+            this.Column4.DataPropertyName = "gameG";
+            this.Column4.HeaderText = "客队";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column4.Width = 130;
             // 
-            // timer
+            // Column5
             // 
-            this.timer.Enabled = true;
-            this.timer.Interval = 40000;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            this.Column5.DataPropertyName = "text";
+            this.Column5.HeaderText = "事件";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column5.Width = 125;
             // 
             // MsgShowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 78);
-            this.Controls.Add(this.lbEvent);
-            this.Controls.Add(this.lbGameG);
-            this.Controls.Add(this.lbConst);
-            this.Controls.Add(this.lbGameH);
-            this.Controls.Add(this.lbLiansai);
-            this.Controls.Add(this.lbShiduan);
+            this.ClientSize = new System.Drawing.Size(622, 167);
+            this.Controls.Add(this.InfoDgv);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MsgShowForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "消息提示";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MsgShowForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MsgShowForm_FormClosed);
+            this.Load += new System.EventHandler(this.MsgShowForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.InfoDgv)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label lbShiduan;
-        private System.Windows.Forms.Label lbLiansai;
-        private System.Windows.Forms.Label lbGameH;
-        private System.Windows.Forms.Label lbConst;
-        private System.Windows.Forms.Label lbGameG;
-        private System.Windows.Forms.Label lbEvent;
-        private System.Windows.Forms.Timer timer;
+
+        private System.Windows.Forms.DataGridView InfoDgv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
     }
 }
