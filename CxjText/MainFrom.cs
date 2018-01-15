@@ -51,7 +51,6 @@ namespace CxjText
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
             speakInit();
-
         }
 
         //初始化语音
