@@ -105,7 +105,7 @@ namespace CxjText
             this.leftPanel.Controls.Add(leftForm);      //添加窗体
             leftForm.Show();
             leftForm.setMainForm(loginForm, this);
-
+            
         }
 
 
@@ -400,7 +400,7 @@ namespace CxjText
                 {
                     int time = int.Parse(enventInfo.T);
                     enventShowInfo.gameTime = time;
-                    enventShowInfo.gameTimeStr = DateUtils.GetTimeFormMs(time);
+                    enventShowInfo.gameTimeStr = FormUtils.GetTimeFormMs(time);
                     if (time <= 2700000)
                     { //半场
                         str = "比赛(上半场) :";
