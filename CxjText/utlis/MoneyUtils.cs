@@ -135,18 +135,32 @@ namespace CxjText.utlis
             //获取钱的处理
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/Home";
-            String moneyUrl = userInfo.loginUrl + "/RestCredit?uid=" + userInfo.uid;
-            String moneyRltStr = HttpUtils.HttpPostHeader(moneyUrl, "uid=" + userInfo.uid, "", userInfo.cookie, headJObject);
-            Console.WriteLine("系统：" + userInfo.tag + "-" + userInfo.baseUrl + "\n" + moneyRltStr);
-            if (moneyRltStr == null)
+           // headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_header?uid="+uid+"&showtype=&langx=zh-cn&mtype=3";
+            String moneyUrl = userInfo.loginUrl + "/app/member/reloadCredit?uid="+uid+"&langx=zh-cn";
+            String moneyRltStr = HttpUtils.HttpGetHeader(moneyUrl, "", userInfo.cookie, headJObject);
+            //Console.WriteLine("系统：" + userInfo.tag + "-" + userInfo.baseUrl + "\n" + moneyRltStr);
+            if (moneyRltStr == null|| !moneyRltStr.Contains("人民币"))
             {
+                if (moneyRltStr != null&&moneyRltStr.Contains("登录")) {
+                    return -1;
+                }
+
+                if (FormUtils.getCurrentTime() - userInfo.loginTime > 7 * 60 * 1000) {
+                    return -1;
+                }
                 return 0;
             }
+
+
+            int start = moneyRltStr.IndexOf("人民币");
+            String moneyStr = moneyRltStr.Substring(start,moneyRltStr.Length-start).Trim();
+            moneyStr = moneyStr.Replace("人民币", "").Trim();
+            moneyStr = moneyStr.Replace("');", "").Trim();
+            moneyStr = moneyStr.Replace("</script>", "").Trim();
             try
             {
-                float money = float.Parse(moneyRltStr.Trim().Replace("\"", ""));
+                float money = float.Parse(moneyStr.Trim().Replace("\"", ""));
                 if (money < 0) {   //小于0表示没有登录
                     return -1;
                 }
@@ -154,7 +168,7 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 5 * 60 * 1000)
+                if (userInfo.loginTime > 0 && FormUtils.getCurrentTime() - userInfo.loginTime > 7 * 60 * 1000)
                 {
                     return -1;
                 }
@@ -374,10 +388,6 @@ namespace CxjText.utlis
             user.money = moneyStr;
             return 1;
         }
-
-
-
-
         //获取F的money   1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetFMoney(UserInfo user)
         {
