@@ -650,14 +650,7 @@ namespace CxjText
         private void MsgShowFormInit()
         {
             Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
-            //EnventShowInfo enventShowInfo = new EnventShowInfo();
-            //enventShowInfo.gameTime = 5700000;
-            //enventShowInfo.gameTimeStr = DateUtils.GetTimeFormMs(enventShowInfo.gameTime);
-            //enventShowInfo.shiDuan = "下半场";
-            //enventShowInfo.lianSaiStr  = "超级联赛";
-            //enventShowInfo.gameH = "主队";
-            //enventShowInfo.gameG = "客队";
-            //enventShowInfo.text = "可能主队炸弹";
+            t.SetApartmentState(ApartmentState.STA);
             t.Start(null);
         }
         // 消息列表 显示消息
