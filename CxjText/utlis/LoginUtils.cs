@@ -601,7 +601,6 @@ namespace CxjText.utlis
             }
 
             userInfo.uid = uid; //获取到uid
-
             int moneyStatus = MoneyUtils.GetUMoney(userInfo);
             if (moneyStatus == 1)
             {
