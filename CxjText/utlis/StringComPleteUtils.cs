@@ -14,10 +14,6 @@ namespace CxjText.utlis
                 return 0;
             }
             if (str1.Equals(str2)) return 1;
-            if (str1.Contains(str2) || str2.Contains(str1))
-            {
-                return (decimal)0.9;
-            }
             str1 = str1.Trim().Replace(" ","").Replace("[","").Replace("]","").Replace("(","").Replace(")","");
             str2 = str2.Trim().Replace(" ", "").Replace("[", "").Replace("]", "").Replace("(", "").Replace(")", "");
             //将其都转化为简体
