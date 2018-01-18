@@ -598,73 +598,155 @@ namespace CxjText.views
             object obj = null; //要下注的对象
             if (enventInfo.bangchangType == 1) //用户选半场
             {
-                if (!isBanChang) return; //选择半场 全场直接返回
-                if (enventInfo.inputType == 0)  //半场让球的情况下，找第一个大于0.7的队  全部找不到  就找大小
+               // if (!isBanChang) return; //选择半场 全场直接返回
+                if (isBanChang)
                 {
-                    for (int i = 0; i < searchArray.Count; i++) {
-                        String data = "";
-                        if (isH)
-                        {
-                            data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
-                        }
-                        else {
-                            data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
-                        }
-
-                        if (StringComPleteUtils.isDa07(data)) {
-                            obj = searchArray[i];
-                            selectDaXiao = false;
-                            isBanChang = true;
-                            break;
-                        }
-                    }
-                    //找不到就找大小
-                    if (obj == null) {
-                        /*  for (int i = 0; i < searchArray.Count; i++)
-                          {
-                              String data = "";
-                              if (isH)
-                              {
-                                  data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                              }
-                              else
-                              {
-                                  data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
-                              }
-
-                              if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                              {
-                                  obj = searchArray[i];
-                                  selectDaXiao = true;
-                                  isBanChang = true;
-                                  break;
-                              }
-                          }*/
-                        return;
-                    }
-                }
-                else {  //大小的情况  找第一个有大小数据的
-                    for (int i = 0; i < searchArray.Count; i++)
+                    if (enventInfo.inputType == 0)  //半场让球的情况下，找第一个大于0.7的队  全部找不到  就找大小
                     {
-                        String data = "";
-                        if (isH)
+                        for (int i = 0; i < searchArray.Count; i++)
                         {
-                            data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                        }
-                        else
-                        {
-                            data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
-                        }
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                            }
 
-                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            if (StringComPleteUtils.isDa07(data))
+                            {
+                                obj = searchArray[i];
+                                selectDaXiao = false;
+                                isBanChang = true;
+                                break;
+                            }
+                        }
+                        //找不到就找大小
+                        if (obj == null)
                         {
-                            obj = searchArray[i];
-                            selectDaXiao = true;
-                            isBanChang = true;
-                            break;
+                            /*  for (int i = 0; i < searchArray.Count; i++)
+                              {
+                                  String data = "";
+                                  if (isH)
+                                  {
+                                      data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                                  }
+                                  else
+                                  {
+                                      data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
+                                  }
+
+                                  if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                                  {
+                                      obj = searchArray[i];
+                                      selectDaXiao = true;
+                                      isBanChang = true;
+                                      break;
+                                  }
+                              }*/
+                            return;
+                        }
+                    }
+                    else
+                    {  //大小的情况  找第一个有大小数据的
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                selectDaXiao = true;
+                                isBanChang = true;
+                                break;
+                            }
                         }
                     }
                 }
+                else { //全场
+                    if (enventInfo.inputType == 0)  //让球的情况下
+                    {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c04_data(searchArray[i], userInfo.tag); //主队全场让球
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
+                            }
+
+                            if (StringComPleteUtils.isDa07(data))
+                            {
+                                obj = searchArray[i];
+                                selectDaXiao = false;
+                                isBanChang = false;
+                                break;
+                            }
+                        }
+                        //找不到就找大小
+                        if (obj == null)
+                        {
+                            /*  for (int i = 0; i < searchArray.Count; i++)
+                              {
+                                  String data = "";
+                                  if (isH)
+                                  {
+                                      data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                                  }
+                                  else
+                                  {
+                                      data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
+                                  }
+
+                                  if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                                  {
+                                      obj = searchArray[i];
+                                      selectDaXiao = true;
+                                      isBanChang = false;
+                                      break;
+                                  }
+                              }*/
+                            return;
+                        }
+                    }
+                    else
+                    {  //大小的情况
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag);// 主队全场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);// 客队全场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                selectDaXiao = true;
+                                isBanChang = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+               
             }
             else if (enventInfo.bangchangType == 2) //用户选全场
             {
