@@ -51,7 +51,6 @@ namespace CxjText
 
             }
             utlis.YDMWrapper.YDM_SetAppInfo(Config.codeAppId,Config.codeSerect);
-           
         }
 
 

@@ -347,15 +347,18 @@ namespace CxjText.views
                         float moneyAll = float.Parse(user.money);
                         if (mainFrom.GetAmountSelected() == 1) //1/2
                         {
-                            inputMoney = (int)moneyAll / 2;
+                            inputMoney = (int)(moneyAll / 2);
+                            inputMoney =((int) (inputMoney / 10)) * 10;
                         }
                         else if (mainFrom.GetAmountSelected() == 2)//1/3
                         {
-                            inputMoney = (int)moneyAll / 3;
+                            inputMoney = (int)(moneyAll / 3);
+                            inputMoney = ((int)(inputMoney / 10)) * 10;
                         }
                         else if (mainFrom.GetAmountSelected() == 3)//1/4
                         {
-                            inputMoney = (int)moneyAll / 4;
+                            inputMoney = (int)(moneyAll / 4);
+                            inputMoney = ((int)(inputMoney / 10)) * 10;
                         }
                     }
                     catch (Exception e) {
