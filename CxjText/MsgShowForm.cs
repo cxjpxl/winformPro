@@ -18,9 +18,9 @@ namespace CxjText.views
 {
     public partial class MsgShowForm : Form
     {
-
         List<EnventShowInfo> list = new List<EnventShowInfo>();
         private BindingSource customersBindingSource = new BindingSource();
+        private MainFrom mainFrom = null;
         // 线程上下文  用于在多线程环境中更新UI
         SynchronizationContext m_SyncContext = null;
 
@@ -35,15 +35,21 @@ namespace CxjText.views
         // 第一次加載
         private void MsgShowForm_Load(object sender, EventArgs e)
         {
+            ViewInit();
+        }
+        //初始化数据源
+        private void ViewInit()
+        {
             this.InfoDgv.MultiSelect = false;
             this.customersBindingSource.DataSource = list;
             this.InfoDgv.DataSource = this.customersBindingSource;
         }
         // 数据展示
-        public void ShowEvent(EnventShowInfo enventShowInfo)
+        public void ShowEvent(EnventShowInfo enventShowInfo, MainFrom mainFrom)
         {
             try
             {
+                this.setMainForm(mainFrom);
                 this.AddLineInHead(enventShowInfo);
                 this.ShowDialog();
             }
@@ -65,9 +71,24 @@ namespace CxjText.views
         // 更新UI
         private void UpdateUI(object obj)
         {
-            EnventShowInfo enventShowInfo = (EnventShowInfo)obj; 
+            EnventShowInfo enventShowInfo = (EnventShowInfo)obj;
+            //  处理事件
+            enventShowInfo.gameTimeStr = FormUtils.GetTimeFormMs(enventShowInfo.gameTime);//显示比赛时间时分秒
+            if (enventShowInfo.text.Contains("主队"))
+            {
+                enventShowInfo.gameH = enventShowInfo.gameH + "_0";
+            }else if (enventShowInfo.text.Contains("客队"))
+            {
+                enventShowInfo.gameG = enventShowInfo.gameG + "_0";
+            }
+
             list.Insert(0, enventShowInfo);
             customersBindingSource.ResetBindings(true);
+        }
+
+        private void setMainForm(MainFrom mainFrom)
+        {
+            this.mainFrom = mainFrom;
         }
 
         private void MsgShowForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -92,6 +113,22 @@ namespace CxjText.views
             this.Dispose();
         }
 
+        private void InfoDgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex != 3 && e.ColumnIndex != 2) return;
+            String value = this.InfoDgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
+            //先将数据搜索出来
+            Console.WriteLine("blue============历史消息点击了："+value);
+            StringComPleteUtils.haveQiuDui(value);
+
+            if (mainFrom != null)
+            {
+                this.Invoke(new Action(() => {
+                    mainFrom.setTextBox1Text(value);
+                }));
+            }
+
+        }
     }
 
 }

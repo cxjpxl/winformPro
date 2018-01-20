@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.InfoDgv = new System.Windows.Forms.DataGridView();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.InfoDgv = new ColorfulDataGridView();
+            this.column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.InfoDgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,12 +46,12 @@
             this.InfoDgv.AllowUserToResizeRows = false;
             this.InfoDgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.InfoDgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column6,
-            this.Column1,
-            this.Column2,
-            this.Column3,
-            this.Column4,
-            this.Column5});
+            this.column1,
+            this.column2,
+            this.column3,
+            this.column4,
+            this.column5,
+            this.column6});
             this.InfoDgv.Location = new System.Drawing.Point(0, 0);
             this.InfoDgv.Margin = new System.Windows.Forms.Padding(0);
             this.InfoDgv.MultiSelect = false;
@@ -60,53 +60,54 @@
             this.InfoDgv.RowTemplate.Height = 23;
             this.InfoDgv.Size = new System.Drawing.Size(621, 165);
             this.InfoDgv.TabIndex = 1;
+            this.InfoDgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.InfoDgv_CellClick);
             // 
-            // Column6
+            // column1
             // 
-            this.Column6.DataPropertyName = "shiDuan";
-            this.Column6.HeaderText = "时段";
-            this.Column6.Name = "Column6";
-            this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column6.Width = 50;
+            this.column1.DataPropertyName = "shiduan";
+            this.column1.HeaderText = "时段";
+            this.column1.Name = "column1";
+            this.column1.ReadOnly = true;
+            this.column1.Width = 60;
             // 
-            // Column1
+            // column2
             // 
-            this.Column1.DataPropertyName = "gameTimeStr";
-            this.Column1.HeaderText = "时间";
-            this.Column1.Name = "Column1";
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 70;
+            this.column2.DataPropertyName = "gameTimeStr";
+            this.column2.HeaderText = "时间";
+            this.column2.Name = "column2";
+            this.column2.ReadOnly = true;
+            this.column2.Width = 80;
             // 
-            // Column2
+            // column3
             // 
-            this.Column2.DataPropertyName = "lianSaiStr";
-            this.Column2.HeaderText = "联赛";
-            this.Column2.Name = "Column2";
-            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.column3.DataPropertyName = "lianSaiStr";
+            this.column3.HeaderText = "联赛";
+            this.column3.Name = "column3";
+            this.column3.ReadOnly = true;
             // 
-            // Column3
+            // column4
             // 
-            this.Column3.DataPropertyName = "gameH";
-            this.Column3.HeaderText = "主队";
-            this.Column3.Name = "Column3";
-            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column3.Width = 130;
+            this.column4.DataPropertyName = "gameH";
+            this.column4.HeaderText = "主队";
+            this.column4.Name = "column4";
+            this.column4.ReadOnly = true;
+            this.column4.Width = 120;
             // 
-            // Column4
+            // column5
             // 
-            this.Column4.DataPropertyName = "gameG";
-            this.Column4.HeaderText = "客队";
-            this.Column4.Name = "Column4";
-            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column4.Width = 130;
+            this.column5.DataPropertyName = "gameG";
+            this.column5.HeaderText = "客队";
+            this.column5.Name = "column5";
+            this.column5.ReadOnly = true;
+            this.column5.Width = 120;
             // 
-            // Column5
+            // column6
             // 
-            this.Column5.DataPropertyName = "text";
-            this.Column5.HeaderText = "事件";
-            this.Column5.Name = "Column5";
-            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 125;
+            this.column6.DataPropertyName = "text";
+            this.column6.HeaderText = "事件";
+            this.column6.Name = "column6";
+            this.column6.ReadOnly = true;
+            this.column6.Width = 120;
             // 
             // MsgShowForm
             // 
@@ -128,12 +129,12 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView InfoDgv;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private ColorfulDataGridView InfoDgv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column6;
     }
 }

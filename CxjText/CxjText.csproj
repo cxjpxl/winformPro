@@ -154,6 +154,12 @@
     <Compile Include="utlis\YDMWrapper.cs" />
     <Compile Include="utlis\Config.cs" />
     <Compile Include="utlis\HttpUtils.cs" />
+    <Compile Include="views\ColorfulDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="views\ColorfulDataGridView.designer.cs">
+      <DependentUpon>ColorfulDataGridView.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\DataForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,6 +211,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="views\ColorfulDataGridView.resx">
+      <DependentUpon>ColorfulDataGridView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="views\DataForm.resx">
       <DependentUpon>DataForm.cs</DependentUpon>
     </EmbeddedResource>

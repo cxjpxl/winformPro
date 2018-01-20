@@ -400,7 +400,6 @@ namespace CxjText
                 {
                     int time = int.Parse(enventInfo.T);
                     enventShowInfo.gameTime = time;
-                    enventShowInfo.gameTimeStr = FormUtils.GetTimeFormMs(time);
                     if (time <= 2700000)
                     { //半场
                         str = "比赛(上半场) :";
@@ -474,7 +473,7 @@ namespace CxjText
                 }
                 timeText.Text = "时间: " + DateTime.Now.ToString(); 
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
-                enventShowInfo.text = enventText.Text.ToString();
+                enventShowInfo.text = enventText.Text.ToString().Replace("事件:","");
                 enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
 
                 //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
@@ -649,9 +648,17 @@ namespace CxjText
         // 消息列表 初始化
         private void MsgShowFormInit()
         {
+            EnventShowInfo enventShowInfo = new EnventShowInfo();
+            enventShowInfo.shiDuan = "上半场";
+            enventShowInfo.gameTime = 3700000;
+            enventShowInfo.lianSaiStr = "荷兰甲组联赛U19-附加赛";
+            enventShowInfo.gameH = "PSV燕豪芬U19";
+            enventShowInfo.gameG = "艾克马亚U19";
+            enventShowInfo.text = "可能客队炸弹";
+
             Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
             t.SetApartmentState(ApartmentState.STA);
-            t.Start(null);
+            t.Start(enventShowInfo);
         }
         // 消息列表 显示消息
         private void ShowEventInfo(Object positionObj)
@@ -662,7 +669,7 @@ namespace CxjText
             {
                 msgShowForm = null;
                 msgShowForm = new MsgShowForm();
-                msgShowForm.ShowEvent(enventShowInfo);
+                msgShowForm.ShowEvent(enventShowInfo,this);
             }
             else 
             {
