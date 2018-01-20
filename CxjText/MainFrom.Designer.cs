@@ -148,6 +148,7 @@
             this.gameText.Size = new System.Drawing.Size(49, 14);
             this.gameText.TabIndex = 12;
             this.gameText.Text = "比赛：";
+            this.gameText.Click += new System.EventHandler(this.gameText_Click);
             // 
             // enventText
             // 
