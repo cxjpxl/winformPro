@@ -959,5 +959,10 @@ namespace CxjText.views
 
         }
 
+        public String getSaiName(String name) {
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            return StringComPleteUtils.getSaiName(name, this.dataJArray, userInfo);
+        }
+
     }
 }

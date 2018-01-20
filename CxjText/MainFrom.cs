@@ -681,15 +681,30 @@ namespace CxjText
             if (strs.Length > 1) {
                 if ((int)gameText.Tag == 1)
                 {  //主队
-                    this.setTextBox1Text(strs[0].Trim());
+                    String name = leftForm.getSaiName(strs[0].Trim());
+                    if (name == null)
+                    {
+                        name = strs[0].Trim();
+                    }
+                    this.setTextBox1Text((name));
                 }
                 else if ((int)gameText.Tag == 2)
                 { //客队
-                    this.setTextBox1Text(strs[1].Trim());
+                    String name = leftForm.getSaiName(strs[1].Trim());
+                    if (name == null)
+                    {
+                        name = strs[1].Trim();
+                    }
+                    this.setTextBox1Text((name));
                 }
                 else
                 {
-                    this.setTextBox1Text(strs[0].Trim());
+                    String name = leftForm.getSaiName(strs[0].Trim());
+                    if (name == null)
+                    {
+                        name = strs[0].Trim();
+                    }
+                    this.setTextBox1Text((name));
                 }
             }
         }
