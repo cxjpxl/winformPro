@@ -122,19 +122,14 @@ namespace CxjText.views
             if (value.Contains("_0")) // 只有标记了颜色的才可以点击
             {
                 value = value.Replace("_0", ""); // 去除颜色标记
-                Console.WriteLine("blue============历史消息点击了：" + value);
-                if (mainFrom != null)
-                {
-                    this.Invoke(new Action(() => {
-                        mainFrom.searchForHistoryTeam(value);
-                    }));
-                }
             }
-            else
+            Console.WriteLine("blue============历史消息点击了：" + value);
+            if (mainFrom != null)
             {
-                return;
+                this.Invoke(new Action(() => {
+                    mainFrom.searchForHistoryTeam(value);
+                }));
             }
-
         }
     }
 
