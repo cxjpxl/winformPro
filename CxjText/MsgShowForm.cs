@@ -119,7 +119,7 @@ namespace CxjText.views
             if (e.ColumnIndex != 3 && e.ColumnIndex != 2) return;
             String value = this.InfoDgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             //先将数据搜索出来
-            if (value.Contains("_0")) // 只有标记了颜色的才可以点击
+            if (value.Contains("_0"))
             {
                 value = value.Replace("_0", ""); // 去除颜色标记
             }
