@@ -77,7 +77,7 @@ namespace CxjText
                         speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
                     }
 
-                    speechSynthesizer.Rate = 1;
+                    speechSynthesizer.Rate = 6;
                     speechSynthesizer.SpeakAsync("登录成功");
                 }
             }
@@ -351,6 +351,8 @@ namespace CxjText
                             speakStr = "客队点球";
                         }
                     }
+
+                    speechSynthesizer.Rate = 6;
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
 
