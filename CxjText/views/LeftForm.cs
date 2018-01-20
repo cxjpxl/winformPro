@@ -960,7 +960,12 @@ namespace CxjText.views
         }
 
         public String getSaiName(String name) {
-            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            int index = this.cIndex;
+            if(index<0 || index>Config.userList.Count)
+            {
+                index = 0;
+            }
+            UserInfo userInfo = (UserInfo)Config.userList[index];
             return StringComPleteUtils.getSaiName(name, this.dataJArray, userInfo);
         }
 

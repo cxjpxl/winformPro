@@ -27,9 +27,14 @@ public partial class RowMergeView : DataGridView
         protected override void OnPaint(PaintEventArgs pe)
         {
             // TODO: 在此处添加自定义绘制代码
-
-            // 调用基类 OnPaint
-            base.OnPaint(pe);
+            try
+            {
+                // 调用基类 OnPaint
+                base.OnPaint(pe);
+            }
+            catch (Exception e)
+            {
+            }
         }
         protected override void OnCellPainting(DataGridViewCellPaintingEventArgs e)
         {

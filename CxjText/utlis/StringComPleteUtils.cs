@@ -605,22 +605,6 @@ namespace CxjText.utlis
             }
             return false;
         }
-
-
-        public static Boolean haveQiuDui(String value)
-        {
-            if (value == null) return false;
-            if (value.Length <= 0) return false;
-
-            if (value.Contains("(中)")) return false;
-            if (value.Contains("[中]")) return false;
-            if (value.Contains("[后]")) return false;
-            if (value.Contains("(后)")) return false;
-            if (value.Contains("(女)")) return false;
-
-
-            return true;
-        }
     }
 
 }

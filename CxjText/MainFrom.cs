@@ -653,17 +653,9 @@ namespace CxjText
         // 消息列表 初始化
         private void MsgShowFormInit()
         {
-            EnventShowInfo enventShowInfo = new EnventShowInfo();
-            enventShowInfo.shiDuan = "上半场";
-            enventShowInfo.gameTime = 3700000;
-            enventShowInfo.lianSaiStr = "荷兰甲组联赛U19-附加赛";
-            enventShowInfo.gameH = "PSV燕豪芬U19";
-            enventShowInfo.gameG = "艾克马亚U19";
-            enventShowInfo.text = "可能客队炸弹";
-
             Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
             t.SetApartmentState(ApartmentState.STA);
-            t.Start(enventShowInfo);
+            t.Start(null);
         }
         // 消息列表 显示消息
         private void ShowEventInfo(Object positionObj)
@@ -713,6 +705,20 @@ namespace CxjText
                     }
                     this.setTextBox1Text((name));
                 }
+            }
+        }
+
+        // 消息列表 历史消息点击搜索
+        public void searchForHistoryTeam(String team)
+        {
+            if (team.Length > 1)
+            {
+                String name = leftForm.getSaiName(team.Trim());
+                if (name == null)
+                {
+                    name = team.Trim();
+                }
+                this.setTextBox1Text((name));
             }
         }
     }
