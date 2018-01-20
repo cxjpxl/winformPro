@@ -418,7 +418,7 @@ namespace CxjText
                 enventShowInfo.shiDuan = shiDuan;
                 enventShowInfo.gameH = enventInfo.nameH;
                 enventShowInfo.gameG = enventInfo.nameG;
-                gameText.Text = str + "(主)" + enventInfo.nameH + " - " + enventInfo.nameG;
+                gameText.Text =  enventInfo.nameH + " - " + enventInfo.nameG;
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
@@ -463,15 +463,20 @@ namespace CxjText
                 if (cid.Equals("9926") || cid.Equals("1031")|| cid.Equals("1062")) //主队
                 {
                     enventShowInfo.gameTeamColor = 1;
+                    gameText.Tag = 1;
+
                 }
                 else if (cid.Equals("9927") || cid.Equals("2055") || cid.Equals("2086"))//客队
                 {
                     enventShowInfo.gameTeamColor = 2;
+                    gameText.Tag = 2;
                 }
                 else {
                     enventShowInfo.gameTeamColor = 0;
+                    gameText.Tag = 0;
                 }
-                timeText.Text = "时间: " + DateTime.Now.ToString(); 
+               
+                timeText.Text = "时间: " + DateTime.Now.ToString()+ " - "+str; 
                 lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
                 enventShowInfo.text = enventText.Text.ToString().Replace("事件:","");
                 enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
@@ -674,6 +679,40 @@ namespace CxjText
             else 
             {
                 msgShowForm.AddLineInHead(enventShowInfo);
+            }
+        }
+        //比赛点击搜索
+        private void gameText_Click(object sender, EventArgs e)
+        {
+            String[] strs = gameText.Text.Split('-');
+            if (strs.Length > 1) {
+                if ((int)gameText.Tag == 1)
+                {  //主队
+                    String name = leftForm.getSaiName(strs[0].Trim());
+                    if (name == null)
+                    {
+                        name = strs[0].Trim();
+                    }
+                    this.setTextBox1Text((name));
+                }
+                else if ((int)gameText.Tag == 2)
+                { //客队
+                    String name = leftForm.getSaiName(strs[1].Trim());
+                    if (name == null)
+                    {
+                        name = strs[1].Trim();
+                    }
+                    this.setTextBox1Text((name));
+                }
+                else
+                {
+                    String name = leftForm.getSaiName(strs[0].Trim());
+                    if (name == null)
+                    {
+                        name = strs[0].Trim();
+                    }
+                    this.setTextBox1Text((name));
+                }
             }
         }
     }

@@ -628,26 +628,6 @@ namespace CxjText.views
                         //找不到就找大小
                         if (obj == null)
                         {
-                            /*  for (int i = 0; i < searchArray.Count; i++)
-                              {
-                                  String data = "";
-                                  if (isH)
-                                  {
-                                      data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                                  }
-                                  else
-                                  {
-                                      data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
-                                  }
-
-                                  if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                                  {
-                                      obj = searchArray[i];
-                                      selectDaXiao = true;
-                                      isBanChang = true;
-                                      break;
-                                  }
-                              }*/
                             return;
                         }
                     }
@@ -701,26 +681,6 @@ namespace CxjText.views
                         //找不到就找大小
                         if (obj == null)
                         {
-                            /*  for (int i = 0; i < searchArray.Count; i++)
-                              {
-                                  String data = "";
-                                  if (isH)
-                                  {
-                                      data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                                  }
-                                  else
-                                  {
-                                      data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                                  }
-
-                                  if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                                  {
-                                      obj = searchArray[i];
-                                      selectDaXiao = true;
-                                      isBanChang = false;
-                                      break;
-                                  }
-                              }*/
                             return;
                         }
                     }
@@ -778,26 +738,6 @@ namespace CxjText.views
                     //找不到就找大小
                     if (obj == null)
                     {
-                        /*  for (int i = 0; i < searchArray.Count; i++)
-                          {
-                              String data = "";
-                              if (isH)
-                              {
-                                  data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                              }
-                              else
-                              {
-                                  data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                              }
-
-                              if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                              {
-                                  obj = searchArray[i];
-                                  selectDaXiao = true;
-                                  isBanChang = false;
-                                  break;
-                              }
-                          }*/
                         return;
                     }
                 }
@@ -851,26 +791,7 @@ namespace CxjText.views
                         }
 
                         if (obj == null) {
-                           /* for (int i = 0; i < searchArray.Count; i++)
-                            {
-                                String data = "";
-                                if (isH)
-                                {
-                                    data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                                }
-                                else
-                                {
-                                    data = DataUtils.get_c18_data(searchArray[i], userInfo.tag);//客队半场大小
-                                }
-
-                                if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                                {
-                                    obj = searchArray[i];
-                                    selectDaXiao = true;
-                                    isBanChang = true;
-                                    break;
-                                }
-                            }*/
+                           
                         }
                     }
 
@@ -899,26 +820,6 @@ namespace CxjText.views
                         //找不到就找大小
                         if (obj == null)
                         {
-                            /*   for (int i = 0; i < searchArray.Count; i++)
-                               {
-                                   String data = "";
-                                   if (isH)
-                                   {
-                                       data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                                   }
-                                   else
-                                   {
-                                       data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                                   }
-
-                                   if (!StringComPleteUtils.daXiaoIsEmpty(data))
-                                   {
-                                       obj = searchArray[i];
-                                       selectDaXiao = true;
-                                       isBanChang = false;
-                                       break;
-                                   }
-                               }*/
                             return;
                         }
                     }
@@ -1056,6 +957,11 @@ namespace CxjText.views
                 return;
             }
 
+        }
+
+        public String getSaiName(String name) {
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            return StringComPleteUtils.getSaiName(name, this.dataJArray, userInfo);
         }
 
     }
