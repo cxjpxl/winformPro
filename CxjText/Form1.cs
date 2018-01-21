@@ -67,7 +67,7 @@ namespace CxjText
             Config.speakJObject["2086"] = "可能客队点球";
             Config.speakJObject["146"] = "点球取消";
             Config.speakJObject["1062"] = "可能主队点球";
-            Config.speakJObject["142"] = "可能点球";
+            Config.speakJObject["142"] = "点球取消";
         }
 
 
