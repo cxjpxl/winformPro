@@ -127,7 +127,7 @@ namespace CxjText.views
             if (mainFrom != null)
             {
                 this.Invoke(new Action(() => {
-                    mainFrom.searchForHistoryTeam(value);
+                   // mainFrom.searchForHistoryTeam(value);
                 }));
             }
         }

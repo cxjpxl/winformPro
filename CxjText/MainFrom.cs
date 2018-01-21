@@ -682,28 +682,34 @@ namespace CxjText
             if (strs.Length > 1) {
                 if ((int)gameText.Tag == 1)
                 {  //主队
-                    searchForHistoryTeam(strs[0].Trim());
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(),true);
                 }
                 else if ((int)gameText.Tag == 2)
                 { //客队
-                    searchForHistoryTeam(strs[1].Trim());
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), false);
                 }
                 else
                 {
-                    searchForHistoryTeam(strs[0].Trim());
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), true);
                 }
             }
         }
 
-        // 消息列表 历史消息点击搜索
-        public void searchForHistoryTeam(String team)
+        // 消息列表 历史消息点击搜索  
+        //参数  主队  客队  是否主队
+        public void searchForHistoryTeam(String hStr,String gStr,bool isH)
         {
-            if (team.Length > 1)
+            if (!String.IsNullOrEmpty(hStr)&& !String.IsNullOrEmpty(gStr))
             {
-                String name = leftForm.getSaiName(team.Trim());
-                if (name == null)
-                {
-                    name = team.Trim();
+                String name = leftForm.getSaiName(hStr, gStr,isH);
+                if (name == null) {
+                    if (isH)
+                    {
+                        name = hStr;
+                    }
+                    else {
+                        name = gStr;
+                    }
                 }
                 this.setTextBox1Text((name));
             }

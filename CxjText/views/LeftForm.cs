@@ -1039,14 +1039,14 @@ namespace CxjText.views
 
         }
 
-        public String getSaiName(String name) {
+        public String getSaiName(String hStr, String gStr, bool isH) {
             int index = this.cIndex;
             if(index<0 || index>Config.userList.Count)
             {
                 index = 0;
             }
             UserInfo userInfo = (UserInfo)Config.userList[index];
-            return StringComPleteUtils.getSaiName(name, this.dataJArray, userInfo);
+            return  StringComPleteUtils.getSaiName(hStr, gStr, isH,this.dataJArray, userInfo);
         }
 
     }

@@ -319,10 +319,11 @@ namespace CxjText.utlis
         }
 
 
-        public static String getSaiName(String teamName, JArray jArray, UserInfo userInfo)
+        public static String getSaiName(String teamNameH, String teamNameG,bool isH, JArray jArray, UserInfo userInfo)
         {
 
-            if (String.IsNullOrEmpty(teamName)) return null;
+            if (String.IsNullOrEmpty(teamNameH)) return null;
+            if (String.IsNullOrEmpty(teamNameG)) return null;
             if (jArray == null || jArray.Count == 0 || userInfo == null) return null;
 
             String tag = userInfo.tag;
@@ -415,12 +416,24 @@ namespace CxjText.utlis
                 if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
                 if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
 
+                String zhuName = hStr;//原始数据
+                String geName = gStr;//原始数据
+
                 if (hStr.Contains("(中)")) hStr = hStr.Replace("(中)", "");
                 if (hStr.Contains("[中]")) hStr = hStr.Replace("[中]", "");
                 if (hStr.Contains("[后]")) hStr = hStr.Replace("[后]", "");
                 if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
                 if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
                 hStr = hStr.Trim();
+
+                if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
+                if (gStr.Contains("[中]")) gStr = gStr.Replace("[中]", "");
+                if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
+                if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
+                if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
+                gStr = gStr.Trim();
+
+
                 String[] hStrs = hStr.Split('U');
                 if (hStrs.Length > 1)
                 {
@@ -435,20 +448,7 @@ namespace CxjText.utlis
 
                     }
                 }
-                String zhuName = hStr;//原始数据
-                decimal hRate = SpeedyCompute(teamName, hStr);
-                if (hRate > (decimal)0.7)
-                {
-                    return zhuName;
-                }
-
-
-                if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
-                if (gStr.Contains("[中]")) gStr = gStr.Replace("[中]", "");
-                if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
-                if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
-                if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
-                gStr = gStr.Trim();
+                
                 String[] gStrs = gStr.Split('U');
                 if (gStrs.Length > 1)
                 {
@@ -460,15 +460,25 @@ namespace CxjText.utlis
                     }
                     catch (Exception e)
                     {
-
+                        
                     }
                 }
-                String geName = gStr;//原始数据
-                decimal gRate = SpeedyCompute(teamName, gStr);
-                if (gRate > (decimal)0.7)
+                decimal hRate = SpeedyCompute(teamNameH, hStr);
+                decimal gRate = SpeedyCompute(teamNameG, gStr);
+                if (hRate > (decimal)0.6&&gRate > (decimal)0.6)
                 {
-                    return geName;
+                    if (isH) return zhuName;
+                    else return geName;
                 }
+                //换过来比较
+                 hRate = SpeedyCompute(teamNameH, gStr);
+                 gRate = SpeedyCompute(teamNameG, hStr);
+                if (hRate > (decimal)0.6 && gRate > (decimal)0.6)
+                {
+                    if (isH) return geName;
+                    else return zhuName;
+                }
+
             }
             return null;
         }
