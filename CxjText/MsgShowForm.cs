@@ -117,17 +117,35 @@ namespace CxjText.views
         {
             if (e.RowIndex == -1 || e.ColumnIndex == -1) return;
             if (e.ColumnIndex != 3 && e.ColumnIndex != 2) return;
-            String value = this.InfoDgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
-            //先将数据搜索出来
-            if (value.Contains("_0"))
+            EnventShowInfo enventShowInfo = list[e.RowIndex];
+            if (enventShowInfo == null) return;
+
+            bool isH = true;
+            if (e.ColumnIndex == 2)
             {
-                value = value.Replace("_0", ""); // 去除颜色标记
+                isH = true;
             }
-            Console.WriteLine("blue============历史消息点击了：" + value);
+            else
+            {
+                isH = false;
+            }
+
+            String hStr = enventShowInfo.gameH;
+            if (hStr.Contains("_0"))
+            {
+                hStr = hStr.Replace("_0", ""); // 去除颜色标记
+            }
+
+            String gStr = enventShowInfo.gameG;
+            if (gStr.Contains("_0"))
+            {
+                gStr = gStr.Replace("_0", ""); // 去除颜色标记
+            }
+            Console.WriteLine("blue============历史消息点击了：" + hStr+":"+gStr+":"+isH);
             if (mainFrom != null)
             {
                 this.Invoke(new Action(() => {
-                   // mainFrom.searchForHistoryTeam(value);
+                    mainFrom.searchForHistoryTeam(hStr, gStr, isH);
                 }));
             }
         }

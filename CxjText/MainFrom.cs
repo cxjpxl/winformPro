@@ -655,6 +655,15 @@ namespace CxjText
         // 消息列表 初始化
         private void MsgShowFormInit()
         {
+            // 测试数据
+            //EnventShowInfo enventShowInfo = new EnventShowInfo();
+            //enventShowInfo.shiDuan = "上半场";
+            //enventShowInfo.gameTime = 3700000;
+            //enventShowInfo.lianSaiStr = "意大利甲组联赛";
+            //enventShowInfo.gameH = "阿特兰大";
+            //enventShowInfo.gameG = "拿玻里";
+            //enventShowInfo.text = "可能客队炸弹";
+
             Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
             t.SetApartmentState(ApartmentState.STA);
             t.Start(null);
