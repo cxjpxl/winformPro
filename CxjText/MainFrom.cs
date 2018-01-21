@@ -682,30 +682,15 @@ namespace CxjText
             if (strs.Length > 1) {
                 if ((int)gameText.Tag == 1)
                 {  //主队
-                    String name = leftForm.getSaiName(strs[0].Trim());
-                    if (name == null)
-                    {
-                        name = strs[0].Trim();
-                    }
-                    this.setTextBox1Text((name));
+                    searchForHistoryTeam(strs[0].Trim());
                 }
                 else if ((int)gameText.Tag == 2)
                 { //客队
-                    String name = leftForm.getSaiName(strs[1].Trim());
-                    if (name == null)
-                    {
-                        name = strs[1].Trim();
-                    }
-                    this.setTextBox1Text((name));
+                    searchForHistoryTeam(strs[1].Trim());
                 }
                 else
                 {
-                    String name = leftForm.getSaiName(strs[0].Trim());
-                    if (name == null)
-                    {
-                        name = strs[0].Trim();
-                    }
-                    this.setTextBox1Text((name));
+                    searchForHistoryTeam(strs[0].Trim());
                 }
             }
         }

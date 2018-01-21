@@ -411,9 +411,6 @@ namespace CxjText.utlis
                         return null;
 
                 }
-                String zhuName = hStr;//原始数据
-                String geName = gStr;//原始数据
-
 
                 if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
                 if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
@@ -423,19 +420,56 @@ namespace CxjText.utlis
                 if (hStr.Contains("[后]")) hStr = hStr.Replace("[后]", "");
                 if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
                 if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
+                hStr = hStr.Trim();
+                String[] hStrs = hStr.Split('U');
+                if (hStrs.Length > 1)
+                {
+                    String hNum = hStrs[hStrs.Length - 1];
+                    try
+                    {
+                        int num = int.Parse(hNum);
+                        hStr = hStr.Replace("U" + num, "").Trim();
+                    }
+                    catch (Exception e)
+                    {
 
+                    }
+                }
+                String zhuName = hStr;//原始数据
                 decimal hRate = SpeedyCompute(teamName, hStr);
-                decimal gRate = SpeedyCompute(teamName, gStr);
-                if (hRate >(decimal) 0.6) {
+                if (hRate > (decimal)0.7)
+                {
                     return zhuName;
                 }
 
-                if (gRate > (decimal)0.6)
+
+                if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
+                if (gStr.Contains("[中]")) gStr = gStr.Replace("[中]", "");
+                if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
+                if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
+                if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
+                gStr = gStr.Trim();
+                String[] gStrs = gStr.Split('U');
+                if (gStrs.Length > 1)
+                {
+                    String gNum = gStrs[gStrs.Length - 1];
+                    try
+                    {
+                        int num = int.Parse(gNum);
+                        gStr = gStr.Replace("U" + num, "").Trim();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                String geName = gStr;//原始数据
+                decimal gRate = SpeedyCompute(teamName, gStr);
+                if (gRate > (decimal)0.7)
                 {
                     return geName;
                 }
             }
-
             return null;
         }
 
