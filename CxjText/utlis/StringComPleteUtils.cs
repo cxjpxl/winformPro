@@ -546,6 +546,57 @@ namespace CxjText.utlis
         }
 
 
+        public static bool isPingBanDa07(String data) {
+
+            if (data != null)
+            {
+                data = data.Trim();
+            }
+            if (!String.IsNullOrEmpty(data) && !data.Equals(""))
+            {
+
+                String[] datas = data.Split(' ');
+
+                if (datas.Length > 2) return false;
+
+
+                if (datas.Length == 1)
+                {
+                    data = datas[0];
+                }
+                else if (datas.Length == 2)
+                {
+                    String pangKou = datas[0].Replace(" ", "").Trim();
+                    data = datas[1].Trim();
+
+                    if (pangKou != null && (pangKou.Equals("0") ||  pangKou.Equals("")))
+                    {
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (String.IsNullOrEmpty(data)) return false;
+
+                try
+                {
+                    float dataRate = float.Parse(data);
+                    if (dataRate > 0.7)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+
         public static bool isDa07(String data) {
 
             if (data != null) {
@@ -567,7 +618,7 @@ namespace CxjText.utlis
                     String pangKou = datas[0].Replace(" ", "").Trim();
                     data = datas[1].Trim();
 
-                    if (pangKou != null &&(pangKou.Equals("0") || pangKou.Equals("0.5") || pangKou.Equals("0/0.5")||pangKou.Equals("")))
+                    if (pangKou != null &&(pangKou.Equals("0") || pangKou.Equals("0/0.5")||pangKou.Equals("")))
                     {
 
                     }
