@@ -71,7 +71,7 @@ namespace CxjText.utlis
             return intMin;
         }
 
-
+        //要修改
         public static JObject haveData(EnventInfo enventInfo, JArray jArray,UserInfo userInfo)
         {
             if (enventInfo == null || userInfo == null) return null;
@@ -318,7 +318,7 @@ namespace CxjText.utlis
             return null;
         }
 
-
+        //要修改
         public static String getSaiName(String teamNameH, String teamNameG,bool isH, JArray jArray, UserInfo userInfo)
         {
 
