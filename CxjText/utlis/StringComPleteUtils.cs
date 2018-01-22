@@ -465,7 +465,7 @@ namespace CxjText.utlis
                 }
                 decimal hRate = SpeedyCompute(teamNameH, hStr);
                 decimal gRate = SpeedyCompute(teamNameG, gStr);
-                if (hRate > (decimal)0.6&&gRate > (decimal)0.6)
+                if (hRate > (decimal)0.55&&gRate > (decimal)0.55)
                 {
                     if (isH) return zhuName;
                     else return geName;
@@ -473,7 +473,7 @@ namespace CxjText.utlis
                 //换过来比较
                  hRate = SpeedyCompute(teamNameH, gStr);
                  gRate = SpeedyCompute(teamNameG, hStr);
-                if (hRate > (decimal)0.6 && gRate > (decimal)0.6)
+                if (hRate > (decimal)0.55 && gRate > (decimal)0.55)
                 {
                     if (isH) return geName;
                     else return zhuName;
