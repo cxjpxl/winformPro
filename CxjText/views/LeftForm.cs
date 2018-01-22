@@ -1043,7 +1043,7 @@ namespace CxjText.views
             int index = this.cIndex;
             if(index<0 || index>Config.userList.Count)
             {
-                index = 0;
+                return null;
             }
             UserInfo userInfo = (UserInfo)Config.userList[index];
             return  StringComPleteUtils.getSaiName(hStr, gStr, isH,this.dataJArray, userInfo);
