@@ -78,7 +78,7 @@ namespace CxjText
             String codePwdStr = (String)jObject["codePwdStr"];
 
             //登录验证软件是否过期
-            if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
+          if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
                 JObject loginObj = new JObject();
                 loginObj.Add("userName", Config.softUserStr);
                 loginObj.Add("comId", uuid);
@@ -107,8 +107,6 @@ namespace CxjText
                 }
                 Config.softTime = (long)loginObj["time"];
             }
-
-
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
             if (uid < 0) {

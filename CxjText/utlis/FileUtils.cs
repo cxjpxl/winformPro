@@ -42,33 +42,13 @@ namespace CxjText.utlis
                     if (strs == null || strs.Length < Config.pramsNum) continue;
 
                     String tag = strs[0].ToUpper();//tag
-                    String user = strs[1];//用户
-                    String pwd = strs[2];//密码
-                    String baseUrl = strs[3];//网址
-                    String loginUrl = strs[3];//登录的链接地址 
-                    String dataUrl = strs[3]; //获取数据的接口
-
+                    String user = strs[1].Trim();//用户
+                    String pwd = strs[2].Trim();//密码
+                    String baseUrl = strs[3].Trim();//网址
+                    String dataUrl = strs[3].Trim(); //获取数据的接口
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
-
-
-                    if (loginUrl.EndsWith("/")) {
-                        loginUrl = loginUrl.Substring(0, loginUrl.Length - 1);
-                    }
-
-                    //R系统要特殊处理下
-                    if (!loginUrl.Contains("www.")&&tag.Equals("R"))
-                    {
-                        if (loginUrl.Contains("http://"))
-                        {
-                            loginUrl = "http://" + "www." + loginUrl.Substring(7, loginUrl.Length - 7);
-                        }
-                        else if (loginUrl.Contains("https://"))
-                        {
-                            loginUrl = "https://" + "www." + loginUrl.Substring(8, loginUrl.Length - 8);
-                        }
-                    }
-                    
+                    String loginUrl = dataUrl;//登录的链接地址 
                     if (list.Contains(baseUrl))
                     { //过滤重复的网址
                         break;
@@ -189,7 +169,7 @@ namespace CxjText.utlis
                 baseUrl = "www." + baseUrl;
             }
 
-            return baseUrl;
+            return baseUrl.Trim();
         }
 
         public static String changeDataUrl(String dataUrl) {
@@ -207,7 +187,8 @@ namespace CxjText.utlis
                     dataUrl = "https://" + "www." + dataUrl.Substring(8, dataUrl.Length - 8);
                 }
             }
-            return dataUrl;
+            
+            return dataUrl.Trim();
         }
 
     }

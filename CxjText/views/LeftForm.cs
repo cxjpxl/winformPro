@@ -558,14 +558,14 @@ namespace CxjText.views
             //先将数据搜索出来
             if (mainFrom != null)
             {
-                if (isH)
+               /* if (isH)
                 {
                     mainFrom.setTextBox1Text(nameH);
                 }
                 else
                 {
                     mainFrom.setTextBox1Text(nameG);
-                }
+                }*/
 
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
