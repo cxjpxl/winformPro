@@ -220,7 +220,7 @@ namespace CxjText.utlis
                 case "A":
                     {
                         JObject jObjectA = (JObject)obj;
-                        c03 = "";
+                        c03 = (String)jObjectA["a7"];
                         break;
                     }
                 case "B":
@@ -554,7 +554,7 @@ namespace CxjText.utlis
                 case "A":
                     {
                         JObject jObjectA = (JObject)obj;
-                        c06 = "";
+                        c06 = (String)jObjectA["a40"];
                         break;
                     }
                 case "B":
@@ -1305,7 +1305,7 @@ namespace CxjText.utlis
                 case "A":
                     {
                         JObject jObjectA = (JObject)obj;
-                        c16 = "";
+                        c16 = (String)jObjectA["a41"];
                         break;
                     }
                 case "B":
@@ -1665,7 +1665,7 @@ namespace CxjText.utlis
                 case "A":
                     {
                         JObject jObjectA = (JObject)obj;
-                        c23 = "";
+                        c23 = (String)jObjectA["a9"];
                         break;
                     }
                 case "B":
@@ -1744,7 +1744,7 @@ namespace CxjText.utlis
                 case "A":
                     {
                         JObject jObjectA = (JObject)obj;
-                        c26 = "";
+                        c26 = (String)jObjectA["a42"];
                         break;
                     }
                 case "B":
