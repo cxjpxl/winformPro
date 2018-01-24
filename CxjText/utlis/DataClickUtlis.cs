@@ -26,6 +26,7 @@ namespace CxjText.utlis
                 switch (clickNum)
                 {
                     case 3:
+                      
                         break;
                     case 4:
                         inputType = inputType + "-让球" ;
@@ -38,6 +39,10 @@ namespace CxjText.utlis
                         bateStr = DataUtils.get_c05_data(jObject, tag);
                         break;
                     case 6:
+                        mid = (String)jObject["a28"];
+                        inputType = inputType + "-半场独赢";
+                        rltStr = "bet=H&rate="+ (String)jObject["a40"] + "&ltype=52&mid="+mid+"&auto=1";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
                         break;
                     case 7:
                         inputType = inputType + "-半场让球";
@@ -74,6 +79,10 @@ namespace CxjText.utlis
                         rltStr = "auto=1&mid=" + mid + "&ltype=10&bet=H&rate=" + (String)jObject["a15"];
                         break;
                     case 6:
+                        mid = (String)jObject["a28"];
+                        inputType = inputType + "-半场独赢";
+                        rltStr = "bet=C&rate=" + (String)jObject["a41"] + "&ltype=52&mid=" + mid + "&auto=1";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
                         break;
                     case 7:
                         inputType = inputType + "-半场让球";
@@ -93,9 +102,16 @@ namespace CxjText.utlis
             }
             else if (numRow == 2)
             {
+                inputType = "和";
                 switch (clickNum)
                 {
                     case 3:
+                        break;
+                    case 6:
+                        mid = (String)jObject["a28"];
+                        inputType = inputType + "-和独赢";
+                        rltStr = "bet=N&rate=" + (String)jObject["a42"] + "&ltype=52&mid=" + mid + "&auto=1";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
                         break;
                     default:
                         return null;
