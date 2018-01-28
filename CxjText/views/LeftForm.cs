@@ -406,6 +406,9 @@ namespace CxjText.views
                     case "F":
                         orderParmas = rltStr;
                         break;
+                    case "D":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -461,10 +464,16 @@ namespace CxjText.views
                     jObject["reqUrl"] = dataJObject["reqUrl"];
                     jObject["money"] = inputMoney;
                 }
-                else if (user.tag.Equals("F")) {
+                else if (user.tag.Equals("F"))
+                {
                     jObject["limitPar"] = dataJObject["limitPar"];
                     jObject["money"] = inputMoney;
                     jObject["orderObj"] = dataJObject["orderObj"];
+                }
+                else if (user.tag.Equals("D")) {
+                    jObject["money"] = inputMoney;
+                    jObject["gid"] = dataJObject["gid"];
+                    jObject["betType"] = dataJObject["betType"];
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -515,6 +524,9 @@ namespace CxjText.views
                         break;
                     case "F":
                         OrderUtils.OrderF(jobject, this, loginForm, rltForm);
+                        break;
+                    case "D":
+                        OrderUtils.OrderD(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

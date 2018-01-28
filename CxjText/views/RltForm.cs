@@ -34,6 +34,7 @@ namespace CxjText.views
 
         //更新数据
         public void RefershLineData(String tag,String status) {
+
             try {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -47,7 +48,7 @@ namespace CxjText.views
                 }
             }
             catch (Exception e) {
-              
+                Console.WriteLine(e.ToString());
             }
             
         }

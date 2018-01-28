@@ -263,6 +263,11 @@ namespace CxjText.views
                     if (jObjectF == null) return;
                     rltStr = DataClickUtlis.DataSysFClick(dataJObject, jObjectF, numRow, clickNum, "F");
                     break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    if (jObjectD == null) return;
+                    rltStr = DataClickUtlis.DataSysDClick(dataJObject, jObjectD, numRow, clickNum, "D");
+                    break;
                 default:
                     break;
 
