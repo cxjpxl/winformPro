@@ -888,5 +888,53 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
 
+
+        /***********************D系统获取数据*************************/
+        public static String getDData(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            String dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=1&legName=&selection=-1&_="+FormUtils.getCurrentTime();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            String rltStr = HttpUtils.HttpGetHeader(dataUrl,"", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+            {
+                return null;
+            }
+            JObject jObject = JObject.Parse(rltStr);
+        
+            JArray jArray = new JArray();
+            if (jObject["matchList"] == null)
+            {
+                jObject = new JObject();
+                jObject.Add("list", jArray);
+                return jObject.ToString();
+            }
+            int page = (int)jObject["totalPage"];
+            jArray = (JArray)jObject["matchList"];
+
+            for (int i = 2; i <= page; i++)
+            {
+                dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page="+i+"&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+                rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+                {
+                    continue;
+                }
+                JObject tempJObject = JObject.Parse(rltStr);
+                if (tempJObject["matchList"] == null) continue;
+                JArray tempJArry = (JArray)tempJObject["matchList"];
+                if (tempJArry.Count > 0)
+                {
+                    for (int j = 0; j < tempJArry.Count; j++)
+                    {
+                        jArray.Add(tempJArry[j]);
+                    }
+                }
+            }
+            jObject = new JObject();
+            jObject.Add("list", jArray);
+            return jObject.ToString();
+        }
     }
 }

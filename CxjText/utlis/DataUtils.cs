@@ -58,6 +58,12 @@ namespace CxjText.utlis
                         c00 = (String)jObjectF["mname"];
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectF = (JObject)obj;
+                        c00 = (String)jObjectF["league"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -160,7 +166,16 @@ namespace CxjText.utlis
                         time = "半场";
                     }
                     time = time+"\n"+ (String)jObjectF["hscore"]+"-"+ (String)jObjectF["gscore"];
-                    break; 
+                    break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    time = ((String)jObjectD["retimeset"]).Replace(" ", "");
+                    if (time.Contains("半场"))
+                    {
+                        time = "半场";
+                    }
+                    time = time + "\n" + (String)jObjectD["score_h"] + "-" + (String)jObjectD["score_c"];
+                    break;
                 default:
                     break;
             }
@@ -205,6 +220,10 @@ namespace CxjText.utlis
                 case "F":
                     JObject jObjectF = (JObject)obj;
                     c02 = (String)jObjectF["hteam"];
+                    break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    c02 = (String)jObjectD["team_h"];
                     break;
                 default:
                     break;
@@ -275,6 +294,16 @@ namespace CxjText.utlis
                     {
                         JObject jObjectF = (JObject)obj;
                          c03 = (String)jObjectF["a_capot_h"];
+                        if (c03 == null || c03.Equals("null")) {
+                            c03 = "";
+                        }
+                        break;
+
+                    }
+                     case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                         c03 = (String)jObjectD["ior_MH"];
                         if (c03 == null || c03.Equals("null")) {
                             c03 = "";
                         }
@@ -430,6 +459,28 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ior_RH = (String)jObjectD["ior_RH"];
+                        if (String.IsNullOrEmpty(ior_RH) || ior_RH.Trim().Equals("0"))
+                        {
+                            c04 = "";
+                        }
+                        else
+                        {
+                            bool strong = (bool)jObjectD["strong"];
+                            if (strong)
+                            {
+                                c04 = ((String)jObjectD["ratio"]).Replace(" ", "") + " " + ior_RH;
+                            }
+                            else
+                            {
+                                c04 = ior_RH;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -540,6 +591,21 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ratio_o = (String)jObjectD["ratio_o"];
+                        String ior_OUH = (String)jObjectD["ior_OUH"];
+                        if (String.IsNullOrEmpty(ratio_o) || String.IsNullOrEmpty(ior_OUH))
+                        {
+                            c05 = "";
+                        }
+                        else
+                        {
+                            c05 = ratio_o+ " "+ ior_OUH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -607,6 +673,17 @@ namespace CxjText.utlis
                         JObject jObjectF = (JObject)obj;
                         c06 = (String)jObjectF["u_capot_h"];
                         if (String.IsNullOrEmpty(c06) || c06.Equals("0")) {
+                            c06 = "";
+                        }
+                        break;
+
+                    }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        c06 = (String)jObjectD["ior_HMH"];
+                        if (c06 == null || c06.Equals("null"))
+                        {
                             c06 = "";
                         }
                         break;
@@ -779,6 +856,28 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ior_HRH = (String)jObjectD["ior_HRH"];
+                        if (String.IsNullOrEmpty(ior_HRH) || ior_HRH.Trim().Equals("0"))
+                        {
+                            c07 = "";
+                        }
+                        else
+                        {
+                            bool strong = (bool)jObjectD["strong"];
+                            if (strong)
+                            {
+                                c07 = ((String)jObjectD["hratio"]).Replace(" ", "") + " " + ior_HRH;
+                            }
+                            else
+                            {
+                                c07 = ior_HRH;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -895,6 +994,21 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String hratio_o = (String)jObjectD["hratio_o"];
+                        String ior_HOUH = (String)jObjectD["ior_HOUH"];
+                        if (String.IsNullOrEmpty(hratio_o) || String.IsNullOrEmpty(ior_HOUH))
+                        {
+                            c08 = "";
+                        }
+                        else
+                        {
+                            c08 = hratio_o + " "+ ior_HOUH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -953,6 +1067,10 @@ namespace CxjText.utlis
                 case "F":
                     JObject jObjectF = (JObject)obj;
                     c12 = (String)jObjectF["gteam"];
+                    break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    c12 = (String)jObjectD["team_c"];
                     break;
                 default:
                     break;
@@ -1020,6 +1138,17 @@ namespace CxjText.utlis
                     {
                         JObject jObjectF = (JObject)obj;
                         c13 = (String)jObjectF["a_capot_g"];
+                        if (c13 == null || c13.Equals("null"))
+                        {
+                            c13 = "";
+                        }
+                        break;
+
+                    }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        c13 = (String)jObjectD["ior_MC"];
                         if (c13 == null || c13.Equals("null"))
                         {
                             c13 = "";
@@ -1180,6 +1309,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ior_RC = (String)jObjectD["ior_RC"];
+                        bool strong = (bool)jObjectD["strong"];
+                        String ratio = (String)jObjectD["ratio"];
+                        if (String.IsNullOrEmpty(ior_RC) || ior_RC.Trim().Equals("0"))
+                        {
+                            c14 = "";
+                        }
+                        else
+                        {
+                            if (!strong)
+                            {
+                                c14 = ratio.Replace(" ", "") + " " + ior_RC;
+                            }
+                            else
+                            {
+                                c14 = ior_RC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1291,6 +1443,21 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ratio_u = (String)jObjectD["ratio_u"];
+                        String ior_OUC = (String)jObjectD["ior_OUC"];
+                        if (String.IsNullOrEmpty(ratio_u)||String.IsNullOrEmpty(ior_OUC))
+                        {
+                            c15 = "";
+                        }
+                        else
+                        {
+                            c15 = ratio_u+" "+ ior_OUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1364,7 +1531,18 @@ namespace CxjText.utlis
                         break;
 
                     }
-                    default:
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        c16 = (String)jObjectD["ior_HMC"];
+                        if (c16 == null || c16.Equals("null"))
+                        {
+                            c16 = "";
+                        }
+                        break;
+
+                    }
+                default:
                         break;
                 }
                 return c16;
@@ -1533,6 +1711,28 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ior_HRC = (String)jObjectD["ior_HRC"];
+                        if (String.IsNullOrEmpty(ior_HRC) || ior_HRC.Trim().Equals("0"))
+                        {
+                            c17 = "";
+                        }
+                        else
+                        {
+                            bool strong = (bool)jObjectD["strong"];
+                            if (!strong)
+                            {
+                                c17 = ((String)jObjectD["hratio"]).Replace(" ", "") + " " + ior_HRC;
+                            }
+                            else
+                            {
+                                c17 = ior_HRC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1650,6 +1850,21 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String ior_HOUC = (String)jObjectD["ior_HOUC"];
+                        String hratio_u = (String)jObjectD["hratio_u"];
+                        if (String.IsNullOrEmpty(hratio_u))
+                        {
+                            c18 = "";
+                        }
+                        else
+                        {
+                            c18 = hratio_u + " " + ior_HOUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1730,6 +1945,17 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        c23 = (String)jObjectD["ior_MN"];
+                        if (c23 == null || c23.Equals("null"))
+                        {
+                            c23 = "";
+                        }
+                        break;
+
+                    }
                 default:
                     break;
             }
@@ -1797,6 +2023,17 @@ namespace CxjText.utlis
                         JObject jObjectF = (JObject)obj;
                         c26 = (String)jObjectF["u_capot_d"];
                         if (String.IsNullOrEmpty(c26) || c26.Equals("0"))
+                        {
+                            c26 = "";
+                        }
+                        break;
+
+                    }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        c26 = (String)jObjectD["ior_HMN"];
+                        if (c26 == null || c26.Equals("null"))
                         {
                             c26 = "";
                         }
@@ -1942,8 +2179,14 @@ namespace CxjText.utlis
                     }
                 case "F":
                     {
-                        JObject jObjectC = (JObject)obj;
-                        mid = (String)jObjectC["matchesDetailId"];
+                        JObject jObjectF = (JObject)obj;
+                        mid = (String)jObjectF["matchesDetailId"];
+                        break;
+                    }
+                case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        mid = (String)jObjectD["gid"];
                         break;
                     }
                 default:

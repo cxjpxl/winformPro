@@ -144,6 +144,12 @@ namespace CxjText.views
                         rltObj = DataUtils.updateUI(jObject, "F");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
+                    else if (userInfo.tag.Equals("D"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "D");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
                     else
                     {
                         mid = "";
