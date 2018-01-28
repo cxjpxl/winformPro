@@ -410,5 +410,35 @@ namespace CxjText.utlis
             user.money = moneyStr;
             return 1;
         }
+
+        //获取D的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetDMoney(UserInfo user)
+        {
+            String uid = user.uid;
+            if (String.IsNullOrEmpty(uid))
+            {
+                return -1;
+            }
+            //添加cookie到头部 
+            user.cookie.Add(new Cookie("account", user.user, "/", user.baseUrl));
+            String moneyUrl = user.dataUrl + "/api/user/info";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/views/main.html";
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
+            Console.WriteLine(moneyRlt);
+            if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
+            {
+                return 0;
+            }
+            JObject jObject = JObject.Parse(moneyRlt);
+            if (jObject["extInfo"] == null) return 0;
+            JObject extInfo = (JObject)jObject["extInfo"];
+            if (extInfo["money"] == null) return 0;
+            String moneyStr =(String) extInfo["money"];
+            user.money = moneyStr;
+            return 1;
+        }
     }
 }
