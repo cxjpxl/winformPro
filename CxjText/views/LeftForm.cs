@@ -441,6 +441,7 @@ namespace CxjText.views
                 { //B系统要先请求这个参数的东西才能下单
                     jObject["C_Str"] = dataJObject["C_Str"];
                     jObject["isDuYing"] = dataJObject["isDuYing"];
+                    jObject["money"] = inputMoney;
                 }
                 else if (user.tag.Equals("I"))
                 {

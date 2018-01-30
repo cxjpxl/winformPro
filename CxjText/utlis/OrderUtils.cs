@@ -106,7 +106,7 @@ namespace CxjText.utlis
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             String C_Str = (String)jobject["C_Str"];
-
+            int money = (int)jobject["money"];
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
@@ -157,11 +157,11 @@ namespace CxjText.utlis
                 bool isDuYing = (bool)jobject["isDuYing"];
                 if (isDuYing)
                 {
-                    bet_win = float.Parse(bet_point) * user.inputMoney;
+                    bet_win = float.Parse(bet_point) * money;
                 }
                 else
                 {
-                    bet_win = float.Parse(bet_point) * user.inputMoney + user.inputMoney;
+                    bet_win = float.Parse(bet_point) * money + money;
                 }
 
             }
@@ -179,7 +179,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            orderStr = "touzhutype=0&" + orderStr + "bet_money=" + user.inputMoney + "&bet_win=" + bet_win;
+            orderStr = "touzhutype=0&" + orderStr + "bet_money=" + money + "&bet_win=" + bet_win;
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
@@ -1603,11 +1603,15 @@ namespace CxjText.utlis
             String configRlt = HttpUtils.HttpGetHeader(configUrl, "", user.cookie, headJObject);
             if (String.IsNullOrEmpty(configRlt)||!configRlt.Equals("false"))
             {
-
+                
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "配置订单失败");
+                        String str = "配置订单失败";
+                        if (configRlt.Equals("true")) {
+                            str = "盘口已关闭，请重新刷新";
+                        }
+                        rltForm.RefershLineData(inputTag, str);
                     }
                 }));
                 return;
