@@ -291,7 +291,7 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
             String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl + "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-
+            Console.WriteLine(orderBetStr);
             if (!FormUtils.IsJsonObject(orderBetStr))
             {
                 leftForm.Invoke(new Action(() => {
@@ -303,6 +303,7 @@ namespace CxjText.utlis
                 return;
             }
             JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
+           
             if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null || !((String)orderBJObect["1"]).Equals("滚球足球")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -342,6 +343,7 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl + "/app/hsport/sports/order_buy";
             String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
             String orderStr = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(orderStr);
             if (!FormUtils.IsJsonArray(orderStr)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)

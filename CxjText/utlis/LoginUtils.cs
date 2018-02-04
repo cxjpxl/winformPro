@@ -280,6 +280,7 @@ namespace CxjText.utlis
                               Config.codeAppId, Config.codeSerect,
                               AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
                               1004, 20, codeStrBuf);
+            Console.WriteLine(num);
             if (num <= 0)
             {
                 userInfo.loginFailTime++;
@@ -296,6 +297,7 @@ namespace CxjText.utlis
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+            Console.WriteLine(rltStr);
             if (rltStr == null)
             {
                 userInfo.loginFailTime++;

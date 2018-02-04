@@ -688,7 +688,8 @@ namespace CxjText.views
                             }
                         }
                     }
-                    else {
+                    else
+                    {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
                             String data = "";
@@ -710,10 +711,11 @@ namespace CxjText.views
                             }
                         }
                     }
-                    
+
                 }
-                else {  //全场的情况下
-               
+                else if (enventInfo.bangchangType == 2)
+                {  //全场的情况下
+
                     for (int i = 0; i < searchArray.Count; i++)
                     {
                         String data = "";
@@ -734,6 +736,33 @@ namespace CxjText.views
                             break;
                         }
                     }
+                }
+                else if (enventInfo.bangchangType == 3)  //上半场
+                {
+                    if (!isBanChang) return;
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = "";
+                        if (isH)
+                        {
+                            data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                        }
+                        else
+                        {
+                            data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
+                        }
+
+                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                        {
+                            obj = searchArray[i];
+                            selectDaXiao = true;
+                            isBanChang = true;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    return;
                 }
             }
             else { //让球的情况处理
@@ -762,7 +791,8 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null) {
+                        if (obj == null)
+                        {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
                                 String data = "";
@@ -810,7 +840,8 @@ namespace CxjText.views
                             }
                         }
 
-                        if (obj == null) {
+                        if (obj == null)
+                        {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
                                 String data = "";
@@ -831,14 +862,15 @@ namespace CxjText.views
                                     break;
                                 }
                             }
-                        } 
+                        }
                     }
                 }
                 else if (enventInfo.bangchangType == 1)//半场的情况下
                 {
                     if (isBanChang)
                     {
-                        for (int i = 0; i < searchArray.Count; i++) {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
                             String data = "";
                             if (isH)
                             {
@@ -857,7 +889,8 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null) {
+                        if (obj == null)
+                        {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
                                 String data = "";
@@ -879,7 +912,9 @@ namespace CxjText.views
                                 }
                             }
                         }
-                    }else{
+                    }
+                    else
+                    {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
                             String data = "";
@@ -900,7 +935,8 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null) {
+                        if (obj == null)
+                        {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
                                 String data = "";
@@ -921,13 +957,14 @@ namespace CxjText.views
                                     break;
                                 }
                             }
-                        }                          
+                        }
                     }
                 }
-                else  //全场的情况下
-                {  
+                else if (enventInfo.bangchangType == 2)//全场的情况下
+                {
                     //优先查找0/0.5  赔率>0.7
-                    for (int i = 0; i < searchArray.Count; i++) {
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
                         String data = "";
                         if (isH)
                         {
@@ -945,7 +982,8 @@ namespace CxjText.views
                             break;
                         }
                     }
-                    if (obj == null) {
+                    if (obj == null)
+                    {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
                             String data = "";
@@ -967,6 +1005,59 @@ namespace CxjText.views
                             }
                         }
                     }
+                }
+                else if (enventInfo.bangchangType == 3) //上半场
+                {
+                    if (!isBanChang) return;
+                    if (isBanChang)
+                    {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                            }
+
+                            if (StringComPleteUtils.isPingBanDa07(data))
+                            {
+                                obj = searchArray[i];
+                                selectDaXiao = false;
+                                isBanChang = true;
+                                break;
+                            }
+                        }
+                        if (obj == null)
+                        {
+                            for (int i = 0; i < searchArray.Count; i++)
+                            {
+                                String data = "";
+                                if (isH)
+                                {
+                                    data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                                }
+                                else
+                                {
+                                    data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                                }
+
+                                if (StringComPleteUtils.isDa07(data))
+                                {
+                                    obj = searchArray[i];
+                                    selectDaXiao = false;
+                                    isBanChang = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    return;
                 }
             }
             /*******************处理自动下注结束********************************/

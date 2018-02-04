@@ -57,6 +57,7 @@
             this.putAuto = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -302,7 +303,7 @@
             this.groupBox2.Controls.Add(this.panel1);
             this.groupBox2.Location = new System.Drawing.Point(999, 453);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(226, 203);
+            this.groupBox2.Size = new System.Drawing.Size(286, 203);
             this.groupBox2.TabIndex = 22;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "自动下注";
@@ -343,12 +344,13 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.shangBcrBtn);
             this.groupBox3.Controls.Add(this.quanCRadio);
             this.groupBox3.Controls.Add(this.AutoBanChang);
             this.groupBox3.Controls.Add(this.bangCRadio);
             this.groupBox3.Location = new System.Drawing.Point(11, 44);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 50);
+            this.groupBox3.Size = new System.Drawing.Size(260, 50);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "场景";
@@ -365,6 +367,17 @@
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
+            // 
+            // shangBcrBtn
+            // 
+            this.shangBcrBtn.AutoSize = true;
+            this.shangBcrBtn.Location = new System.Drawing.Point(165, 20);
+            this.shangBcrBtn.Name = "shangBcrBtn";
+            this.shangBcrBtn.Size = new System.Drawing.Size(59, 16);
+            this.shangBcrBtn.TabIndex = 19;
+            this.shangBcrBtn.TabStop = true;
+            this.shangBcrBtn.Text = "上半场";
+            this.shangBcrBtn.UseVisualStyleBackColor = true;
             // 
             // MainFrom
             // 
@@ -428,5 +441,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.RadioButton putZaDan;
         private System.Windows.Forms.RadioButton putAuto;
+        private System.Windows.Forms.RadioButton shangBcrBtn;
     }
 }

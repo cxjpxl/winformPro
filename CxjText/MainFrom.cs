@@ -163,8 +163,6 @@ namespace CxjText
                 num = 0;
             }
 
-
-
             //删除缓存列表数据
             OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 100 * 60 * 1000));
 
@@ -602,7 +600,7 @@ namespace CxjText
         {
             return autoCheck.Checked;
         }
-        //获取半场选择  默认返回0   半场返回1   全场返回2
+        //获取半场选择  默认返回0   半场返回1   全场返回2  上半场返回3
         public int GetBanChangSelected()
         {
             if (AutoBanChang.Checked) {
@@ -617,6 +615,10 @@ namespace CxjText
             if (quanCRadio.Checked)
             {
                 return 2;
+            }
+
+            if (shangBcrBtn.Checked) {
+                return 3;
             }
             return 0;
         }
