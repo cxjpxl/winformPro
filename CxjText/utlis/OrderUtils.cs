@@ -291,7 +291,6 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
             String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl + "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            Console.WriteLine(orderBetStr);
             if (!FormUtils.IsJsonObject(orderBetStr))
             {
                 leftForm.Invoke(new Action(() => {
@@ -343,7 +342,6 @@ namespace CxjText.utlis
             String orderUrl = user.dataUrl + "/app/hsport/sports/order_buy";
             String orderP = "money=" + money + "&t=" + FormUtils.getCurrentTime();
             String orderStr = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-            Console.WriteLine(orderStr);
             if (!FormUtils.IsJsonArray(orderStr)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -417,7 +415,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "获取订单接口失败");
                     }
                 }));
                 return;
@@ -469,7 +467,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "失败");
+                        rltForm.RefershLineData(inputTag, "获取订单参数失败");
                     }
                 }));
                 return;
@@ -501,13 +499,13 @@ namespace CxjText.utlis
 
             orderPrams = orderPrams + "autoOdd=Y&gold=" + money;
             String orderUrl = user.dataUrl + "/app/FtOrder/FT_Order_" + rString.Replace("r", "R");
+
             if (!String.IsNullOrEmpty(orderUrl1))
             {
                 orderUrl = user.dataUrl + orderUrl1;
             }
             headJObject["Referer"] = brtUrl;
             String orderRltStr = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-         //   Console.WriteLine(orderRltStr);
             if (String.IsNullOrEmpty(orderRltStr) || !orderRltStr.Contains("成功提交注单")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1183,7 +1181,6 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
-           // Console.WriteLine(betRlt);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1300,7 +1297,6 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1502,7 +1498,6 @@ namespace CxjText.utlis
             String orderParStr = "data=" + WebUtility.UrlEncode(dataStr) + "&Mix=0&Live=1&autoAccept=1&task=bet&matchType=2";
             String orderUrl = user.dataUrl + "/MatchInfoServlet";
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl,orderParStr, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
-        //    Console.WriteLine(orderRlt);
             if (String.IsNullOrEmpty(orderRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
