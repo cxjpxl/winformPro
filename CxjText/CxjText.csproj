@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bean\AutoData.cs" />
+    <Compile Include="bean\Eid.cs" />
     <Compile Include="bean\EnventInfo.cs" />
     <Compile Include="bean\EnventShowInfo.cs" />
     <Compile Include="bean\InputInfo.cs" />

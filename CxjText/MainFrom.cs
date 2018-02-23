@@ -23,6 +23,8 @@ namespace CxjText
         private WebSocketUtils webSocketUtils = null;
         private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+
+        private List<Eid> listEid = new List<Eid>(); //eid事件储存
         
         public MainFrom()
         {
@@ -164,9 +166,12 @@ namespace CxjText
             }
 
             //删除缓存列表数据
-            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 100 * 60 * 1000));
+            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 120 * 60 * 1000));
 
-
+            if (listEid != null && listEid.Count > 0) {
+                listEid.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 120 * 60 * 1000));
+            }
+            
 
             if (this.loginForm == null) return;
             //获取当前选中的行
@@ -381,6 +386,41 @@ namespace CxjText
             if (jObject["game"] == null || jObject["data"] == null) return;
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
+            String EID = (String)jObject["data"]["EID"];
+
+            try
+            {
+                int eidInt = int.Parse(EID);
+                Eid eid = listEid.Find(j => j.mid.Equals(mid));
+                if (eid != null)
+                {
+                    if (eidInt - eid.eid > 0)
+                    {
+                        listEid.RemoveAll(j => j.mid.Equals(mid));
+                        Eid eidEvent = new Eid();
+                        eidEvent.mid = mid;
+                        eidEvent.eid = eidInt;
+                        eidEvent.time = FormUtils.getCurrentTime();
+                        listEid.Add(eidEvent);
+                    }
+                    else {
+                        return; 
+                    }
+                }
+                else {
+                    Eid eidEvent = new Eid();
+                    eidEvent.mid = mid;
+                    eidEvent.eid = eidInt;
+                    eidEvent.time = FormUtils.getCurrentTime();
+                    listEid.Add(eidEvent);
+
+                }
+
+            }
+            catch (Exception e11) {
+
+            }
+
 
 
             EnventInfo enventInfo = new EnventInfo();
