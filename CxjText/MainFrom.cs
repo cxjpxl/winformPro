@@ -160,7 +160,10 @@ namespace CxjText
             {
                 if (webSocketUtils != null)
                 {
-                    webSocketUtils.send("11111");
+                    JObject jObject = new JObject();
+                    jObject["user"] = Config.softUserStr;
+                    jObject["version"] = Config.vString;
+                    webSocketUtils.send(jObject.ToString());
                 }
                 num = 0;
             }
@@ -374,12 +377,12 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
+           // Console.WriteLine(message);
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
                 return;
             }
-
-            Console.WriteLine(message);
+            
             JObject jObject = JObject.Parse(message);
             if (leftForm == null) return;
             if (this.isFinish) return;

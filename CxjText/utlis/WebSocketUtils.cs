@@ -1,4 +1,6 @@
 ﻿using CxjText.iface;
+using CxjText.utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 using System.Threading;
@@ -40,10 +42,6 @@ namespace CxjText.utlis
                 {
                     webSocket.Close();
                 }
-                else
-                {
-                    socketInit();
-                }
                 return;
             }
             else {
@@ -62,10 +60,6 @@ namespace CxjText.utlis
                     if (webSocket != null)
                     {
                         webSocket.Close();
-                    }
-                    else
-                    {
-                        socketInit();
                     }
 
                 }
@@ -87,7 +81,10 @@ namespace CxjText.utlis
                     Console.WriteLine("OnOpen");
                     contentStatus = 1;
                     isError = false;
-                    send("1111");
+                    JObject jObject = new JObject();
+                    jObject["user"] = Config.softUserStr;
+                    jObject["version"] = Config.vString;
+                    send(jObject.ToString());
                 };
 
                 webSocket.OnError += (ss, ee) => {
@@ -99,10 +96,6 @@ namespace CxjText.utlis
                         if (webSocket != null)
                         {
                             webSocket.Close();
-                        }
-                        else
-                        {
-                            socketInit();
                         }
                     }
                     
