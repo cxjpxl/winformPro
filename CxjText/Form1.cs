@@ -24,12 +24,6 @@ namespace CxjText
             dataInit();
             speakInit();
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
-            if (String.IsNullOrEmpty(uuid) &&(!Config.softUserStr.Equals("admin")|| !Config.softUserStr.Equals("admin-client")))
-            {
-                MessageBox.Show("获取设备信息错误!");
-                Application.Exit();
-                return;
-            }
             if (Config.softUserStr.Equals("admin")|| Config.softUserStr.Equals("admin-client")) {
                   codeUserEdit.Text = "cxj81886404";
                   codePwdEdit.Text = "cxj13580127662";
@@ -43,15 +37,7 @@ namespace CxjText
         {
             userText.Text = userText.Text.ToString().Trim() + "(" + Config.vString + ")";
             Config.codeMoneyStr = "";
-            if (Config.softUserStr.Contains("admin")) {
-                this.userContact.Text = Config.softUserStr + "  -  多系统支持版本"; 
-            }
-            else {
-                this.userContact.Text = Config.softUserStr;
-
-            }
             utlis.YDMWrapper.YDM_SetAppInfo(Config.codeAppId,Config.codeSerect);
-            
         }
 
 
@@ -76,13 +62,14 @@ namespace CxjText
             JObject jObject = (JObject)obj;
             String codeUserStr =(String) jObject["codeUserStr"];
             String codePwdStr = (String)jObject["codePwdStr"];
+            String userString = (String)jObject["user"];
 
             //登录验证软件是否过期
-          if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
+            if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
                 JObject loginObj = new JObject();
-                loginObj.Add("userName", Config.softUserStr);
+                loginObj.Add("userName", userString);
                 loginObj.Add("comId", uuid);
-                String loginStr = HttpUtils.HttpPost("http://47.88.168.99:8500/cxj/login", loginObj.ToString(), "application/json", null);
+                String loginStr = HttpUtils.HttpPost(Config.netUrl + "/cxj/login", loginObj.ToString(), "application/json", null);
                 if (String.IsNullOrEmpty(loginStr)||!FormUtils.IsJsonObject(loginStr)) {
                     Invoke(new Action(() =>
                     {
@@ -92,7 +79,6 @@ namespace CxjText
                     }));
                     return;
                 }
-
                 loginObj = JObject.Parse(loginStr);
                 int no = (int)loginObj["no"];
                 if (no != 200) {
@@ -106,6 +92,10 @@ namespace CxjText
                     return;
                 }
                 Config.softTime = (long)loginObj["time"];
+                if (!userString.Contains("admin")) //不是admin用户没有权限
+                {
+                    Config.urls = ((String)loginObj["urls"]).Replace(",","\t");
+                }
             }
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
@@ -155,6 +145,10 @@ namespace CxjText
             {
                 Config.codeUserStr = codeUserStr;
                 Config.codePwdStr = codePwdStr;
+                Config.softUserStr = userString;
+
+               
+
                 MainFrom mainFrom = new MainFrom();
                 mainFrom.Show();
                 this.Hide();
@@ -167,8 +161,15 @@ namespace CxjText
         {
             String codeUserStr = codeUserEdit.Text.ToString().Trim();
             String codePwdStr = codePwdEdit.Text.ToString().Trim();
+            String userStr = userEdit.Text.ToString().Trim();
+            if (String.IsNullOrEmpty(userStr) || String.IsNullOrEmpty(userStr))
+            {
+                MessageBox.Show("用户不能为空!");
+                return;
+            }
+
             if (String.IsNullOrEmpty(codeUserStr)|| String.IsNullOrEmpty(codePwdStr)) {
-                MessageBox.Show("用户或者密码不能为空!");
+                MessageBox.Show("打码用户或者密码不能为空!");
                 return;
             }
             //登录打码平台并记录在程序里面  并显示软件使用时间  时间优先级比较高  同时客户端记录软件使用时间
@@ -178,6 +179,7 @@ namespace CxjText
             JObject jobject = new JObject();
             jobject.Add("codeUserStr", codeUserStr);
             jobject.Add("codePwdStr", codePwdStr);
+            jobject.Add("user", userStr);
             Thread t = new Thread(new ParameterizedThreadStart(goLogin));
             t.Start(jobject);
         }
