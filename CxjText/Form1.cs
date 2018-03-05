@@ -23,6 +23,7 @@ namespace CxjText
             
             dataInit();
             speakInit();
+            userEdit.Focus();
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
             if (Config.softUserStr.Equals("admin")|| Config.softUserStr.Equals("admin-client")) {
                   codeUserEdit.Text = "cxj81886404";

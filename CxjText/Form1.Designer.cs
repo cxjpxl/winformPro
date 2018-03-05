@@ -104,7 +104,7 @@
             this.userEdit.Location = new System.Drawing.Point(201, 97);
             this.userEdit.Name = "userEdit";
             this.userEdit.Size = new System.Drawing.Size(172, 26);
-            this.userEdit.TabIndex = 9;
+            this.userEdit.TabIndex = 3;
             // 
             // label1
             // 
