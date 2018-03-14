@@ -209,10 +209,12 @@ namespace CxjText.views
             upDateRow();
         }
 
+        private bool isUpdate = false;
         //更新表格信息
         private void upDateRow()
         {
-            if (upDateList==null|| upDateList.Count==0||upDateList.Count > 1) return;
+            if (isUpdate || upDateList == null || upDateList.Count == 0 ) return;
+            isUpdate = true;
             int index = (int)upDateList[0];
             try {
                 UserInfo userInfo = (UserInfo)Config.userList[index];
@@ -263,6 +265,7 @@ namespace CxjText.views
                
                 Console.WriteLine(e.ToString());
             }
+            isUpdate = false;
             upDateList.RemoveAt(0);
             if (upDateList.Count >= 1) {
                 upDateRow(); //自己消耗自己的资源  防止线程阻塞

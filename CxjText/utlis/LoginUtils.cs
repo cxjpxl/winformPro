@@ -1381,37 +1381,40 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
             headJObject["Origin"] = userInfo.dataUrl;
-            /*String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
-           //获取登录的系统参数 
-          String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
-           String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, paramsStr, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-           if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt)) {
-               userInfo.loginFailTime++;
-               userInfo.status = 3;
-               loginForm.Invoke(new Action(() => {
-                   loginForm.AddToListToUpDate(position);
-               }));
-               return;
-           }
-           JObject rltJObject = JObject.Parse(checkLoginRlt);
-           if (((String)rltJObject["login_result"]).Equals("10") && (((String)rltJObject["code"]).Equals("102") || ((String)rltJObject["code"]).Equals("101")))
-           {
 
-           }
-           else {
-               //其他原因可能账号异常
-               userInfo.loginFailTime++;
-               userInfo.status = 3;
-               loginForm.Invoke(new Action(() => {
-                   loginForm.AddToListToUpDate(position);
-               }));
-               return;
-           }*/
+            String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
             //现在要登录处理
             String loginUrl = userInfo.dataUrl + "/v/user/login";
-            String loginP = "r="+FormUtils.getCurrentTime()+"&account="+userInfo.user+"&password="+userInfo.pwd+"&valiCode=";
+            String loginP = "r="+FormUtils.getCurrentTime()+"&account="+userInfo.user+"&password="+userInfo.pwd+"&valiCode="+ codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
             Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
