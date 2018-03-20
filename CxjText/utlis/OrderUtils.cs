@@ -533,6 +533,12 @@ namespace CxjText.utlis
 
             //获取钱
             int moneyStatus = MoneyUtils.GetUMoney(user);
+            //更新U的金额
+            int num = 0;
+            while (moneyStatus != 1 || num < 3) {
+                moneyStatus = MoneyUtils.GetUMoney(user);
+                num++;
+            }
             if (moneyStatus == 1)
             {
                 leftForm.Invoke(new Action(() =>

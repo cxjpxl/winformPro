@@ -1414,9 +1414,16 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
             //现在要登录处理
             String loginUrl = userInfo.dataUrl + "/v/user/login";
-            String loginP = "r="+FormUtils.getCurrentTime()+"&account="+userInfo.user+"&password="+userInfo.pwd+"&valiCode="+ codeStrBuf.ToString();
-            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            userInfo.cookie.Add(new Cookie("md5Password", "true", "/", FileUtils.changeBaseUrl(userInfo.baseUrl)));
+            String loginP = "r="+FormUtils.getCurrentTime()+"&account="+userInfo.user+"&password="+ FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
+            String rltStr = null;
+            rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
             Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
+            {
+                loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString(); 
+                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            }
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
             {
                 userInfo.loginFailTime++;

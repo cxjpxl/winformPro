@@ -374,7 +374,15 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetIMoney(userInfo);
                         break;
                     case "U":
+                        //获取钱
                         moneyStatus = MoneyUtils.GetUMoney(userInfo);
+                        //更新U的金额
+                        int num = 0;
+                        while (moneyStatus != 1 || num < 2)
+                        {
+                            moneyStatus = MoneyUtils.GetUMoney(userInfo);
+                            num++;
+                        }
                         break;
                     case "R":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)

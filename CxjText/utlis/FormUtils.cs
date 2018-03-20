@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using CxjText.bean;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Security.Cryptography;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -412,6 +413,32 @@ namespace CxjText.utlis
                 str = ts.Seconds + "s";
             }
             return str;
+        }
+
+
+        public static string GetMD5(string myString)
+        {
+            if (myString == null)
+            {
+                return null;
+            }
+
+            MD5 md5Hash = MD5.Create();
+
+            // 将输入字符串转换为字节数组并计算哈希数据 
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(myString));
+
+            // 创建一个 Stringbuilder 来收集字节并创建字符串 
+            StringBuilder sBuilder = new StringBuilder();
+
+            // 循环遍历哈希数据的每一个字节并格式化为十六进制字符串 
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // 返回十六进制字符串 
+            return sBuilder.ToString();
         }
 
     }

@@ -71,6 +71,7 @@ namespace CxjText
                 JObject loginObj = new JObject();
                 loginObj.Add("userName", userString);
                 loginObj.Add("comId", uuid);
+                loginObj.Add("version", Config.vString);
                 String loginStr = HttpUtils.HttpPost(Config.netUrl + "/cxj/login", loginObj.ToString(), "application/json", null);
                 if (String.IsNullOrEmpty(loginStr)||!FormUtils.IsJsonObject(loginStr)) {
                     Invoke(new Action(() =>
