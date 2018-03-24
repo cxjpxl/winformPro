@@ -1536,7 +1536,7 @@ namespace CxjText.utlis
                 return;
 
             }
-
+            Console.WriteLine(orderRlt);
             if (!orderRlt.Contains("下注成功"))
             {
 

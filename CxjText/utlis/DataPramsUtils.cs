@@ -848,7 +848,7 @@ namespace CxjText.utlis
         {
             JObject headJObject = new JObject();
             String dataUrl = userInfo.dataUrl + "/MatchInfoServlet?task=matches";
-            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Host"] = FileUtils.changeBaseUrl(dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
             String pStr = "task=matches&Type=3020000&pageNo=1&Live=1&Lsids=&special=";
             String rltStr = HttpUtils.HttpPostHeader(dataUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);

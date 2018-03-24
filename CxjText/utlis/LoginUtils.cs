@@ -1246,7 +1246,7 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            String codeUrl = userInfo.dataUrl + "/validCode?t=" + FormUtils.getCurrentTime();
+            String codeUrl = userInfo.loginUrl + "/validCode?t=" + FormUtils.getCurrentTime();
             int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -1274,7 +1274,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            String checkLoginUrl = userInfo.dataUrl + "/member/member";
+            String checkLoginUrl = userInfo.loginUrl + "/member/member";
             String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr)) {
@@ -1295,7 +1295,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            String loginMenUrl = userInfo.dataUrl + "/jsp/member/loginProtocol.jsp";
+            String loginMenUrl = userInfo.loginUrl + "/jsp/member/loginProtocol.jsp";
             rltStr = HttpUtils.HttpGetHeader(loginMenUrl,"",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("游戏协议"))
             {
@@ -1308,7 +1308,7 @@ namespace CxjText.utlis
             }
 
             //真正调用登录接口
-            String loginUrl = userInfo.dataUrl + "/member/member";
+            String loginUrl = userInfo.loginUrl + "/member/member";
             pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=denglu&rmNum=" + codeStrBuf.ToString();
             rltStr = HttpUtils.HttpPostHeader(loginUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
@@ -1330,6 +1330,58 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+            //获取数据接口
+            String getDataUrl = userInfo.loginUrl + "/member/flex?type=loginapi&key=ty&v="+FormUtils.getCurrentTime();
+            String rltString = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(rltString) || !rltString.Contains("var fo =")) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String[] strs = rltString.Split('\n');
+            String dataUrl = "";
+            String tokenUrl = "";
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (String.IsNullOrEmpty(str) || !str.Contains("var fo =")) {
+                    continue;
+                }
+
+
+                int index = str.IndexOf("var fo =");
+                str = str.Substring(index);
+
+                str = str.Replace("var fo =", "").Replace("\"","").Trim();
+                
+                String[] dataStrs = str.Split('?');
+                if (dataStrs.Length > 1) {
+                    tokenUrl = "https://" + str.Split(';')[0];
+                    dataUrl = "https://" + dataStrs[0];
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(dataUrl))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //保存地址并替换cookie里面的seeionId
+            userInfo.dataUrl = dataUrl;
+            headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(dataUrl);
+            headJObject["Origin"] = userInfo.dataUrl;
+            HttpUtils.HttpGetHeader(tokenUrl,"",userInfo.cookie, headJObject);
+
             //获取money 
             int moneyStatus = MoneyUtils.GetFMoney(userInfo);
             if (moneyStatus != 1)
@@ -1383,44 +1435,49 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
 
-            String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
-            if (codeNum < 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+          
+            
 
             headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
             //现在要登录处理
             String loginUrl = userInfo.dataUrl + "/v/user/login";
-            userInfo.cookie.Add(new Cookie("md5Password", "true", "/", FileUtils.changeBaseUrl(userInfo.baseUrl)));
             String loginP = "r="+FormUtils.getCurrentTime()+"&account="+userInfo.user+"&password="+ FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
             String rltStr = null;
             rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
             {
+                loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=";
+                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            }
+                if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
+            {
+                String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
+                int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+                if (codeNum < 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                //获取打码平台的码
+                StringBuilder codeStrBuf = new StringBuilder();
+                int num = YDMWrapper.YDM_EasyDecodeByPath(
+                                  Config.codeUserStr, Config.codePwdStr,
+                                  Config.codeAppId, Config.codeSerect,
+                                  AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                                  1004, 20, codeStrBuf);
+                if (num <= 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
                 loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString(); 
                 rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
             }

@@ -392,10 +392,10 @@ namespace CxjText.utlis
         public static int GetFMoney(UserInfo user)
         {
 
-            String moneyUrl = user.dataUrl + "/member/member?type=getAccountBalance";
+            String moneyUrl = user.loginUrl + "/member/member?type=getAccountBalance";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["Origin"] = user.dataUrl;
+            headJObject["Origin"] = user.loginUrl;
           //  headJObject["Referer"] = user.dataUrl + "/FootBall";
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "", user.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
