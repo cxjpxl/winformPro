@@ -1358,8 +1358,8 @@ namespace CxjText.utlis
             String limitPar ="";
             int isWho = 0;
             JObject orderObj = new JObject();
-          //  orderObj["matches"] = jObject["matchesDetailId"];
-          //  orderObj["league"] = jObject["matchesId"];
+            orderObj["matches"] = jObject["matchesDetailId"];
+            orderObj["league"] = jObject["matchesId"];
             orderObj["hcode"] = jObject["hcode"]; //唯一标识
             orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
             orderObj["plate"] = "H";
@@ -1387,6 +1387,7 @@ namespace CxjText.utlis
                         {
                             isWho = 2;
                         }
+                        orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
                         orderObj["betType"] = "3020012";
                         limitPar = "task=limit&Type=3020012";
                         rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020012" + "&plate=H&isWho=" + isWho;
@@ -1417,6 +1418,7 @@ namespace CxjText.utlis
                             isWho = 2;
                         }
                         orderObj["betType"] = "3020022";
+                        orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
                         limitPar = "task=limit&Type=3020022";
                         rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020022"  + "&plate=H&isWho=" + isWho;
                         inputType = inputType + "-半场让球";
@@ -1456,7 +1458,7 @@ namespace CxjText.utlis
                         {
                             isWho = 3;
                         }
-                        orderObj["liveGoals"] = (String)jObject["gscore"] + ":" + (String)jObject["hscore"];
+                        orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
                         orderObj["betType"] = "3020012";
                         limitPar = "task=limit&Type=3020012";
                         rltStr = "task=nowodds&isMix=" + jObject["isMix"] + "&type=3020012"  + "&plate=H&isWho="+ isWho;
@@ -1488,7 +1490,7 @@ namespace CxjText.utlis
                         {
                             isWho = 3;
                         }
-                        orderObj["liveGoals"] = (String)jObject["gscore"] + ":" + (String)jObject["hscore"];
+                        orderObj["liveGoals"] = (String)jObject["hscore"] + ":" + (String)jObject["gscore"];
                         orderObj["betType"] = "3020022";
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c17_data(jObject, tag);
