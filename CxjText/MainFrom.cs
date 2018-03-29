@@ -53,6 +53,7 @@ namespace CxjText
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
             webSocketUtils.setOnMessListener(this);
             speakInit();
+            Config.hasFitter = fitBox.Checked;
         }
 
         //初始化语音
@@ -796,6 +797,11 @@ namespace CxjText
                 }
                 this.setTextBox1Text((name));
             }
+        }
+
+        private void fitBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.hasFitter = fitBox.Checked;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CxjText.bean;
+using CxjText.utils;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -502,6 +503,10 @@ namespace CxjText.utlis
 
         //判断是属于过滤的联赛
         public static bool canAutoPut(String lianSai) {
+
+            if (!Config.hasFitter) {
+                return true;
+            }
 
             if (lianSai.Contains("圣保罗")) {
                 return true;
