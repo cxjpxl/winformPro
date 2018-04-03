@@ -184,6 +184,7 @@ namespace CxjText.utlis
                 if (hStr.Contains("[后]")) hStr = hStr.Replace("[后]", "");
                 if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
                 if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
+                if (hStr.Contains("II")) hStr = hStr.Replace("II", "");
                 hStr = hStr.Trim();
                 String[] hStrs = hStr.Split('U');
                 if (hStrs.Length > 1) {
@@ -205,6 +206,7 @@ namespace CxjText.utlis
                 if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
                 if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
                 if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
+                if (gStr.Contains("II")) gStr = gStr.Replace("II", "");
                 gStr = gStr.Trim();
                 String[] gStrs = gStr.Split('U');
                 if (gStrs.Length > 1)
@@ -233,7 +235,7 @@ namespace CxjText.utlis
 
            
                 //正着比较
-                if ( hRate > (decimal)0.55 && gRate > (decimal)0.55)
+                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                   
                     JObject jObject = new JObject();
@@ -281,7 +283,7 @@ namespace CxjText.utlis
 
                 
                 //反着比较
-                if ( hRate > (decimal)0.55 && gRate > (decimal)0.55)
+                if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                   
                     JObject jObject = new JObject();
@@ -441,6 +443,7 @@ namespace CxjText.utlis
                 if (hStr.Contains("[后]")) hStr = hStr.Replace("[后]", "");
                 if (hStr.Contains("(后)")) hStr = hStr.Replace("(后)", "");
                 if (hStr.Contains("(女)")) hStr = hStr.Replace("(女)", "");
+                if (hStr.Contains("II")) hStr = hStr.Replace("II", "");
                 hStr = hStr.Trim();
 
                 if (gStr.Contains("(中)")) gStr = gStr.Replace("(中)", "");
@@ -448,6 +451,7 @@ namespace CxjText.utlis
                 if (gStr.Contains("[后]")) gStr = gStr.Replace("[后]", "");
                 if (gStr.Contains("(后)")) gStr = gStr.Replace("(后)", "");
                 if (gStr.Contains("(女)")) gStr = gStr.Replace("(女)", "");
+                if (gStr.Contains("II")) gStr = gStr.Replace("II", "");
                 gStr = gStr.Trim();
 
 
@@ -482,7 +486,7 @@ namespace CxjText.utlis
                 }
                 decimal hRate = SpeedyCompute(teamNameH, hStr);
                 decimal gRate = SpeedyCompute(teamNameG, gStr);
-                if (hRate > (decimal)0.55&&gRate > (decimal)0.55)
+                if (hRate > (decimal)0.6&&gRate > (decimal)0.6)
                 {
                     if (isH) return zhuName;
                     else return geName;
@@ -490,7 +494,7 @@ namespace CxjText.utlis
                 //换过来比较
                  hRate = SpeedyCompute(teamNameH, gStr);
                  gRate = SpeedyCompute(teamNameG, hStr);
-                if (hRate > (decimal)0.55 && gRate > (decimal)0.55)
+                if (hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                     if (isH) return geName;
                     else return zhuName;

@@ -5,6 +5,17 @@ namespace CxjText.utlis
     public class DataUtils
     {
 
+
+        /********************获取角球************************/
+        public static bool getHasJiaoQiu(object obj, String tag) {
+
+            String hName = get_c02_data(obj, tag);
+            if (String.IsNullOrEmpty(hName)) return false;
+            if (hName.Contains("角球")) return true;
+            return false;
+
+        }
+
         /******************赛事名称*******************/
         public static String get_c00_data(object obj,String tag) {
             String c00 = "";
