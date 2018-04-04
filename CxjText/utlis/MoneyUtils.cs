@@ -392,7 +392,7 @@ namespace CxjText.utlis
         public static int GetFMoney(UserInfo user)
         {
 
-            String moneyUrl = user.loginUrl + "/member/member?type=getAccountBalance";
+            String moneyUrl = user.loginUrl + "/member/member?type=updateSessionMoney&api=1";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.loginUrl;
@@ -410,7 +410,6 @@ namespace CxjText.utlis
             user.money = moneyStr;
             return 1;
         }
-
         //获取D的money   1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetDMoney(UserInfo user)
         {
@@ -439,6 +438,31 @@ namespace CxjText.utlis
             String moneyStr =(String) extInfo["money"];
             user.money = moneyStr;
             return 1;
+        }
+        //获取E的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetEMoney(UserInfo user)
+        {
+            
+            String moneyUrl = user.dataUrl + "/meminfo.do";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(user.dataUrl) ;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/lotteryV3/index.do";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "","", user.cookie, headJObject);
+            //{"money":0.000000,"login":true,"account":"test1234"}
+
+            if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt) || !moneyRlt.Contains("money") || !moneyRlt.Contains("login")) {
+                return 0;
+            }
+
+            JObject moneyJObject = JObject.Parse(moneyRlt);
+            bool isLogin = (bool)moneyJObject["login"];
+            if (!isLogin) return -1;
+            String money = (String)moneyJObject["money"];
+            user.money = money;
+            return 1;
+           
         }
     }
 }

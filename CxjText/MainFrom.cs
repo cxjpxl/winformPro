@@ -43,11 +43,9 @@ namespace CxjText
                 Application.Exit();
                 return;
             }
-            // 消息列表 初始化
-            //if (Config.softUserStr.Contains("client"))
-           // {
-                this.MsgShowFormInit();
-           // }
+           
+            this.MsgShowFormInit();
+           
             ViewInit();
             this.upDateTimer.Start(); //启动定时任务器
             webSocketUtils = new WebSocketUtils(Config.webSocketUrl);
@@ -278,6 +276,9 @@ namespace CxjText
                         break;
                     case "D":
                         dataRtlStr = DataPramsUtils.getDData(userInfo);
+                        break;
+                    case "E":
+                        dataRtlStr = DataPramsUtils.getEData(userInfo);
                         break;
                     default:
                         break;
@@ -555,11 +556,10 @@ namespace CxjText
                 enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
 
                 //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
-              //  if (Config.softUserStr.Contains("client"))
-              //  {
+              
                     Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
                     t.Start(enventShowInfo);
-              //  }
+              
 
             }));
 

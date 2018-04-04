@@ -887,8 +887,6 @@ namespace CxjText.utlis
             jObject.Add("list", jArray);
             return jObject.ToString();
         }
-
-
         /***********************D系统获取数据*************************/
         public static String getDData(UserInfo userInfo)
         {
@@ -935,6 +933,94 @@ namespace CxjText.utlis
             jObject = new JObject();
             jObject.Add("list", jArray);
             return jObject.ToString();
+        }
+        /***********************E系统获取数据*******************************/
+        public static String getEData(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            String dataUrl = userInfo.dataUrl + "/sports/hg/getData.do";
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] =userInfo.dataUrl+ "/sports/hg/goPage.do?dataType=RB_FT_MN";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String dataP = "pageNo=1&gameType=FT_RB_MN&sortType=1";
+            String rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+            {
+                return null;
+            }
+
+            JObject jObject = new JObject();
+            JArray jArray = new JArray();
+            jObject["list"] = jArray;
+
+            JObject dataJObject = JObject.Parse(rltStr);
+            if (dataJObject["games"] == null || dataJObject["headers"] == null || dataJObject["pageCount"] == null) {
+                return jObject.ToString();
+            }
+
+            int pageCount = (int)dataJObject["pageCount"];
+            if (pageCount < 1) {
+                return jObject.ToString();
+            }
+
+            JArray headerKeys =(JArray) dataJObject["headers"];
+            JArray gameJArrays = (JArray)dataJObject["games"];
+            if (headerKeys.Count == 0 || gameJArrays.Count == 0) {
+                return jObject.ToString();
+            }
+
+            for (int i = 0; i < gameJArrays.Count; i++) {
+                JArray itemJArray = (JArray)gameJArrays[i];
+                JObject itemJObject = new JObject();
+                if (itemJArray.Count != headerKeys.Count) {
+                    continue;
+                }
+                for (int j = 0; j < headerKeys.Count; j++) {
+                    itemJObject[headerKeys[j]+""] = itemJArray[j];
+                }
+                jArray.Add(itemJObject);
+            }
+
+
+
+            for (int pageNo = 2; pageNo <= pageCount; pageNo++) {
+                 dataP = "pageNo="+pageNo+"&gameType=FT_RB_MN&sortType=1";
+                 rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+                {
+                    continue;
+                }
+                 
+                 dataJObject = JObject.Parse(rltStr);
+                if (dataJObject["games"] == null ||  dataJObject["pageCount"] == null)
+                {
+                    continue;
+                }
+                 gameJArrays = (JArray)dataJObject["games"];
+                if ( gameJArrays.Count == 0)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < gameJArrays.Count; i++)
+                {
+                    JArray itemJArray = (JArray)gameJArrays[i];
+                    JObject itemJObject = new JObject();
+                    if (itemJArray.Count != headerKeys.Count)
+                    {
+                        continue;
+                    }
+                    for (int j = 0; j < headerKeys.Count; j++)
+                    {
+                        itemJObject[headerKeys[j]+""] = itemJArray[j];
+                    }
+                    jArray.Add(itemJObject);
+                }
+            }
+
+            jObject["list"] = jArray;
+            return jObject.ToString() ;
         }
     }
 }

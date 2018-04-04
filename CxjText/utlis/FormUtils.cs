@@ -171,6 +171,12 @@ namespace CxjText.utlis
                         isUpdate = true;
                     }
                     break;
+                case "E":
+                    if (currentTime - userTime >= 5 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
                 default:
                     Console.WriteLine("系统待开发中!");
                     break;

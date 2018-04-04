@@ -15,7 +15,7 @@ namespace CxjText.utlis
         public static List<AutoData> autoLists = new List<AutoData>();
 
 
-        public static void addAutoData(String baseUrl,String mid ,long time, String gameTeam) {
+        public static void addAutoData(String baseUrl, String mid, long time, String gameTeam) {
             AutoData autoData = new AutoData();
             autoData.baseUrl = baseUrl;
             autoData.mid = mid;
@@ -32,14 +32,14 @@ namespace CxjText.utlis
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
-           
+
             //请求发出前先更新UI 标记http请求已发送
             JObject headJObject = new JObject();
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/sport/football.aspx?action=re&uid=" + user.uid;
             headJObject["Host"] = user.dataUrl;
             String orderUrl = user.dataUrl + "/sport/order_ft.aspx?uid=" + user.uid;
-                   String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            String rlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (rlt == null || rlt.IndexOf("false") >= 0 || rlt.Length > 0)
             {
 
@@ -65,7 +65,7 @@ namespace CxjText.utlis
                 if (rltForm != null)
                 {
                     if (jobject["gameMid"] != null) {
-                        addAutoData(user.baseUrl,(String) jobject["gameMid"], FormUtils.getCurrentTime(),(String)jobject["gameTeam"]);
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -100,7 +100,7 @@ namespace CxjText.utlis
         //B下单
         public static void OrderB(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
-         
+
             String parmsStr = (String)jobject["rlt"];//B系统里面参数
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
@@ -167,7 +167,7 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-               
+
                 //请求失败处理 UI处理
                 leftForm.Invoke(new Action(() =>
                 {
@@ -183,7 +183,7 @@ namespace CxjText.utlis
             //请求发出前先更新UI 标记http请求已发送
             String checkMoneyrUrl = user.dataUrl + "/checkxe.php";
             checkMoneyrUrl = checkMoneyrUrl + "?" + WebUtility.UrlEncode(C_Str); ;
-            String rlt = HttpUtils.HttpGetHeader(checkMoneyrUrl, "", user.cookie,headJObject);
+            String rlt = HttpUtils.HttpGetHeader(checkMoneyrUrl, "", user.cookie, headJObject);
             if (!FormUtils.IsJsonObject(rlt))
             {
                 //请求失败处理 UI处理
@@ -220,7 +220,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            
+
 
 
             //下单接口的请求
@@ -228,7 +228,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/left.php";
             String orderRlt = HttpUtils.HttpPostHeader(user.dataUrl + "/bet.php", orderStr,
-                "application/x-www-form-urlencoded",user.cookie, headJObject);
+                "application/x-www-form-urlencoded", user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -302,7 +302,7 @@ namespace CxjText.utlis
                 return;
             }
             JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
-           
+
             if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null || !((String)orderBJObect["1"]).Equals("滚球足球")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -486,7 +486,7 @@ namespace CxjText.utlis
                 }
             }
             catch (Exception e) {
-              
+
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -612,7 +612,7 @@ namespace CxjText.utlis
                 bType = int.Parse(parms[3]);
             }
             catch (Exception e) {
-               
+
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -949,7 +949,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String msg =(String) orderJObject["msg"];
+            String msg = (String)orderJObject["msg"];
             if (String.IsNullOrEmpty(msg)) {
                 if (rltForm != null)
                 {
@@ -1014,7 +1014,7 @@ namespace CxjText.utlis
         public static void OrderK(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
 
-            
+
             String reqUrl = (String)jobject["reqUrl"];//请求连接地址
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
@@ -1024,9 +1024,9 @@ namespace CxjText.utlis
 
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid="+ user.uid + "&langx=zh-cn";
-            String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl+"?"+ parmsStr;
-            String betRlt = HttpUtils.HttpGetHeader(betUrl,"",user.cookie,headJObject);
+            headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
+            String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
+            String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("确定交易")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1089,7 +1089,7 @@ namespace CxjText.utlis
                 return;
             }
 
-        
+
             try
             {
                 int minMoney = int.Parse(gmin_single);
@@ -1115,7 +1115,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            orderPrams = orderPrams + "gold=" + money+ "&autoOdd=Y";
+            orderPrams = orderPrams + "gold=" + money + "&autoOdd=Y";
             if (String.IsNullOrEmpty(orderUrl1)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1142,7 +1142,7 @@ namespace CxjText.utlis
                         else {
                             rltForm.RefershLineData(inputTag, "下单失败");
                         }
-                        
+
                     }
                 }));
                 return;
@@ -1206,9 +1206,9 @@ namespace CxjText.utlis
             {
                 String str = strs[i].Trim();
 
-                if (str.Contains("<form")&&str.Contains("action=\"")) {
+                if (str.Contains("<form") && str.Contains("action=\"")) {
                     int startIndex = str.IndexOf("action=\"");
-                    str = str.Substring(startIndex+8, str.Length - (startIndex+8));
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
                     startIndex = str.IndexOf("\"");
                     str = str.Substring(0, startIndex);
                     orderUrl1 = str.Trim();
@@ -1236,14 +1236,14 @@ namespace CxjText.utlis
                     //C处理
                     if (nameKey.Equals("bet_url"))
                     {
-                        
+
                         orderPrams = orderPrams + nameKey + "=" + WebUtility.UrlEncode(valueStr) + "&";
                     }
                     else {
                         //数据解析出来
                         orderPrams = orderPrams + nameKey + "=" + valueStr + "&";
                     }
-                   
+
                 }
             }
             if (String.IsNullOrEmpty(orderUrl1))
@@ -1349,7 +1349,7 @@ namespace CxjText.utlis
         //F下单
         public static void OrderF(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
-            
+
             JObject orderObj = (JObject)jobject["orderObj"];
             String limitPar = (String)jobject["limitPar"];//请求连接地址
             String parmsStr = (String)jobject["rlt"];
@@ -1360,57 +1360,55 @@ namespace CxjText.utlis
 
 
             String hcode = (String)orderObj["hcode"];
-           /*   String dataRlt = DataPramsUtils.getFData(user);
-              if (String.IsNullOrEmpty(dataRlt) || !FormUtils.IsJsonObject(dataRlt)) {
-                  leftForm.Invoke(new Action(() => {
-                      if (rltForm != null)
-                      {
-                          rltForm.RefershLineData(inputTag, "获取数据失败");
-                      }
-                  }));
-                  return;
-              }
+            /*   String dataRlt = DataPramsUtils.getFData(user);
+               if (String.IsNullOrEmpty(dataRlt) || !FormUtils.IsJsonObject(dataRlt)) {
+                   leftForm.Invoke(new Action(() => {
+                       if (rltForm != null)
+                       {
+                           rltForm.RefershLineData(inputTag, "获取数据失败");
+                       }
+                   }));
+                   return;
+               }
 
-              JObject dataJObject = JObject.Parse(dataRlt);
-              JArray dataJArray = (JArray)dataJObject["list"];
-              if (dataJArray.Count == 0) {
-                  leftForm.Invoke(new Action(() => {
-                      if (rltForm != null)
-                      {
-                          rltForm.RefershLineData(inputTag, "该网站无数据");
-                      }
-                  }));
-                  return;
-              }
-              JObject curJObject = null;
-              for(int  i = 0; i < dataJArray.Count; i++)
-              {
-                  JObject temp = (JObject)dataJArray[i];
-                  if (((String)(temp["hcode"])).Equals(hcode)) {
-                      curJObject = temp;
-                      break;
-                  }
-              }
-              if (curJObject == null|| curJObject["matchesDetailId"]==null) {
-                  leftForm.Invoke(new Action(() => {
-                      if (rltForm != null)
-                      {
-                          rltForm.RefershLineData(inputTag, "该网站无该比赛数据");
-                      }
-                  }));
-                  return;
-              }
+               JObject dataJObject = JObject.Parse(dataRlt);
+               JArray dataJArray = (JArray)dataJObject["list"];
+               if (dataJArray.Count == 0) {
+                   leftForm.Invoke(new Action(() => {
+                       if (rltForm != null)
+                       {
+                           rltForm.RefershLineData(inputTag, "该网站无数据");
+                       }
+                   }));
+                   return;
+               }
+               JObject curJObject = null;
+               for(int  i = 0; i < dataJArray.Count; i++)
+               {
+                   JObject temp = (JObject)dataJArray[i];
+                   if (((String)(temp["hcode"])).Equals(hcode)) {
+                       curJObject = temp;
+                       break;
+                   }
+               }
+               if (curJObject == null|| curJObject["matchesDetailId"]==null) {
+                   leftForm.Invoke(new Action(() => {
+                       if (rltForm != null)
+                       {
+                           rltForm.RefershLineData(inputTag, "该网站无该比赛数据");
+                       }
+                   }));
+                   return;
+               }
 
 
 
-              orderObj["matches"] = curJObject["matchesDetailId"];
-              orderObj["league"] = curJObject["matchesId"];
-         */
+               orderObj["matches"] = curJObject["matchesDetailId"];
+               orderObj["league"] = curJObject["matchesId"];
+          */
 
 
             parmsStr = parmsStr + "&matid=" + orderObj["matches"];
-
-            Console.WriteLine(parmsStr);
 
             JObject headJObject = new JObject();
             headJObject = new JObject();
@@ -1419,10 +1417,10 @@ namespace CxjText.utlis
             headJObject["Referer"] = user.dataUrl + "/jsp/member/sports/sportsLeft.jsp";
             String betUrl = user.dataUrl + "/MatchInfoServlet";
             String betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
-           
+
             if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt))
             {
-              
+
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -1433,15 +1431,15 @@ namespace CxjText.utlis
             }
 
             JObject betJObject = JObject.Parse(betRlt);
-            String matches =(String)  orderObj["matches"] ;
+            String matches = (String)orderObj["matches"];
             String league = (String)orderObj["league"];
-            String liveGoals = (String)orderObj["liveGoals"] ;
-            
-            String plate  = (String)orderObj["plate"];
+            String liveGoals = (String)orderObj["liveGoals"];
+
+            String plate = (String)orderObj["plate"];
             String betWho = (String)orderObj["betWho"];
             String betType = (String)orderObj["betType"];
 
-            String betOdds =(String) betJObject["odds"];
+            String betOdds = (String)betJObject["odds"];
             String showOdds = "";
             if (betJObject["exodds"] == null)
             {
@@ -1457,20 +1455,20 @@ namespace CxjText.utlis
                 betDetail = betDetail.Replace(" ", "");
             }
             //matches 1602976,betType 3020012,betOdds 0.87,showOdds 0.87,betDetail 0.5,betWho 0,money 10,league 66046,isToday 2,plate H,liveGoals 1:0
-            String dataStr = "matches "+matches
-                            +",betType "+betType
-                            +",betOdds "+ betOdds + ",showOdds "+ showOdds + ",betDetail "
+            String dataStr = "matches " + matches
+                            + ",betType " + betType
+                            + ",betOdds " + betOdds + ",showOdds " + showOdds + ",betDetail "
                             + betDetail + ","
-                            +"betWho "+betWho
-                            +",money "+money+",league "+league
-                            +",isToday 2,plate "+plate
-                            +",liveGoals "+liveGoals;
+                            + "betWho " + betWho
+                            + ",money " + money + ",league " + league
+                            + ",isToday 2,plate " + plate
+                            + ",liveGoals " + liveGoals;
             headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(user.dataUrl);
             headJObject["Origin"] = user.dataUrl;
             String orderParStr = "data=" + WebUtility.UrlEncode(dataStr) + "&Mix=0&Live=1&autoAccept=1&task=bet&matchType=2";
             String orderUrl = user.dataUrl + "/MatchInfoServlet";
-            String orderRlt = HttpUtils.HttpPostHeader(orderUrl,orderParStr, "application/x-www-form-urlencoded; charset=UTF-8",user.cookie,headJObject);
+            String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderParStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1503,7 +1501,7 @@ namespace CxjText.utlis
                 return;
 
             }
-        
+
             if (!orderRlt.Contains("下注成功"))
             {
 
@@ -1514,7 +1512,7 @@ namespace CxjText.utlis
                     }
                 }));
                 return;
-               
+
             }
 
             leftForm.Invoke(new Action(() => {
@@ -1556,24 +1554,24 @@ namespace CxjText.utlis
         public static void OrderD(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
 
-        
+
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             int money = (int)jobject["money"];
             String gid = (String)jobject["gid"];
-           
+
             JObject headJObject = new JObject();
             headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/sports/main.html";
-            String configUrl = user.dataUrl + "/api/sports/validateGrounderConfig?"+ parmsStr;
+            String configUrl = user.dataUrl + "/api/sports/validateGrounderConfig?" + parmsStr;
             String configRlt = HttpUtils.HttpGetHeader(configUrl, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(configRlt)||!configRlt.Equals("false"))
+            if (String.IsNullOrEmpty(configRlt) || !configRlt.Equals("false"))
             {
-                
+
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -1590,7 +1588,7 @@ namespace CxjText.utlis
 
             String betUrl = user.dataUrl + "/api/sports/getMatch";
             String betP = "{\"list\":[{\"sportType\":\"ft_rb_re\",\"gid\":" + gid + "}]}";
-            String betRlt = HttpUtils.HttpPostHeader(betUrl,betP, "application/json", user.cookie,headJObject);
+            String betRlt = HttpUtils.HttpPostHeader(betUrl, betP, "application/json", user.cookie, headJObject);
             if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -1601,7 +1599,7 @@ namespace CxjText.utlis
                 return;
             }
             JObject betJObject = JObject.Parse(betRlt);
-            if (betJObject == null || betJObject["list"] == null || betJObject["list"][0]== null) {
+            if (betJObject == null || betJObject["list"] == null || betJObject["list"][0] == null) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
@@ -1618,7 +1616,7 @@ namespace CxjText.utlis
             JArray jArray = new JArray();
             JObject betItems = new JObject();
             betItems["sportType"] = "ft_rb_re";
-            String betType =(String) jobject["betType"];
+            String betType = (String)jobject["betType"];
             betItems["betType"] = betType;
             betItems["betInfo"] = "";
             betItems["gid"] = betJObject["gid"];
@@ -1666,39 +1664,39 @@ namespace CxjText.utlis
                     isDuying = true;
                     break;
                 case "ior_HMN"://和半场独赢
-                     isDuying = true;
+                    isDuying = true;
                     break;
             }
             betItems["odds"] = odds;//未出理
             betItems["strong"] = betJObject["strong"];
-            betItems["handlerConfirm"] =true;
+            betItems["handlerConfirm"] = true;
             jArray.Add(betItems);
             dataJObject["betItems"] = jArray;
-            dataJObject["canWin"] = isDuying?money*(odds-1):money*odds; //还没有处理
+            dataJObject["canWin"] = isDuying ? money * (odds - 1) : money * odds; //还没有处理
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, dataJObject.ToString(), "application/json", user.cookie, headJObject);
-           
-                if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
-                {
-                    leftForm.Invoke(new Action(() => {
-                        if (rltForm != null)
-                        {
-                            rltForm.RefershLineData(inputTag, "下单失败");
-                        }
-                    }));
-                    return;
-                }
 
-                JObject orderRltObj = JObject.Parse(orderRlt);
-                if (orderRltObj["success"] == null || !((bool)orderRltObj["success"]))
-                {
-                    leftForm.Invoke(new Action(() => {
-                        if (rltForm != null)
-                        {
-                            rltForm.RefershLineData(inputTag, "下单失败");
-                        }
-                    }));
-                    return;
-                }
+            if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+
+            JObject orderRltObj = JObject.Parse(orderRlt);
+            if (orderRltObj["success"] == null || !((bool)orderRltObj["success"]))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
 
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
@@ -1735,6 +1733,105 @@ namespace CxjText.utlis
                     }
                 }));
             }
+        }
+        //E下单
+        public static void OrderE(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+
+            JObject headJObject = new JObject();
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/sports/hg/index.do";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String betUrl = user.dataUrl + "/sports/hg/bet/getOdds.do";
+            String betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt) || !betRlt.Contains("gid") || !betRlt.Contains("odds")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单参数失败");
+                    }
+                }));
+                return;
+            }
+
+            JObject betRltObj = JObject.Parse(betRlt);
+            JObject betJObject = (JObject)jobject["betJObject"];
+            betJObject["money"] = money;
+            betJObject["acceptBestOdds"] = true;
+            betJObject["items"][0]["oddds"] = betRltObj["odds"][0]["oddds"];
+
+            //下单 
+            String orderUrl = user.dataUrl + "/sports/hg/bet/bet.do";
+            String orderP =  "data=" + WebUtility.UrlEncode(betJObject.ToString());
+            String orderStr = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(orderStr) || !FormUtils.IsJsonObject(orderStr)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单接口失败");
+                    }
+                }));
+                return;
+            }
+
+            JObject orderJObject = JObject.Parse(orderStr);
+            if (orderJObject["success"] == null || !((bool)orderJObject["success"])) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败!");
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+           
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetEMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+
         }
     }
 }

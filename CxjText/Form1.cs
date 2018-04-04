@@ -25,7 +25,7 @@ namespace CxjText
             speakInit();
             userEdit.Focus();
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
-            if (Config.softUserStr.Equals("admin")|| Config.softUserStr.Equals("admin-client")) {
+            if (Config.softUserStr.Equals("admin")) {
                   userEdit.Text = Config.softUserStr;
                   codeUserEdit.Text = "cxj81886404";
                   codePwdEdit.Text = "cxj13580127662";
@@ -67,7 +67,7 @@ namespace CxjText
             String userString = (String)jObject["user"];
 
             //登录验证软件是否过期
-            if (!Config.softUserStr.Equals("admin")&& !Config.softUserStr.Equals("admin-client")) {
+            if (!Config.softUserStr.Equals("admin")) {
                 JObject loginObj = new JObject();
                 loginObj.Add("userName", userString);
                 loginObj.Add("comId", uuid);

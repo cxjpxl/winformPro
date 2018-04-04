@@ -71,8 +71,14 @@ namespace CxjText.utlis
                     }
                 case "D":
                     {
-                        JObject jObjectF = (JObject)obj;
-                        c00 = (String)jObjectF["league"];
+                        JObject jObjectD = (JObject)obj;
+                        c00 = (String)jObjectD["league"];
+                        break;
+                    }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c00 = (String)jObjectE["league"];
                         break;
                     }
                 default:
@@ -187,12 +193,20 @@ namespace CxjText.utlis
                     }
                     time = time + "\n" + (String)jObjectD["score_h"] + "-" + (String)jObjectD["score_c"];
                     break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    time = ((String)jObjectE["retimeset"]).Replace(" ", "");
+                    if (time.Contains("半场"))
+                    {
+                        time = "半场";
+                    }
+                    time = time + "\n" + (String)jObjectE["scoreH"] + "-" + (String)jObjectE["scoreC"];
+                    break;
                 default:
                     break;
             }
             return time;
         }
-
         /*****************主队名称******************/
         public static String get_c02_data(object obj, String tag)
         {
@@ -209,11 +223,11 @@ namespace CxjText.utlis
                     break;
                 case "I":
                     JArray jObjectI = (JArray)obj;
-                    c02 = (String)jObjectI[2]; 
+                    c02 = (String)jObjectI[2];
                     break;
                 case "U":
                     JArray jObjectU = (JArray)obj;
-                    c02 = (String)jObjectU[5]; 
+                    c02 = (String)jObjectU[5];
                     break;
                 case "R":
                     JObject jObjectR = (JObject)obj;
@@ -236,11 +250,84 @@ namespace CxjText.utlis
                     JObject jObjectD = (JObject)obj;
                     c02 = (String)jObjectD["team_h"];
                     break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    c02 = (String)jObjectE["home"];
+                    break;
                 default:
                     break;
             }
             return c02;
         }
+        /******************客队名称*******************/
+        public static String get_c12_data(object obj, String tag)
+        {
+            String c12 = "";
+            switch (tag)
+            {
+                case "A":
+                    {
+                        JObject jObjectA = (JObject)obj;
+                        c12 = (String)jObjectA["a3"];
+                        break;
+                    }
+                case "B":
+                    {
+                        JObject jObjectB = (JObject)obj;
+                        c12 = (String)jObjectB["Match_Guest"]; 
+                        break;
+                    }
+                case "I":
+                    {
+                        JArray jObjectI = (JArray)obj;
+                        c12 = (String)jObjectI[3]; 
+                        break;
+                    }
+                case "U":
+                    {
+                        JArray jObjectU = (JArray)obj;
+                        c12 = (String)jObjectU[6]; 
+                        break;
+                    }
+                case "R":
+                    {
+                        JObject jObjectR = (JObject)obj;
+                        c12 = (String)jObjectR["nameG"];
+                        break;
+                    }
+                case "G":
+                    {
+                        JObject jObjectG = (JObject)obj;
+                        c12 = (String)jObjectG["Match_Guest"]; //球队名称
+                        break;
+                    }
+                case "K":
+                case "C":
+                    {
+                        JObject jObjectK = (JObject)obj;
+                        c12 = (String)jObjectK["team_c"]; //球队名称
+                        break;
+                    }
+                case "F":
+                    JObject jObjectF = (JObject)obj;
+                    c12 = (String)jObjectF["gteam"];
+                    break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    c12 = (String)jObjectD["team_c"];
+                    break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    c12 = (String)jObjectE["guest"];
+                    break;
+                default:
+                    break;
+            }
+            return c12;
+        }
+
+
+
         /******************主队独赢*******************/
         public static String get_c03_data(object obj, String tag)
         {
@@ -316,6 +403,17 @@ namespace CxjText.utlis
                         JObject jObjectD = (JObject)obj;
                          c03 = (String)jObjectD["ior_MH"];
                         if (c03 == null || c03.Equals("null")) {
+                            c03 = "";
+                        }
+                        break;
+
+                    }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c03 = (String)jObjectE["ior_MH"];
+                        if (c03 == null || c03.Equals("null"))
+                        {
                             c03 = "";
                         }
                         break;
@@ -492,6 +590,25 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        String CON_RH = (String)jObjectE["CON_RH"]; //主队让球
+                        String ior_RH = (String)jObjectE["ior_RH"]; //主队让球的赔率
+                        if (String.IsNullOrEmpty(ior_RH)) {
+                            c04 = "";
+                        } else {
+                            CON_RH =  CON_RH.Replace(" ", "");
+                            if (CON_RH.Contains("-"))
+                            {
+                                c04 = ior_RH;
+                            }
+                            else {
+                                c04 = CON_RH +" "+ior_RH;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -617,6 +734,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        String CON_OUH = (String)jObjectE["CON_OUH"];
+                        String ior_OUH = (String)jObjectE["ior_OUH"];
+                        if (String.IsNullOrEmpty(CON_OUH) || String.IsNullOrEmpty(ior_OUH))
+                        {
+                            c05 = "";
+                        }
+                        else
+                        {
+                            CON_OUH = CON_OUH.Replace(" ", "");
+                            c05 = "大"+CON_OUH + " " + ior_OUH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -700,6 +833,18 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c06 = (String)jObjectE["ior_HMH"];
+                        if (c06 == null || c06.Equals("null"))
+                        {
+                            c06 = "";
+                        }
+                        break;
+
+                    }
+                    
                 default:
                     break;
             }
@@ -889,6 +1034,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        String CON_HRH = (String)jObjectE["CON_HRH"]; //主队让球
+                        String ior_HRH = (String)jObjectE["ior_HRH"]; //主队让球的赔率
+                        if (String.IsNullOrEmpty(ior_HRH))
+                        {
+                            c07 = "";
+                        }
+                        else
+                        {
+                            CON_HRH = CON_HRH.Replace(" ", "");
+                            if (CON_HRH.Contains("-"))
+                            {
+                                c07 = ior_HRH;
+                            }
+                            else
+                            {
+                                c07 = CON_HRH + " " + ior_HRH;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1020,74 +1188,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String CON_HOUH = (String)jObjectD["CON_HOUH"];
+                        String ior_HOUH = (String)jObjectD["ior_HOUH"];
+                        if (String.IsNullOrEmpty(CON_HOUH) || String.IsNullOrEmpty(ior_HOUH))
+                        {
+                            c08 = "";
+                        }
+                        else
+                        {
+                            CON_HOUH = CON_HOUH.Replace(" ", "");
+                            c08 = "大" + CON_HOUH + " " + ior_HOUH;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
             return c08;
         }
 
-        /******************客队名称*******************/
-        public static String get_c12_data(object obj, String tag)
-        {
-            String c12 = "";
-            switch (tag)
-            {
-                case "A":
-                    {
-                        JObject jObjectA = (JObject)obj;
-                        c12 = (String)jObjectA["a3"];
-                        break;
-                    }
-                case "B":
-                    {
-                        JObject jObjectB = (JObject)obj;
-                        c12 = (String)jObjectB["Match_Guest"]; 
-                        break;
-                    }
-                case "I":
-                    {
-                        JArray jObjectI = (JArray)obj;
-                        c12 = (String)jObjectI[3]; 
-                        break;
-                    }
-                case "U":
-                    {
-                        JArray jObjectU = (JArray)obj;
-                        c12 = (String)jObjectU[6]; 
-                        break;
-                    }
-                case "R":
-                    {
-                        JObject jObjectR = (JObject)obj;
-                        c12 = (String)jObjectR["nameG"];
-                        break;
-                    }
-                case "G":
-                    {
-                        JObject jObjectG = (JObject)obj;
-                        c12 = (String)jObjectG["Match_Guest"]; //球队名称
-                        break;
-                    }
-                case "K":
-                case "C":
-                    {
-                        JObject jObjectK = (JObject)obj;
-                        c12 = (String)jObjectK["team_c"]; //球队名称
-                        break;
-                    }
-                case "F":
-                    JObject jObjectF = (JObject)obj;
-                    c12 = (String)jObjectF["gteam"];
-                    break;
-                case "D":
-                    JObject jObjectD = (JObject)obj;
-                    c12 = (String)jObjectD["team_c"];
-                    break;
-                default:
-                    break;
-            }
-            return c12;
-        }
+       
         /******************客队独赢*******************/
         public static String get_c13_data(object obj, String tag)
         {
@@ -1160,6 +1283,17 @@ namespace CxjText.utlis
                     {
                         JObject jObjectD = (JObject)obj;
                         c13 = (String)jObjectD["ior_MC"];
+                        if (c13 == null || c13.Equals("null"))
+                        {
+                            c13 = "";
+                        }
+                        break;
+
+                    }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c13 = (String)jObjectE["ior_MC"];
                         if (c13 == null || c13.Equals("null"))
                         {
                             c13 = "";
@@ -1343,6 +1477,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        String CON_RC = (String)jObjectE["CON_RC"]; //客队让球
+                        String ior_RC = (String)jObjectE["ior_RC"]; //客队让球的赔率
+                        if (String.IsNullOrEmpty(ior_RC))
+                        {
+                            c14 = "";
+                        }
+                        else
+                        {
+                            CON_RC = CON_RC.Replace(" ", "");
+                            if (CON_RC.Contains("-"))
+                            {
+                                c14 = CON_RC.Replace("-","") + " " + ior_RC;
+                            }
+                            else
+                            {
+                                c14 = ior_RC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1469,6 +1626,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String CON_OUC = (String)jObjectD["CON_OUC"];
+                        String ior_OUC = (String)jObjectD["ior_OUC"];
+                        if (String.IsNullOrEmpty(CON_OUC) || String.IsNullOrEmpty(ior_OUC))
+                        {
+                            c15 = "";
+                        }
+                        else
+                        {
+                            CON_OUC = CON_OUC.Replace(" ", "");
+                            c15 = "小"+CON_OUC + " " + ior_OUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1546,6 +1719,17 @@ namespace CxjText.utlis
                     {
                         JObject jObjectD = (JObject)obj;
                         c16 = (String)jObjectD["ior_HMC"];
+                        if (c16 == null || c16.Equals("null"))
+                        {
+                            c16 = "";
+                        }
+                        break;
+
+                    }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c16 = (String)jObjectE["ior_HMC"];
                         if (c16 == null || c16.Equals("null"))
                         {
                             c16 = "";
@@ -1744,6 +1928,29 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        String CON_HRC = (String)jObjectE["CON_HRC"]; //客队让球
+                        String ior_HRC = (String)jObjectE["ior_HRC"]; //客队让球的赔率
+                        if (String.IsNullOrEmpty(ior_HRC))
+                        {
+                            c17 = "";
+                        }
+                        else
+                        {
+                            CON_HRC = CON_HRC.Replace(" ", "");
+                            if (CON_HRC.Contains("-"))
+                            {
+                                c17 = CON_HRC.Replace("-", "") + " " + ior_HRC;
+                            }
+                            else
+                            {
+                                c17 = ior_HRC;
+                            }
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1876,6 +2083,22 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "E":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        String CON_HOUC = (String)jObjectD["CON_HOUC"];
+                        String ior_HOUC = (String)jObjectD["ior_HOUC"];
+                        if (String.IsNullOrEmpty(ior_HOUC))
+                        {
+                            c18 = "";
+                        }
+                        else
+                        {
+                            CON_HOUC = CON_HOUC.Replace(" ", "");
+                            c18 = "小"+ CON_HOUC + " " + ior_HOUC;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1967,6 +2190,17 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c23 = (String)jObjectE["ior_MN"];
+                        if (c23 == null || c23.Equals("null"))
+                        {
+                            c23 = "";
+                        }
+                        break;
+
+                    }
                 default:
                     break;
             }
@@ -2044,6 +2278,17 @@ namespace CxjText.utlis
                     {
                         JObject jObjectD = (JObject)obj;
                         c26 = (String)jObjectD["ior_HMN"];
+                        if (c26 == null || c26.Equals("null"))
+                        {
+                            c26 = "";
+                        }
+                        break;
+
+                    }
+                case "E":
+                    {
+                        JObject jObjectE = (JObject)obj;
+                        c26 = (String)jObjectE["ior_HMN"];
                         if (c26 == null || c26.Equals("null"))
                         {
                             c26 = "";
@@ -2195,6 +2440,12 @@ namespace CxjText.utlis
                         break;
                     }
                 case "D":
+                    {
+                        JObject jObjectD = (JObject)obj;
+                        mid = (String)jObjectD["gid"];
+                        break;
+                    }
+                case "E":
                     {
                         JObject jObjectD = (JObject)obj;
                         mid = (String)jObjectD["gid"];

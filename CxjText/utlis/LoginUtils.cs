@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace CxjText.utlis
 {
@@ -38,6 +39,8 @@ namespace CxjText.utlis
                 case "F":
                     break;
                 case "D":
+                    break;
+                case "E":
                     break;
                 default:
                     return false;
@@ -1499,6 +1502,119 @@ namespace CxjText.utlis
         
             //获取money 
             int moneyStatus = MoneyUtils.GetDMoney(userInfo);
+            if (moneyStatus != 1)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            userInfo.loginFailTime = 0;
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            userInfo.updateMoneyTime = userInfo.loginTime;
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            return;
+        }
+
+        /**************************E系统登录的处理****************************/
+        public static void loginE(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                userInfo.cookie = null;
+                userInfo.cookie = new CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            userInfo.cookie = new CookieContainer();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Referer"] = userInfo.dataUrl + "/lotteryV3/index.do";
+            String codeUrl = userInfo.dataUrl + "/verifycode.do?flag=false&timestamp=1522812116178";
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject);
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
+                              1004, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            Thread.Sleep(3000);  //休眠3秒去登录  非常有必要 记住
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            headJObject["Origin"] = userInfo.dataUrl;
+            String loginUrl = userInfo.dataUrl + "/login.do";
+            String loginP = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&verifyCode=" + codeStrBuf.ToString();
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(rltStr);
+
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            
+
+            //没有成功登陆
+            if (!(rltStr.Contains("success") && rltStr.Contains("true")))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+
+
+            //获取money 
+            int moneyStatus = MoneyUtils.GetEMoney(userInfo);
             if (moneyStatus != 1)
             {
                 userInfo.loginFailTime++;

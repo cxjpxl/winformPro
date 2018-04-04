@@ -1708,5 +1708,166 @@ namespace CxjText.utlis
             dataJObject["betType"] = betType;
             return rltStr;
         }
+
+        //E系统点击处理
+        public static String DataSysEClick(JObject dataJObject, object obj,
+            int numRow, int clickNum, String tag
+            )
+        {
+
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            String gid = DataUtils.getMid(obj, tag);
+
+            JObject betJObject = new JObject();
+            betJObject["plate"] = "H";
+            betJObject["gameType"] = "FT_RB_MN";
+            JArray jArray = new JArray();
+            JObject itemObject = new JObject();
+            itemObject["gid"] = gid;
+            itemObject["scoreH"] =(String) jObject["scoreH"];
+            itemObject["scoreC"] = (String)jObject["scoreC"];
+            if (numRow == 0)
+            {
+
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        itemObject["type"] = "ior_MH";//类型
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        itemObject["type"] = "ior_RH";//类型
+                        itemObject["project"] = jObject["CON_RH"];//盘口
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        itemObject["type"] = "ior_OUH";//类型
+                        itemObject["project"] = jObject["CON_OUH"];//盘口
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        itemObject["type"] = "ior_HMH";//类型
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        itemObject["type"] = "ior_HRH";//类型
+                        itemObject["project"] = jObject["CON_HRH"];//盘口
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        itemObject["type"] = "ior_HOUH";//类型
+                        itemObject["project"] = jObject["CON_HOUH"];//盘口
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        itemObject["type"] = "ior_MC";//类型
+                        break;
+                    case 4:
+                        itemObject["type"] = "ior_RC";//类型
+                        itemObject["project"] = jObject["CON_RC"];//盘口
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        itemObject["type"] = "ior_OUC";//类型
+                        itemObject["project"] = jObject["CON_OUC"];//盘口
+                        break;
+                    case 6:
+                        rltStr = "sportType=ft_rb_re&betType=ior_HMC&gid=" + gid;
+                        itemObject["type"] = "ior_HMC";//类型
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        itemObject["type"] = "ior_HRC";//类型
+                        itemObject["project"] = jObject["CON_HRC"];//盘口
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        itemObject["type"] = "ior_HOUC";//类型
+                        itemObject["project"] = jObject["CON_HOUC"];//盘口
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        itemObject["type"] = "ior_MN";//类型
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        itemObject["type"] = "ior_HMN";//类型
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+
+            
+            itemObject["odds"] = jObject[itemObject["type"]+""];//赔率
+
+            gameName = (String)jObject["league"]; //获取赛事 修改
+            gameTeam = (String)jObject["home"] + "-" + (String)jObject["guest"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            dataJObject["gid"] = gid;
+
+            jArray.Add(itemObject);
+            betJObject["items"] = jArray;
+            rltStr = "data=" + WebUtility.UrlEncode(betJObject.ToString());  //获取订单的参数
+            dataJObject["betJObject"] = betJObject; //订单数据
+            return rltStr;
+        }
     }
 }
