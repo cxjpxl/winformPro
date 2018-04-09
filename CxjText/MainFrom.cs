@@ -181,7 +181,7 @@ namespace CxjText
         {
             
             num++;
-            if (num % 10 == 0)
+            if (num % 15 == 0)
             {
                 if (webSocketUtils != null)
                 {
@@ -410,8 +410,15 @@ namespace CxjText
             {
                 return;
             }
-            
             JObject jObject = JObject.Parse(message);
+            if (jObject == null) return;
+
+            //87分钟事件的处理
+            if (jObject["cmd"] != null && ((int)jObject["cmd"]) != 1)
+            {
+                return;
+            }
+            //点球事件的处理
             if (leftForm == null) return;
             if (this.isFinish) return;
             if (jObject["game"] == null || jObject["data"] == null) return;

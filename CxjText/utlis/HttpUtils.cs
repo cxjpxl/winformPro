@@ -20,6 +20,7 @@ namespace CxjText.utils
         }
 
         public static void setMaxContectionNum(int num) {
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             ServicePointManager.DefaultConnectionLimit = num;
         }
 
