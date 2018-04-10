@@ -52,6 +52,7 @@ namespace CxjText
             webSocketUtils.setOnMessListener(this);
             speakInit();
             Config.hasFitter = fitBox.Checked;
+            Config.isPingBang = pingbanCheckBox.Checked;
         }
 
         //初始化语音
@@ -700,24 +701,42 @@ namespace CxjText
             return 0;
         }
         //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
-        public int GetAmountSelected()
+        public int GetAmountSelected(bool isDriect)
         {
-             if (rbAmount_1_2.Checked)
+            if (isDriect)
             {
-                return 1;
+                if (rbAmount_1_2.Checked)
+                {
+                    return 1;
+                }
+                else if (rbAmount_1_3.Checked)
+                {
+                    return 2;
+                }
+                else if (rbAmount_1_4.Checked)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            else if (rbAmount_1_3.Checked)
-            {
-                return 2;
+            else {
+                if (z_2_rd.Checked)
+                {
+                    return 1;
+                }
+                else if (z_3_rd.Checked)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            else if (rbAmount_1_4.Checked)
-            {
-                return 3;
-            }
-            else
-            {
-                return 0;
-            }
+             
         }
         //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
         public int GetAutoPutType()
@@ -809,6 +828,11 @@ namespace CxjText
         private void fitBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.hasFitter = fitBox.Checked;
+        }
+
+        private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.isPingBang = pingbanCheckBox.Checked;
         }
     }
 }

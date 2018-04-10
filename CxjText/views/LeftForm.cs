@@ -341,24 +341,29 @@ namespace CxjText.views
                 if (user.status != 2) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
-                if (dataJObject["gameMid"] != null&&mainFrom.isAuto()&& mainFrom.GetAmountSelected() != 0) {
+                if (dataJObject["gameMid"] != null&&mainFrom.isAuto() && dataJObject["isDriect"]!=null) {
                     try
                     {
+                        bool isDriect = (bool) dataJObject["isDriect"];
                         float moneyAll = float.Parse(user.money);
-                        if (mainFrom.GetAmountSelected() == 1) //1/2
+                        int selectNum = mainFrom.GetAmountSelected(isDriect);
+                        if (selectNum == 1) //1/2
                         {
                             inputMoney = (int)(moneyAll / 2);
-                            inputMoney =((int) (inputMoney / 10)) * 10;
+                            inputMoney = ((int)(inputMoney / 10)) * 10;
                         }
-                        else if (mainFrom.GetAmountSelected() == 2)//1/3
+                        else if (selectNum == 2)//1/3
                         {
                             inputMoney = (int)(moneyAll / 3);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                         }
-                        else if (mainFrom.GetAmountSelected() == 3)//1/4
+                        else if (selectNum == 3)//1/4
                         {
                             inputMoney = (int)(moneyAll / 4);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
+                        }
+                        else {
+                             inputMoney = user.inputMoney;
                         }
                     }
                     catch (Exception e) {
@@ -622,6 +627,12 @@ namespace CxjText.views
             //找到所有的球队了
             if (searchArray.Count == 0) return;
             object obj = null; //要下注的对象
+
+            bool canPingban = true;
+            if (enventInfo.isDriect && !Config.isPingBang) {
+                canPingban = false;
+            }
+
             /**********************处理自动下注开始*****************************/
             if (enventInfo.inputType == 1)   //选择大小的情况处理
             {
@@ -802,7 +813,7 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null)
+                        if (obj == null && canPingban)
                         {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
@@ -851,7 +862,7 @@ namespace CxjText.views
                             }
                         }
 
-                        if (obj == null)
+                        if (obj == null && canPingban)
                         {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
@@ -900,7 +911,7 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null)
+                        if (obj == null && canPingban)
                         {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
@@ -946,7 +957,7 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null)
+                        if (obj == null && canPingban)
                         {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
@@ -993,7 +1004,7 @@ namespace CxjText.views
                             break;
                         }
                     }
-                    if (obj == null)
+                    if (obj == null && canPingban)
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
@@ -1042,7 +1053,7 @@ namespace CxjText.views
                                 break;
                             }
                         }
-                        if (obj == null)
+                        if (obj == null && canPingban)
                         {
                             for (int i = 0; i < searchArray.Count; i++)
                             {
@@ -1077,6 +1088,7 @@ namespace CxjText.views
             String gameMid = DataUtils.getMid(obj,userInfo.tag);
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
+            jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
             Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +

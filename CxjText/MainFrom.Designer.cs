@@ -52,19 +52,25 @@
             this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.fitBox = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.putZaDan = new System.Windows.Forms.RadioButton();
             this.putAuto = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.fitBox = new System.Windows.Forms.CheckBox();
+            this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.z_moren_rd = new System.Windows.Forms.RadioButton();
+            this.z_2_rd = new System.Windows.Forms.RadioButton();
+            this.z_3_rd = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -176,7 +182,7 @@
             // 
             this.rbRangQiu.AutoSize = true;
             this.rbRangQiu.Checked = true;
-            this.rbRangQiu.Location = new System.Drawing.Point(13, 9);
+            this.rbRangQiu.Location = new System.Drawing.Point(6, 8);
             this.rbRangQiu.Name = "rbRangQiu";
             this.rbRangQiu.Size = new System.Drawing.Size(47, 16);
             this.rbRangQiu.TabIndex = 8;
@@ -187,7 +193,7 @@
             // rbDaxiao
             // 
             this.rbDaxiao.AutoSize = true;
-            this.rbDaxiao.Location = new System.Drawing.Point(66, 10);
+            this.rbDaxiao.Location = new System.Drawing.Point(53, 7);
             this.rbDaxiao.Name = "rbDaxiao";
             this.rbDaxiao.Size = new System.Drawing.Size(47, 16);
             this.rbDaxiao.TabIndex = 9;
@@ -198,9 +204,9 @@
             // 
             this.panel1.Controls.Add(this.rbDaxiao);
             this.panel1.Controls.Add(this.rbRangQiu);
-            this.panel1.Location = new System.Drawing.Point(76, 12);
+            this.panel1.Location = new System.Drawing.Point(61, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(128, 28);
+            this.panel1.Size = new System.Drawing.Size(109, 28);
             this.panel1.TabIndex = 15;
             // 
             // AutoBanChang
@@ -252,7 +258,7 @@
             // rbAmount_1_3
             // 
             this.rbAmount_1_3.AutoSize = true;
-            this.rbAmount_1_3.Location = new System.Drawing.Point(106, 22);
+            this.rbAmount_1_3.Location = new System.Drawing.Point(92, 22);
             this.rbAmount_1_3.Name = "rbAmount_1_3";
             this.rbAmount_1_3.Size = new System.Drawing.Size(41, 16);
             this.rbAmount_1_3.TabIndex = 18;
@@ -263,7 +269,7 @@
             // rbAmount_1_2
             // 
             this.rbAmount_1_2.AutoSize = true;
-            this.rbAmount_1_2.Location = new System.Drawing.Point(59, 22);
+            this.rbAmount_1_2.Location = new System.Drawing.Point(53, 22);
             this.rbAmount_1_2.Name = "rbAmount_1_2";
             this.rbAmount_1_2.Size = new System.Drawing.Size(41, 16);
             this.rbAmount_1_2.TabIndex = 17;
@@ -274,7 +280,7 @@
             // rbAmount_1_4
             // 
             this.rbAmount_1_4.AutoSize = true;
-            this.rbAmount_1_4.Location = new System.Drawing.Point(153, 22);
+            this.rbAmount_1_4.Location = new System.Drawing.Point(133, 22);
             this.rbAmount_1_4.Name = "rbAmount_1_4";
             this.rbAmount_1_4.Size = new System.Drawing.Size(41, 16);
             this.rbAmount_1_4.TabIndex = 19;
@@ -288,15 +294,17 @@
             this.groupBox1.Controls.Add(this.rbAmount_MoRen);
             this.groupBox1.Controls.Add(this.rbAmount_1_3);
             this.groupBox1.Controls.Add(this.rbAmount_1_2);
-            this.groupBox1.Location = new System.Drawing.Point(11, 99);
+            this.groupBox1.Location = new System.Drawing.Point(3, 99);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 44);
+            this.groupBox1.Size = new System.Drawing.Size(176, 44);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "金額";
+            this.groupBox1.Text = "直接类型金額";
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.groupBox2);
+            this.fitterBox.Controls.Add(this.pingbanCheckBox);
             this.fitterBox.Controls.Add(this.fitBox);
             this.fitterBox.Controls.Add(this.groupBox5);
             this.fitterBox.Controls.Add(this.groupBox3);
@@ -305,10 +313,23 @@
             this.fitterBox.Controls.Add(this.panel1);
             this.fitterBox.Location = new System.Drawing.Point(999, 453);
             this.fitterBox.Name = "fitterBox";
-            this.fitterBox.Size = new System.Drawing.Size(286, 203);
+            this.fitterBox.Size = new System.Drawing.Size(356, 203);
             this.fitterBox.TabIndex = 22;
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
+            // 
+            // fitBox
+            // 
+            this.fitBox.AutoSize = true;
+            this.fitBox.Checked = true;
+            this.fitBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.fitBox.Location = new System.Drawing.Point(174, 21);
+            this.fitBox.Name = "fitBox";
+            this.fitBox.Size = new System.Drawing.Size(48, 16);
+            this.fitBox.TabIndex = 0;
+            this.fitBox.Text = "过滤";
+            this.fitBox.UseVisualStyleBackColor = true;
+            this.fitBox.CheckedChanged += new System.EventHandler(this.fitBox_CheckedChanged);
             // 
             // groupBox5
             // 
@@ -350,7 +371,7 @@
             this.groupBox3.Controls.Add(this.quanCRadio);
             this.groupBox3.Controls.Add(this.AutoBanChang);
             this.groupBox3.Controls.Add(this.bangCRadio);
-            this.groupBox3.Location = new System.Drawing.Point(11, 44);
+            this.groupBox3.Location = new System.Drawing.Point(6, 44);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(260, 50);
             this.groupBox3.TabIndex = 23;
@@ -381,18 +402,62 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
-            // fitBox
+            // pingbanCheckBox
             // 
-            this.fitBox.AutoSize = true;
-            this.fitBox.Checked = true;
-            this.fitBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.fitBox.Location = new System.Drawing.Point(133, 170);
-            this.fitBox.Name = "fitBox";
-            this.fitBox.Size = new System.Drawing.Size(48, 16);
-            this.fitBox.TabIndex = 0;
-            this.fitBox.Text = "过滤";
-            this.fitBox.UseVisualStyleBackColor = true;
-            this.fitBox.CheckedChanged += new System.EventHandler(this.fitBox_CheckedChanged);
+            this.pingbanCheckBox.AutoSize = true;
+            this.pingbanCheckBox.Checked = true;
+            this.pingbanCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pingbanCheckBox.Location = new System.Drawing.Point(226, 21);
+            this.pingbanCheckBox.Name = "pingbanCheckBox";
+            this.pingbanCheckBox.Size = new System.Drawing.Size(96, 16);
+            this.pingbanCheckBox.TabIndex = 25;
+            this.pingbanCheckBox.Text = "直接类型平半";
+            this.pingbanCheckBox.UseVisualStyleBackColor = true;
+            this.pingbanCheckBox.CheckedChanged += new System.EventHandler(this.pingbanCheckBox_CheckedChanged);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.z_3_rd);
+            this.groupBox2.Controls.Add(this.z_2_rd);
+            this.groupBox2.Controls.Add(this.z_moren_rd);
+            this.groupBox2.Location = new System.Drawing.Point(193, 100);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(152, 43);
+            this.groupBox2.TabIndex = 26;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "炸弹类型金额";
+            // 
+            // z_moren_rd
+            // 
+            this.z_moren_rd.AutoSize = true;
+            this.z_moren_rd.Checked = true;
+            this.z_moren_rd.Location = new System.Drawing.Point(8, 20);
+            this.z_moren_rd.Name = "z_moren_rd";
+            this.z_moren_rd.Size = new System.Drawing.Size(47, 16);
+            this.z_moren_rd.TabIndex = 0;
+            this.z_moren_rd.TabStop = true;
+            this.z_moren_rd.Text = "默认";
+            this.z_moren_rd.UseVisualStyleBackColor = true;
+            // 
+            // z_2_rd
+            // 
+            this.z_2_rd.AutoSize = true;
+            this.z_2_rd.Location = new System.Drawing.Point(56, 21);
+            this.z_2_rd.Name = "z_2_rd";
+            this.z_2_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_2_rd.TabIndex = 1;
+            this.z_2_rd.Text = "1/2";
+            this.z_2_rd.UseVisualStyleBackColor = true;
+            // 
+            // z_3_rd
+            // 
+            this.z_3_rd.AutoSize = true;
+            this.z_3_rd.Location = new System.Drawing.Point(100, 20);
+            this.z_3_rd.Name = "z_3_rd";
+            this.z_3_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_3_rd.TabIndex = 27;
+            this.z_3_rd.Text = "1/3";
+            this.z_3_rd.UseVisualStyleBackColor = true;
             // 
             // MainFrom
             // 
@@ -422,6 +487,8 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,5 +525,10 @@
         private System.Windows.Forms.RadioButton putAuto;
         private System.Windows.Forms.RadioButton shangBcrBtn;
         private System.Windows.Forms.CheckBox fitBox;
+        private System.Windows.Forms.CheckBox pingbanCheckBox;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton z_3_rd;
+        private System.Windows.Forms.RadioButton z_2_rd;
+        private System.Windows.Forms.RadioButton z_moren_rd;
     }
 }
