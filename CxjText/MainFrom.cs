@@ -402,6 +402,30 @@ namespace CxjText
         }
 
 
+        //界面的显示处理
+        private void showViewText(EnventShowInfo enventShowInfo) {
+            timeText.Text = "时间: " + DateTime.Now.ToString() + " - " + enventShowInfo.shiDuan;
+            lianSaiText.Text = "联赛：" + enventShowInfo.lianSaiStr;
+            gameText.Text = enventShowInfo.gameH + " - " + enventShowInfo.gameG;
+            enventText.Text = "事件:" + enventShowInfo.text;
+            gameText.Tag = enventShowInfo.gameTeamColor; //判断主客队标志
+        }
+
+
+        //显示事件
+        private EnventShowInfo getShowInfo(int time, int teamColor, String shiDuan,
+            String hSting, String gString, String enventStr, String lianSai) {
+            EnventShowInfo enventShowInfo = new EnventShowInfo();
+            enventShowInfo.gameTime = time;
+            enventShowInfo.gameTeamColor = teamColor;
+            enventShowInfo.shiDuan = shiDuan;
+            enventShowInfo.gameH = hSting;
+            enventShowInfo.gameG = gString;
+            enventShowInfo.text = enventStr;
+            enventShowInfo.lianSaiStr = lianSai;
+            return enventShowInfo;
+        }
+
 
         //收到数据
         public void OnWebSocketMessAge(string message)
@@ -473,23 +497,23 @@ namespace CxjText
             enventInfo.T = (String)jObject["data"]["T"];
             enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
-            speak(cid, enventInfo.info);
+            speak(cid, enventInfo.info); //语音播报
+            //事件显示和弹框的处理
             this.Invoke(new Action(() => {
-                EnventShowInfo enventShowInfo = new EnventShowInfo();
-                String str = "比赛(全场) :";
+           
                 String shiDuan = "全场";
+                String enventString = "";
+                int teamColor = 0;
+                int time = 0;
                 try
                 {
-                    int time = int.Parse(enventInfo.T);
-                    enventShowInfo.gameTime = time;
+                    time = int.Parse(enventInfo.T);
                     if (time <= 2700000)
                     { //半场
-                        str = "比赛(上半场) :";
                         shiDuan = "上半场";
                     }
                     else
                     {
-                        str = "比赛(全场) :";
                         shiDuan = "全场";
                     }
                 }
@@ -497,24 +521,22 @@ namespace CxjText
                 {
 
                 }
-                enventShowInfo.shiDuan = shiDuan;
-                enventShowInfo.gameH = enventInfo.nameH;
-                enventShowInfo.gameG = enventInfo.nameG;
-                gameText.Text =  enventInfo.nameH + " - " + enventInfo.nameG;
+               
+                
                 if (Config.speakJObject[cid] != null)
                 {
                     if (enventInfo.info.Contains("Cancelled"))
                     {
                         if (cid.Equals("1031"))
                         {
-                            enventText.Text = "事件:主队点球取消";
+                            enventString = "事件:主队点球取消";
                         }
                         else if (cid.Equals("2055"))
                         {
-                            enventText.Text = "事件:客队点球取消";
+                            enventString = "事件:客队点球取消";
                         }
                         else {
-                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                            enventString = "事件:" + (String)Config.speakJObject[cid];
                         }
 
                     }
@@ -522,53 +544,48 @@ namespace CxjText
                     {
                         if (cid.Equals("1031"))
                         {
-                            enventText.Text = "事件:主队点球";
+                            enventString = "事件:主队点球";
                         }
                         else if (cid.Equals("2055"))
                         {
-                            enventText.Text = "事件:客队点球";
+                            enventString = "事件:客队点球";
                         }
                         else {
-                            enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                            enventString = "事件:" + (String)Config.speakJObject[cid];
                         }
                     }
                     else {
-                        enventText.Text = "事件:" + (String)Config.speakJObject[cid];
+                        enventString = "事件:" + (String)Config.speakJObject[cid];
                     }
                 }
                 else
                 {
-                    enventText.Text = "事件:" + "未知";
+                    enventString = "事件:" + "未知";
                 }
 
 
                 if (cid.Equals("9926") || cid.Equals("1031")|| cid.Equals("1062")) //主队
                 {
-                    enventShowInfo.gameTeamColor = 1;
-                    gameText.Tag = 1;
+                    teamColor = 1;
 
                 }
                 else if (cid.Equals("9927") || cid.Equals("2055") || cid.Equals("2086"))//客队
                 {
-                    enventShowInfo.gameTeamColor = 2;
-                    gameText.Tag = 2;
+                    teamColor = 2;
                 }
                 else {
-                    enventShowInfo.gameTeamColor = 0;
-                    gameText.Tag = 0;
+                    teamColor = 0;
                 }
-               
-                timeText.Text = "时间: " + DateTime.Now.ToString()+ " - "+str; 
-                lianSaiText.Text = "联赛：" + (String)jObject["game"]["leagueName"];
-                enventShowInfo.text = enventText.Text.ToString().Replace("事件:","");
-                enventShowInfo.lianSaiStr = (String)jObject["game"]["leagueName"];
+                //事件的显示
+                EnventShowInfo enventShowInfo = getShowInfo(time, teamColor, shiDuan, 
+                    enventInfo.nameH, enventInfo.nameG, 
+                    enventString.Replace("事件:", ""),(String)jObject["game"]["leagueName"]);
 
-                //blue  要处理的地方  全在这个enventShowInfo类里面 记得做配置文件的处理 提交的时候配置文件必须是false
-              
-                    Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
-                    t.Start(enventShowInfo);
-              
+                //界面显示
+                showViewText(enventShowInfo);
 
+                Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+                t.Start(enventShowInfo);
             }));
 
 

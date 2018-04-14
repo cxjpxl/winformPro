@@ -1152,10 +1152,12 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
             headJObject["Origin"] = userInfo.dataUrl;
-             /*String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
+             String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
             //获取登录的系统参数 
-           String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
-            String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, paramsStr, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+           String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+ "&langx=zh-cn&theme=0";
+            String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, 
+                paramsStr, "application/x-www-form-urlencoded;charset=UTF-8",
+                userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1177,12 +1179,15 @@ namespace CxjText.utlis
                     loginForm.AddToListToUpDate(position);
                 }));
                 return;
-            }*/
+            }
             //现在要登录处理
             String loginUrl = userInfo.dataUrl + "/app/member/login.php";
-            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&username="+userInfo.user+"&password="+userInfo.pwd+"&checkbox=on";
-            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid="))
+            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&theme=0&username=" + userInfo.user+"&password="+userInfo.pwd;
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
+                "application/x-www-form-urlencoded;charset=UTF-8", 
+                userInfo.cookie, headJObject);
+            Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1191,13 +1196,41 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-           
-            int uidStart = rltStr.IndexOf("uid=");
-            rltStr = rltStr.Substring(uidStart, rltStr.Length - uidStart);
-            int start = rltStr.IndexOf("&");
-            rltStr = rltStr.Substring(0,  start);
-            String uid  = rltStr.Replace("uid=","");
+            rltStr = rltStr.Replace("<script>window.location.href='", "");
+            rltStr = rltStr.Replace("';</script>", "").Trim();
+            if (!rltStr.Contains("oldUrl"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+             headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            Console.WriteLine(rltStr);
+            // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
+            String uidRlt = HttpUtils.HttpGetHeader(rltStr,  "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            Console.WriteLine(uidRlt);
+            int uidStart = uidRlt.IndexOf("uid=");
+            uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
+            int start = uidRlt.IndexOf("&");
+            uidRlt = uidRlt.Substring(0,  start);
+            String uid  = uidRlt.Replace("uid=","");
             userInfo.uid = uid;
+            Console.WriteLine(uid);
             //获取money 
             int moneyStatus = MoneyUtils.GetCMoney(userInfo);
             if (moneyStatus != 1)

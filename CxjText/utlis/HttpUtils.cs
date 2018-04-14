@@ -47,10 +47,9 @@ namespace CxjText.utils
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "GET";
-            request.Timeout = 10 * 1000;
-            request.ReadWriteTimeout = 10 * 1000;
+            request.Timeout = 15 * 1000;
+            request.ReadWriteTimeout = 15 * 1000;
             request.UserAgent = Config.userAgent;
-
             if (headJObject != null)
             {
                 IEnumerable<JProperty> properties = headJObject.Properties();

@@ -218,7 +218,6 @@ namespace CxjText.views
         {
             if (isUpdate || upDateList == null || upDateList.Count == 0 ) return;
             if (upDateList[0] == null) {
-                upDateList.RemoveAt(0);
                 return;
             } 
             isUpdate = true;
