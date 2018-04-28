@@ -22,6 +22,7 @@ namespace CxjText.utils
         public static void setMaxContectionNum(int num) {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             ServicePointManager.DefaultConnectionLimit = num;
+            ServicePointManager.Expect100Continue = false;
         }
 
         public static void SetHeaderValue(WebHeaderCollection header, string name, string value)

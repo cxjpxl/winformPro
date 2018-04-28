@@ -139,6 +139,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="utlis\CodeUtils.cs" />
     <Compile Include="utlis\CompareAz.cs" />
     <Compile Include="utlis\DataClickUtlis.cs" />
     <Compile Include="utlis\DataPramsUtils.cs" />

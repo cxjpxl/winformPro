@@ -18,6 +18,10 @@ namespace CxjText
             httpUtils = new HttpUtils();
         }
 
+
+        
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
             
@@ -30,7 +34,6 @@ namespace CxjText
                   codeUserEdit.Text = "cxj81886404";
                   codePwdEdit.Text = "cxj13580127662";
             }
-
         }
 
 

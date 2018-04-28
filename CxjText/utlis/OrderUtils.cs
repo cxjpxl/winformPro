@@ -1187,6 +1187,7 @@ namespace CxjText.utlis
             headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
             String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
             String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
+           
             if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1201,7 +1202,7 @@ namespace CxjText.utlis
             String[] strs = betRlt.Split('\n');
             String orderPrams = "";
             String gmin_single = "";
-            String orderUrl1 = "";
+            String orderUrl1 = null;
             for (int i = 0; i < strs.Length; i++)
             {
                 String str = strs[i].Trim();
@@ -1303,6 +1304,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+       //     Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1674,7 +1676,7 @@ namespace CxjText.utlis
             dataJObject["betItems"] = jArray;
             dataJObject["canWin"] = isDuying ? money * (odds - 1) : money * odds; //还没有处理
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, dataJObject.ToString(), "application/json", user.cookie, headJObject);
-
+            Console.WriteLine("接口返回:"+orderRlt);
             if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
             {
                 leftForm.Invoke(new Action(() => {

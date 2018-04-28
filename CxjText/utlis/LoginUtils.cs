@@ -113,15 +113,9 @@ namespace CxjText.utlis
                 
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
-            {
+
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
@@ -249,16 +243,7 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+            
 
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime(); 
             //登录请求
@@ -276,15 +261,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            Console.WriteLine(num);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -300,7 +278,6 @@ namespace CxjText.utlis
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
-            Console.WriteLine(rltStr);
             if (rltStr == null)
             {
                 userInfo.loginFailTime++;
@@ -374,16 +351,7 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+           
 
             String codeUrl = userInfo.loginUrl + "/app/member/index/verify/t/" + FormUtils.getCurrentTime();
             //下载图片
@@ -402,14 +370,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -499,17 +461,7 @@ namespace CxjText.utlis
             {
                 loginForm.AddToListToUpDate(position);
             }));
-
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+            
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
@@ -530,19 +482,12 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
+                loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
                 return;
@@ -662,16 +607,7 @@ namespace CxjText.utlis
             }));
 
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+            
             String codeUrl = userInfo.loginUrl + "/app/member/verify/mkcode.ashx?type=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -690,19 +626,12 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
+                loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
                 return;
@@ -799,16 +728,7 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
+           
 
             String codeUrl = userInfo.loginUrl + "/yzm.php?type=" + FormUtils.getCurrentTime();
             //登录请求
@@ -828,14 +748,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1003,18 +917,7 @@ namespace CxjText.utlis
             loginForm.Invoke(new Action(() => {
                 loginForm.AddToListToUpDate(position);
             }));
-
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
+            
             String codeUrl = userInfo.loginUrl + "/app/member/mkcode.php?" + FormUtils.getCurrentTime();
             //登录请求
            
@@ -1032,14 +935,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1186,7 +1083,6 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
                 "application/x-www-form-urlencoded;charset=UTF-8", 
                 userInfo.cookie, headJObject);
-            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
             {
                 userInfo.loginFailTime++;
@@ -1210,7 +1106,6 @@ namespace CxjText.utlis
              headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
-            Console.WriteLine(rltStr);
             // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
             String uidRlt = HttpUtils.HttpGetHeader(rltStr,  "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
@@ -1222,15 +1117,13 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
-            Console.WriteLine(uidRlt);
+            
             int uidStart = uidRlt.IndexOf("uid=");
             uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
             int start = uidRlt.IndexOf("&");
             uidRlt = uidRlt.Substring(0,  start);
             String uid  = uidRlt.Replace("uid=","");
             userInfo.uid = uid;
-            Console.WriteLine(uid);
             //获取money 
             int moneyStatus = MoneyUtils.GetCMoney(userInfo);
             if (moneyStatus != 1)
@@ -1293,14 +1186,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1498,14 +1385,8 @@ namespace CxjText.utlis
                     }));
                     return;
                 }
-                //获取打码平台的码
-                StringBuilder codeStrBuf = new StringBuilder();
-                int num = YDMWrapper.YDM_EasyDecodeByPath(
-                                  Config.codeUserStr, Config.codePwdStr,
-                                  Config.codeAppId, Config.codeSerect,
-                                  AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                                  1004, 20, codeStrBuf);
-                if (num <= 0)
+                String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+                if (String.IsNullOrEmpty(codeStrBuf))
                 {
                     userInfo.loginFailTime++;
                     userInfo.status = 3;
@@ -1597,14 +1478,8 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            //获取打码平台的码
-            StringBuilder codeStrBuf = new StringBuilder();
-            int num = YDMWrapper.YDM_EasyDecodeByPath(
-                              Config.codeUserStr, Config.codePwdStr,
-                              Config.codeAppId, Config.codeSerect,
-                              AppDomain.CurrentDomain.BaseDirectory + position + ".jpg",
-                              1004, 20, codeStrBuf);
-            if (num <= 0)
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1613,13 +1488,13 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            Thread.Sleep(3000);  //休眠3秒去登录  非常有必要 记住
+            Thread.Sleep(3100);  //休眠3秒去登录  非常有必要 记住
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Origin"] = userInfo.dataUrl;
             String loginUrl = userInfo.dataUrl + "/login.do";
             String loginP = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&verifyCode=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            Console.WriteLine(rltStr);
+          
 
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {

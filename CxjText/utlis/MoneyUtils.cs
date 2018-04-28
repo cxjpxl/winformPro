@@ -46,12 +46,10 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             String bMoneyRlt = HttpUtils.HttpGetHeader(user.loginUrl + "/top_money_data.php", "", user.cookie, headJObject);
-            Console.WriteLine("系统：" + user.tag + "\n" + bMoneyRlt);
             if (bMoneyRlt == null) return 0;
             if (bMoneyRlt.Trim().Equals("")) return 0;
             if (bMoneyRlt.Contains("重新登录")) return -1;
             bMoneyRlt = bMoneyRlt.Trim();
-            Console.WriteLine(bMoneyRlt);
             if (bMoneyRlt.Contains("DOCTYPE")) {
                 String[] strs = bMoneyRlt.Split('\n');
                 for (int i = 0; i < strs.Length; i++) {
@@ -139,7 +137,6 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_header?uid="+uid+"&showtype=&langx=zh-cn&mtype=3";
             String moneyUrl = userInfo.loginUrl + "/app/member/reloadCredit?uid="+uid+"&langx=zh-cn";
             String moneyRltStr = HttpUtils.HttpGetHeader(moneyUrl, "", userInfo.cookie, headJObject);
-            //Console.WriteLine("系统：" + userInfo.tag + "-" + userInfo.baseUrl + "\n" + moneyRltStr);
             if (moneyRltStr == null|| !moneyRltStr.Contains("人民币"))
             {
                 if (moneyRltStr != null&&moneyRltStr.Contains("登录")) {
@@ -204,6 +201,15 @@ namespace CxjText.utlis
                     newCookieUrl = usrls[0];
                     break;
                 }
+
+                if (htmlStr.Contains("UA=") && htmlStr.Contains("src='"))
+                {
+                    int start1 = htmlStr.IndexOf("src='") + 5;
+                    htmlStr = htmlStr.Substring(start1, htmlStr.Length - start1);
+                    String[] usrls = htmlStr.Split('\'');
+                    newCookieUrl = usrls[0];
+                    break;
+                }
             }
             if (String.IsNullOrEmpty(newCookieUrl))
             {
@@ -236,11 +242,11 @@ namespace CxjText.utlis
 
             int apiStart = mktUrl.IndexOf("api");
             if (apiStart <= 0) return 0;
+      
             mktUrl = mktUrl.Substring(0, apiStart - 1);
             userInfo.dataUrl = FileUtils.changeDataUrl(mktUrl.Replace("mkt", "www"));
             userInfo.loginUrl = userInfo.dataUrl;
             baseUrl = FileUtils.changeBaseUrl(userInfo.dataUrl);
-
 
             /********************更新登录***************************/
             /*String refershUrl = userInfo.dataUrl+"/app/member/login.ashx?act=refresh&UID=" + userInfo.uid;
@@ -264,7 +270,6 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/cl/index.aspx";
             String monryUrl = userInfo.dataUrl + "/app/member/login.ashx?act=getcredit&type=ssc&t=" + FormUtils.getCurrentTime();
             String moneyStr = HttpUtils.HttpGetHeader(monryUrl, "application/json; charset=utf-8", userInfo.cookie, headJObject);
-            Console.WriteLine("系统：" + userInfo.tag + "\n" + moneyStr);
             if (String.IsNullOrEmpty(moneyStr))
             {
                 return 0;
@@ -426,7 +431,6 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;

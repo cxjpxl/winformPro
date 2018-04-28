@@ -4,6 +4,8 @@ using CxjText.bean;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Security.Cryptography;
+using System.Drawing;
+using System.IO;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -447,5 +449,28 @@ namespace CxjText.utlis
             return sBuilder.ToString();
         }
 
+
+        public static  String ImgToBase64String(string Imagefilename)
+        {
+            String strbaser64 = null;
+            try
+            {
+                Bitmap bmp = new Bitmap(Imagefilename);
+                MemoryStream ms = new MemoryStream();
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                byte[] arr = new byte[ms.Length];
+                ms.Position = 0;
+                ms.Read(arr, 0, (int)ms.Length);
+                ms.Close();
+                strbaser64 = Convert.ToBase64String(arr);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return strbaser64;
+        }
     }
 }
