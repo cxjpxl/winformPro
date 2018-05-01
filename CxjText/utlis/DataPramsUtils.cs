@@ -1022,5 +1022,511 @@ namespace CxjText.utlis
             jObject["list"] = jArray;
             return jObject.ToString() ;
         }
+        /***********************H系统获取数据*************************/
+        public static String getHData(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            String dataUrl = userInfo.dataUrl + "/hg_sports";
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie == null ? new CookieContainer() : userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+
+            JArray jArray = new JArray(); // 存储球赛赛事
+
+
+            //循环获取分页数据
+            String getDataUrl = userInfo.dataUrl + "/hg_sports/index/ft/gq";
+            headJObject = new JObject();
+            //dataUrl = userInfo.dataUrl + "/hg_sports/index/ft/gq";
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Referer"] = userInfo.dataUrl + "/hg_sports/index/head";
+
+            int dataPages = 1;
+            String pg_txt = "";
+            for (int page = 1; page <= dataPages; page++)
+            {
+                String url = getDataUrl;//gq_page-2-111_
+                if (page > 1)
+                {
+                    url += "_page" + page + "-" + pg_txt + "_";
+                }
+                String rlt = HttpUtils.HttpGetHeader(url, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rlt)) break;
+
+                // 解析html
+                //解析html 字符串或者本地html文件  
+                HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(rlt);
+                // 找到当前页面所有联赛  
+                HtmlNodeCollection lianSaiNodes = htmlDoc.DocumentNode.SelectNodes("//td[@class='b_title']");
+                // 找到当前页面所有比赛 
+                HtmlNodeCollection htmlNodes = htmlDoc.DocumentNode.SelectNodes("//tbody//tr[@class='b_cen']");
+                if (htmlNodes == null || htmlNodes.Count <= 0 || lianSaiNodes == null || lianSaiNodes.Count <= 0)
+                {
+                    break;
+                }
+
+                // 将数据解析成指定格式
+                // 解析出每场赛事
+                String lianSaiName = lianSaiNodes[0].InnerText.ToString().Trim();
+                for (int i = 0; i < htmlNodes.Count; i = i + 3)
+                {
+                    HtmlNode hNode = htmlNodes[i], gNode = htmlNodes[i + 1], heNode = htmlNodes[i + 2];
+                    ///***************************时间的解析*********************************/
+                    HtmlNode timeNode = hNode.SelectSingleNode("//div[@class='bf']"); //时间
+                    String time = "";
+                    if (timeNode.ChildNodes.Count > 1)
+                    {
+                        String time1 = timeNode.ChildNodes[0].InnerText.ToString().Trim();
+                        String bifen = timeNode.ChildNodes[2].InnerText.ToString().Trim();
+                        time = time1 + "\n" + bifen;
+                    }
+                    /************************解析比赛队伍************************************/
+                    HtmlNode duiwuNode = hNode.ChildNodes[3];
+                    String nameStr = duiwuNode != null ? duiwuNode.InnerText.ToString().Trim() : "";
+                    String[] nameArr = nameStr.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    String nameH = nameArr.Length > 0 ? nameArr[0].Trim() : ""; //主队
+                    String nameG = nameArr.Length > 1 ? nameArr[1].Trim() : ""; //客队
+
+                    /***************************解析独赢***********************************/
+                    HtmlNode hDuyingNode = hNode.ChildNodes[5];
+                    HtmlNode gDuyingNode = gNode.ChildNodes[1];
+                    HtmlNode heDuyingNode = heNode.ChildNodes[3];
+
+                    String h_du_y = hDuyingNode != null ? hDuyingNode.InnerText.ToString().Trim() : ""; //主队独赢
+                    String g_du_y = gDuyingNode != null ? gDuyingNode.InnerText.ToString().Trim() : ""; //客队独赢
+                    String he_du_y = heDuyingNode != null ? heDuyingNode.InnerText.ToString().Trim() : ""; //和局独赢
+
+                    int start = 0, end = 0;
+                    String str1 = "", h_du_y_click = "", mid = "", g_du_y_click = "", he_du_y_click = "";
+                    if (h_du_y != "&nbsp;")
+                    {
+                        str1 = hDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? h_du_y_click.Split(',')[0] : mid;
+                    }
+                    if (g_du_y != "&nbsp;")
+                    {
+                        str1 = gDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? g_du_y_click.Split(',')[0] : mid;
+                    }
+                    if (he_du_y != "&nbsp;")
+                    {
+                        str1 = heDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        he_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? he_du_y_click.Split(',')[0] : mid;
+                    }
+                    /***************************全场让球*************************************/
+                    HtmlNode hRqNode = hNode.ChildNodes[7];
+                    HtmlNode gRqNode = gNode.ChildNodes[3];
+                    HtmlNode spanNode = null, aNode = null;
+                    for (int j = 0; (hRqNode != null) && (j < hRqNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && hRqNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = hRqNode.ChildNodes[j];
+                        }
+                        if (aNode == null && hRqNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = hRqNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode hRqKeyNode = spanNode;
+                    HtmlNode hRqValueNode = aNode;
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (gRqNode != null) && (j < gRqNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && gRqNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = gRqNode.ChildNodes[j];
+                        }
+                        if (aNode == null && gRqNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = gRqNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode gRqKeyNode = spanNode;
+                    HtmlNode gRqValueNode = aNode;
+
+                    String h_rang_key = hRqKeyNode != null ? hRqKeyNode.InnerText.ToString().Trim() : "";
+                    String g_rang_key = gRqKeyNode != null ? gRqKeyNode.InnerText.ToString().Trim() : "";
+                    String h_rang_value = hRqValueNode != null ? hRqValueNode.InnerText.ToString().Trim() : "";
+                    String g_rang_value = gRqValueNode != null ? gRqValueNode.InnerText.ToString().Trim() : "";
+
+                    String h_rang = h_rang_key.Replace(" ","") + " " + h_rang_value.Replace(" ", "");
+                    String g_rang = g_rang_key.Replace(" ", "") + " " + g_rang_value.Replace(" ", "");
+
+                    String h_rang_click = "", g_rang_click = "";
+                    if (h_rang_value != "&nbsp;" && h_rang_value != "")
+                    {
+                        str1 = hRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? h_rang_click.Split(',')[0] : mid;
+                    }
+                    else if (h_rang_key != "&nbsp;" && h_rang_key != "")
+                    {
+                        str1 = hRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? h_rang_click.Split(',')[0] : mid;
+                    }
+                    if (g_rang_value != "&nbsp;" && g_rang_value != "")
+                    {
+                        str1 = gRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? g_rang_click.Split(',')[0] : mid;
+                    }
+                    else if (g_rang_key != "&nbsp;" && g_rang_key != "")
+                    {
+                        str1 = gRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? g_rang_click.Split(',')[0] : mid;
+                    }
+                    /*********************************全场大小****************************************/
+                    HtmlNode hDXNode = hNode.ChildNodes[9];
+                    HtmlNode gDXNode = gNode.ChildNodes[5];
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (hDXNode != null) && (j < hDXNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && hDXNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = hDXNode.ChildNodes[j];
+                        }
+                        if (aNode == null && hDXNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = hDXNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode hDXKeyNode = spanNode;
+                    HtmlNode hDXValueNode = aNode;
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (gDXNode != null) && (j < gDXNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && gDXNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = gDXNode.ChildNodes[j];
+                        }
+                        if (aNode == null && gDXNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = gDXNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode gDXKeyNode = spanNode;
+                    HtmlNode gDXValueNode = aNode;
+
+                    String h_daxiao_key = hDXKeyNode != null ? hDXKeyNode.InnerText.ToString().Trim() : "";
+                    String g_daxiao_key = gDXKeyNode != null ? gDXKeyNode.InnerText.ToString().Trim() : "";
+                    String h_daxiao_value = hDXValueNode != null ? hDXValueNode.InnerText.ToString().Trim() : "";
+                    String g_daxiao_value = gDXValueNode != null ? gDXValueNode.InnerText.ToString().Trim() : "";
+
+                    String h_daxiao = h_daxiao_key.Replace(" ", "") + " " + h_daxiao_value.Replace(" ", "");
+                    String g_daxiao = g_daxiao_key.Replace(" ", "") + " " + g_daxiao_value.Replace(" ", "");
+
+                    String h_daxiao_click = "", g_daxiao_click = "";
+                    if (h_daxiao_value != "&nbsp;" && h_daxiao_value != "")
+                    {
+                        str1 = hDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? h_daxiao_click.Split(',')[0] : mid;
+                    }
+                    else if (h_daxiao_key != "&nbsp;" && h_daxiao_key != "")
+                    {
+                        str1 = hDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? h_daxiao_click.Split(',')[0] : mid;
+                    }
+                    if (g_daxiao_value != "&nbsp;" && g_daxiao_value != "")
+                    {
+                        str1 = gDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? g_daxiao_click.Split(',')[0] : mid;
+                    }
+                    else if (g_daxiao_key != "&nbsp;" && g_daxiao_key != "")
+                    {
+                        str1 = gDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? g_daxiao_click.Split(',')[0] : mid;
+                    }
+                    /***********************半场独赢********************************/
+                    HtmlNode bhDuYingNode = hNode.ChildNodes[13];
+                    HtmlNode bgDuyingNode = gNode.ChildNodes[9];
+                    HtmlNode bheDuyingNode = heNode.ChildNodes[7];
+
+                    String bh_du_y = bhDuYingNode != null ? bhDuYingNode.InnerText.ToString().Trim() : ""; //主队半场独赢
+                    String bg_du_y = bgDuyingNode != null ? bgDuyingNode.InnerText.ToString().Trim() : ""; //客队半场独赢
+                    String bhe_du_y = bheDuyingNode != null ? bheDuyingNode.InnerText.ToString().Trim() : ""; //和局半场独赢
+
+                    String bh_du_y_click = "", bg_du_y_click = "", bhe_du_y_click = "";
+                    if (bh_du_y != "&nbsp;")
+                    {
+                        str1 = bhDuYingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? bh_du_y_click.Split(',')[0] : mid;
+                    }
+                    if (bg_du_y != "&nbsp;")
+                    {
+                        str1 = bgDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? bg_du_y_click.Split(',')[0] : mid;
+                    }
+                    if (bhe_du_y != "&nbsp;")
+                    {
+                        str1 = bheDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bhe_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        mid = mid == "" ? bhe_du_y_click.Split(',')[0] : mid;
+                    }
+                    ///***************************半场让球*************************************/
+                    HtmlNode bhRqNode = hNode.ChildNodes[15];
+                    HtmlNode bgRqNode = gNode.ChildNodes[11];
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (bhRqNode != null) && (j < bhRqNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && bhRqNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = bhRqNode.ChildNodes[j];
+                        }
+                        if (aNode == null && bhRqNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = bhRqNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode bhRqKeyNode = spanNode;
+                    HtmlNode bhRqValueNode = aNode;
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (bgRqNode != null) && (j < bgRqNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && bgRqNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = bgRqNode.ChildNodes[j];
+                        }
+                        if (aNode == null && bgRqNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = bgRqNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode bgRqKeyNode = spanNode;
+                    HtmlNode bgRqValueNode = aNode;
+
+                    String bh_rang_key = bhRqKeyNode != null ? bhRqKeyNode.InnerText.ToString().Trim() : "";
+                    String bg_rang_key = bgRqKeyNode != null ? bgRqKeyNode.InnerText.ToString().Trim() : "";
+                    String bh_rang_value = bhRqValueNode != null ? bhRqValueNode.InnerText.ToString().Trim() : "";
+                    String bg_rang_value = bgRqValueNode != null ? bgRqValueNode.InnerText.ToString().Trim() : "";
+
+                    String bh_rang = bh_rang_key.Replace(" ", "") + " " + bh_rang_value.Replace(" ", "");
+                    String bg_rang = bg_rang_key.Replace(" ", "") + " " + bg_rang_value.Replace(" ", "");
+
+                    String bh_rang_click = "", bg_rang_click = "";
+                    if (bh_rang_value != "&nbsp;" && bh_rang_value != "")
+                    {
+                        str1 = bhRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bh_rang_click.Split(',')[0] : mid;
+                    }
+                    else if (bh_rang_key != "&nbsp;" && bh_rang_key != "")
+                    {
+                        str1 = bhRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bh_rang_click.Split(',')[0] : mid;
+                    }
+                    if (bg_rang_value != "&nbsp;" && bg_rang_value != "")
+                    {
+                        str1 = bgRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bg_rang_click.Split(',')[0] : mid;
+                    }
+                    else if (bg_rang_key != "&nbsp;" && bg_rang_key != "")
+                    {
+                        str1 = bgRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bg_rang_click.Split(',')[0] : mid;
+                    }
+                    /*********************************半场大小****************************************/
+                    HtmlNode bhDXNode = hNode.ChildNodes[17];
+                    HtmlNode bgDXNode = gNode.ChildNodes[13];
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (bhDXNode != null) && (j < bhDXNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && bhDXNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = bhDXNode.ChildNodes[j];
+                        }
+                        if (aNode == null && bhDXNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = bhDXNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode bhDXKeyNode = spanNode;
+                    HtmlNode bhDXValueNode = aNode;
+                    spanNode = null; aNode = null;
+                    for (int j = 0; (bgDXNode != null) && (j < bgDXNode.ChildNodes.Count); j++)
+                    {
+                        if (spanNode == null && bgDXNode.ChildNodes[j].Name == "span")
+                        {
+                            spanNode = bgDXNode.ChildNodes[j];
+                        }
+                        if (aNode == null && bgDXNode.ChildNodes[j].Name == "a")
+                        {
+                            aNode = bgDXNode.ChildNodes[j];
+                        }
+                    }
+                    HtmlNode bgDXKeyNode = spanNode;
+                    HtmlNode bgDXValueNode = aNode;
+
+                    String bh_daxiao_key = bhDXKeyNode != null ? bhDXKeyNode.InnerText.ToString().Trim() : "";
+                    String bg_daxiao_key = bgDXKeyNode != null ? bgDXKeyNode.InnerText.ToString().Trim() : "";
+                    String bh_daxiao_value = bhDXValueNode != null ? bhDXValueNode.InnerText.ToString().Trim() : "";
+                    String bg_daxiao_value = bgDXValueNode != null ? bgDXValueNode.InnerText.ToString().Trim() : "";
+
+                    String bh_daxiao = bh_daxiao_key.Replace(" ", "") + " " + bh_daxiao_value.Replace(" ", "");
+                    String bg_daxiao = bg_daxiao_key.Replace(" ", "") + " " + bg_daxiao_value.Replace(" ", "");
+
+                    String bh_daxiao_click = "", bg_daxiao_click = "";
+                    if (bh_daxiao_value != "&nbsp;" && bh_daxiao_value != "")
+                    {
+                        str1 = bhDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bh_daxiao_click.Split(',')[0] : mid;
+                    }
+                    else if (bh_daxiao_key != "&nbsp;" && bh_daxiao_key != "")
+                    {
+                        str1 = bhDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bh_daxiao_click.Split(',')[0] : mid;
+                    }
+                    if (bg_daxiao_value != "&nbsp;" && bg_daxiao_value != "")
+                    {
+                        str1 = bgDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bg_daxiao_click.Split(',')[0] : mid;
+                    }
+                    else if (bg_daxiao_key != "&nbsp;" && bg_daxiao_key != "")
+                    {
+                        str1 = bgDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        mid = (mid == "") ? bg_daxiao_click.Split(',')[0] : mid;
+                    }
+                    /****************************数据填充*********************************/
+                    JObject saiShiJObect = new JObject();
+                    saiShiJObect.Add("lianSai", lianSaiName.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("time", time.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("mid", mid.Replace("\"", "").Replace("&nbsp;", "")); //赋值mid
+
+                    saiShiJObect.Add("nameH", nameH.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("nameG", nameG.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_du_y", h_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_du_y", g_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("he_du_y", he_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_du_y_click", h_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_du_y_click", g_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("he_du_y_click", he_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_rang", h_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_rang", g_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_rang_click", h_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_rang_click", g_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_daxiao", h_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_daxiao", g_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_daxiao_click", h_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_daxiao_click", g_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_du_y", bh_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_du_y", bg_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bhe_du_y", bhe_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_du_y_click", bh_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_du_y_click", bg_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bhe_du_y_click", bhe_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_rang", bh_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_rang", bg_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_rang_click", bh_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_rang_click", bg_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_daxiao", bh_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_daxiao", bg_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_daxiao_click", bh_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_daxiao_click", bg_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    //解析之后将其给array
+                    jArray.Add(saiShiJObect);
+
+                    HtmlNode lianSaiPNode = (heNode.NextSibling != null && heNode.NextSibling.NextSibling != null && heNode.NextSibling.NextSibling.NextSibling != null && heNode.NextSibling.NextSibling.NextSibling.NextSibling != null) ?
+                        heNode.NextSibling.NextSibling.NextSibling.NextSibling : null;
+                    HtmlNode liansaiNode = lianSaiPNode != null ? lianSaiPNode.FirstChild : null;//联赛的节点
+                    if ((liansaiNode != null) && liansaiNode.GetAttributeValue("class", "") == "b_title")
+                    {
+                        lianSaiName = liansaiNode.InnerText.ToString().Trim();
+                    }
+                }
+
+
+                // 数据页码处理
+                HtmlNodeCollection pageNodes = htmlDoc.DocumentNode.SelectNodes("//span[@id='pg_txt']/span[@class='pageBar']/span");
+                if (pageNodes == null || pageNodes.Count <= 2)
+                {
+                    break;
+                }
+                else
+                {
+                    var pgTxtNode = pageNodes[0];
+                    pg_txt = pgTxtNode.InnerText.Replace("[", "").Replace("]", "");
+                    dataPages = pageNodes.Count - 2;
+                }
+
+            }
+
+            JObject jObject = new JObject();
+            jObject.Add("list", jArray);
+            return jObject.ToString();
+
+        }
     }
 }

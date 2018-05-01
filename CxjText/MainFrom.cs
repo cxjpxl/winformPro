@@ -281,6 +281,9 @@ namespace CxjText
                     case "E":
                         dataRtlStr = DataPramsUtils.getEData(userInfo);
                         break;
+                    case "H":
+                        dataRtlStr = DataPramsUtils.getHData(userInfo);
+                        break;
                     default:
                         break;
                 }
