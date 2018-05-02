@@ -83,6 +83,30 @@ namespace CxjText.views
                 this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value = num;
                 userInfo.inputMoney = num;
             }
+            else if (e.ColumnIndex == 6)
+            { //第6列的情况
+                int rowIndex = e.RowIndex;
+                if (rowIndex == -1) return;
+                UserInfo userInfo = (UserInfo)Config.userList[rowIndex];
+                int num = 0;
+                try
+                {
+                    String numStr = this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    num = int.Parse(numStr);
+                    if (num < 0)
+                    {
+                        num = 0;
+                    }
+                }
+                catch (Exception e1)
+                {
+
+                    num = 0;
+                }
+                this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value = num;
+                userInfo.xianDing = num;
+            }
+
         }
 
         //鼠标点击事件注册
@@ -235,8 +259,11 @@ namespace CxjText.views
 
                     int inputMoney = userInfo.inputMoney;
                     int status = userInfo.status;
+                    int xianDing = userInfo.xianDing;
                     this.loginDaGridView.Rows[index].Cells[3].ReadOnly = false;
                     this.loginDaGridView.Rows[index].Cells[3].Value = inputMoney;
+                    this.loginDaGridView.Rows[index].Cells[6].Value = xianDing;
+
 
                     if (status == -1)
                     {
