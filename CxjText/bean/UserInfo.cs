@@ -17,6 +17,8 @@ namespace CxjText.bean
         public String loginUrl = "";//登录使用接口前缀
         public String dataUrl = "";//获取数据的接口 
 
+        public String xianDing = "";  //限定
+
         public String uid = "";
         public String exp = "";
         public int inputMoney = 0; //输入金额
