@@ -501,6 +501,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl+ "/home";
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+          
             if (rltStr == null)
             {
                 userInfo.loginFailTime++;
@@ -1540,6 +1541,76 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
             return;
+        }
+
+
+        /**************************H系统登录的处理****************************/
+        public static void loginH(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.uid = "";
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                userInfo.cookie = null;
+                userInfo.cookie = new CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            userInfo.cookie = new CookieContainer();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            String webStr = HttpUtils.HttpGetHeader(userInfo.dataUrl, "", userInfo.cookie, headJObject);
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/cn/index";
+            headJObject["Upgrade-Insecure-Requests"] = "1";
+            String loginUrl = userInfo.dataUrl + "/cn";
+            String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&Submit=";
+            String loginStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(loginStr) || !loginStr.Contains(userInfo.user)|| !loginStr.Contains("userinfo")) {
+                Console.WriteLine("访问不成功!");
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //获取money 
+            int moneyStatus = MoneyUtils.GetHMoney(userInfo);
+            if (moneyStatus != 1)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            userInfo.loginFailTime = 0;
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            userInfo.updateMoneyTime = userInfo.loginTime;
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+            return;
+
         }
     }
 }

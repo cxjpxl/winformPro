@@ -468,5 +468,34 @@ namespace CxjText.utlis
             return 1;
            
         }
+        //获取H的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetHMoney(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/cn/balance";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(user.dataUrl);
+            headJObject["Referer"] = user.dataUrl + "/hg_sports/index/head";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
+            Console.WriteLine(moneyRlt);
+            if (String.IsNullOrEmpty(moneyRlt))
+            {
+                return 0;
+            }
+
+            try
+            {
+                float money = float.Parse(moneyRlt);
+            }
+            catch (Exception e) {
+                return 0;
+            }
+
+            user.money = moneyRlt;
+            return 1;
+
+        }
     }
 }

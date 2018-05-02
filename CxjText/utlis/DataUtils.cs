@@ -81,6 +81,12 @@ namespace CxjText.utlis
                         c00 = (String)jObjectE["league"];
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectR = (JObject)obj;
+                        c00 = (String)jObjectR["lianSai"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -202,6 +208,10 @@ namespace CxjText.utlis
                     }
                     time = time + "\n" + (String)jObjectE["scoreH"] + "-" + (String)jObjectE["scoreC"];
                     break;
+                case "H":
+                    JObject jObjectH = (JObject)obj;
+                    time = (String)jObjectH["time"];
+                    break;
                 default:
                     break;
             }
@@ -253,6 +263,10 @@ namespace CxjText.utlis
                 case "E":
                     JObject jObjectE = (JObject)obj;
                     c02 = (String)jObjectE["home"];
+                    break;
+                case "H":
+                    JObject jObjectH = (JObject)obj;
+                    c02 = (String)jObjectH["nameH"];
                     break;
                 default:
                     break;
@@ -320,6 +334,12 @@ namespace CxjText.utlis
                     JObject jObjectE = (JObject)obj;
                     c12 = (String)jObjectE["guest"];
                     break;
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c12 = (String)jObjectH["nameG"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -418,6 +438,12 @@ namespace CxjText.utlis
                         }
                         break;
 
+                    }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c03 = (String)jObjectH["h_du_y"];
+                        break;
                     }
                 default:
                     break;
@@ -609,6 +635,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c04 = (String)jObjectH["h_rang"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -750,6 +782,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c05 = (String)jObjectH["h_daxiao"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -844,7 +882,12 @@ namespace CxjText.utlis
                         break;
 
                     }
-                    
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c06 = (String)jObjectH["bh_du_y"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1057,6 +1100,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c07 = (String)jObjectH["bh_rang"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1204,6 +1253,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c08 = (String)jObjectH["bh_daxiao"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1300,6 +1355,12 @@ namespace CxjText.utlis
                         }
                         break;
 
+                    }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c13 = (String)jObjectH["g_du_y"];
+                        break;
                     }
                 default:
                     break;
@@ -1500,6 +1561,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c14 = (String)jObjectH["g_rang"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1640,6 +1707,12 @@ namespace CxjText.utlis
                             CON_OUC = CON_OUC.Replace(" ", "");
                             c15 = "小"+CON_OUC + " " + ior_OUC;
                         }
+                        break;
+                    }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c15 = (String)jObjectH["g_daxiao"];
                         break;
                     }
                 default:
@@ -1951,6 +2024,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c17 = (String)jObjectH["bg_rang"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2099,6 +2178,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c18 = (String)jObjectH["bg_daxiao"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2201,6 +2286,12 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c23 = (String)jObjectH["he_du_y"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2295,6 +2386,12 @@ namespace CxjText.utlis
                         }
                         break;
 
+                    }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c26 = (String)jObjectH["bhe_du_y"];
+                        break;
                     }
                 default:
                     break;
@@ -2449,6 +2546,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectD = (JObject)obj;
                         mid = (String)jObjectD["gid"];
+                        break;
+                    }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        mid = (String)jObjectH["mid"];
                         break;
                     }
                 default:

@@ -174,6 +174,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectE, tag);
                         obj = jObjectE;
                         break;
+                    case "H":
+                        JObject jObjectH = (JObject)jArray[i];
+                        lianSai = (String)jObjectH["lianSai"];
+                        hStr = (String)jObjectH["nameH"];
+                        gStr = (String)jObjectH["nameG"];
+                        mid = DataUtils.getMid(jObjectH, tag);
+                        obj = jObjectH;
+                        break;
                     default:
                         return null;
 
@@ -442,6 +450,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectE["guest"];
                         mid = DataUtils.getMid(jObjectE, tag);
                         obj = jObjectE;
+                        break;
+                    case "H":
+                        JObject jObjectH = (JObject)jArray[i];
+                        lianSai = (String)jObjectH["lianSai"];
+                        hStr = (String)jObjectH["nameH"];
+                        gStr = (String)jObjectH["nameG"];
+                        mid = DataUtils.getMid(jObjectH, tag);
+                        obj = jObjectH;
                         break;
                     default:
                         return null;

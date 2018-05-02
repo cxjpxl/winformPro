@@ -456,6 +456,55 @@ namespace CxjText.utlis
                     }
                 }
             }
+            else if (userInfo.tag.Equals("H"))
+            {
+                JArray jArray = (JArray)jObject["list"];
+                if (jArray == null || jArray.Count == 0)
+                {
+                    return rltJArray;
+                }
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject itemJObject = (JObject)jArray[i];
+
+                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
+                    {
+                        continue;
+                    }
+
+                    String lianSai = (String)itemJObject["lianSai"];
+                    if (String.IsNullOrEmpty(lianSai)) continue;
+                    bool hasLianSai = false;
+                    for (int resultIndex = 0; resultIndex < rltJArray.Count; resultIndex++)
+                    {
+                        String lianSai1 = (String)rltJArray[resultIndex][0]["lianSai"];
+
+                        if (lianSai1.Equals(lianSai))
+                        {
+                            hasLianSai = true;
+                        }
+                    }
+                    if (hasLianSai) continue;
+                    JArray itemJArray = new JArray();
+                    for (int j = i; j < jArray.Count; j++)
+                    {
+                        JObject itemJObject1 = (JObject)jArray[j];
+                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
+                        {
+                            continue;
+                        }
+                        String lianSai2 = (String)itemJObject1["lianSai"];
+                        if (lianSai2.Equals(lianSai))
+                        {
+                            itemJArray.Add(itemJObject1);
+                        }
+                    }
+                    if (itemJArray.Count > 0)
+                    {
+                        rltJArray.Add(itemJArray);
+                    }
+                }
+            }
             else
             {
                 Console.WriteLine("系统开发中!");
@@ -501,6 +550,10 @@ namespace CxjText.utlis
             {
                 title = currentArray[0]["league"].ToString();
             }
+            else if (userInfo.tag.Equals("H"))
+            {
+                title = currentArray[0]["lianSai"].ToString();
+            }
             else
             {
                 title = "系统开发中!";
@@ -545,6 +598,10 @@ namespace CxjText.utlis
             else if (userInfo.tag.Equals("E"))
             {
                 mid = (String)jArray[index][0]["gid"] + ""; //唯一标识
+            }
+            else if (userInfo.tag.Equals("H"))
+            {
+                mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
             else
             {
@@ -620,6 +677,15 @@ namespace CxjText.utlis
             {
                 String nameH = (String)jObject["home"];
                 String nameG = (String)jObject["guest"];
+                if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
+                {
+                    return true;
+                }
+            }
+            else if (userInfo.tag.Equals("H"))
+            {
+                String nameH = (String)jObject["nameH"];
+                String nameG = (String)jObject["nameG"];
                 if (nameH.IndexOf(str) >= 0 || nameG.IndexOf(str) >= 0)
                 {
                     return true;

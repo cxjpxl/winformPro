@@ -1835,5 +1835,118 @@ namespace CxjText.utlis
             }
 
         }
+        //H下单
+        public static void OrderH(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+            JObject headJObject = new JObject();
+            /*****************获取cookie用的********************************/
+            String dataUrl = user.dataUrl + "/hg_sports";
+            headJObject["Host"] = FileUtils.changeBaseUrl(user.dataUrl);
+            HttpUtils.HttpGetHeader(dataUrl, "",user.cookie, headJObject);
+            /**************************************************************/
+            String[] parms = parmsStr.Split(',');
+            if (parms.Length != 4)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "参数错误");
+                    }
+                }));
+                return;
+            }
+            String baseUrl = FileUtils.changeBaseUrl(user.dataUrl);
+            headJObject["Host"] = baseUrl;
+            headJObject["Referer"] = user.dataUrl + "/hg_sports/index/left";
+            headJObject["Upgrade-Insecure-Requests"] = "1";
+            String url1 = user.dataUrl + "/hg_sports/order/order/"+ parms[0] + "?stype="+ parms[1] + "&type="+ parms[2] + "&btype="+ parms[3];
+            String rlt = HttpUtils.HttpGetHeader(url1, "", user.cookie, headJObject);
+            Console.WriteLine(rlt);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("可用额度"))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败");
+                    }
+                }));
+                return;
+            }
+
+            String orderUrl = user.dataUrl + "/hg_sports/order/doorder";
+            headJObject = new JObject();
+            headJObject["Host"] = baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = url1;
+            headJObject["Upgrade-Insecure-Requests"] = "1";
+         String orderP = "match_id=" + parms[0] + "&" +  //取html里面的input
+                "stype=" + parms[1] + "&" +
+                "type=" + parms[2] + "&" +
+                "btype=" + parms[3] + "&" +
+                "gold=" + money;
+            String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded",user.cookie,headJObject);
+            Console.WriteLine(orderRlt);
+            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("待确认")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        String msg = "下单失败";
+
+                        if (orderRlt.Contains("金额超过限额")) {
+                            msg = "失败，检查网站限额";
+                        }
+                        rltForm.RefershLineData(inputTag, msg);
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetHMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+
+
+        }
     }
 }

@@ -1028,7 +1028,11 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             String dataUrl = userInfo.dataUrl + "/hg_sports";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
-            String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie == null ? new CookieContainer() : userInfo.cookie, headJObject);
+            CookieContainer cookie = userInfo.cookie;
+            if (userInfo.status != 2) {
+                cookie = new CookieContainer();
+            }
+            String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr))
             {
                 return null;
@@ -1053,7 +1057,7 @@ namespace CxjText.utlis
                 {
                     url += "_page" + page + "-" + pg_txt + "_";
                 }
-                String rlt = HttpUtils.HttpGetHeader(url, "", userInfo.cookie, headJObject);
+                String rlt = HttpUtils.HttpGetHeader(url, "", cookie, headJObject);
                 if (String.IsNullOrEmpty(rlt)) break;
 
                 // 解析html

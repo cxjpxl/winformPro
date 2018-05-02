@@ -417,6 +417,9 @@ namespace CxjText.views
                     case "E":
                         orderParmas = rltStr;
                         break;
+                    case "H":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -489,6 +492,10 @@ namespace CxjText.views
                     jObject["money"] = inputMoney;
                     jObject["betJObject"] = dataJObject["betJObject"];
                 }
+                else if (user.tag.Equals("H"))
+                {
+                    jObject["money"] = inputMoney;
+                }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
@@ -544,6 +551,9 @@ namespace CxjText.views
                         break;
                     case "E":
                         OrderUtils.OrderE(jobject, this, loginForm, rltForm);
+                        break;
+                    case "H":
+                        OrderUtils.OrderH(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;
