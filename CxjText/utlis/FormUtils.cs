@@ -13,6 +13,38 @@ namespace CxjText.utlis
     class FormUtils
     {
 
+        public static bool isChaoXianDing(UserInfo userInfo) {
+
+            if (userInfo.status != 2) {
+                return false;  
+            }
+
+            //登录的情况才要处理
+            int xianDing = userInfo.xianDing;
+
+            if (xianDing < 20) return false; //最小限定是20
+
+            String moneyStr = userInfo.money;
+
+            float moneyF = 0.00f;
+
+            try
+            {
+                moneyF = float.Parse(moneyStr);
+            }
+            catch (Exception e) {
+                return false;
+            }
+
+
+            if (xianDing <= (int)moneyF) {
+                return true;
+            }
+
+            return false;
+        }
+
+
         //多系统处理   解析登录返回
         public static int explandsLoginData(UserInfo userInfo, String dataStr) {
 

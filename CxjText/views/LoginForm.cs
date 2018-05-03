@@ -93,7 +93,7 @@ namespace CxjText.views
                 {
                     String numStr = this.loginDaGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
                     num = int.Parse(numStr);
-                    if (num < 0)
+                    if (num < 20)
                     {
                         num = 0;
                     }
@@ -333,7 +333,23 @@ namespace CxjText.views
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
-              
+
+                //检测限定金额
+                bool isCXd = FormUtils.isChaoXianDing(user);
+                if (isCXd) {
+                    user.uid = "";
+                    user.loginFailTime = 0;
+                    user.loginTime = -1;
+                    user.updateMoneyTime = -1;
+                    user.status = 0;
+                    this.Invoke(new Action(() => {
+                        this.AddToListToUpDate(i);
+                    }));
+                    user.cookie = null;
+                    user.cookie = new System.Net.CookieContainer();
+                    continue;
+                }
+
                 if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 10) {  
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);

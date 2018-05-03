@@ -42,6 +42,8 @@ namespace CxjText.utlis
                     break;
                 case "E":
                     break;
+                case "H":
+                    break;
                 default:
                     return false;
             }

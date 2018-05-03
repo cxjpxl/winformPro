@@ -512,10 +512,22 @@ namespace CxjText.views
         //下单接口
         private void postOrder(object obj)
         {
+           
             JObject jobject = (JObject)obj;
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
+            if (FormUtils.isChaoXianDing(user)) {
+                Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "超过限定不能下注!");
+                    }
+                }));
+                return;
+            }
+
             try {
                 switch (user.tag)
                 {

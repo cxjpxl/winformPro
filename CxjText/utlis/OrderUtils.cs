@@ -1676,7 +1676,7 @@ namespace CxjText.utlis
             dataJObject["betItems"] = jArray;
             dataJObject["canWin"] = isDuying ? money * (odds - 1) : money * odds; //还没有处理
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, dataJObject.ToString(), "application/json", user.cookie, headJObject);
-            Console.WriteLine("接口返回:"+orderRlt);
+          //  Console.WriteLine("接口返回:"+orderRlt);
             if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
             {
                 leftForm.Invoke(new Action(() => {
