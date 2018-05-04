@@ -1080,12 +1080,13 @@ namespace CxjText.utlis
                 {
                     HtmlNode hNode = htmlNodes[i], gNode = htmlNodes[i + 1], heNode = htmlNodes[i + 2];
                     ///***************************时间的解析*********************************/
-                    HtmlNode timeNode = hNode.SelectSingleNode("//div[@class='bf']"); //时间
+                    HtmlNode timeNode = hNode.ChildNodes[1]; //时间
                     String time = "";
                     if (timeNode.ChildNodes.Count > 1)
                     {
-                        String time1 = timeNode.ChildNodes[0].InnerText.ToString().Trim();
-                        String bifen = timeNode.ChildNodes[2].InnerText.ToString().Trim();
+                        HtmlNode tempNode = timeNode.ChildNodes[1];
+                        String time1 = tempNode.ChildNodes[0].InnerText.ToString().Trim();
+                        String bifen = tempNode.ChildNodes[2].InnerText.ToString().Trim();
                         time = time1 + "\n" + bifen;
                     }
                     /************************解析比赛队伍************************************/

@@ -1810,6 +1810,12 @@ namespace CxjText.utlis
                         break;
 
                     }
+                case "H":
+                    {
+                        JObject jObjectH = (JObject)obj;
+                        c16 = (String)jObjectH["bg_du_y"];
+                        break;
+                    }
                 default:
                         break;
                 }
