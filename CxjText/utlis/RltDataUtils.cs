@@ -36,9 +36,9 @@ namespace CxjText.utlis
                    
                     JObject itemJObject = (JObject)jArray[i];
 
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag)) {
+                    /*if (DataUtils.getHasJiaoQiu(itemJObject, thisTag)) {
                         continue;
-                    }
+                    }*/
                     
                     String lianSai = (String)itemJObject["a26"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
@@ -56,10 +56,10 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
+                       /* if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
                         {
                             continue;
-                        }
+                        }*/
                         
 
                         String lianSai2 = (String)itemJObject1["a26"];
