@@ -1902,6 +1902,10 @@ namespace CxjText.utlis
                         if (orderRlt.Contains("金额超过限额")) {
                             msg = "失败，检查网站限额";
                         }
+                        if (orderRlt.Contains("余额不足,下注失败"))
+                        {
+                            msg = "余额不足,下注失败";
+                        }
                         rltForm.RefershLineData(inputTag, msg);
                     }
                 }));

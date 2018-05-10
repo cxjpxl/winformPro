@@ -636,16 +636,7 @@ namespace CxjText.views
             JArray searchArray = new JArray();
             if (this.dataJArray == null) return;
             bool selectDaXiao = false;
-            for (int i = 0; i < this.dataJArray.Count; i++)
-            {
-                String nameH1 = DataUtils.get_c02_data(this.dataJArray[i],userInfo.tag);
-                if (nameH1.Contains("角球") || nameH1.Contains("点球")) continue;
-                String nameG1 = DataUtils.get_c12_data(this.dataJArray[i], userInfo.tag);
-                if (nameG1.Contains("角球") || nameG1.Contains("点球")) continue;
-                if (nameH1.Equals(nameH)&&nameG1.Equals(nameG)) {  //找出名字一样的所有比赛
-                    searchArray.Add(this.dataJArray[i]);
-                }
-            }
+            searchArray = AutoUtils.getGames(this.dataJArray,userInfo, nameH,nameG);
             //找到所有的球队了
             if (searchArray.Count == 0) return;
             object obj = null; //要下注的对象
@@ -1111,12 +1102,12 @@ namespace CxjText.views
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
             jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
-            Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
+          /*  Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +
                        "\n是否主队下注:" + isH +
                        "\n是否半场:" + isBanChang
-                       + "\n是否强制下大小:" + selectDaXiao);
+                       + "\n是否强制下大小:" + selectDaXiao);*/
 
 
             //判断是2s前保存的队伍

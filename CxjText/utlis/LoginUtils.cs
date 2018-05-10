@@ -1020,6 +1020,109 @@ namespace CxjText.utlis
             return;
         }
         /**************************C系统登录的处理****************************/
+
+        private static bool loginC1(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            headJObject["Origin"] = userInfo.dataUrl;
+            String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
+            //获取登录的系统参数 
+            String paramsStr = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&langx=zh-cn&theme=0";
+            String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl,
+                paramsStr, "application/x-www-form-urlencoded;charset=UTF-8",
+                userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt))
+            {
+                return false;
+            }
+            JObject rltJObject = JObject.Parse(checkLoginRlt);
+
+            if(rltJObject["login_result"] == null) return false;
+
+            if (((String)rltJObject["login_result"]).Equals("10") && (((String)rltJObject["code"]).Equals("102") || ((String)rltJObject["code"]).Equals("101")))
+            {
+
+            }
+            else
+            {
+                return false;
+            }
+            //现在要登录处理
+            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
+            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&theme=0&username=" + userInfo.user + "&password=" + userInfo.pwd;
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
+                "application/x-www-form-urlencoded;charset=UTF-8",
+                userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
+            {
+                return false;
+            }
+            rltStr = rltStr.Replace("<script>window.location.href='", "");
+            rltStr = rltStr.Replace("';</script>", "").Trim();
+            if (!rltStr.Contains("oldUrl"))
+            {
+                return false;
+            }
+            headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
+            String uidRlt = HttpUtils.HttpGetHeader(rltStr, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
+            {
+                return false;
+            }
+
+            int uidStart = uidRlt.IndexOf("uid=");
+            uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
+            int start = uidRlt.IndexOf("&");
+            uidRlt = uidRlt.Substring(0, start);
+            String uid = uidRlt.Replace("uid=", "");
+            userInfo.uid = uid;
+            return true;
+        }
+
+        private static bool loginC2(UserInfo userInfo) {
+            userInfo.cookie = new CookieContainer();
+            String login_newUrl = userInfo.dataUrl + "/app/member/login_new.php";
+            String p = "username="+userInfo.user+"&password="+userInfo.pwd+"&langx=zh-cn";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String oneRlt = HttpUtils.HttpPostHeader(login_newUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(oneRlt) || !FormUtils.IsJsonObject(oneRlt)) {
+                return false;
+            }
+
+            JObject oneJObject = JObject.Parse(oneRlt);
+            if (oneJObject["code"] == null) return false;
+            String code = (String)oneJObject["code"];
+            if (!code.Equals("1")) return false;
+
+
+            String login_new2Url = userInfo.dataUrl + "/app/member/login_new2.php";
+             p = "username="+userInfo.user+"&password="+ userInfo.pwd+ "&langx=zh-cn&theme=0";
+         
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String twoRlt = HttpUtils.HttpPostHeader(login_new2Url, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(twoRlt) || !FormUtils.IsJsonObject(twoRlt))
+            {
+                return false;
+            }
+            JObject twoJObject = JObject.Parse(twoRlt);
+            if (twoJObject["code"] == null) return false;
+            if (twoJObject["uid"] == null) return false;
+            userInfo.uid = (String)twoJObject["uid"];
+            return true;
+        }
+
         public static void loginC(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -1048,85 +1151,21 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
             userInfo.cookie = new CookieContainer();
-            JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
-            headJObject["Origin"] = userInfo.dataUrl;
-             String checkLoginUrl = userInfo.dataUrl + "/app/member/login_check.php";
-            //获取登录的系统参数 
-           String paramsStr = "username="+userInfo.user+"&password="+userInfo.pwd+ "&langx=zh-cn&theme=0";
-            String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl, 
-                paramsStr, "application/x-www-form-urlencoded;charset=UTF-8",
-                userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt)) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            JObject rltJObject = JObject.Parse(checkLoginRlt);
-            if (((String)rltJObject["login_result"]).Equals("10") && (((String)rltJObject["code"]).Equals("102") || ((String)rltJObject["code"]).Equals("101")))
-            {
 
-            }
-            else {
-                //其他原因可能账号异常
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            //现在要登录处理
-            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
-            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&theme=0&username=" + userInfo.user+"&password="+userInfo.pwd;
-            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
-                "application/x-www-form-urlencoded;charset=UTF-8", 
-                userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
+            bool loginStatus = loginC1(userInfo);
+            if (!loginStatus)
             {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+                loginStatus = loginC2(userInfo);
+                if (!loginStatus) {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
             }
-            rltStr = rltStr.Replace("<script>window.location.href='", "");
-            rltStr = rltStr.Replace("';</script>", "").Trim();
-            if (!rltStr.Contains("oldUrl"))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-             headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
-            // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
-            String uidRlt = HttpUtils.HttpGetHeader(rltStr,  "", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            
-            int uidStart = uidRlt.IndexOf("uid=");
-            uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
-            int start = uidRlt.IndexOf("&");
-            uidRlt = uidRlt.Substring(0,  start);
-            String uid  = uidRlt.Replace("uid=","");
-            userInfo.uid = uid;
+            Console.WriteLine("登录1成功");
             //获取money 
             int moneyStatus = MoneyUtils.GetCMoney(userInfo);
             if (moneyStatus != 1)

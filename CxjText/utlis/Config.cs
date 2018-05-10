@@ -11,7 +11,7 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static String softUserStr = "";
+        public static String softUserStr = "admin";
         public static bool hasFitter = true;
         public static bool isPingBang = true;
         public static long softTime = -1; //软件使用时间记录
