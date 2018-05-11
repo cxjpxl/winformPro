@@ -55,7 +55,7 @@ namespace CxjText.views
             }
             catch (Exception e)
             {
-                Console.WriteLine("历史消息崩溃了:"+ e);
+                MessageBox.Show(e.ToString());
                 this.Close();
             }
         }

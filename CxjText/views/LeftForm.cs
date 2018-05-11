@@ -649,6 +649,31 @@ namespace CxjText.views
             searchArray = AutoUtils.getGames(this.dataJArray,userInfo, nameH,nameG);
             //找到所有的球队了
             if (searchArray.Count == 0) return;
+
+            //判断进球比分是否可以下注
+            if (enventInfo.scoreArray != null) {
+                JArray localScoreArray = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
+                int localHScore = (int)localScoreArray[0];
+                int localGScore = (int)localScoreArray[1];
+                if (localHScore == -1 || localGScore == -1) return;
+
+                int netHScore = (int)enventInfo.scoreArray[0];
+                int netGScore = (int)enventInfo.scoreArray[1];
+                if (netHScore == -1 || netGScore == -1) return;
+
+                if (isH)
+                {
+                    if (localGScore != netGScore) return;
+                    if (netHScore - localHScore != 1) return;
+                }
+                else {
+                    if (localHScore != netHScore) return;
+                    if (netGScore - localGScore != 1) return;
+                }
+            }
+          
+
+
             object obj = null; //要下注的对象
 
             bool canPingban = true;

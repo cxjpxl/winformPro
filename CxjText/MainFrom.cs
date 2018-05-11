@@ -455,88 +455,94 @@ namespace CxjText
                 
                 if (((int)jObject["cmd"]) != 2) return;
                 Console.WriteLine(message);
-                String league = (String)jObject["league"];
-                int state = (int)jObject["state"];
-                int zhuScore = (int)jObject["score1"];
-                int geScore = (int)jObject["score2"];
-                String hName = (String)jObject["tm1"];
-                String gName = (String)jObject["tm2"];
-                int gameTime = (int)jObject["gametime"];
-
-
-                gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
-                String shijianStr = "";
-                int teamColor = 0;
-                String shiDuan = "全场";
-                String biFenString = "("+zhuScore + ":" + geScore+")";
-
-                if (state == 1)
-                {
-                    teamColor = 1;
-                    shijianStr = "主队进球";
-                }
-                else if (state == 0)
-                {
-                    teamColor = 2;
-                    shijianStr = "客队进球";
-                }
-                else { return; }
-                if (gameTime < 2700000){ //半场
-                    shiDuan = "上半场";
-                }
-                else{
-                    shiDuan = "全场";
-                }
-
-
-                speechSynthesizer.SpeakAsync(shiDuan+ shijianStr+","+ biFenString);
-
-                //事件的显示
-                EnventShowInfo jinQiuShowInfo = getShowInfo(gameTime,
-                    teamColor, shiDuan,
-                    hName, gName,
-                    shijianStr+ biFenString, league,1);
 
                 this.Invoke(new Action(() => {
+                    String league = (String)jObject["league"];
+                    int state = (int)jObject["state"];
+                    int zhuScore = (int)jObject["score1"];
+                    int geScore = (int)jObject["score2"];
+                    String hName = (String)jObject["tm1"];
+                    String gName = (String)jObject["tm2"];
+                    int gameTime = (int)jObject["gametime"];
+
+
+                    gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
+                    String shijianStr = "";
+                    int teamColor = 0;
+                    String shiDuan = "全场";
+                    String biFenString = "(" + zhuScore + ":" + geScore + ")";
+
+                    if (state == 1)
+                    {
+                        teamColor = 1;
+                        shijianStr = "主队进球";
+                    }
+                    else if (state == 0)
+                    {
+                        teamColor = 2;
+                        shijianStr = "客队进球";
+                    }
+                    else { return; }
+                    if (gameTime < 2700000)
+                    { //半场
+                        shiDuan = "上半场";
+                    }
+                    else
+                    {
+                        shiDuan = "全场";
+                    }
+
+                    speakStr(shiDuan + shijianStr + "," + biFenString);
+               
+
+                    //事件的显示
+                    EnventShowInfo jinQiuShowInfo = getShowInfo(gameTime,
+                        teamColor, shiDuan,
+                        hName, gName,
+                        shijianStr + biFenString, league, 1);
+
                     showViewText(jinQiuShowInfo);
-                }));
-                Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
-                t.Start(jinQiuShowInfo);
+                   
 
-                //处理进球下单事件
-                EnventInfo jinQiuEnventInfo = new EnventInfo();
 
-                if (state == 1) //主队
-                {
-                    jinQiuEnventInfo.cid = "1031";
-                }
-                else if (state == 0) //客队
-                {
-                    jinQiuEnventInfo.cid = "2055";
-                }
+                    //处理进球下单事件
+                    EnventInfo jinQiuEnventInfo = new EnventInfo();
 
-                jinQiuEnventInfo.info = shijianStr;
-                jinQiuEnventInfo.time = FormUtils.getCurrentTime();
-                jinQiuEnventInfo.mid = "-1"; //mid为-1表示进球
-                jinQiuEnventInfo.nameH = hName;
-                jinQiuEnventInfo.nameG = gName;
-                jinQiuEnventInfo.T = gameTime+"";
-                jinQiuEnventInfo.inputType = this.GetCurrUserSelected();
-                jinQiuEnventInfo.bangchangType = GetBanChangSelected();
-                jinQiuEnventInfo.isDriect = false;
-                JArray scoreArray = new JArray();
-                scoreArray.Add(zhuScore);//第0个
-                scoreArray.Add(geScore);//第1个
-                jinQiuEnventInfo.scoreArray = scoreArray; //进球比分赋值处理
+                    if (state == 1) //主队
+                    {
+                        jinQiuEnventInfo.cid = "1031";
+                    }
+                    else if (state == 0) //客队
+                    {
+                        jinQiuEnventInfo.cid = "2055";
+                    }
 
-                this.Invoke(new Action(() => {
+                    jinQiuEnventInfo.info = shijianStr;
+                    jinQiuEnventInfo.time = FormUtils.getCurrentTime();
+                    jinQiuEnventInfo.mid = "-1"; //mid为-1表示进球
+                    jinQiuEnventInfo.nameH = hName;
+                    jinQiuEnventInfo.nameG = gName;
+                    jinQiuEnventInfo.T = gameTime + "";
+                    jinQiuEnventInfo.inputType = this.GetCurrUserSelected();
+                    jinQiuEnventInfo.bangchangType = GetBanChangSelected();
+                    jinQiuEnventInfo.isDriect = false;
+                    JArray scoreArray = new JArray();
+                    scoreArray.Add(zhuScore);//第0个
+                    scoreArray.Add(geScore);//第1个
+                    jinQiuEnventInfo.scoreArray = scoreArray; //进球比分赋值处理
+
                     speakStr("有进球要下注");
                     leftForm.setComplete(jinQiuEnventInfo);
+                   
+
+                    Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+                    t.Start(jinQiuShowInfo);
                 }));
+                
                 return;
             }
 
-
+         
 
 
             //点球事件的处理
