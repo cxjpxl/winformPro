@@ -217,6 +217,163 @@ namespace CxjText.utlis
             }
             return time;
         }
+        /****************比分******************/
+        public static JArray get_bifen_data(object obj, String tag)
+        {
+            String hBifen="", gBifen = "";
+            switch (tag)
+            {
+                case "A":
+                    JObject jObjectA = (JObject)obj;
+                    hBifen = (String)jObjectA["a16"];
+                    gBifen = (String)jObjectA["a17"];
+                    break;
+                case "B":
+                    JObject jObjectB = (JObject)obj;
+                    try
+                    {
+                        String str = (String)jObjectB["Match_NowScore"];
+                        String[] strArr = str.Split(':');
+                        if (strArr.Length >= 2)
+                        {
+                            hBifen = strArr[0];
+                            gBifen = strArr[1];
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        hBifen = "";
+                        gBifen = "";
+                    }
+                    break;
+                case "I":
+                    JArray jObjectI = (JArray)obj;
+                    hBifen = (String)jObjectI[5];
+                    gBifen = (String)jObjectI[6];
+                    break;
+                case "U":
+                    JArray jObjectU = (JArray)obj;
+                    hBifen = ((String)jObjectU[18]).Trim();
+                    gBifen = ((String)jObjectU[19]).Trim();
+                    break;
+                case "R":
+                    JObject jObjectR = (JObject)obj;
+                    try
+                    {
+                        String str = (String)jObjectR["time"];
+                        String[] strArr = str.Split('\n');
+                        if (strArr.Length >= 2)
+                        {
+                            str = strArr[1];
+                            strArr = str.Split('-');
+                            if (strArr.Length >= 2)
+                            {
+                                hBifen = strArr[0];
+                                gBifen = strArr[1];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        hBifen = "";
+                        gBifen = "";
+                    }
+                    break;
+                case "G":
+                    JObject jObjectG = (JObject)obj;
+                    try
+                    {
+                        String str = (String)jObjectG["Match_NowScore"];
+                        String[] strArr = str.Split(':');
+                        if (strArr.Length >= 2)
+                        {
+                            hBifen = strArr[0];
+                            gBifen = strArr[1];
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        hBifen = "";
+                        gBifen = "";
+                    }
+                    break;
+                case "K":
+                case "C":
+                    JObject jObjectK = (JObject)obj;
+                    hBifen = (String)jObjectK["score_h"];
+                    gBifen = (String)jObjectK["score_c"];
+                    break;
+                case "F":
+                    JObject jObjectF = (JObject)obj;
+                    hBifen = (String)jObjectF["hscore"];
+                    gBifen = (String)jObjectF["gscore"];
+                    break;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    hBifen = (String)jObjectD["score_h"];
+                    gBifen = (String)jObjectD["score_c"];
+                    break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    hBifen = (String)jObjectE["scoreH"];
+                    gBifen = (String)jObjectE["scoreC"];
+                    break;
+                case "H":
+                    JObject jObjectH = (JObject)obj;
+                    try
+                    {
+                        String str = (String)jObjectH["time"];
+                        String[] strArr = str.Split('\n');
+                        if (strArr.Length >= 2)
+                        {
+                            str = strArr[1];
+                            strArr = str.Split('-');
+                            if (strArr.Length >= 2)
+                            {
+                                hBifen = strArr[0];
+                                gBifen = strArr[1];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        hBifen = "";
+                        gBifen = "";
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            hBifen = hBifen.Trim();
+            gBifen = gBifen.Trim();
+
+            JArray jArray = new JArray();
+            if (!hBifen.Equals("") && !gBifen.Equals(""))
+            {
+                try
+                {
+                    int hBF_int = int.Parse(hBifen);
+                    int gBF_int = int.Parse(gBifen);
+                    jArray.Add(hBF_int);
+                    jArray.Add(gBF_int);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("比分获取失败:", hBifen,"-",gBifen,"------",tag, "------", obj);
+                    jArray.Add(-1);
+                    jArray.Add(-1);
+                }
+            }
+            else
+            {
+                Console.WriteLine("比分获取失败:", hBifen, "-", gBifen, "------", tag, "------", obj);
+                jArray.Add(-1);
+                jArray.Add(-1);
+            }
+
+            return jArray;
+        }
         /*****************主队名称******************/
         public static String get_c02_data(object obj, String tag)
         {
@@ -2416,6 +2573,7 @@ namespace CxjText.utlis
             //联赛时间
             String time = get_c01_data(jObject, tag);
             returnObj.Add("c01", time.Trim());
+            JArray bifenArray = get_bifen_data(jObject, tag);
             //主队名字
             String c02 = get_c02_data(jObject, tag);
             returnObj.Add("c02", c02.Trim());
