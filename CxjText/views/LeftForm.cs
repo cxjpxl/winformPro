@@ -596,11 +596,17 @@ namespace CxjText.views
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
             //判断时候要下注   主要返回要下那一队
             //修改6
-            JObject jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
+            JObject jObject = null;
+            if (enventInfo.scoreArray != null) //进球处理
+            {
+                jObject = StringComPleteUtils.getJinQiuData(enventInfo, this.dataJArray, userInfo);
+            }
+            else {
+                jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
+            }
+            
          
             if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
-            Console.WriteLine(jObject.ToString());
-
             bool isBanChang = (bool)jObject["isBanChang"];
             bool isH = (bool)jObject["isH"]; //是否主队
             String nameH = (String)jObject["nameH"];
@@ -609,14 +615,18 @@ namespace CxjText.views
             //先将数据搜索出来
             if (mainFrom != null)
             {
-                if (isH)
-                {
-                    mainFrom.setTextBox1Text(nameH);
+                //进球的自动搜索出来
+                if (enventInfo.scoreArray != null) {
+                    if (isH)
+                    {
+                        mainFrom.setTextBox1Text(nameH);
+                    }
+                    else
+                    {
+                        mainFrom.setTextBox1Text(nameG);
+                    }
                 }
-                else
-                {
-                    mainFrom.setTextBox1Text(nameG);
-                }
+                   
 
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
@@ -628,8 +638,8 @@ namespace CxjText.views
 
             }
 
-            //是否属于过滤的球队
-            if (!StringComPleteUtils.canAutoPut(lianSai)) {
+            //进球的过滤无效  是否属于过滤的球队
+            if (enventInfo.scoreArray== null && !StringComPleteUtils.canAutoPut(lianSai)) {
                 return;
             }
             //自动下注要处理的算法 搜索出全部的结果出来
@@ -1097,17 +1107,20 @@ namespace CxjText.views
             }
             /*******************处理自动下注结束********************************/
 
-            if (obj == null) return;
+            if (obj == null) {
+                Console.WriteLine("没有可以下注的条件");
+                return;
+            } 
             String gameMid = DataUtils.getMid(obj,userInfo.tag);
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
             jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
-          /*  Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
+            Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +
                        "\n是否主队下注:" + isH +
                        "\n是否半场:" + isBanChang
-                       + "\n是否强制下大小:" + selectDaXiao);*/
+                       + "\n是否强制下大小:" + selectDaXiao);
 
 
             //判断是2s前保存的队伍
@@ -1179,14 +1192,31 @@ namespace CxjText.views
 
         }
 
-        public String getSaiName(String hStr, String gStr, bool isH) {
+        public String getSaiName(String hStr, String gStr, bool isH, int ballType) {
             int index = this.cIndex;
             if(index<0 || index>Config.userList.Count)
             {
                 return null;
             }
+
             UserInfo userInfo = (UserInfo)Config.userList[index];
-            return  StringComPleteUtils.getSaiName(hStr, gStr, isH,this.dataJArray, userInfo);
+
+            String name = null;
+
+            if (ballType == 0)
+            { //点球处理
+                name =  StringComPleteUtils.getSaiName(hStr, gStr, isH, this.dataJArray, userInfo);
+            }
+            else if (ballType == 1)
+            { //进球处理
+                name = StringComPleteUtils.getJinQiuSaiName(hStr, gStr, isH, this.dataJArray, userInfo);
+            }
+            else {
+                
+            }
+
+            return name;
+            
         }
 
     }

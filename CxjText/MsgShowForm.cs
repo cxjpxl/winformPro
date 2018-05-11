@@ -145,7 +145,7 @@ namespace CxjText.views
             if (mainFrom != null)
             {
                 this.Invoke(new Action(() => {
-                    mainFrom.searchForHistoryTeam(hStr, gStr, isH);
+                    mainFrom.searchForHistoryTeam(hStr, gStr, isH,enventShowInfo.ballType);
                 }));
             }
         }

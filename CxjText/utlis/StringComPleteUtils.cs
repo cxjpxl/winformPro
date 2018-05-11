@@ -345,6 +345,313 @@ namespace CxjText.utlis
             return null;
         }
 
+        //进球球队搜索  要修改的
+        public static JObject getJinQiuData(EnventInfo enventInfo, JArray jArray, UserInfo userInfo) {
+            if (enventInfo == null || userInfo == null) return null;
+            if (jArray == null || jArray.Count == 0) return null;
+            String tag = userInfo.tag;
+            for (int i = 0; i < jArray.Count; i++)
+            {
+                String lianSai = "";
+                String hStr = "";
+                String gStr = "";
+                String mid = "";
+                object obj = null;
+                switch (tag)
+                {
+                    case "A":
+                        JObject jObjectA = (JObject)jArray[i];
+                        lianSai = (String)jObjectA["a26"];
+                        hStr = (String)jObjectA["a2"];
+                        gStr = (String)jObjectA["a3"];
+                        mid = DataUtils.getMid(jObjectA, tag);
+                        obj = jObjectA;
+                        break;
+                    case "B":
+                        JObject jObjectB = (JObject)jArray[i];
+                        lianSai = (String)jObjectB["Match_Name"];
+                        hStr = (String)jObjectB["Match_Master"];
+                        gStr = (String)jObjectB["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectB, tag);
+                        obj = jObjectB;
+                        break;
+                    case "I":
+                        JArray jObjectI = (JArray)jArray[i];
+                        lianSai = (String)jObjectI[1];
+                        hStr = (String)jObjectI[2];
+                        gStr = (String)jObjectI[3];
+                        mid = DataUtils.getMid(jObjectI, tag);
+                        obj = jObjectI;
+                        break;
+                    case "U":
+                        JArray jObjectU = (JArray)jArray[i];
+                        lianSai = (String)jObjectU[2];
+                        hStr = (String)jObjectU[5];
+                        gStr = (String)jObjectU[6];
+                        mid = DataUtils.getMid(jObjectU, tag);
+                        obj = jObjectU;
+                        break;
+                    case "R":
+                        JObject jObjectR = (JObject)jArray[i];
+                        lianSai = (String)jObjectR["lianSai"];
+                        hStr = (String)jObjectR["nameH"];
+                        gStr = (String)jObjectR["nameG"];
+                        mid = DataUtils.getMid(jObjectR, tag);
+                        obj = jObjectR;
+                        break;
+                    case "G":
+                        JObject jObjectG = (JObject)jArray[i];
+                        lianSai = (String)jObjectG["Match_Name"];
+                        hStr = (String)jObjectG["Match_Master"];
+                        gStr = (String)jObjectG["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectG, tag);
+                        obj = jObjectG;
+                        break;
+                    case "K":
+                        JObject jObjectK = (JObject)jArray[i];
+                        lianSai = (String)jObjectK["league"];
+                        hStr = (String)jObjectK["team_h"];
+                        gStr = (String)jObjectK["team_c"];
+                        mid = DataUtils.getMid(jObjectK, tag);
+                        obj = jObjectK;
+                        break;
+                    case "C":
+                        JObject jObjectC = (JObject)jArray[i];
+                        lianSai = (String)jObjectC["league"];
+                        hStr = (String)jObjectC["team_h"];
+                        gStr = (String)jObjectC["team_c"];
+                        mid = DataUtils.getMid(jObjectC, tag);
+                        obj = jObjectC;
+                        break;
+                    case "F":
+                        JObject jObjectF = (JObject)jArray[i];
+                        lianSai = (String)jObjectF["mname"];
+                        hStr = (String)jObjectF["hteam"];
+                        gStr = (String)jObjectF["gteam"];
+                        mid = DataUtils.getMid(jObjectF, tag);
+                        obj = jObjectF;
+                        break;
+                    case "D":
+                        JObject jObjectD = (JObject)jArray[i];
+                        lianSai = (String)jObjectD["league"];
+                        hStr = (String)jObjectD["team_h"];
+                        gStr = (String)jObjectD["team_c"];
+                        mid = DataUtils.getMid(jObjectD, tag);
+                        obj = jObjectD;
+                        break;
+                    case "E":
+                        JObject jObjectE = (JObject)jArray[i];
+                        lianSai = (String)jObjectE["league"];
+                        hStr = (String)jObjectE["home"];
+                        gStr = (String)jObjectE["guest"];
+                        mid = DataUtils.getMid(jObjectE, tag);
+                        obj = jObjectE;
+                        break;
+                    case "H":
+                        JObject jObjectH = (JObject)jArray[i];
+                        lianSai = (String)jObjectH["lianSai"];
+                        hStr = (String)jObjectH["nameH"];
+                        gStr = (String)jObjectH["nameG"];
+                        mid = DataUtils.getMid(jObjectH, tag);
+                        obj = jObjectH;
+                        break;
+                    default:
+                        return null;
+                }
+
+                if (!hStr.Trim().Equals(enventInfo.nameH.Trim())) {
+                    continue;
+                }
+
+                if (!gStr.Trim().Equals(enventInfo.nameG.Trim()))
+                {
+                    continue;
+                }
+
+                JObject jObject = new JObject();
+                bool isH = true;
+                if (enventInfo.cid.Equals("1031"))
+                {
+                    isH = true;
+                }
+                else if (enventInfo.cid.Equals("2055"))
+                { 
+                    isH = false;
+                }
+                else
+                {
+                    return null;
+                }
+
+                bool isBanChang = false;
+                try
+                {
+                    int time = int.Parse(enventInfo.T);
+                    if (time <= 2700000)
+                    { 
+                        isBanChang = true;
+                    }
+                    else
+                    {
+                        isBanChang = false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    
+                }
+
+
+                jObject.Add("isH", isH); //是否主队
+                jObject.Add("isBanChang", isBanChang); //是否半场
+                jObject.Add("nameH", hStr);//主队名字
+                jObject.Add("nameG", gStr);//客队名字
+                jObject.Add("lianSai", lianSai);
+                return jObject;
+            }
+
+            return null;
+
+        }
+
+
+        //进球球队搜索  要修改的
+        public static String getJinQiuSaiName(String teamNameH, String teamNameG, bool isH, JArray jArray, UserInfo userInfo)
+        {
+            if (String.IsNullOrEmpty(teamNameH)) return null;
+            if (String.IsNullOrEmpty(teamNameG)) return null;
+            if (jArray == null || jArray.Count == 0) return null;
+            String tag = userInfo.tag;
+            for (int i = 0; i < jArray.Count; i++)
+            {
+                String lianSai = "";
+                String hStr = "";
+                String gStr = "";
+                String mid = "";
+                object obj = null;
+                switch (tag)
+                {
+                    case "A":
+                        JObject jObjectA = (JObject)jArray[i];
+                        lianSai = (String)jObjectA["a26"];
+                        hStr = (String)jObjectA["a2"];
+                        gStr = (String)jObjectA["a3"];
+                        mid = DataUtils.getMid(jObjectA, tag);
+                        obj = jObjectA;
+                        break;
+                    case "B":
+                        JObject jObjectB = (JObject)jArray[i];
+                        lianSai = (String)jObjectB["Match_Name"];
+                        hStr = (String)jObjectB["Match_Master"];
+                        gStr = (String)jObjectB["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectB, tag);
+                        obj = jObjectB;
+                        break;
+                    case "I":
+                        JArray jObjectI = (JArray)jArray[i];
+                        lianSai = (String)jObjectI[1];
+                        hStr = (String)jObjectI[2];
+                        gStr = (String)jObjectI[3];
+                        mid = DataUtils.getMid(jObjectI, tag);
+                        obj = jObjectI;
+                        break;
+                    case "U":
+                        JArray jObjectU = (JArray)jArray[i];
+                        lianSai = (String)jObjectU[2];
+                        hStr = (String)jObjectU[5];
+                        gStr = (String)jObjectU[6];
+                        mid = DataUtils.getMid(jObjectU, tag);
+                        obj = jObjectU;
+                        break;
+                    case "R":
+                        JObject jObjectR = (JObject)jArray[i];
+                        lianSai = (String)jObjectR["lianSai"];
+                        hStr = (String)jObjectR["nameH"];
+                        gStr = (String)jObjectR["nameG"];
+                        mid = DataUtils.getMid(jObjectR, tag);
+                        obj = jObjectR;
+                        break;
+                    case "G":
+                        JObject jObjectG = (JObject)jArray[i];
+                        lianSai = (String)jObjectG["Match_Name"];
+                        hStr = (String)jObjectG["Match_Master"];
+                        gStr = (String)jObjectG["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectG, tag);
+                        obj = jObjectG;
+                        break;
+                    case "K":
+                        JObject jObjectK = (JObject)jArray[i];
+                        lianSai = (String)jObjectK["league"];
+                        hStr = (String)jObjectK["team_h"];
+                        gStr = (String)jObjectK["team_c"];
+                        mid = DataUtils.getMid(jObjectK, tag);
+                        obj = jObjectK;
+                        break;
+                    case "C":
+                        JObject jObjectC = (JObject)jArray[i];
+                        lianSai = (String)jObjectC["league"];
+                        hStr = (String)jObjectC["team_h"];
+                        gStr = (String)jObjectC["team_c"];
+                        mid = DataUtils.getMid(jObjectC, tag);
+                        obj = jObjectC;
+                        break;
+                    case "F":
+                        JObject jObjectF = (JObject)jArray[i];
+                        lianSai = (String)jObjectF["mname"];
+                        hStr = (String)jObjectF["hteam"];
+                        gStr = (String)jObjectF["gteam"];
+                        mid = DataUtils.getMid(jObjectF, tag);
+                        obj = jObjectF;
+                        break;
+                    case "D":
+                        JObject jObjectD = (JObject)jArray[i];
+                        lianSai = (String)jObjectD["league"];
+                        hStr = (String)jObjectD["team_h"];
+                        gStr = (String)jObjectD["team_c"];
+                        mid = DataUtils.getMid(jObjectD, tag);
+                        obj = jObjectD;
+                        break;
+                    case "E":
+                        JObject jObjectE = (JObject)jArray[i];
+                        lianSai = (String)jObjectE["league"];
+                        hStr = (String)jObjectE["home"];
+                        gStr = (String)jObjectE["guest"];
+                        mid = DataUtils.getMid(jObjectE, tag);
+                        obj = jObjectE;
+                        break;
+                    case "H":
+                        JObject jObjectH = (JObject)jArray[i];
+                        lianSai = (String)jObjectH["lianSai"];
+                        hStr = (String)jObjectH["nameH"];
+                        gStr = (String)jObjectH["nameG"];
+                        mid = DataUtils.getMid(jObjectH, tag);
+                        obj = jObjectH;
+                        break;
+                    default:
+                        return null;
+                }
+
+                if (!hStr.Trim().Equals(teamNameH.Trim()))
+                {
+                    continue;
+                }
+
+                if (!gStr.Trim().Equals(teamNameG.Trim()))
+                {
+                    continue;
+                }
+
+                if (isH) {
+                    return hStr;
+                }
+
+                return gStr;
+            }
+
+            return null;
+
+        }
+
         //要修改
         public static String getSaiName(String teamNameH, String teamNameG,bool isH, JArray jArray, UserInfo userInfo)
         {

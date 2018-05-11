@@ -52,6 +52,11 @@
             this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.z_3_rd = new System.Windows.Forms.RadioButton();
+            this.z_2_rd = new System.Windows.Forms.RadioButton();
+            this.z_moren_rd = new System.Windows.Forms.RadioButton();
+            this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
             this.fitBox = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.putZaDan = new System.Windows.Forms.RadioButton();
@@ -59,18 +64,13 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.z_moren_rd = new System.Windows.Forms.RadioButton();
-            this.z_2_rd = new System.Windows.Forms.RadioButton();
-            this.z_3_rd = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // loginPanel
@@ -318,6 +318,63 @@
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.z_3_rd);
+            this.groupBox2.Controls.Add(this.z_2_rd);
+            this.groupBox2.Controls.Add(this.z_moren_rd);
+            this.groupBox2.Location = new System.Drawing.Point(193, 100);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(152, 43);
+            this.groupBox2.TabIndex = 26;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "炸弹+进球金额";
+            // 
+            // z_3_rd
+            // 
+            this.z_3_rd.AutoSize = true;
+            this.z_3_rd.Location = new System.Drawing.Point(100, 20);
+            this.z_3_rd.Name = "z_3_rd";
+            this.z_3_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_3_rd.TabIndex = 27;
+            this.z_3_rd.Text = "1/3";
+            this.z_3_rd.UseVisualStyleBackColor = true;
+            // 
+            // z_2_rd
+            // 
+            this.z_2_rd.AutoSize = true;
+            this.z_2_rd.Location = new System.Drawing.Point(56, 21);
+            this.z_2_rd.Name = "z_2_rd";
+            this.z_2_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_2_rd.TabIndex = 1;
+            this.z_2_rd.Text = "1/2";
+            this.z_2_rd.UseVisualStyleBackColor = true;
+            // 
+            // z_moren_rd
+            // 
+            this.z_moren_rd.AutoSize = true;
+            this.z_moren_rd.Checked = true;
+            this.z_moren_rd.Location = new System.Drawing.Point(8, 20);
+            this.z_moren_rd.Name = "z_moren_rd";
+            this.z_moren_rd.Size = new System.Drawing.Size(47, 16);
+            this.z_moren_rd.TabIndex = 0;
+            this.z_moren_rd.TabStop = true;
+            this.z_moren_rd.Text = "默认";
+            this.z_moren_rd.UseVisualStyleBackColor = true;
+            // 
+            // pingbanCheckBox
+            // 
+            this.pingbanCheckBox.AutoSize = true;
+            this.pingbanCheckBox.Checked = true;
+            this.pingbanCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pingbanCheckBox.Location = new System.Drawing.Point(226, 21);
+            this.pingbanCheckBox.Name = "pingbanCheckBox";
+            this.pingbanCheckBox.Size = new System.Drawing.Size(96, 16);
+            this.pingbanCheckBox.TabIndex = 25;
+            this.pingbanCheckBox.Text = "直接类型平半";
+            this.pingbanCheckBox.UseVisualStyleBackColor = true;
+            this.pingbanCheckBox.CheckedChanged += new System.EventHandler(this.pingbanCheckBox_CheckedChanged);
+            // 
             // fitBox
             // 
             this.fitBox.AutoSize = true;
@@ -337,7 +394,7 @@
             this.groupBox5.Controls.Add(this.putAuto);
             this.groupBox5.Location = new System.Drawing.Point(12, 149);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(113, 48);
+            this.groupBox5.Size = new System.Drawing.Size(149, 48);
             this.groupBox5.TabIndex = 24;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "自动下注类型";
@@ -347,10 +404,10 @@
             this.putZaDan.AutoSize = true;
             this.putZaDan.Location = new System.Drawing.Point(65, 20);
             this.putZaDan.Name = "putZaDan";
-            this.putZaDan.Size = new System.Drawing.Size(47, 16);
+            this.putZaDan.Size = new System.Drawing.Size(77, 16);
             this.putZaDan.TabIndex = 1;
             this.putZaDan.TabStop = true;
-            this.putZaDan.Text = "炸弹";
+            this.putZaDan.Text = "炸弹+进球";
             this.putZaDan.UseVisualStyleBackColor = true;
             // 
             // putAuto
@@ -402,63 +459,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
-            // pingbanCheckBox
-            // 
-            this.pingbanCheckBox.AutoSize = true;
-            this.pingbanCheckBox.Checked = true;
-            this.pingbanCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.pingbanCheckBox.Location = new System.Drawing.Point(226, 21);
-            this.pingbanCheckBox.Name = "pingbanCheckBox";
-            this.pingbanCheckBox.Size = new System.Drawing.Size(96, 16);
-            this.pingbanCheckBox.TabIndex = 25;
-            this.pingbanCheckBox.Text = "直接类型平半";
-            this.pingbanCheckBox.UseVisualStyleBackColor = true;
-            this.pingbanCheckBox.CheckedChanged += new System.EventHandler(this.pingbanCheckBox_CheckedChanged);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.z_3_rd);
-            this.groupBox2.Controls.Add(this.z_2_rd);
-            this.groupBox2.Controls.Add(this.z_moren_rd);
-            this.groupBox2.Location = new System.Drawing.Point(193, 100);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(152, 43);
-            this.groupBox2.TabIndex = 26;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "炸弹类型金额";
-            // 
-            // z_moren_rd
-            // 
-            this.z_moren_rd.AutoSize = true;
-            this.z_moren_rd.Checked = true;
-            this.z_moren_rd.Location = new System.Drawing.Point(8, 20);
-            this.z_moren_rd.Name = "z_moren_rd";
-            this.z_moren_rd.Size = new System.Drawing.Size(47, 16);
-            this.z_moren_rd.TabIndex = 0;
-            this.z_moren_rd.TabStop = true;
-            this.z_moren_rd.Text = "默认";
-            this.z_moren_rd.UseVisualStyleBackColor = true;
-            // 
-            // z_2_rd
-            // 
-            this.z_2_rd.AutoSize = true;
-            this.z_2_rd.Location = new System.Drawing.Point(56, 21);
-            this.z_2_rd.Name = "z_2_rd";
-            this.z_2_rd.Size = new System.Drawing.Size(41, 16);
-            this.z_2_rd.TabIndex = 1;
-            this.z_2_rd.Text = "1/2";
-            this.z_2_rd.UseVisualStyleBackColor = true;
-            // 
-            // z_3_rd
-            // 
-            this.z_3_rd.AutoSize = true;
-            this.z_3_rd.Location = new System.Drawing.Point(100, 20);
-            this.z_3_rd.Name = "z_3_rd";
-            this.z_3_rd.Size = new System.Drawing.Size(41, 16);
-            this.z_3_rd.TabIndex = 27;
-            this.z_3_rd.Text = "1/3";
-            this.z_3_rd.UseVisualStyleBackColor = true;
-            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -481,14 +481,14 @@
             this.groupBox1.PerformLayout();
             this.fitterBox.ResumeLayout(false);
             this.fitterBox.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

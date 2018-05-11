@@ -411,6 +411,9 @@ namespace CxjText
             timeText.Text = "时间: " + DateTime.Now.ToString() + " - " + enventShowInfo.shiDuan;
             lianSaiText.Text = "联赛：" + enventShowInfo.lianSaiStr;
             gameText.Text = enventShowInfo.gameH + " - " + enventShowInfo.gameG;
+            if (enventShowInfo.ballType == 1) {
+                gameText.Text = gameText.Text.ToString() + "(进球)";
+            }
             enventText.Text = "事件:" + enventShowInfo.text;
             gameText.Tag = enventShowInfo.gameTeamColor; //判断主客队标志
         }
@@ -418,7 +421,7 @@ namespace CxjText
 
         //显示事件
         private EnventShowInfo getShowInfo(int time, int teamColor, String shiDuan,
-            String hSting, String gString, String enventStr, String lianSai) {
+            String hSting, String gString, String enventStr, String lianSai,int ballType) {
             EnventShowInfo enventShowInfo = new EnventShowInfo();
             enventShowInfo.gameTime = time;
             enventShowInfo.gameTeamColor = teamColor;
@@ -427,6 +430,7 @@ namespace CxjText
             enventShowInfo.gameG = gString;
             enventShowInfo.text = enventStr;
             enventShowInfo.lianSaiStr = lianSai;
+            enventShowInfo.ballType = ballType;
             return enventShowInfo;
         }
 
@@ -437,16 +441,104 @@ namespace CxjText
            // Console.WriteLine(message);
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
+                
                 return;
             }
             JObject jObject = JObject.Parse(message);
             if (jObject == null) return;
 
             //87分钟事件的处理
+            //{"cmd":2,"league":"冰岛女子甲组联赛","state":0,"score1":"1","score2":"1","tm1":"斯洛图尔(女)","tm2":"富佐尼(女)","gametime":"67"}
+            // 联赛名字，{1:主队进球,0:客队进球},主队比分,客队比分,主队名字,客队名字,比赛进行的时间
             if (jObject["cmd"] != null && ((int)jObject["cmd"]) != 1)
             {
+                
+                if (((int)jObject["cmd"]) != 2) return;
+                Console.WriteLine(message);
+                String league = (String)jObject["league"];
+                int state = (int)jObject["state"];
+                int zhuScore = (int)jObject["score1"];
+                int geScore = (int)jObject["score2"];
+                String hName = (String)jObject["tm1"];
+                String gName = (String)jObject["tm2"];
+                int gameTime = (int)jObject["gametime"];
+
+
+                gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
+                String shijianStr = "";
+                int teamColor = 0;
+                String shiDuan = "全场";
+                String biFenString = "("+zhuScore + ":" + geScore+")";
+
+                if (state == 1)
+                {
+                    teamColor = 1;
+                    shijianStr = "主队进球";
+                }
+                else if (state == 0)
+                {
+                    teamColor = 2;
+                    shijianStr = "客队进球";
+                }
+                else { return; }
+                if (gameTime < 2700000){ //半场
+                    shiDuan = "上半场";
+                }
+                else{
+                    shiDuan = "全场";
+                }
+
+
+                speechSynthesizer.SpeakAsync(shiDuan+ shijianStr+","+ biFenString);
+
+                //事件的显示
+                EnventShowInfo jinQiuShowInfo = getShowInfo(gameTime,
+                    teamColor, shiDuan,
+                    hName, gName,
+                    shijianStr+ biFenString, league,1);
+
+                this.Invoke(new Action(() => {
+                    showViewText(jinQiuShowInfo);
+                }));
+                Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+                t.Start(jinQiuShowInfo);
+
+                //处理进球下单事件
+                EnventInfo jinQiuEnventInfo = new EnventInfo();
+
+                if (state == 1) //主队
+                {
+                    jinQiuEnventInfo.cid = "1031";
+                }
+                else if (state == 0) //客队
+                {
+                    jinQiuEnventInfo.cid = "2055";
+                }
+
+                jinQiuEnventInfo.info = shijianStr;
+                jinQiuEnventInfo.time = FormUtils.getCurrentTime();
+                jinQiuEnventInfo.mid = "-1"; //mid为-1表示进球
+                jinQiuEnventInfo.nameH = hName;
+                jinQiuEnventInfo.nameG = gName;
+                jinQiuEnventInfo.T = gameTime+"";
+                jinQiuEnventInfo.inputType = this.GetCurrUserSelected();
+                jinQiuEnventInfo.bangchangType = GetBanChangSelected();
+                jinQiuEnventInfo.isDriect = false;
+                JArray scoreArray = new JArray();
+                scoreArray.Add(zhuScore);//第0个
+                scoreArray.Add(geScore);//第1个
+                jinQiuEnventInfo.scoreArray = scoreArray; //进球比分赋值处理
+
+                this.Invoke(new Action(() => {
+                    speakStr("有进球要下注");
+                    leftForm.setComplete(jinQiuEnventInfo);
+                }));
                 return;
             }
+
+
+
+
             //点球事件的处理
             if (leftForm == null) return;
             if (this.isFinish) return;
@@ -582,8 +674,10 @@ namespace CxjText
                 }
                 //事件的显示
                 EnventShowInfo enventShowInfo = getShowInfo(time, teamColor, shiDuan, 
-                    enventInfo.nameH, enventInfo.nameG, 
-                    enventString.Replace("事件:", ""),(String)jObject["game"]["leagueName"]);
+                    enventInfo.nameH,
+                    enventInfo.nameG, 
+                    enventString.Replace("事件:", ""),
+                    (String)jObject["game"]["leagueName"],0);
 
                 //界面显示
                 showViewText(enventShowInfo);
@@ -809,30 +903,37 @@ namespace CxjText
         //比赛点击搜索
         private void gameText_Click(object sender, EventArgs e)
         {
-            String[] strs = gameText.Text.Split('-');
+            String text = gameText.Text.ToString();
+            int ballType = 0; // 点球
+            if (text.Contains("(进球)")) {
+                ballType = 1;
+                text = text.Replace("(进球)", "");
+            }
+
+            String[] strs = text.Split('-');
             if (strs.Length > 1) {
                 if ((int)gameText.Tag == 1)
                 {  //主队
-                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(),true);
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(),true,ballType);
                 }
                 else if ((int)gameText.Tag == 2)
                 { //客队
-                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), false);
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), false, ballType);
                 }
                 else
                 {
-                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), true);
+                    searchForHistoryTeam(strs[0].Trim(), strs[1].Trim(), true,ballType);
                 }
             }
         }
 
         // 消息列表 历史消息点击搜索  
-        //参数  主队  客队  是否主队
-        public void searchForHistoryTeam(String hStr,String gStr,bool isH)
+        //参数  主队  客队  是否主队  类型
+        public void searchForHistoryTeam(String hStr,String gStr,bool isH,int ballType)
         {
             if (!String.IsNullOrEmpty(hStr)&& !String.IsNullOrEmpty(gStr))
             {
-                String name = leftForm.getSaiName(hStr, gStr,isH);
+                String name = leftForm.getSaiName(hStr, gStr,isH, ballType);
                 if (name == null) {
                     if (isH)
                     {

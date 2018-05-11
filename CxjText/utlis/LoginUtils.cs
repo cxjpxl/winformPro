@@ -1165,7 +1165,7 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            Console.WriteLine("登录1成功");
+          
             //获取money 
             int moneyStatus = MoneyUtils.GetCMoney(userInfo);
             if (moneyStatus != 1)
@@ -1228,6 +1228,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
             String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
             if (String.IsNullOrEmpty(codeStrBuf))
             {
@@ -1239,9 +1240,51 @@ namespace CxjText.utlis
                 return;
             }
 
+            String loginStatusUrl = userInfo.loginUrl + "/member/member";
+            String loginStatuP = "account="+userInfo.user+"&type=getLoginStatus";
+           
+            headJObject["Origin"] = userInfo.loginUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String loginStatusStr = HttpUtils.HttpPostHeader(loginStatusUrl,loginStatuP, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
+          
+            if (String.IsNullOrEmpty(loginStatusStr)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            int loginStatus = -1;
+            try
+            {
+                 loginStatus = int.Parse(loginStatusStr);
+            }
+            catch (Exception e) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            if (loginStatus >= 3) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+           
+
             String checkLoginUrl = userInfo.loginUrl + "/member/member";
+            //account=tye654321&password=tye396&type=validInfo
             String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
+         
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1624,7 +1667,7 @@ namespace CxjText.utlis
             String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&Submit=";
             String loginStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded",userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(loginStr) || !loginStr.Contains(userInfo.user)|| !loginStr.Contains("userinfo")) {
-                Console.WriteLine("访问不成功!");
+                
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace CxjText.bean
         public int inputType = -1;//下注类型  0是让球  1是大小
         public int bangchangType = 0; //下半场的类型   0默认  1半场  2全场 3上半场
         public bool isDriect = false; //是否是直接下注类型 默认为false
+    
+        public JArray scoreArray = null; //进球的比分
 
     }
 }
