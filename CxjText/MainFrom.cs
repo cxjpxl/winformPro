@@ -454,7 +454,7 @@ namespace CxjText
             {
                 
                 if (((int)jObject["cmd"]) != 2) return;
-                Console.WriteLine(message);
+               // Console.WriteLine(message);
 
                 this.Invoke(new Action(() => {
                     String league = (String)jObject["league"];
@@ -464,6 +464,21 @@ namespace CxjText
                     String hName = (String)jObject["tm1"];
                     String gName = (String)jObject["tm2"];
                     int gameTime = (int)jObject["gametime"];
+
+                    int curPosition = loginForm.getCurrentSelectRow();
+                    if (curPosition >= Config.userList.Count) return;
+
+                    UserInfo userInfo = (UserInfo)Config.userList[curPosition];
+                    if (userInfo == null) return;
+                    //AUD
+                    if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D"))) {
+                        return;
+                    }
+
+                    if (!((gameTime >= 42 && gameTime <= 44) || (gameTime >= 86 && gameTime <= 89))) {
+                        return;
+                    }
+
 
 
                     gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
