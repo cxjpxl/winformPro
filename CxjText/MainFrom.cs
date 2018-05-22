@@ -470,15 +470,24 @@ namespace CxjText
 
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
                     if (userInfo == null) return;
-                    //AUD
-                    if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D"))) {
-                        return;
-                    }
 
-                    if (!((gameTime >= 42 && gameTime <= 44) || (gameTime >= 86 && gameTime <= 89))) {
-                        return;
+                    if (Config.softUserStr.Equals("admin") && userInfo.tag.Equals("C"))
+                    {
+                        //用于本人处理测试C系统  ok就开放
                     }
+                    else {
+                        //AUD
+                        if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
+                        {
+                            return;
+                        }
 
+                        if (!((gameTime >= 86 && gameTime <= 89)))
+                        {
+                            return;
+                        }
+                    }
+                    
 
 
                     gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
