@@ -471,8 +471,10 @@ namespace CxjText
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
                     if (userInfo == null) return;
 
-                    if (Config.softUserStr.Equals("admin") && userInfo.tag.Equals("C"))
+                    if (Config.softUserStr.Equals("admin") && userInfo.tag.Equals("C") )
                     {
+                        if (gameTime > 0 && gameTime < 25) return;
+                        if (gameTime > 45 && gameTime < 75) return;
                         //用于本人处理测试C系统  ok就开放
                     }
                     else {
