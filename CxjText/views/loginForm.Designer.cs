@@ -29,9 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.loginDaGridView = new System.Windows.Forms.DataGridView();
+            this.loginSelectMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.loginTimer = new System.Windows.Forms.Timer(this.components);
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,9 +42,7 @@
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.loginSelectMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.loginTimer = new System.Windows.Forms.Timer(this.components);
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.loginDaGridView)).BeginInit();
             this.loginSelectMenu.SuspendLayout();
             this.SuspendLayout();
@@ -51,8 +52,8 @@
             this.loginDaGridView.AllowUserToAddRows = false;
             this.loginDaGridView.AllowUserToResizeColumns = false;
             this.loginDaGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.LemonChiffon;
-            this.loginDaGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LemonChiffon;
+            this.loginDaGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.loginDaGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.loginDaGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.loginDaGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -62,17 +63,37 @@
             this.Column4,
             this.Column5,
             this.Column6,
-            this.Column7});
+            this.Column7,
+            this.Column8});
             this.loginDaGridView.Location = new System.Drawing.Point(0, 0);
             this.loginDaGridView.Name = "loginDaGridView";
             this.loginDaGridView.RowHeadersVisible = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.loginDaGridView.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.loginDaGridView.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.loginDaGridView.RowTemplate.Height = 23;
             this.loginDaGridView.Size = new System.Drawing.Size(356, 267);
             this.loginDaGridView.TabIndex = 1;
             this.loginDaGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LoginDaGridView_CellMouseClick);
             this.loginDaGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.LoginDaGridView_CellValueChanged);
+            // 
+            // loginSelectMenu
+            // 
+            this.loginSelectMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2});
+            this.loginSelectMenu.Name = "loginSelectMenu";
+            this.loginSelectMenu.Size = new System.Drawing.Size(91, 26);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(90, 22);
+            this.toolStripMenuItem2.Text = "11";
+            // 
+            // loginTimer
+            // 
+            this.loginTimer.Enabled = true;
+            this.loginTimer.Interval = 60000;
+            this.loginTimer.Tick += new System.EventHandler(this.loginTimer_Tick);
             // 
             // Column1
             // 
@@ -131,25 +152,15 @@
             // 
             this.Column7.HeaderText = "限定";
             this.Column7.Name = "Column7";
+            this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // loginSelectMenu
+            // Column8
             // 
-            this.loginSelectMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2});
-            this.loginSelectMenu.Name = "loginSelectMenu";
-            this.loginSelectMenu.Size = new System.Drawing.Size(91, 26);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(90, 22);
-            this.toolStripMenuItem2.Text = "11";
-            // 
-            // loginTimer
-            // 
-            this.loginTimer.Enabled = true;
-            this.loginTimer.Interval = 60000;
-            this.loginTimer.Tick += new System.EventHandler(this.loginTimer_Tick);
+            this.Column8.HeaderText = "备注";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            this.Column8.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // LoginForm
             // 
@@ -181,5 +192,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
     }
 }

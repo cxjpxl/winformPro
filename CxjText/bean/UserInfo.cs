@@ -34,6 +34,8 @@ namespace CxjText.bean
         public long updateMoneyTime = -1;//记录money的更新时间
         public int loginFailTime = 0;
 
+        public String infoExp = "";//用户信息扩展  (目前有些D网能检测是否能出款)
+
         public UserInfo() {
             cookie = new CookieContainer();
         }

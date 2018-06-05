@@ -64,6 +64,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.genggai_ben = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
@@ -303,6 +304,7 @@
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.genggai_ben);
             this.fitterBox.Controls.Add(this.groupBox2);
             this.fitterBox.Controls.Add(this.pingbanCheckBox);
             this.fitterBox.Controls.Add(this.fitBox);
@@ -459,6 +461,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
+            // genggai_ben
+            // 
+            this.genggai_ben.Location = new System.Drawing.Point(201, 161);
+            this.genggai_ben.Name = "genggai_ben";
+            this.genggai_ben.Size = new System.Drawing.Size(75, 23);
+            this.genggai_ben.TabIndex = 27;
+            this.genggai_ben.Text = "更改";
+            this.genggai_ben.UseVisualStyleBackColor = true;
+            this.genggai_ben.Click += new System.EventHandler(this.genggai_ben_Click);
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -530,5 +542,6 @@
         private System.Windows.Forms.RadioButton z_3_rd;
         private System.Windows.Forms.RadioButton z_2_rd;
         private System.Windows.Forms.RadioButton z_moren_rd;
+        private System.Windows.Forms.Button genggai_ben;
     }
 }

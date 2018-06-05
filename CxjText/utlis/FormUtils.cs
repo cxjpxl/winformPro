@@ -6,6 +6,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Drawing;
 using System.IO;
+using CxjText.utils;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -510,5 +511,8 @@ namespace CxjText.utlis
 
             return strbaser64;
         }
+
+
+   
     }
 }

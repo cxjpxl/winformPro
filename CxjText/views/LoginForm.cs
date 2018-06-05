@@ -263,7 +263,15 @@ namespace CxjText.views
                     this.loginDaGridView.Rows[index].Cells[3].ReadOnly = false;
                     this.loginDaGridView.Rows[index].Cells[3].Value = inputMoney;
                     this.loginDaGridView.Rows[index].Cells[6].Value = xianDing;
-
+                    String infoExp = userInfo.infoExp;
+                    if (!String.IsNullOrEmpty(infoExp))
+                    {
+                        infoExp = userInfo.infoExp;
+                    }
+                    else {
+                        infoExp = "";
+                    }
+                    this.loginDaGridView.Rows[index].Cells[7].Value = infoExp;
 
                     if (status == -1)
                     {

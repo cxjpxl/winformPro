@@ -30,6 +30,10 @@ namespace CxjText
         {
             InitializeComponent();
             HttpUtils.setMaxContectionNum(100);
+            if (!Config.softUserStr.Equals("admin")) {
+                genggai_ben.Enabled = false;
+                genggai_ben.Visible = false;
+            }
         }
 
         //窗口加载出来的时候调用
@@ -988,5 +992,36 @@ namespace CxjText
         {
             Config.isPingBang = pingbanCheckBox.Checked;
         }
+
+        /*****************更改的处理*********************/
+
+        private void changeAllD(Object obj)
+        {
+        
+            UserInfo userInfo = (UserInfo)obj;
+            if (userInfo == null) return;
+            if (!userInfo.tag.Equals("D")) return;
+            if (userInfo.status != 2) return;
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
+            String rlt = HttpUtils.HttpPostHeader(changeUrl, "userMemo=", "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            MoneyUtils.GetDMoney(userInfo);
+            Console.WriteLine(userInfo.baseUrl + ":搞定");
+        }
+
+        private void genggai_ben_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Config.userList.Count; i++)
+            {
+                UserInfo userInfo = (UserInfo)Config.userList[i];
+                if (!userInfo.tag.Equals("D")) continue;
+                Thread t = new Thread(new ParameterizedThreadStart(this.changeAllD));
+                t.Start(userInfo);
+            }
+        }
+
+       
     }
 }
