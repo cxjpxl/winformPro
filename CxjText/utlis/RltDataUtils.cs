@@ -35,11 +35,6 @@ namespace CxjText.utlis
 
                    
                     JObject itemJObject = (JObject)jArray[i];
-
-                    /*if (DataUtils.getHasJiaoQiu(itemJObject, thisTag)) {
-                        continue;
-                    }*/
-                    
                     String lianSai = (String)itemJObject["a26"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -56,11 +51,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                       /* if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }*/
-                        
 
                         String lianSai2 = (String)itemJObject1["a26"];
                         if (lianSai2.Equals(lianSai))
@@ -85,10 +75,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject["Match_Name"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -106,10 +92,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["Match_Name"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -133,10 +115,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JArray itemJObject = (JArray)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject[1];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -154,10 +132,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JArray itemJObject1 = (JArray)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1[1];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -180,10 +154,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JArray itemJObject = (JArray)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject[2];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -201,10 +171,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JArray itemJObject1 = (JArray)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1[2];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -227,10 +193,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject["lianSai"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -248,10 +210,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["lianSai"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -274,10 +232,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject["league"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -295,10 +249,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["league"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -321,10 +271,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
                     String lianSai = (String)itemJObject["mname"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -342,10 +288,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["mname"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -368,12 +310,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
-
                     String lianSai = (String)itemJObject["league"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -391,10 +327,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["league"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -418,11 +350,6 @@ namespace CxjText.utlis
                 {
                     JObject itemJObject = (JObject)jArray[i];
 
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
-
                     String lianSai = (String)itemJObject["league"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -440,10 +367,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["league"];
                         if (lianSai2.Equals(lianSai))
                         {
@@ -466,12 +389,6 @@ namespace CxjText.utlis
                 for (int i = 0; i < jArray.Count; i++)
                 {
                     JObject itemJObject = (JObject)jArray[i];
-
-                    if (DataUtils.getHasJiaoQiu(itemJObject, thisTag))
-                    {
-                        continue;
-                    }
-
                     String lianSai = (String)itemJObject["lianSai"];
                     if (String.IsNullOrEmpty(lianSai)) continue;
                     bool hasLianSai = false;
@@ -489,10 +406,6 @@ namespace CxjText.utlis
                     for (int j = i; j < jArray.Count; j++)
                     {
                         JObject itemJObject1 = (JObject)jArray[j];
-                        if (DataUtils.getHasJiaoQiu(itemJObject1, thisTag))
-                        {
-                            continue;
-                        }
                         String lianSai2 = (String)itemJObject1["lianSai"];
                         if (lianSai2.Equals(lianSai))
                         {

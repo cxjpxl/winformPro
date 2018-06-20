@@ -1553,7 +1553,7 @@ namespace CxjText.utlis
             //统一显示的
             dataJObject["gameName"] = gameName; //获取赛事
             dataJObject["gameTeam"] = gameTeam; //球队名称
-            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["bateStr"] = bateStr; //赔
             dataJObject["inputType"] = inputType; //下注类型
             return rltStr;
         }
@@ -2003,6 +2003,7 @@ namespace CxjText.utlis
             dataJObject["gameTeam"] = gameTeam; //球队名称
             dataJObject["bateStr"] = bateStr; //赔率
             dataJObject["inputType"] = inputType; //下注类型
+
             return rltStr;
         }
     }

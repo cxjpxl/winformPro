@@ -99,7 +99,7 @@ namespace CxjText.utlis
             //登录请求
             if (userInfo.cookie == null)
             {
-                userInfo.cookie = new System.Net.CookieContainer();
+                userInfo.cookie = new CookieContainer();
             }
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
@@ -235,7 +235,7 @@ namespace CxjText.utlis
                 }));
                // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
                 userInfo.cookie = null;
-                userInfo.cookie = new System.Net.CookieContainer();
+                userInfo.cookie = new CookieContainer();
                 return;
             }
 
@@ -245,15 +245,17 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            
 
-            String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime(); 
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
+            String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime();
             //登录请求
             if (userInfo.cookie == null)
             {
-                userInfo.cookie = new System.Net.CookieContainer();
+                userInfo.cookie = new CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -273,13 +275,14 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
+            
             //获取登录的系统参数 
             String paramsStr  = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
-           
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
-            String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             if (rltStr == null)
             {
                 userInfo.loginFailTime++;
@@ -289,6 +292,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
             //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
             int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
             if (rltNum < 0)
@@ -1281,7 +1285,6 @@ namespace CxjText.utlis
            
 
             String checkLoginUrl = userInfo.loginUrl + "/member/member";
-            //account=tye654321&password=tye396&type=validInfo
             String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
          

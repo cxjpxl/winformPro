@@ -194,6 +194,7 @@ namespace CxjText.utlis
 
                 if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
                 if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
+                if (hStr.Contains("罚牌") || gStr.Contains("罚牌")) continue;
 
                 if (hStr.Contains("(中)")) hStr = hStr.Replace("(中)", "");
                 if (hStr.Contains("[中]")) hStr = hStr.Replace("[中]", "");
@@ -653,7 +654,8 @@ namespace CxjText.utlis
         }
 
         //要修改
-        public static String getSaiName(String teamNameH, String teamNameG,bool isH, JArray jArray, UserInfo userInfo)
+        public static String getSaiName(String teamNameH, String teamNameG,
+            bool isH, JArray jArray, UserInfo userInfo)
         {
 
             if (String.IsNullOrEmpty(teamNameH)) return null;
@@ -773,6 +775,8 @@ namespace CxjText.utlis
 
                 if (hStr.Contains("角球") || gStr.Contains("角球")) continue;
                 if (hStr.Contains("点球") || gStr.Contains("点球")) continue;
+                if (hStr.Contains("罚牌") || gStr.Contains("罚牌")) continue;
+                
 
                 String zhuName = hStr;//原始数据
                 String geName = gStr;//原始数据

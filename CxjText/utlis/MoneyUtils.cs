@@ -431,7 +431,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-            //Console.WriteLine(moneyRlt);
+          //  Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;
@@ -441,13 +441,17 @@ namespace CxjText.utlis
             JObject extInfo = (JObject)jObject["extInfo"];
             if (extInfo["money"] == null) return 0;
             String moneyStr =(String) extInfo["money"];
-
+           
             //用户信息显示处理
             if (jObject["userInfo"] != null) {
                 JObject userInfoJObject = (JObject)jObject["userInfo"];
-                if (userInfoJObject["userMemo"] != null) {
-                    String userMemo =(String) userInfoJObject["userMemo"];
+                if (userInfoJObject["userMemo"] != null)
+                {
+                    String userMemo = (String)userInfoJObject["userMemo"];
                     user.infoExp = userMemo;
+                }
+                else {
+                    user.infoExp = "";
                 }
             }
 
@@ -490,7 +494,6 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
 
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt))
             {
                 return 0;

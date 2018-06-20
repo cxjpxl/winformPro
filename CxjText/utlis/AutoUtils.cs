@@ -26,5 +26,25 @@ namespace CxjText.utlis
             }
             return searchArray;
         }
+
+
+        public static JArray getJiaoQiuGames(JArray dataJArray,
+            UserInfo userInfo, String nameH, String nameG)
+        {
+            JArray searchArray = new JArray();
+            for (int i = 0; i < dataJArray.Count; i++)
+            {
+                String nameH1 = DataUtils.get_c02_data(dataJArray[i], userInfo.tag);
+                if ( nameH1.Contains("点球")) continue;
+                String nameG1 = DataUtils.get_c12_data(dataJArray[i], userInfo.tag);
+                if (nameG1.Contains("点球")) continue;
+
+                if (nameH1.Contains(nameH) && nameG1.Contains(nameG) && nameH1.Contains("角球"))
+                {  //找出名字一样的所有比赛
+                    searchArray.Add(dataJArray[i]);
+                }
+            }
+            return searchArray;
+        }
     }
 }

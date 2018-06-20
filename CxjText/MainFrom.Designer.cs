@@ -52,25 +52,31 @@
             this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.dianQiu_check = new System.Windows.Forms.CheckBox();
+            this.fitBox = new System.Windows.Forms.CheckBox();
+            this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
+            this.jiaoqiu_checkBox = new System.Windows.Forms.CheckBox();
+            this.jiaoQiuTime = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.z_3_rd = new System.Windows.Forms.RadioButton();
             this.z_2_rd = new System.Windows.Forms.RadioButton();
             this.z_moren_rd = new System.Windows.Forms.RadioButton();
-            this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
-            this.fitBox = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.putZaDan = new System.Windows.Forms.RadioButton();
             this.putAuto = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.genGai_pan = new System.Windows.Forms.Panel();
+            this.genggai_text = new System.Windows.Forms.TextBox();
             this.genggai_ben = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.genGai_pan.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -172,7 +178,7 @@
             // autoCheck
             // 
             this.autoCheck.AutoSize = true;
-            this.autoCheck.Location = new System.Drawing.Point(14, 20);
+            this.autoCheck.Location = new System.Drawing.Point(6, 21);
             this.autoCheck.Name = "autoCheck";
             this.autoCheck.Size = new System.Drawing.Size(48, 16);
             this.autoCheck.TabIndex = 14;
@@ -205,9 +211,9 @@
             // 
             this.panel1.Controls.Add(this.rbDaxiao);
             this.panel1.Controls.Add(this.rbRangQiu);
-            this.panel1.Location = new System.Drawing.Point(61, 12);
+            this.panel1.Location = new System.Drawing.Point(59, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(109, 28);
+            this.panel1.Size = new System.Drawing.Size(109, 27);
             this.panel1.TabIndex = 15;
             // 
             // AutoBanChang
@@ -295,7 +301,7 @@
             this.groupBox1.Controls.Add(this.rbAmount_MoRen);
             this.groupBox1.Controls.Add(this.rbAmount_1_3);
             this.groupBox1.Controls.Add(this.rbAmount_1_2);
-            this.groupBox1.Location = new System.Drawing.Point(3, 99);
+            this.groupBox1.Location = new System.Drawing.Point(173, 100);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(176, 44);
             this.groupBox1.TabIndex = 21;
@@ -304,28 +310,94 @@
             // 
             // fitterBox
             // 
-            this.fitterBox.Controls.Add(this.genggai_ben);
-            this.fitterBox.Controls.Add(this.groupBox2);
-            this.fitterBox.Controls.Add(this.pingbanCheckBox);
+            this.fitterBox.Controls.Add(this.dianQiu_check);
             this.fitterBox.Controls.Add(this.fitBox);
+            this.fitterBox.Controls.Add(this.pingbanCheckBox);
+            this.fitterBox.Controls.Add(this.jiaoqiu_checkBox);
+            this.fitterBox.Controls.Add(this.jiaoQiuTime);
+            this.fitterBox.Controls.Add(this.groupBox2);
+            this.fitterBox.Controls.Add(this.panel1);
             this.fitterBox.Controls.Add(this.groupBox5);
             this.fitterBox.Controls.Add(this.groupBox3);
             this.fitterBox.Controls.Add(this.autoCheck);
             this.fitterBox.Controls.Add(this.groupBox1);
-            this.fitterBox.Controls.Add(this.panel1);
-            this.fitterBox.Location = new System.Drawing.Point(999, 453);
+            this.fitterBox.Controls.Add(this.genGai_pan);
+            this.fitterBox.Location = new System.Drawing.Point(999, 454);
             this.fitterBox.Name = "fitterBox";
-            this.fitterBox.Size = new System.Drawing.Size(356, 203);
+            this.fitterBox.Size = new System.Drawing.Size(356, 202);
             this.fitterBox.TabIndex = 22;
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
+            // 
+            // dianQiu_check
+            // 
+            this.dianQiu_check.AutoSize = true;
+            this.dianQiu_check.Checked = true;
+            this.dianQiu_check.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dianQiu_check.Location = new System.Drawing.Point(299, 22);
+            this.dianQiu_check.Name = "dianQiu_check";
+            this.dianQiu_check.Size = new System.Drawing.Size(48, 16);
+            this.dianQiu_check.TabIndex = 0;
+            this.dianQiu_check.Text = "点球";
+            this.dianQiu_check.UseVisualStyleBackColor = true;
+            this.dianQiu_check.CheckedChanged += new System.EventHandler(this.dianQiu_check_CheckedChanged);
+            // 
+            // fitBox
+            // 
+            this.fitBox.AutoSize = true;
+            this.fitBox.Checked = true;
+            this.fitBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.fitBox.Location = new System.Drawing.Point(240, 78);
+            this.fitBox.Name = "fitBox";
+            this.fitBox.Size = new System.Drawing.Size(48, 16);
+            this.fitBox.TabIndex = 0;
+            this.fitBox.Text = "过滤";
+            this.fitBox.UseVisualStyleBackColor = true;
+            this.fitBox.CheckedChanged += new System.EventHandler(this.fitBox_CheckedChanged);
+            // 
+            // pingbanCheckBox
+            // 
+            this.pingbanCheckBox.AutoSize = true;
+            this.pingbanCheckBox.Checked = true;
+            this.pingbanCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pingbanCheckBox.Location = new System.Drawing.Point(240, 51);
+            this.pingbanCheckBox.Name = "pingbanCheckBox";
+            this.pingbanCheckBox.Size = new System.Drawing.Size(96, 16);
+            this.pingbanCheckBox.TabIndex = 25;
+            this.pingbanCheckBox.Text = "直接类型平半";
+            this.pingbanCheckBox.UseVisualStyleBackColor = true;
+            this.pingbanCheckBox.CheckedChanged += new System.EventHandler(this.pingbanCheckBox_CheckedChanged);
+            // 
+            // jiaoqiu_checkBox
+            // 
+            this.jiaoqiu_checkBox.AutoSize = true;
+            this.jiaoqiu_checkBox.Location = new System.Drawing.Point(252, 21);
+            this.jiaoqiu_checkBox.Name = "jiaoqiu_checkBox";
+            this.jiaoqiu_checkBox.Size = new System.Drawing.Size(48, 16);
+            this.jiaoqiu_checkBox.TabIndex = 0;
+            this.jiaoqiu_checkBox.Text = "角球";
+            this.jiaoqiu_checkBox.UseVisualStyleBackColor = true;
+            this.jiaoqiu_checkBox.CheckedChanged += new System.EventHandler(this.jiaoqiu_checkBox_CheckedChanged);
+            // 
+            // jiaoQiuTime
+            // 
+            this.jiaoQiuTime.AutoSize = true;
+            this.jiaoQiuTime.Checked = true;
+            this.jiaoQiuTime.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.jiaoQiuTime.Location = new System.Drawing.Point(174, 20);
+            this.jiaoQiuTime.Name = "jiaoQiuTime";
+            this.jiaoQiuTime.Size = new System.Drawing.Size(72, 16);
+            this.jiaoQiuTime.TabIndex = 29;
+            this.jiaoQiuTime.Text = "角球时间";
+            this.jiaoQiuTime.UseVisualStyleBackColor = true;
+            this.jiaoQiuTime.CheckedChanged += new System.EventHandler(this.jiaoQiuTime_CheckedChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.z_3_rd);
             this.groupBox2.Controls.Add(this.z_2_rd);
             this.groupBox2.Controls.Add(this.z_moren_rd);
-            this.groupBox2.Location = new System.Drawing.Point(193, 100);
+            this.groupBox2.Location = new System.Drawing.Point(6, 101);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(152, 43);
             this.groupBox2.TabIndex = 26;
@@ -364,37 +436,11 @@
             this.z_moren_rd.Text = "默认";
             this.z_moren_rd.UseVisualStyleBackColor = true;
             // 
-            // pingbanCheckBox
-            // 
-            this.pingbanCheckBox.AutoSize = true;
-            this.pingbanCheckBox.Checked = true;
-            this.pingbanCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.pingbanCheckBox.Location = new System.Drawing.Point(226, 21);
-            this.pingbanCheckBox.Name = "pingbanCheckBox";
-            this.pingbanCheckBox.Size = new System.Drawing.Size(96, 16);
-            this.pingbanCheckBox.TabIndex = 25;
-            this.pingbanCheckBox.Text = "直接类型平半";
-            this.pingbanCheckBox.UseVisualStyleBackColor = true;
-            this.pingbanCheckBox.CheckedChanged += new System.EventHandler(this.pingbanCheckBox_CheckedChanged);
-            // 
-            // fitBox
-            // 
-            this.fitBox.AutoSize = true;
-            this.fitBox.Checked = true;
-            this.fitBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.fitBox.Location = new System.Drawing.Point(174, 21);
-            this.fitBox.Name = "fitBox";
-            this.fitBox.Size = new System.Drawing.Size(48, 16);
-            this.fitBox.TabIndex = 0;
-            this.fitBox.Text = "过滤";
-            this.fitBox.UseVisualStyleBackColor = true;
-            this.fitBox.CheckedChanged += new System.EventHandler(this.fitBox_CheckedChanged);
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.putZaDan);
             this.groupBox5.Controls.Add(this.putAuto);
-            this.groupBox5.Location = new System.Drawing.Point(12, 149);
+            this.groupBox5.Location = new System.Drawing.Point(9, 149);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(149, 48);
             this.groupBox5.TabIndex = 24;
@@ -432,7 +478,7 @@
             this.groupBox3.Controls.Add(this.bangCRadio);
             this.groupBox3.Location = new System.Drawing.Point(6, 44);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(260, 50);
+            this.groupBox3.Size = new System.Drawing.Size(228, 50);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "场景";
@@ -448,6 +494,32 @@
             this.shangBcrBtn.Text = "上半场";
             this.shangBcrBtn.UseVisualStyleBackColor = true;
             // 
+            // genGai_pan
+            // 
+            this.genGai_pan.Controls.Add(this.genggai_text);
+            this.genGai_pan.Controls.Add(this.genggai_ben);
+            this.genGai_pan.Location = new System.Drawing.Point(171, 149);
+            this.genGai_pan.Name = "genGai_pan";
+            this.genGai_pan.Size = new System.Drawing.Size(174, 50);
+            this.genGai_pan.TabIndex = 28;
+            // 
+            // genggai_text
+            // 
+            this.genggai_text.Location = new System.Drawing.Point(70, 17);
+            this.genggai_text.Name = "genggai_text";
+            this.genggai_text.Size = new System.Drawing.Size(93, 21);
+            this.genggai_text.TabIndex = 28;
+            // 
+            // genggai_ben
+            // 
+            this.genggai_ben.Location = new System.Drawing.Point(3, 17);
+            this.genggai_ben.Name = "genggai_ben";
+            this.genggai_ben.Size = new System.Drawing.Size(60, 23);
+            this.genggai_ben.TabIndex = 27;
+            this.genggai_ben.Text = "更改";
+            this.genggai_ben.UseVisualStyleBackColor = true;
+            this.genggai_ben.Click += new System.EventHandler(this.genggai_ben_Click);
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.timeText);
@@ -460,16 +532,6 @@
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
-            // 
-            // genggai_ben
-            // 
-            this.genggai_ben.Location = new System.Drawing.Point(201, 161);
-            this.genggai_ben.Name = "genggai_ben";
-            this.genggai_ben.Size = new System.Drawing.Size(75, 23);
-            this.genggai_ben.TabIndex = 27;
-            this.genggai_ben.Text = "更改";
-            this.genggai_ben.UseVisualStyleBackColor = true;
-            this.genggai_ben.Click += new System.EventHandler(this.genggai_ben_Click);
             // 
             // MainFrom
             // 
@@ -499,6 +561,8 @@
             this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.genGai_pan.ResumeLayout(false);
+            this.genGai_pan.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -543,5 +607,10 @@
         private System.Windows.Forms.RadioButton z_2_rd;
         private System.Windows.Forms.RadioButton z_moren_rd;
         private System.Windows.Forms.Button genggai_ben;
+        private System.Windows.Forms.Panel genGai_pan;
+        private System.Windows.Forms.TextBox genggai_text;
+        private System.Windows.Forms.CheckBox jiaoqiu_checkBox;
+        private System.Windows.Forms.CheckBox jiaoQiuTime;
+        private System.Windows.Forms.CheckBox dianQiu_check;
     }
 }

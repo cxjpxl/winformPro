@@ -12,6 +12,10 @@ namespace CxjText.utils
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
         public static String softUserStr = "admin";
+        public static int softFun = 2; //0点 1角  2点+角
+        public static bool jiaoQiuEnble = true;
+        public static bool jiaoQiuGouXuan = false;
+        public static bool dianQiuGouXuan = false;
         public static bool hasFitter = true;
         public static bool isPingBang = true;
         public static long softTime = -1; //软件使用时间记录
@@ -37,7 +41,7 @@ namespace CxjText.utils
         //用户配置登录数据结构
         public static int pramsNum = 4; //参数个数
         public static ArrayList userList = null; //用户登陆信息记录
-        public static String vString = "V2.8";
+        public static String vString = "V2.88";
 
 
         public static bool isDeug = false;  //控制打印

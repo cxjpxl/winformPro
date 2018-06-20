@@ -9,7 +9,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
-
+using System.Net;
 
 namespace CxjText
 {
@@ -30,11 +30,74 @@ namespace CxjText
         {
             InitializeComponent();
             HttpUtils.setMaxContectionNum(100);
-            if (!Config.softUserStr.Equals("admin")) {
+            uiInit();
+        }
+
+
+        private void uiInit() {
+            //更改按键的处理
+            if (!(Config.softUserStr.Equals("admin")
+                || Config.softUserStr.Equals("admin-vip")
+                || Config.softUserStr.Equals("admin-ying")
+                || Config.softUserStr.Equals("admin-tai")
+                || Config.softUserStr.Equals("admin-client-ming")
+                 || Config.softUserStr.Equals("admin-cly200w")
+                ))
+            {
                 genggai_ben.Enabled = false;
                 genggai_ben.Visible = false;
+                genGai_pan.Visible = false;
             }
+
+
+            //按键权限的控制
+
+            if (Config.softFun == 0)
+            { //点
+                jiaoqiu_checkBox.Enabled = false; //不显示角球
+                jiaoqiu_checkBox.Visible = false;
+                jiaoQiuTime.Visible = false;
+                jiaoQiuTime.Enabled = false; //不显示角球
+
+                dianQiu_check.Visible = false;
+                dianQiu_check.Enabled = false;
+            }
+            else if (Config.softFun == 1)
+            { //角  直接下角球  不用角球显示器
+                fitBox.Visible = false;
+                fitBox.Enabled = false;
+
+                pingbanCheckBox.Visible = false;
+                pingbanCheckBox.Enabled = false;
+
+                jiaoqiu_checkBox.Visible = false;
+                jiaoqiu_checkBox.Enabled = false;
+
+                panel1.Visible = false; //显示让球和大小的选择框
+                groupBox1.Visible = false; //直接下注金额设置
+                groupBox2.Visible = true; //炸弹下注金额设置
+                groupBox2.Text = "角球金额设置";//（就是当炸弹来下注）
+                groupBox5.Visible = false; // 自动下注类型选择显示处理
+                jiaoQiuTime.Visible = true;
+                Config.jiaoQiuGouXuan = jiaoQiuTime.Checked;
+
+                dianQiu_check.Visible = false;
+                dianQiu_check.Enabled = false;
+            }
+            else if (Config.softFun == 2) {
+                //全部显示
+                groupBox2.Text = "炸+进+角-金额";
+                putZaDan.Text= "炸+进+角";
+                Config.jiaoQiuGouXuan = jiaoQiuTime.Checked;
+
+                dianQiu_check.Visible = true;
+                dianQiu_check.Enabled = true;
+                Config.dianQiuGouXuan = dianQiu_check.Checked;
+                Config.jiaoQiuEnble = jiaoqiu_checkBox.Checked;
+            }
+
         }
+
 
         //窗口加载出来的时候调用
         private void MainFrom_Load(object sender, EventArgs e)
@@ -415,8 +478,13 @@ namespace CxjText
             timeText.Text = "时间: " + DateTime.Now.ToString() + " - " + enventShowInfo.shiDuan;
             lianSaiText.Text = "联赛：" + enventShowInfo.lianSaiStr;
             gameText.Text = enventShowInfo.gameH + " - " + enventShowInfo.gameG;
-            if (enventShowInfo.ballType == 1) {
+            if (enventShowInfo.ballType == 1)
+            {
                 gameText.Text = gameText.Text.ToString() + "(进球)";
+            }
+            else if(enventShowInfo.ballType == 2)
+            {
+                gameText.Text = gameText.Text.ToString() + "(角球)";
             }
             enventText.Text = "事件:" + enventShowInfo.text;
             gameText.Tag = enventShowInfo.gameTeamColor; //判断主客队标志
@@ -445,21 +513,20 @@ namespace CxjText
            // Console.WriteLine(message);
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
-                
                 return;
             }
+            if (leftForm == null) return;
+            if (this.isFinish) return;
+
             JObject jObject = JObject.Parse(message);
             if (jObject == null) return;
 
             //87分钟事件的处理
             //{"cmd":2,"league":"冰岛女子甲组联赛","state":0,"score1":"1","score2":"1","tm1":"斯洛图尔(女)","tm2":"富佐尼(女)","gametime":"67"}
             // 联赛名字，{1:主队进球,0:客队进球},主队比分,客队比分,主队名字,客队名字,比赛进行的时间
-            if (jObject["cmd"] != null && ((int)jObject["cmd"]) != 1)
+            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 2)
             {
-                
-                if (((int)jObject["cmd"]) != 2) return;
-               // Console.WriteLine(message);
-
+                if (Config.softFun == 1) { return; } //角球的直接返回
                 this.Invoke(new Action(() => {
                     String league = (String)jObject["league"];
                     int state = (int)jObject["state"];
@@ -474,28 +541,15 @@ namespace CxjText
 
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
                     if (userInfo == null) return;
-
-                    if (Config.softUserStr.Equals("admin") && userInfo.tag.Equals("C") )
+                    //AUD
+                    if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
                     {
-                        if (gameTime > 0 && gameTime < 25) return;
-                        if (gameTime > 45 && gameTime < 75) return;
-                        //用于本人处理测试C系统  ok就开放
+                        return;
                     }
-                    else {
-                        //AUD
-                        if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
-                        {
-                            return;
-                        }
-
-                        if (!((gameTime >= 86 && gameTime <= 89)))
-                        {
-                            return;
-                        }
+                    if (!((gameTime >= 86 && gameTime <= 89)))
+                    {
+                        return;
                     }
-                    
-
-
                     gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
                     String shijianStr = "";
                     int teamColor = 0;
@@ -549,40 +603,35 @@ namespace CxjText
 
                     jinQiuEnventInfo.info = shijianStr;
                     jinQiuEnventInfo.time = FormUtils.getCurrentTime();
-                    jinQiuEnventInfo.mid = "-1"; //mid为-1表示进球
+                    jinQiuEnventInfo.mid = "-1";
                     jinQiuEnventInfo.nameH = hName;
                     jinQiuEnventInfo.nameG = gName;
                     jinQiuEnventInfo.T = gameTime + "";
                     jinQiuEnventInfo.inputType = this.GetCurrUserSelected();
                     jinQiuEnventInfo.bangchangType = GetBanChangSelected();
                     jinQiuEnventInfo.isDriect = false;
-                    JArray scoreArray = new JArray();
+                    JArray scoreArray = new JArray(); 
                     scoreArray.Add(zhuScore);//第0个
                     scoreArray.Add(geScore);//第1个
                     jinQiuEnventInfo.scoreArray = scoreArray; //进球比分赋值处理
-
                     speakStr("有进球要下注");
                     leftForm.setComplete(jinQiuEnventInfo);
-                   
-
                     Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
                     t.Start(jinQiuShowInfo);
                 }));
-                
                 return;
             }
 
-         
+
+            if (((int)jObject["cmd"]) != 1) return;
 
 
-            //点球事件的处理
-            if (leftForm == null) return;
-            if (this.isFinish) return;
+
+            /****************判断事件的类型做出显示的处理*****************************/
             if (jObject["game"] == null || jObject["data"] == null) return;
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
             String EID = (String)jObject["data"]["EID"];
-
             try
             {
                 int eidInt = int.Parse(EID);
@@ -598,11 +647,13 @@ namespace CxjText
                         eidEvent.time = FormUtils.getCurrentTime();
                         listEid.Add(eidEvent);
                     }
-                    else {
-                        return; 
+                    else
+                    {
+                        return;
                     }
                 }
-                else {
+                else
+                {
                     Eid eidEvent = new Eid();
                     eidEvent.mid = mid;
                     eidEvent.eid = eidInt;
@@ -612,12 +663,150 @@ namespace CxjText
                 }
 
             }
-            catch (Exception e11) {
+            catch (Exception e11)
+            {
 
             }
 
 
+            //这里要把角球判断出来  未处理
+            bool isJiaoQiu = false;
 
+            if (cid.Equals("1025") || cid.Equals("2049")) {
+                
+                isJiaoQiu = true;
+            }
+
+            if (isJiaoQiu)//角球的情况
+            {
+                if (Config.softFun == 0)//点
+                {
+                    return;
+                }
+                listEnvets.RemoveAll(j => j.mid.Equals(mid));
+                this.Invoke(new Action(() => {
+                    int curPosition = loginForm.getCurrentSelectRow();
+                    if (curPosition >= Config.userList.Count) return;
+                    UserInfo userInfo = (UserInfo)Config.userList[curPosition];
+                    if (userInfo == null) return;
+
+                    String league = (String)jObject["game"]["leagueName"]; //联赛
+                    int state = 1;//主客队进球标志 未处理
+
+                    bool isCancel = false;
+                    bool isConfirme = false;
+                    String dataInfo = (String)jObject["data"]["Info"];
+                    if (dataInfo.Contains("Cancelled") || dataInfo.Contains("Confirmed"))
+                    {
+                        if (dataInfo.Contains("Cancelled")) {
+                            isCancel = true;
+                        }
+
+                        if (dataInfo.Contains("Confirmed")) {
+                            isConfirme = true;
+                        }
+                    }
+
+                    if (cid.Equals("1025")) //主队角球
+                    {
+                        state = 1;
+                    }
+                    else {
+                        state = 0;
+                    }
+                    String hName = (String)jObject["game"]["nameH"]; //主队
+                    String gName = (String)jObject["game"]["nameG"]; //客队
+                    int gameTime = (int)jObject["data"]["T"];//毫秒级别
+
+                    String shijianStr = "";
+                    int teamColor = 0;
+                    String shiDuan = "全场";
+
+                    if (state == 1)
+                    {
+                        teamColor = 1;
+                        shijianStr = "可能主队角球";
+                        if (isCancel)
+                        {
+                            shijianStr = "主队角球取消";
+                        }
+                        else if (isConfirme) {
+                            shijianStr = "主队角球";
+                        }
+                    }
+                    else if (state == 0)
+                    {
+                        teamColor = 2;
+                        shijianStr = "可能客队角球";
+                        if (isCancel)
+                        {
+                            shijianStr = "客队角球取消";
+                        }
+                        else if (isConfirme)
+                        {
+                            shijianStr = "客队角球";
+                        }
+                    }
+                    else { return; }
+                    if (gameTime < 2700000)
+                    { //半场
+                        shiDuan = "上半场";
+                    }
+                    else
+                    {
+                       shiDuan = "全场";
+                    }
+                    speakStr(shiDuan + shijianStr);
+
+                    //事件的显示
+                    EnventShowInfo jiaoQiuShowInfo = getShowInfo(gameTime,
+                      teamColor, shiDuan,
+                      hName, gName,
+                      shiDuan + shijianStr, league, 2);//balltye要处理为2
+
+                    showViewText(jiaoQiuShowInfo);
+
+
+                    //处理角球下单事件
+                    EnventInfo jiaoQiuEnventInfo = new EnventInfo();
+                    if (state == 1) //主队
+                    {
+                        jiaoQiuEnventInfo.cid = "1031";
+                    }
+                    else if (state == 0) //客队
+                    {
+                        jiaoQiuEnventInfo.cid = "2055";
+                    }
+
+                    jiaoQiuEnventInfo.info = shijianStr;
+                    jiaoQiuEnventInfo.time = FormUtils.getCurrentTime();
+                    jiaoQiuEnventInfo.mid = mid;
+                    jiaoQiuEnventInfo.nameH = hName;
+                    jiaoQiuEnventInfo.nameG = gName;
+                    jiaoQiuEnventInfo.T = gameTime + "";
+                    jiaoQiuEnventInfo.inputType = 1;//直接是大小球
+                    jiaoQiuEnventInfo.bangchangType = GetBanChangSelected();
+                    jiaoQiuEnventInfo.isDriect = false;//炸弹类型处理
+                    jiaoQiuEnventInfo.scoreArray = null; 
+                    //角球下注处理
+                    if (!isCancel && !isConfirme) {
+                        speakStr("有角球要下注");
+                        leftForm.setJiaoQiuComplete(jiaoQiuEnventInfo);
+                    }
+                    Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
+                    t.Start(jiaoQiuShowInfo);
+                    }));
+                return;
+            }
+            else { //点
+                if (Config.softFun == 1)//角
+                {
+                    return;
+                }
+                
+            }
+
+            //点球下注处理
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
             enventInfo.cid = cid;
@@ -944,6 +1133,10 @@ namespace CxjText
             if (text.Contains("(进球)")) {
                 ballType = 1;
                 text = text.Replace("(进球)", "");
+            }else if (text.Contains("(角球)"))
+            {
+                ballType = 2;
+                text = text.Replace("(角球)", "");
             }
 
             String[] strs = text.Split('-');
@@ -997,19 +1190,33 @@ namespace CxjText
 
         private void changeAllD(Object obj)
         {
-        
-            UserInfo userInfo = (UserInfo)obj;
+            String text = genggai_text.Text.ToString();
+            int position = (int)obj;
+            if (position > Config.userList.Count) return;
+            UserInfo userInfo = (UserInfo)Config.userList[position];
             if (userInfo == null) return;
             if (!userInfo.tag.Equals("D")) return;
             if (userInfo.status != 2) return;
+            //if (String.IsNullOrEmpty(userInfo.infoExp)) return;
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
-            String rlt = HttpUtils.HttpPostHeader(changeUrl, "userMemo=", "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+           //   String p = "userMemo=" + WebUtility.UrlEncode("出款需审核");
+            String p = "userMemo=";
+            if (!String.IsNullOrEmpty(text.Trim())) {
+                p = "userMemo="+ WebUtility.UrlEncode(text.Trim());
+            }
+            String rlt = HttpUtils.HttpPostHeader(changeUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             MoneyUtils.GetDMoney(userInfo);
-            Console.WriteLine(userInfo.baseUrl + ":搞定");
+            if (loginForm != null) {
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+            }
         }
+
+        
 
         private void genggai_ben_Click(object sender, EventArgs e)
         {
@@ -1018,10 +1225,23 @@ namespace CxjText
                 UserInfo userInfo = (UserInfo)Config.userList[i];
                 if (!userInfo.tag.Equals("D")) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(this.changeAllD));
-                t.Start(userInfo);
+                t.Start(i);
             }
         }
 
-       
+        private void jiaoqiu_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.jiaoQiuEnble = jiaoqiu_checkBox.Checked;
+        }
+
+        private void jiaoQiuTime_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.jiaoQiuGouXuan = jiaoQiuTime.Checked;
+        }
+
+        private void dianQiu_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.dianQiuGouXuan = dianQiu_check.Checked;
+        }
     }
 }

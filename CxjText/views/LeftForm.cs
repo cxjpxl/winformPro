@@ -433,6 +433,9 @@ namespace CxjText.views
                 inputInfo.gameTeam = gameTeam;
                 inputInfo.bateStr = bateStr;
                 inputInfo.inputType = inputType;
+                if (inputInfo.gameTeam.Contains("角球")) {
+                    inputInfo.inputType = inputInfo.inputType + "(角)";
+                }
                 inputInfo.inputMoney = inputMoney;
                 inputInfo.saiKuang = (String)dataJObject["saiKuang"];
                 if (this.rltForm != null) {
@@ -634,6 +637,14 @@ namespace CxjText.views
                 //只下炸弹的时候出现直接下注类型  直接返回
                 if (mainFrom.GetAutoPutType() == 2 && enventInfo.isDriect) {
                     return;
+                }
+
+                if (Config.softFun == 2 )
+                {  //点球用户处理
+                    if (!Config.dianQiuGouXuan)
+                    {
+                        return;
+                    }
                 }
 
             }
@@ -1217,6 +1228,259 @@ namespace CxjText.views
 
         }
 
+
+        //角球自动下注
+        public void setJiaoQiuComplete(EnventInfo enventInfo)
+        {
+            if (enventInfo.inputType < 0) return;
+            if (this.cIndex < 0) return;
+            if (this.nameShowGridView == null) return;
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            //判断时候要下注   主要返回要下那一队
+            //修改6
+            JObject jObject = null;
+            jObject = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
+           
+            if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
+            bool isBanChang = (bool)jObject["isBanChang"];
+            bool isH = (bool)jObject["isH"]; //是否主队
+            String nameH = (String)jObject["nameH"];
+            String nameG = (String)jObject["nameG"];
+            String lianSai = (String)jObject["lianSai"];
+            //先将数据搜索出来
+            if (mainFrom != null)
+            {
+                bool autoCheck = mainFrom.isAuto(); //是否自动下注
+                if (!autoCheck) return;
+                if (Config.softFun == 2 && !Config.jiaoQiuEnble) {
+                    return;
+                }
+                //时间处理
+                if (Config.jiaoQiuGouXuan) {
+                    try
+                    {
+                        int time = int.Parse(enventInfo.T);
+                        //角球时间处理
+                        if (time <= 30 * 60 * 1000 || (time >= 45 * 60 * 1000 && time >= 75 * 60 * 1000))
+                        {
+                        }
+                        else
+                        {
+                            
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return;
+                    }
+                }
+            }
+            //自动下注要处理的算法 搜索出全部的结果出来
+            JArray searchArray = new JArray();
+            if (this.dataJArray == null) return;
+            searchArray = AutoUtils.getJiaoQiuGames(this.dataJArray, userInfo, nameH, nameG);
+            //找到所有的球队了
+            if (searchArray.Count == 0) return;
+            object obj = null; //要下注的对象
+            /**********************处理自动下注开始*****************************/
+            if (enventInfo.inputType == 1)   //选择大小的情况处理
+            {
+                if (enventInfo.bangchangType == 0)//默认的情况下
+                {
+                    if (isBanChang)
+                    { //半场的情况下
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (obj == null || !isBanChang)
+                    {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (enventInfo.bangchangType == 1)//半场的情况下
+                {
+                    if (isBanChang)
+                    {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
+                            }
+
+                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = false;
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                else if (enventInfo.bangchangType == 2)
+                {  //全场的情况下
+
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = "";
+                        if (isH)
+                        {
+                            data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                        }
+                        else
+                        {
+                            data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
+                        }
+
+                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = false;
+                            break;
+                        }
+                    }
+                }
+                else if (enventInfo.bangchangType == 3)  //上半场
+                {
+                    if (!isBanChang) return;
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = "";
+                        if (isH)
+                        {
+                            data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                        }
+                        else
+                        {
+                            data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
+                        }
+
+                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+            /*******************处理自动下注结束********************************/
+            if (obj == null)
+            {
+                Console.WriteLine("没有可以下注的条件");
+                return;
+            }
+            String gameMid = DataUtils.getMid(obj, userInfo.tag);
+            if (String.IsNullOrEmpty(gameMid)) return;
+            jObject["mid"] = gameMid;//赋值mid
+            jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
+            Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
+                       "\n主队:" + nameH +
+                       "\n客队:" + nameG +
+                       "\n是否主队下注:" + isH +
+                       "\n是否半场:" + isBanChang+
+                       "类型角球");
+            //判断是2s前保存的队伍
+            String gameTeamStr = nameH + "-" + nameG;
+            if (lastAutoData.gameTeam.Equals(gameTeamStr) && FormUtils.getCurrentTime() - lastAutoData.time < 2000)
+            {
+                return;
+            }
+            //记录当前下单队伍和时间
+            lastAutoData.gameTeam = gameTeamStr;
+            lastAutoData.time = FormUtils.getCurrentTime();
+            if (enventInfo.inputType == 1) //大小
+            {
+                if (isBanChang)
+                {
+                    dataForm.OnOrderClick(obj, 0, 8, jObject);
+                    return;
+                }
+                else
+                {
+                    dataForm.OnOrderClick(obj, 0, 5, jObject);
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
+
+
         public String getSaiName(String hStr, String gStr, bool isH, int ballType) {
             int index = this.cIndex;
             if(index<0 || index>Config.userList.Count)
@@ -1228,11 +1492,11 @@ namespace CxjText.views
 
             String name = null;
 
-            if (ballType == 0)
-            { //点球处理
+            if (ballType == 0 || ballType == 2) //0点球  2角球
+            { //点球和角球搜索的处理
                 name =  StringComPleteUtils.getSaiName(hStr, gStr, isH, this.dataJArray, userInfo);
             }
-            else if (ballType == 1)
+            else if (ballType == 1) //进球
             { //进球处理
                 name = StringComPleteUtils.getJinQiuSaiName(hStr, gStr, isH, this.dataJArray, userInfo);
             }

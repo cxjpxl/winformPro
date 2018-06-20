@@ -70,13 +70,15 @@ namespace CxjText
             String userString = (String)jObject["user"];
 
             //登录验证软件是否过期
-            if (!Config.softUserStr.Equals("admin")) {
+            if (!Config.softUserStr.Equals("admin"))
+            {
                 JObject loginObj = new JObject();
                 loginObj.Add("userName", userString);
                 loginObj.Add("comId", uuid);
                 loginObj.Add("version", Config.vString);
                 String loginStr = HttpUtils.HttpPost(Config.netUrl + "/cxj/login", loginObj.ToString(), "application/json", null);
-                if (String.IsNullOrEmpty(loginStr)||!FormUtils.IsJsonObject(loginStr)) {
+                if (String.IsNullOrEmpty(loginStr) || !FormUtils.IsJsonObject(loginStr))
+                {
                     Invoke(new Action(() =>
                     {
                         loginSysBtn.Enabled = true;
@@ -87,7 +89,8 @@ namespace CxjText
                 }
                 loginObj = JObject.Parse(loginStr);
                 int no = (int)loginObj["no"];
-                if (no != 200) {
+                if (no != 200)
+                {
                     String msg = (String)loginObj["msg"];
                     Invoke(new Action(() =>
                     {
@@ -100,8 +103,9 @@ namespace CxjText
                 Config.softTime = (long)loginObj["time"];
                 if (!userString.Contains("admin")) //不是admin用户没有权限
                 {
-                    Config.urls = ((String)loginObj["urls"]).Replace(",","\t");
+                    Config.urls = ((String)loginObj["urls"]).Replace(",", "\t");
                 }
+                 Config.softFun = (int)(loginObj["fun"] == null ? "0" : loginObj["fun"]);
             }
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
@@ -152,9 +156,7 @@ namespace CxjText
                 Config.codeUserStr = codeUserStr;
                 Config.codePwdStr = codePwdStr;
                 Config.softUserStr = userString;
-
                
-
                 MainFrom mainFrom = new MainFrom();
                 mainFrom.Show();
                 this.Hide();

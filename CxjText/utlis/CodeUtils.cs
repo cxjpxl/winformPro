@@ -39,6 +39,7 @@ namespace CxjText.utlis
         //总打码
         public static String getImageCode(string Imagefilename)
         {
+
             String base64 = ImgToBase64String(Imagefilename);
             if (String.IsNullOrEmpty(base64))
             {  //不能转base64的情况下
