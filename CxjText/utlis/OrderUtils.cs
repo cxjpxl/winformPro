@@ -24,6 +24,18 @@ namespace CxjText.utlis
             autoLists.Add(autoData);
         }
 
+        public static void addAutoDataAndName(String baseUrl, String mid, long time, String gameTeam,String userName)
+        {
+            AutoData autoData = new AutoData();
+            autoData.baseUrl = baseUrl;
+            autoData.mid = mid;
+            autoData.time = time;
+            autoData.gameTeam = gameTeam;
+            autoData.userName = userName;
+            autoLists.Add(autoData);
+        }
+
+
         //A下单 
         public static void OrderA(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
@@ -1258,7 +1270,7 @@ namespace CxjText.utlis
                 return;
             }
 
-
+         
 
             if (String.IsNullOrEmpty(orderPrams))
             {
@@ -1303,33 +1315,41 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
+            Thread.Sleep(250);
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-       //     Console.WriteLine(rlt);
+            
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        if (!String.IsNullOrEmpty(rlt) && rlt.Contains("赛程已关闭"))
-                        {
-                            rltForm.RefershLineData(inputTag, "赛程已关闭");
-                        }
-                        else
-                        {
-                            rltForm.RefershLineData(inputTag, "下单失败");
-                        }
+                if (rlt.Contains("check") && rlt.Contains("确定") && rlt.Contains("parent.close_bet"))
+                {
 
-                    }
-                }));
-                return;
+                }
+                else {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            if (!String.IsNullOrEmpty(rlt) && (rlt.Contains("赛程已关闭") || rlt.Contains("賽程已關閉")))
+                            {
+                                rltForm.RefershLineData(inputTag, "赛程已关闭");
+                            }
+                            else
+                            {
+                                rltForm.RefershLineData(inputTag, "下单失败");
+                            }
+
+                        }
+                    }));
+                    return;
+                }
+                
             }
 
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
-                    if (jobject["gameMid"] != null)
+                    if (jobject["gameMid"] != null&&(jobject["isJiaoQiu"] == null || (bool)(jobject["isJiaoQiu"]) == false)) //自动下注
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                        addAutoDataAndName(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"],user.user);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }
@@ -1676,7 +1696,7 @@ namespace CxjText.utlis
             dataJObject["betItems"] = jArray;
             dataJObject["canWin"] = isDuying ? money * (odds - 1) : money * odds; //还没有处理
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, dataJObject.ToString(), "application/json", user.cookie, headJObject);
-          //  Console.WriteLine("接口返回:"+orderRlt);
+          
             if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1868,7 +1888,7 @@ namespace CxjText.utlis
             headJObject["Upgrade-Insecure-Requests"] = "1";
             String url1 = user.dataUrl + "/hg_sports/order/order/"+ parms[0] + "?stype="+ parms[1] + "&type="+ parms[2] + "&btype="+ parms[3];
             String rlt = HttpUtils.HttpGetHeader(url1, "", user.cookie, headJObject);
-            Console.WriteLine(rlt);
+            
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("可用额度"))
             {
                 leftForm.Invoke(new Action(() => {
@@ -1892,7 +1912,7 @@ namespace CxjText.utlis
                 "btype=" + parms[3] + "&" +
                 "gold=" + money;
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded",user.cookie,headJObject);
-            Console.WriteLine(orderRlt);
+           
             if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("待确认")) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)

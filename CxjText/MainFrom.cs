@@ -262,7 +262,7 @@ namespace CxjText
             }
 
             //删除缓存列表数据
-            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 120 * 60 * 1000));
+            OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 140 * 60 * 1000));
 
             if (listEid != null && listEid.Count > 0) {
                 listEid.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 120 * 60 * 1000));
@@ -1040,7 +1040,7 @@ namespace CxjText
             }
             return 0;
         }
-        //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
+        //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3  3/4 返回4
         public int GetAmountSelected(bool isDriect)
         {
             if (isDriect)
@@ -1070,6 +1070,10 @@ namespace CxjText
                 else if (z_3_rd.Checked)
                 {
                     return 2;
+                }
+                else if (z_4_rd.Checked) // 3/4
+                {
+                    return 4;
                 }
                 else
                 {

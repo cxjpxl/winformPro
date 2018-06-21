@@ -35,13 +35,17 @@ namespace CxjText.utlis
             for (int i = 0; i < dataJArray.Count; i++)
             {
                 String nameH1 = DataUtils.get_c02_data(dataJArray[i], userInfo.tag);
-                if ( nameH1.Contains("点球")) continue;
                 String nameG1 = DataUtils.get_c12_data(dataJArray[i], userInfo.tag);
-                if (nameG1.Contains("点球")) continue;
-
-                if (nameH1.Contains(nameH) && nameG1.Contains(nameG) && nameH1.Contains("角球"))
+                if (nameH1.Contains("-角球数"))
                 {  //找出名字一样的所有比赛
-                    searchArray.Add(dataJArray[i]);
+                    String str1 = nameH1.Replace("-角球数","").Replace(" ","").Trim();
+                    String str2 = nameH.Replace("-角球数", "").Replace(" ", "").Trim();
+
+                    String str3 = nameG1.Replace("-角球数", "").Replace(" ", "").Trim();
+                    String str4 = nameG.Replace("-角球数", "").Replace(" ", "").Trim();
+                    if (str1.Equals(str2) && str3.Equals(str4)) {
+                        searchArray.Add(dataJArray[i]);
+                    }
                 }
             }
             return searchArray;

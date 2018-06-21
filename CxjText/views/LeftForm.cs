@@ -351,19 +351,32 @@ namespace CxjText.views
                         {
                             inputMoney = (int)(moneyAll / 2);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
+                            if (inputMoney < 10) inputMoney = 10;
+                            if (moneyAll < 10) return;
                         }
                         else if (selectNum == 2)//1/3
                         {
                             inputMoney = (int)(moneyAll / 3);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
+                            if (inputMoney < 10) inputMoney = 10;
+                            if (moneyAll < 10) return;
                         }
                         else if (selectNum == 3)//1/4
                         {
                             inputMoney = (int)(moneyAll / 4);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
+                            if (inputMoney < 10) inputMoney = 10;
+                            if (moneyAll < 10) return;
                         }
-                        else {
-                             inputMoney = user.inputMoney;
+                        else if (selectNum == 4) {
+                            inputMoney = (int)(moneyAll*3/4);
+                            inputMoney = ((int)(inputMoney / 10)) * 10;
+                            if (inputMoney < 10) inputMoney = 10;
+                            if (moneyAll < 10) return;
+                        }
+                        else
+                        {
+                            inputMoney = user.inputMoney;
                         }
                     }
                     catch (Exception e) {
@@ -377,8 +390,21 @@ namespace CxjText.views
                 {
                    // String gameMid = (String)dataJObject["gameMid"];
                     String baseUrl = user.baseUrl;
-                    AutoData autoData = OrderUtils.autoLists.Find(j =>  j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl));
-                    if (autoData != null) continue;
+                    if (dataJObject["isJiaoQiu"] == null || (bool)(dataJObject["isJiaoQiu"]) == false)
+                    {
+                        AutoData autoData = null;
+                        if (user.tag.Equals("C"))
+                        {
+                            autoData = OrderUtils.autoLists.Find(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl)&&j.userName.Equals(user.user));
+                        }
+                        else {
+                            autoData = OrderUtils.autoLists.Find(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl));
+                        }
+                        if (autoData != null) continue;
+                    }
+                    else { //角球可以下
+                     //   OrderUtils.autoLists.RemoveAll(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl));
+                    }
                 }
               
 
@@ -446,6 +472,9 @@ namespace CxjText.views
                 jObject["gameTeam"] = gameTeam;
                 if (dataJObject["gameMid"] != null) {
                     jObject["gameMid"] = dataJObject["gameMid"];
+                    if (dataJObject["isJiaoQiu"] != null) {
+                        jObject["isJiaoQiu"] = dataJObject["isJiaoQiu"];
+                    }
                 }
 
                 jObject["position"] = i;
@@ -1445,6 +1474,7 @@ namespace CxjText.views
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
             jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
+            jObject["isJiaoQiu"] = true;
             Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +

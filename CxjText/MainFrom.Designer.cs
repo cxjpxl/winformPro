@@ -70,6 +70,7 @@
             this.genggai_text = new System.Windows.Forms.TextBox();
             this.genggai_ben = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.z_4_rd = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
@@ -301,9 +302,9 @@
             this.groupBox1.Controls.Add(this.rbAmount_MoRen);
             this.groupBox1.Controls.Add(this.rbAmount_1_3);
             this.groupBox1.Controls.Add(this.rbAmount_1_2);
-            this.groupBox1.Location = new System.Drawing.Point(173, 100);
+            this.groupBox1.Location = new System.Drawing.Point(177, 100);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(176, 44);
+            this.groupBox1.Size = new System.Drawing.Size(174, 44);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "直接类型金額";
@@ -394,12 +395,13 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.z_4_rd);
             this.groupBox2.Controls.Add(this.z_3_rd);
             this.groupBox2.Controls.Add(this.z_2_rd);
             this.groupBox2.Controls.Add(this.z_moren_rd);
             this.groupBox2.Location = new System.Drawing.Point(6, 101);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(152, 43);
+            this.groupBox2.Size = new System.Drawing.Size(171, 43);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "炸弹+进球金额";
@@ -407,7 +409,7 @@
             // z_3_rd
             // 
             this.z_3_rd.AutoSize = true;
-            this.z_3_rd.Location = new System.Drawing.Point(100, 20);
+            this.z_3_rd.Location = new System.Drawing.Point(91, 20);
             this.z_3_rd.Name = "z_3_rd";
             this.z_3_rd.Size = new System.Drawing.Size(41, 16);
             this.z_3_rd.TabIndex = 27;
@@ -417,7 +419,7 @@
             // z_2_rd
             // 
             this.z_2_rd.AutoSize = true;
-            this.z_2_rd.Location = new System.Drawing.Point(56, 21);
+            this.z_2_rd.Location = new System.Drawing.Point(50, 21);
             this.z_2_rd.Name = "z_2_rd";
             this.z_2_rd.Size = new System.Drawing.Size(41, 16);
             this.z_2_rd.TabIndex = 1;
@@ -428,7 +430,7 @@
             // 
             this.z_moren_rd.AutoSize = true;
             this.z_moren_rd.Checked = true;
-            this.z_moren_rd.Location = new System.Drawing.Point(8, 20);
+            this.z_moren_rd.Location = new System.Drawing.Point(4, 20);
             this.z_moren_rd.Name = "z_moren_rd";
             this.z_moren_rd.Size = new System.Drawing.Size(47, 16);
             this.z_moren_rd.TabIndex = 0;
@@ -533,6 +535,17 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
+            // z_4_rd
+            // 
+            this.z_4_rd.AutoSize = true;
+            this.z_4_rd.Location = new System.Drawing.Point(130, 19);
+            this.z_4_rd.Name = "z_4_rd";
+            this.z_4_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_4_rd.TabIndex = 0;
+            this.z_4_rd.TabStop = true;
+            this.z_4_rd.Text = "3/4";
+            this.z_4_rd.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -612,5 +625,6 @@
         private System.Windows.Forms.CheckBox jiaoqiu_checkBox;
         private System.Windows.Forms.CheckBox jiaoQiuTime;
         private System.Windows.Forms.CheckBox dianQiu_check;
+        private System.Windows.Forms.RadioButton z_4_rd;
     }
 }

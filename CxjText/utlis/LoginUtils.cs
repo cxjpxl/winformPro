@@ -1127,6 +1127,44 @@ namespace CxjText.utlis
             return true;
         }
 
+        private static bool loginC3(UserInfo userInfo)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            //现在要登录处理
+            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
+            String loginP = "uid=&langx=zh-cn&mac=&ver=&JE=&theme=0&username=" + userInfo.user + "&password=" + userInfo.pwd;
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
+                "application/x-www-form-urlencoded;charset=UTF-8",
+                userInfo.cookie, headJObject);
+            Console.WriteLine("---------");
+            Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid"))
+            {
+                return false;
+            }
+            String[] strs = rltStr.Split('\n');
+            if (strs.Length <= 0) return false;
+            String uid = "";
+            for (int i = 0; i < strs.Length; i++) {
+                String lineStr = strs[i].Trim();
+                if (String.IsNullOrEmpty(lineStr)) continue;
+                if (lineStr.Contains("top.uid")) {
+                    uid = lineStr.Replace("top.uid", "").Replace("=", "").Replace("'", "").Replace(";", "").Trim();
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(uid)) {
+                return false;
+            }
+            userInfo.uid = uid;
+            Console.WriteLine("-----uid------");
+            Console.WriteLine(uid);
+            return true;
+        }
+
+
         public static void loginC(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -1157,10 +1195,10 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
 
             bool loginStatus = loginC1(userInfo);
-            if (!loginStatus)
-            {
-                loginStatus = loginC2(userInfo);
-                if (!loginStatus) {
+            if (!loginStatus) loginStatus = loginC2(userInfo);
+            if (!loginStatus) loginStatus = loginC3(userInfo);
+
+            if (!loginStatus) {
                     userInfo.loginFailTime++;
                     userInfo.status = 3;
                     loginForm.Invoke(new Action(() => {
@@ -1168,7 +1206,6 @@ namespace CxjText.utlis
                     }));
                     return;
                 }
-            }
           
             //获取money 
             int moneyStatus = MoneyUtils.GetCMoney(userInfo);
