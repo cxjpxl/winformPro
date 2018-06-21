@@ -1315,7 +1315,9 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
-            Thread.Sleep(250);
+            if (jobject["isJiaoQiu"] != null && (bool)(jobject["isJiaoQiu"]) == true) {
+                Thread.Sleep(250);
+            }
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
             
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
