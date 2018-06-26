@@ -1276,6 +1276,11 @@ namespace CxjText.views
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
             String lianSai = (String)jObject["lianSai"];
+            if (lianSai.Contains("俄罗斯") && lianSai.Contains("世界杯"))
+            {
+                return;
+            }
+
             //先将数据搜索出来
             if (mainFrom != null)
             {
@@ -1290,7 +1295,7 @@ namespace CxjText.views
                     {
                         int time = int.Parse(enventInfo.T);
                         //角球时间处理
-                        if (time <= 30 * 60 * 1000 || (time >= 45 * 60 * 1000 && time >= 75 * 60 * 1000))
+                        if (time <= 30 * 60 * 1000 || (time >= 45 * 60 * 1000 && time <= 75 * 60 * 1000))
                         {
                         }
                         else

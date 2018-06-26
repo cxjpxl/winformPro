@@ -12,7 +12,7 @@ namespace CxjText.utils
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
         public static String softUserStr = "admin";
-        public static int softFun = 2; //0点 1角  2点+角
+        public static int softFun = 1; //0点 1角  2点+角
         public static bool jiaoQiuEnble = true;
         public static bool jiaoQiuGouXuan = false;
         public static bool dianQiuGouXuan = false;

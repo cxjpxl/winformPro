@@ -855,6 +855,11 @@ namespace CxjText.utlis
                 return true;
             }
 
+            if (lianSai.Contains("俄罗斯") && lianSai.Contains("世界杯")) {
+                return false;
+            }
+            
+
             if (lianSai.Contains("圣保罗")) {
                 return true;
             }

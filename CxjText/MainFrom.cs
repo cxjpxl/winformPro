@@ -679,6 +679,8 @@ namespace CxjText
 
             if (isJiaoQiu)//角球的情况
             {
+                
+
                 if (Config.softFun == 0)//点
                 {
                     return;
