@@ -156,10 +156,23 @@ namespace CxjText
                 Config.codeUserStr = codeUserStr;
                 Config.codePwdStr = codePwdStr;
                 Config.softUserStr = userString;
-               
-                MainFrom mainFrom = new MainFrom();
-                mainFrom.Show();
-                this.Hide();
+
+                if (Config.softFun == 0 || Config.softFun == 1 || Config.softFun == 2)
+                {
+                    MainFrom mainFrom = new MainFrom();
+                    mainFrom.Show();
+                    this.Hide();
+                }
+                else if (Config.softFun == 3)
+                {
+                    DianZiFrom dianZiFrom = new DianZiFrom();
+                    dianZiFrom.Show();
+                    this.Hide();
+                }
+                else {
+                    MessageBox.Show("功能暂未开放");
+                }
+                
             }));
         }
 

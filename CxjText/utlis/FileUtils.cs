@@ -191,5 +191,94 @@ namespace CxjText.utlis
             return dataUrl.Trim();
         }
 
+
+
+        public static void ReadDzUser(string path)
+        {
+
+            try
+            {
+                //不是管理员  没有配置地址直接return 
+                if (!Config.softUserStr.Contains("admin") && String.IsNullOrEmpty(Config.urls))
+                {
+                    return;
+                }
+
+                StreamReader sr = new StreamReader(path, Encoding.Default);
+                if (sr == null) return;
+                String line;
+
+                ArrayList list = new ArrayList(); //记录不重复的数据
+                ArrayList dzUserList = new ArrayList();
+                while ((line = sr.ReadLine()) != null)
+                {
+                    String[] strs = line.Split('\t');
+                    if (strs == null || strs.Length < Config.DianZiPramsNum) continue;
+
+                    String tag = strs[0].ToUpper();//tag
+                    String user = strs[1].Trim();//用户
+                    String pwd = strs[2].Trim();//密码
+                    String baseUrl = strs[3].Trim();//网址
+                    String dataUrl = strs[3].Trim(); //获取数据的接口
+                    String youxiNoStr = strs[4].Trim(); //游戏编号
+                    baseUrl = changeBaseUrl(baseUrl);
+                    dataUrl = changeDataUrl(dataUrl);
+                    String loginUrl = dataUrl;//登录的链接地址 
+                    if (list.Contains(baseUrl) && !tag.Equals("C"))
+                    { //过滤重复的网址
+                        break;
+                    }
+
+                    int loginStatus = -1; //默认无权登录   
+                    if (Config.softUserStr.Contains("admin"))
+                    {
+                        //管理员的话全部账号添加进来
+                        loginStatus = 0; //未登录的情况
+                    }
+                    else
+                    {
+
+                        String[] ConfigStrs = Config.urls.Split('\t');
+                        for (int i = 0; i < ConfigStrs.Length; i++)
+                        {
+                            if (ConfigStrs[i].Contains(baseUrl))
+                            {
+                                loginStatus = 0; //未登录的情况
+                                break;
+                            }
+                        }
+                    }
+
+                    DzUser dzUser = new DzUser(); //添加登陆显示的用户数据
+                    dzUser.tag = tag;
+                    dzUser.user = user;
+                    dzUser.pwd = pwd;
+                    dzUser.baseUrl = baseUrl.Trim();
+                    dzUser.loginUrl = loginUrl.Trim();
+                    dzUser.dataUrl = dataUrl.Trim();
+                    dzUser.loginTime = -1;
+                    dzUser.updateMoneyTime = FormUtils.getCurrentTime();
+                    dzUser.leastMoney = 10;
+                    dzUser.youxiNoStr = youxiNoStr; //游戏编号处理
+                    dzUser.status = loginStatus;
+                    dzUserList.Add(dzUser);
+                    list.Add(baseUrl);
+                }
+                //用户表全部存在本地静态变量里面
+                if (dzUserList != null && dzUserList.Count > 0)
+                {
+                    //排序
+                    dzUserList.Sort(new DzCompareAz());
+                    Config.dzUserList = dzUserList;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                Config.dzUserList = null;
+            }
+        }
+
     }
 }

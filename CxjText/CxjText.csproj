@@ -117,12 +117,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bean\AutoData.cs" />
+    <Compile Include="bean\DzUser.cs" />
     <Compile Include="bean\Eid.cs" />
     <Compile Include="bean\EnventInfo.cs" />
     <Compile Include="bean\EnventShowInfo.cs" />
     <Compile Include="bean\InputInfo.cs" />
     <Compile Include="bean\NameTy.cs" />
     <Compile Include="bean\UserInfo.cs" />
+    <Compile Include="DianZiFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DianZiFrom.Designer.cs">
+      <DependentUpon>DianZiFrom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +152,9 @@
     <Compile Include="utlis\DataClickUtlis.cs" />
     <Compile Include="utlis\DataPramsUtils.cs" />
     <Compile Include="utlis\DataUtils.cs" />
+    <Compile Include="utlis\DzCompareAz.cs" />
+    <Compile Include="utlis\DzLoginUtils.cs" />
+    <Compile Include="utlis\DzMoneyUtils.cs" />
     <Compile Include="utlis\FileUtils.cs" />
     <Compile Include="utlis\FormUtils.cs" />
     <Compile Include="utlis\LoginUtils.cs" />
@@ -168,6 +178,12 @@
     </Compile>
     <Compile Include="views\DataForm.Designer.cs">
       <DependentUpon>DataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="views\DzLoginFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\DzLoginFrom.Designer.cs">
+      <DependentUpon>DzLoginFrom.cs</DependentUpon>
     </Compile>
     <Compile Include="views\LeftForm.cs">
       <SubType>Form</SubType>
@@ -199,6 +215,9 @@
     <Compile Include="views\RowMergeView.designer.cs">
       <DependentUpon>RowMergeView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DianZiFrom.resx">
+      <DependentUpon>DianZiFrom.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -219,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\DataForm.resx">
       <DependentUpon>DataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\DzLoginFrom.resx">
+      <DependentUpon>DzLoginFrom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\LeftForm.resx">
       <DependentUpon>LeftForm.cs</DependentUpon>
