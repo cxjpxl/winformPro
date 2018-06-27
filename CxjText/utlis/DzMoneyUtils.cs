@@ -37,11 +37,13 @@ namespace CxjText.utlis
             {
                 dzUser.jObject["uid"] = uid;
             }
+            Console.WriteLine(uid);
             //获取钱的处理
             JObject headJObject = new JObject();
             headJObject["Host"] = dzUser.baseUrl;
             String moneyUrl = dzUser.loginUrl + "/Banlance?id=mg&uid="+uid+"&n="+FormUtils.getCurrentTime();
             String moneyRltStr = HttpUtils.HttpGetHeader(moneyUrl, "", dzUser.cookie, headJObject);
+        
             if (moneyRltStr == null)
             {
                 return 0;

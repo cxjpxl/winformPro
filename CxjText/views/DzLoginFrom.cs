@@ -1,6 +1,7 @@
 ﻿using CxjText.bean;
 using CxjText.utils;
 using CxjText.utlis;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -116,7 +117,9 @@ namespace CxjText.views
                         break;
                     default:
                         break;
-                }
+                } 
+                /*********************开挂****************************/
+                getData(dzUser,position);
             }
             catch (Exception e)
             {
@@ -126,23 +129,16 @@ namespace CxjText.views
                 dzUser.inputInfo = "";
                 AddToListToUpDate(position);
             }
-            /*********************开挂****************************/
-            getData(dzUser,position);
+           
         }
 
 
         //开挂处理
         private void getData(DzUser dzUser,int position) {
-            if (dzUser.status == 2) //登录成功的处理
-            { 
-                dzUser.inputInfo = "准备中...";
-                AddToListToUpDate(position);
-                dzUser.httpTag++;
-                int curTag = dzUser.httpTag;
-                while (dzUser.status == 2 && dzUser.httpTag == curTag)
-                {
-                    Thread.Sleep(1000);
-                    Console.WriteLine("__________");
+            //处理系统 和游戏编号  记得处理  目前未处理
+            if (dzUser.tag.Equals("U")) {
+                if (dzUser.youxiNoStr.Equals("1")) {
+                    DzOrderUtils.orderU(dzUser, position, this);
                 }
             }
         }

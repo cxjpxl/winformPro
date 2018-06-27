@@ -86,6 +86,7 @@ namespace CxjText.utlis
                 return;
             }
             String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+           
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 dzUser.loginFailTime++;
@@ -104,7 +105,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = dzUser.dataUrl;
             headJObject["Referer"] = dzUser.dataUrl + "/home";
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", dzUser.cookie, headJObject);
-
+          
             if (rltStr == null)
             {
                 dzUser.loginFailTime++;
@@ -115,7 +116,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            if (!rltStr.Contains("协议与规则"))
+            if (!rltStr.Contains("我同意"))
             {
                 dzUser.loginFailTime++;
                 dzUser.status = 3;
@@ -159,17 +160,42 @@ namespace CxjText.utlis
             }
 
             dzUser.jObject["uid"] = uid; //获取到uid
+        
             int moneyStatus = DzMoneyUtils.GetUMoney(dzUser);
             if (moneyStatus == 1)
             {
-                dzUser.loginFailTime = 0;
-                dzUser.status = 2; //成功
-                dzUser.loginTime = FormUtils.getCurrentTime(); //更新时间
-                dzUser.updateMoneyTime = dzUser.loginTime;
-                dzLoginFrom.Invoke(new Action(() =>
+                if (dzUser.youxiNoStr.Equals("1"))
                 {
-                    dzLoginFrom.AddToListToUpDate(position);
-                }));
+                    //修改1
+                    if (DzLoginPramsUtils.getUYouxi1AllPrams(dzUser) == 1)
+                    {
+                        dzUser.loginFailTime = 0;
+                        dzUser.status = 2; //成功
+                        dzUser.loginTime = FormUtils.getCurrentTime(); //更新时间
+                        dzUser.updateMoneyTime = dzUser.loginTime;
+                        dzLoginFrom.Invoke(new Action(() =>
+                        {
+                            dzLoginFrom.AddToListToUpDate(position);
+                        }));
+                    }
+                    else {
+                        dzUser.loginFailTime++;
+                        dzUser.status = 3;
+                        dzLoginFrom.Invoke(new Action(() =>
+                        {
+                            dzLoginFrom.AddToListToUpDate(position);
+                        }));
+                    }
+                }
+                else
+                {
+                    dzUser.loginFailTime++;
+                    dzUser.status = 3;
+                    dzLoginFrom.Invoke(new Action(() =>
+                    {
+                        dzLoginFrom.AddToListToUpDate(position);
+                    }));
+                }
             }
             else
             {

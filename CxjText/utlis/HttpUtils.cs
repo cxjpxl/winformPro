@@ -122,6 +122,7 @@ namespace CxjText.utils
         //请求包含头部
         public static string HttpPostHeader(string Url, String paramsStr, String contentType, CookieContainer cookie, JObject headJObject)
         {
+            if (Url == null) return null;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "POST";
             request.Timeout = 10 * 1000;
@@ -281,7 +282,7 @@ namespace CxjText.utils
             }
             
         }
-
+        
 
         public static String httpGet(String Url,String contentType,CookieContainer cookie) {
 
@@ -344,7 +345,7 @@ namespace CxjText.utils
                     request = null;
                 }
                 Console.WriteLine(e.ToString());
-                Console.WriteLine("in HttpGett:" + Url);
+                Console.WriteLine("in HttpGet:" + Url);
                 return null;
             }
         }

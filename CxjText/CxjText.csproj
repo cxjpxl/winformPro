@@ -153,8 +153,10 @@
     <Compile Include="utlis\DataPramsUtils.cs" />
     <Compile Include="utlis\DataUtils.cs" />
     <Compile Include="utlis\DzCompareAz.cs" />
+    <Compile Include="utlis\DzLoginPramsUtils.cs" />
     <Compile Include="utlis\DzLoginUtils.cs" />
     <Compile Include="utlis\DzMoneyUtils.cs" />
+    <Compile Include="utlis\DzOrderUtils.cs" />
     <Compile Include="utlis\FileUtils.cs" />
     <Compile Include="utlis\FormUtils.cs" />
     <Compile Include="utlis\LoginUtils.cs" />
