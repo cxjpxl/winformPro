@@ -112,14 +112,13 @@ namespace CxjText.utlis
             {
                 return -1;
             }
-            dzUser.cookie1 = dzUser.cookie;
             JObject headJObject = new JObject();
             String hostUrl1 = defaultUrl.Replace("http://", "").Replace("https://", "");
             int startIndex = hostUrl1.IndexOf('/');
             hostUrl1 = hostUrl1.Substring(0, startIndex);
             headJObject["Host"] = hostUrl1;
            // headJObject["Origin"] = isHttps ? "https://" + redirectBaseUrl : "http://" + redirectBaseUrl;
-            String xiaoDefaultRlt = HttpUtils.HttpPostHeader(defaultUrl, defaultPams, "application/x-www-form-urlencoded", dzUser.cookie1, headJObject);
+            String xiaoDefaultRlt = HttpUtils.HttpPostHeader(defaultUrl, defaultPams, "application/x-www-form-urlencoded", dzUser.cookie, headJObject);
             if (String.IsNullOrEmpty(xiaoDefaultRlt) || !xiaoDefaultRlt.Contains("systemSettings")) return -1;
             startIndex = xiaoDefaultRlt.IndexOf("systemSettings");
             xiaoDefaultRlt = xiaoDefaultRlt.Substring(startIndex, xiaoDefaultRlt.Length - startIndex).Trim();
@@ -156,7 +155,7 @@ namespace CxjText.utlis
             String requestDataUlr = defaultUrl.Contains("https://") ? "https://" + hostUrl1 : "http://" + hostUrl1;
             String CombinedDependenciesUrl = requestDataUlr
                 + "/aurora/zh/aurora/CombinedDependencies.ashx" + "?" + combinedP;
-            String CombinedRlt = HttpUtils.HttpGetHeader(CombinedDependenciesUrl, "", dzUser.cookie1, headJObject);
+            String CombinedRlt = HttpUtils.HttpGetHeader(CombinedDependenciesUrl, "", dzUser.cookie, headJObject);
             if (String.IsNullOrEmpty(CombinedRlt) || !CombinedRlt.Contains("dependency")) return -1;
             String[] combinedStrs = CombinedRlt.Split('\n');
             if (combinedStrs.Length == 0) return -1;
@@ -196,7 +195,7 @@ namespace CxjText.utlis
 
             /****************************获取config.xml里面的数据********************************/
             String congiXmlUrl = requestDataUlr + "/aurora/zh/aurora/System/Aurora/config.xml?v=" + combineJObject["config.xml"];
-            String configXmlRlt = HttpUtils.HttpGetHeader(congiXmlUrl, "", dzUser.cookie1, headJObject);
+            String configXmlRlt = HttpUtils.HttpGetHeader(congiXmlUrl, "", dzUser.cookie, headJObject);
             if (String.IsNullOrEmpty(configXmlRlt) || !configXmlRlt.Contains("targeturl"))
             {
                 return -1;
@@ -218,7 +217,7 @@ namespace CxjText.utlis
             /**********************获取gamelist.xml里面的数据*****************************/
             String gameListXmlUrl = requestDataUlr + "/aurora/zh/aurora/System/Aurora/gamelist.xml?v="
                 + combineJObject["gamelist.xml"];
-            String gameListXmlUrlRlt = HttpUtils.HttpGetHeader(gameListXmlUrl, "", dzUser.cookie1, headJObject);
+            String gameListXmlUrlRlt = HttpUtils.HttpGetHeader(gameListXmlUrl, "", dzUser.cookie, headJObject);
             if (String.IsNullOrEmpty(gameListXmlUrlRlt) || !gameListXmlUrlRlt.Contains("gameset"))
             {
                 return -1;
@@ -266,7 +265,7 @@ namespace CxjText.utlis
             headJObject = new JObject();
             headJObject["Host"] = hostStr;
             headJObject["Origin"] = requestDataUlr;
-            String mgLoginRlt = HttpUtils.HttpPostHeader(targeturl, loginYouXiP, "application/x-www-form-urlencoded", dzUser.cookie1, headJObject);
+            String mgLoginRlt = HttpUtils.HttpPostHeader(targeturl, loginYouXiP, "application/x-www-form-urlencoded", dzUser.cookie, headJObject);
             if (String.IsNullOrEmpty(mgLoginRlt) || !mgLoginRlt.Contains("sessionid")) return -1;
             startIndex = mgLoginRlt.IndexOf("sessionid=\"");
             String sessionidStr = mgLoginRlt.Substring(startIndex + "sessionid=\"".Length, mgLoginRlt.Length - (startIndex + "sessionid=\"".Length));

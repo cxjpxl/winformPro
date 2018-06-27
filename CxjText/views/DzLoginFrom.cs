@@ -112,6 +112,7 @@ namespace CxjText.views
 
                 switch (dzUser.tag)
                 {
+                    //修改
                     case "U":
                         DzLoginUtils.loginU(this, position);
                         break;
@@ -135,7 +136,7 @@ namespace CxjText.views
 
         //开挂处理
         private void getData(DzUser dzUser,int position) {
-            //处理系统 和游戏编号  记得处理  目前未处理
+            //修改
             if (dzUser.tag.Equals("U")) {
                 if (dzUser.youxiNoStr.Equals("1")) {
                     DzOrderUtils.orderU(dzUser, position, this);

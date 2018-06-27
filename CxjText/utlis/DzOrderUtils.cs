@@ -43,14 +43,17 @@ namespace CxjText.utlis
 
                     if (dzUser.status != 2 || targeturl == null) break;
 
-                    String inputRlt = HttpUtils.HttpPostHeader(targeturl, inputP, "application/x-www-form-urlencoded", dzUser.cookie1, headJObject);
+                    String inputRlt = HttpUtils.HttpPostHeader(targeturl, inputP, "application/x-www-form-urlencoded", dzUser.cookie, headJObject);
                    // Console.WriteLine(inputRlt);
                     if (String.IsNullOrEmpty(inputRlt) || !inputRlt.Contains("sessionid") || !inputRlt.Contains("Balance"))
                     {
                         //失败处理判断  失败未处理
                         dzUser.inputInfo = "失败...";
+                        dzUser.status = 3;
+                        dzUser.cookie = null;
+                        dzUser.inputInfo = "";
                         dzLoginForm.AddToListToUpDate(position);
-                        continue;
+                        break;
                     }
 
                     int startIndex = inputRlt.IndexOf("Balance=\"");
