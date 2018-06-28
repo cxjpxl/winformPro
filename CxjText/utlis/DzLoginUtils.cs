@@ -164,7 +164,7 @@ namespace CxjText.utlis
             int moneyStatus = DzMoneyUtils.GetUMoney(dzUser);
             if (moneyStatus == 1)
             {
-                if (dzUser.youxiNoStr.Equals("1"))
+                if (dzUser.youxiNoStr.Equals("1")) //craps这个游戏
                 {
                     //修改1
                     if (DzLoginPramsUtils.getUYouxi1AllPrams(dzUser) == 1)

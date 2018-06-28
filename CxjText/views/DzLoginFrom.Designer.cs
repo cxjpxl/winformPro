@@ -34,6 +34,7 @@
             this.dzLoginGridView = new System.Windows.Forms.DataGridView();
             this.dzLoginSelectMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.dzLoginTimer = new System.Windows.Forms.Timer(this.components);
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -93,6 +94,12 @@
             this.toolStripMenuItem2.Size = new System.Drawing.Size(90, 22);
             this.toolStripMenuItem2.Text = "11";
             // 
+            // dzLoginTimer
+            // 
+            this.dzLoginTimer.Enabled = true;
+            this.dzLoginTimer.Interval = 60000;
+            this.dzLoginTimer.Tick += new System.EventHandler(this.dzLoginTimer_Tick);
+            // 
             // Column1
             // 
             this.Column1.HeaderText = "系统";
@@ -142,7 +149,7 @@
             // 
             // Column7
             // 
-            this.Column7.HeaderText = "金额";
+            this.Column7.HeaderText = "Mg金额";
             this.Column7.Name = "Column7";
             this.Column7.ReadOnly = true;
             this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -192,6 +199,7 @@
         private System.Windows.Forms.DataGridView dzLoginGridView;
         private System.Windows.Forms.ContextMenuStrip dzLoginSelectMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.Timer dzLoginTimer;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;

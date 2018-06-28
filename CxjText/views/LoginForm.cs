@@ -569,6 +569,12 @@ namespace CxjText.views
             }
             
         }
-
+        //关闭
+        private void LoginForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (loginTimer != null) {
+                loginTimer.Stop();
+            }
+        }
     }
 }

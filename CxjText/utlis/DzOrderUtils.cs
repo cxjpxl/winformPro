@@ -18,17 +18,40 @@ namespace CxjText.utlis
             if (dzUser.status == 2) //登录成功的处理
             {
                 dzUser.inputInfo = "准备中...";
-                dzLoginForm.AddToListToUpDate(position);
+                dzLoginForm.Invoke(new Action(() =>
+                {
+                    dzLoginForm.AddToListToUpDate(position);
+                }));
                 dzUser.httpTag++;
                 int curTag = dzUser.httpTag;
-                while (dzUser.status == 2 && dzUser.httpTag == curTag)
+
+                // 一些不刷的条件判断
+                try
+                {
+                    float money = float.Parse(dzUser.money);
+                    if (money <= 10) {
+                        dzUser.inputInfo = "增加MG,重新登录";
+                        dzLoginForm.Invoke(new Action(() =>
+                        {
+                            dzLoginForm.AddToListToUpDate(position);
+                        }));
+                        return;
+                    } 
+                }
+                catch (Exception e1) {
+                    return;
+                }
+
+                while (dzUser.status == 2 && dzUser.httpTag == curTag )
                 {
                     Random r = new Random();
                     int num = r.Next(300, 2000);
-                 //   Console.WriteLine("产出随机数" + num);
                     Thread.Sleep(num);
                     dzUser.inputInfo = "开始...";
-                    dzLoginForm.AddToListToUpDate(position);
+                    dzLoginForm.Invoke(new Action(() =>
+                    {
+                        dzLoginForm.AddToListToUpDate(position);
+                    }));
                     JObject headJObject = new JObject();
                     headJObject["Host"] = dzUser.jObject["Host"];
                     headJObject["Origin"] = dzUser.jObject["Origin"];
@@ -45,14 +68,17 @@ namespace CxjText.utlis
 
                     String inputRlt = HttpUtils.HttpPostHeader(targeturl, inputP, "application/x-www-form-urlencoded", dzUser.cookie, headJObject);
                    // Console.WriteLine(inputRlt);
-                    if (String.IsNullOrEmpty(inputRlt) || !inputRlt.Contains("sessionid") || !inputRlt.Contains("Balance"))
+                    if (String.IsNullOrEmpty(inputRlt) || !inputRlt.Contains("sessionid") || !inputRlt.Contains("Balance") || inputRlt.Contains("Error"))
                     {
                         //失败处理判断  失败未处理
-                        dzUser.inputInfo = "失败...";
+                        dzUser.loginFailTime++;
                         dzUser.status = 3;
                         dzUser.cookie = null;
                         dzUser.inputInfo = "";
-                        dzLoginForm.AddToListToUpDate(position);
+                        dzLoginForm.Invoke(new Action(() =>
+                        {
+                            dzLoginForm.AddToListToUpDate(position);
+                        }));
                         break;
                     }
 
@@ -65,13 +91,23 @@ namespace CxjText.utlis
                         int balance = int.Parse(BalanceStr);
                         balance = balance / 100;
                         dzUser.money = balance + "";
-                   //     Console.WriteLine(balance + "");
+                        if (balance < 10) {
+                            dzUser.inputInfo = "增加MG,重新登录";
+                            dzLoginForm.Invoke(new Action(() =>
+                            {
+                                dzLoginForm.AddToListToUpDate(position);
+                            }));
+                            break;
+                        }
                     }
                     catch (Exception e) {
 
                     }
                     dzUser.inputInfo = "成功...";
-                    dzLoginForm.AddToListToUpDate(position);
+                    dzLoginForm.Invoke(new Action(() =>
+                    {
+                        dzLoginForm.AddToListToUpDate(position);
+                    }));
                     startIndex = inputRlt.IndexOf("sessionid=\"");
                     String sessionidStr = inputRlt.Substring(startIndex + "sessionid=\"".Length, inputRlt.Length - (startIndex + "sessionid=\"".Length));
                     startIndex = sessionidStr.IndexOf("\"");

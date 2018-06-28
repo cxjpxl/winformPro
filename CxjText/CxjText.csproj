@@ -137,6 +137,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="iface\DataClickInface.cs" />
+    <Compile Include="iface\DzLoginFormInterface.cs" />
     <Compile Include="iface\LoginFormInterface.cs" />
     <Compile Include="MainFrom.cs">
       <SubType>Form</SubType>

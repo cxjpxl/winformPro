@@ -1,17 +1,10 @@
 ﻿using CxjText.bean;
+using CxjText.iface;
 using CxjText.utils;
 using CxjText.utlis;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CxjText.views
@@ -19,16 +12,25 @@ namespace CxjText.views
     public partial class DzLoginFrom : Form
     {
         private List<int> upDateList = new List<int>();
+        private DzLoginFormInterface inface = null;
 
         public DzLoginFrom()
         {
             InitializeComponent();
         }
 
+        public void setInterFace(DzLoginFormInterface inface) {
+            this.inface = inface;
+        }
+
         //初始化操作
         private void DzLoginFrom_Load(object sender, EventArgs e)
         {
             loginViewInit();
+            if (dzLoginTimer !=  null) {
+                dzLoginTimer.Start();
+            }
+           
         }
 
 
@@ -94,6 +96,21 @@ namespace CxjText.views
             ToolStripItem itemMenu = (ToolStripItem)sender;
             if (itemMenu != null)
             {
+
+                //登录检测   
+                int num = 0;
+                for (int i = 0; i < Config.dzUserList.Count; i++) {
+                    DzUser dzUser = (DzUser)Config.dzUserList[i];
+                    if (dzUser.status == 2 || dzUser.status ==1) { //登录中和连接中的
+                        num++;
+                    }
+                }
+
+                if (num >= 15) {
+                    MessageBox.Show("最多同时登录15个！");
+                    return;
+                }
+
                 int position = (int)itemMenu.Tag; //获取Tag
                 Thread t = new Thread(new ParameterizedThreadStart(this.GoLogin));
                 t.Start(position);
@@ -136,9 +153,9 @@ namespace CxjText.views
 
         //开挂处理
         private void getData(DzUser dzUser,int position) {
-            //修改
+            //修改 投注金额未处理
             if (dzUser.tag.Equals("U")) {
-                if (dzUser.youxiNoStr.Equals("1")) {
+                if (dzUser.youxiNoStr.Equals("1")) { //Craps 这个游戏
                     DzOrderUtils.orderU(dzUser, position, this);
                 }
             }
@@ -172,27 +189,8 @@ namespace CxjText.views
                 dzUser.inputMoney = num;
             }
             else if (e.ColumnIndex == 8) //限定
-            { //第8列的情况
-                int rowIndex = e.RowIndex;
-                if (rowIndex == -1) return;
-                DzUser dzUser = (DzUser)Config.dzUserList[rowIndex];
-                int num = 0;
-                try
-                {
-                    String numStr = this.dzLoginGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value.ToString();
-                    num = int.Parse(numStr);
-                    if (num < 20)
-                    {
-                        num = 0;
-                    }
-                }
-                catch (Exception e1)
-                {
+            { 
 
-                    num = 0;
-                }
-                this.dzLoginGridView.Rows[rowIndex].Cells[e.ColumnIndex].Value = num;
-                dzUser.xianDing = num;
             }
             else if (e.ColumnIndex == 7) {//游戏编号
 
@@ -264,8 +262,13 @@ namespace CxjText.views
                         this.dzLoginGridView.Rows[index].Cells[6].Value = dzUser.money; //金额
                         this.dzLoginGridView.Rows[index].Cells[5].Value = dzUser.inputInfo;//下注信息显示
                     }
+
+                    this.dzLoginGridView.Rows[index].Cells[7].ReadOnly = true;
                     this.dzLoginGridView.Rows[index].Cells[7].Value = dzUser.youxiNoStr; //游戏编号
-                    this.dzLoginGridView.Rows[index].Cells[8].Value = dzUser.xianDing; //限定
+
+                    this.dzLoginGridView.Rows[index].Cells[8].ReadOnly = true;
+                    this.dzLoginGridView.Rows[index].Cells[8].Value = "暂不开放"; //限定
+
                     String infoExp = dzUser.infoExp; //备注
                     if (!String.IsNullOrEmpty(infoExp))
                     {
@@ -291,7 +294,69 @@ namespace CxjText.views
             }
         }
 
+
+
         //////////////////////登录过期处理//////////////////////////
-        
+        //定时器1分钟执行一次
+        private int num = 0;
+        private void dzLoginTimer_Tick(object sender, EventArgs e)
+        {
+            if (!getCodeStatus) {
+                getCodeMoney(); //获取打码金额
+            }
+            num++;
+            if (num != 3) return;
+            num = 0;
+            //3分钟自动检测登录过且登录失败的数据
+            for (int i = 0; i < Config.dzUserList.Count; i++)
+            {
+                DzUser dzUser = (DzUser)Config.dzUserList[i];
+                if (dzUser == null) continue;
+                //登录失败自动登录 3分钟检测一次
+                if (dzUser.status == 3 && dzUser.loginTime != -1 && dzUser.loginFailTime <= 15)
+                {
+                    Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
+                    t1.Start(i);
+                    continue;
+                }
+            }
+
+        }
+        private bool getCodeStatus = false;
+        private void getCodeMoney()
+        {
+            getCodeStatus = true;
+            String str = "";
+            //获取云代码账号金额
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                if (codeMoney == -1007)
+                {
+                    str = "云打码账户余额不足,请充值";
+                }
+                else
+                {
+                    getCodeStatus = false;
+                    return;
+                }
+
+            }
+
+            if (codeMoney < 100)
+            {
+                str = "云打码账户分低于100,请充值";
+            }
+            else
+            {
+                str = "云打码剩余分:" + codeMoney;
+            }
+
+            if (this.inface != null)
+            {
+                this.inface.getCodeMoneyStatus(str);
+            }
+            getCodeStatus = false;
+        }
     }
 }

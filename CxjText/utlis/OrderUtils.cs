@@ -936,6 +936,12 @@ namespace CxjText.utlis
                 "uid=" + uid;
             String dsorcg = (String)betJObject["data"]["dsorcg"];
             String orderUrl = user.dataUrl + "/index.php/sports/bet/post_bet?dsorcg=" + dsorcg + "&uid=" + uid + "&token=" + user.exp;
+
+            if (jobject["isJiaoQiu"] != null && (bool)(jobject["isJiaoQiu"]) == true)
+            {
+                Thread.Sleep(800); //角球延时下注
+            }
+
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderData, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt)) {
                 leftForm.Invoke(new Action(() => {
@@ -978,7 +984,6 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-
                         rltForm.RefershLineData(inputTag, msg);
                     }
                 }));
@@ -988,7 +993,7 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
-                    if (jobject["gameMid"] != null)
+                    if (jobject["gameMid"] != null && (jobject["isJiaoQiu"] == null || (bool)(jobject["isJiaoQiu"]) == false))
                     {
                         addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }

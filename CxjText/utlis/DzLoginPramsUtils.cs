@@ -252,14 +252,24 @@ namespace CxjText.utlis
             dzUser.jObject["cid"] = cid;//游戏Id
             dzUser.jObject["mid"] = mid;//下注id
 
-
             /*************登录游戏接口*************/
-            String loginYouXiP = "<Pkt><Id mid=\"1\" cid=\"" + cid + "\" sid=\""
-                + dzUser.jObject["serverid"] + "\" verb=\"Login\" sessionid=\"\" clientLang=\"" + dzUser.jObject["language"]
-                + "\"/><Request><Credentials Name=\"" + dzUser.jObject["Username"]
-                + "\" Pass=\"" + dzUser.jObject["sext2"] + "\" clientType=\"1\"/><FC ID1=\"\" IPAddress=\"10.0.0.1\" ID2=\"\"/></Request></Pkt>";
-            String hostStr = targeturl.Replace("http://", "").Replace("https://", "");
+            //修改
+            String loginYouXiP = null;
+            switch (dzUser.tag) {
+                case "U": {
+                        loginYouXiP = "<Pkt><Id mid=\"1\" cid=\"" + cid + "\" sid=\""
+                                        + dzUser.jObject["serverid"] + "\" verb=\"Login\" sessionid=\"\" clientLang=\"" + dzUser.jObject["language"]
+                                        + "\"/><Request><Credentials Name=\"" + dzUser.jObject["Username"]
+                                        + "\" Pass=\"" + dzUser.jObject["sext2"] + "\" clientType=\"1\"/><FC ID1=\"\" IPAddress=\"10.0.0.1\" ID2=\"\"/></Request></Pkt>";
+                        break;
+                }
+                default:
+                    break;
+                   
+            }
 
+            if (loginYouXiP == null) return -1;
+            String hostStr = targeturl.Replace("http://", "").Replace("https://", "");
             startIndex = hostStr.IndexOf("/");
             hostStr = hostStr.Substring(0, startIndex).Trim();
             headJObject = new JObject();
