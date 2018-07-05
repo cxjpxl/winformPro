@@ -537,6 +537,7 @@ namespace CxjText.views
                     jObject["inputMid"] = dataJObject["inputMid"];//mid
                     jObject["Match_Name"] = gameName;//联赛名字
                     jObject["key"] = rltStr;
+                    jObject["pk"] = dataJObject["pk"];//盘口
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;

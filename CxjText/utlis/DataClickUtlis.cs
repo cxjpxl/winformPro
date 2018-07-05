@@ -2022,6 +2022,7 @@ namespace CxjText.utlis
             String gameTeam = "";
             if (jObject == null) return null;
             String mid = (String)jObject["Match_ID"]; //赛事ID的获取
+            String pk = ""; //盘口
             if (numRow == 0)
             {
                 inputType = "主队";
@@ -2031,31 +2032,37 @@ namespace CxjText.utlis
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c03_data(jObject, tag);
                         rltStr = "Match_BzM";
+                        pk = "0";
                         break;
                     case 4:
                         inputType = inputType + "-让球";
                         bateStr = DataUtils.get_c04_data(jObject, tag);
                         rltStr = "Match_Ho";
+                        pk =(String) jObject["Match_RGG"];
                         break;
                     case 5:
                         inputType = inputType + "-大小";
                         bateStr = DataUtils.get_c05_data(jObject, tag);
                         rltStr = "Match_DxDpl";
+                        pk = (String)jObject["Match_DxGG"];
                         break;
                     case 6:
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c06_data(jObject, tag);
                         rltStr = "Match_Bmdy";
+                        pk = "0";
                         break;
                     case 7:
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c07_data(jObject, tag);
                         rltStr = "Match_BHo";
+                        pk = (String)jObject["Match_BRpk"];
                         break;
                     case 8:
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c08_data(jObject, tag);
                         rltStr = "Match_Bdpl";
+                        pk = (String)jObject["Match_Bdxpk"];
                         break;
                     default:
                         return null;
@@ -2071,31 +2078,37 @@ namespace CxjText.utlis
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c13_data(jObject, tag);
                         rltStr = "Match_BzG";
+                        pk = "0";
                         break;
                     case 4:
                         inputType = inputType + "-让球";
                         bateStr = DataUtils.get_c14_data(jObject, tag);
                         rltStr = "Match_Ao";
+                        pk = (String)jObject["Match_RGG"];
                         break;
                     case 5:
                         inputType = inputType + "-大小";
                         bateStr = DataUtils.get_c15_data(jObject, tag);
                         rltStr = "Match_DxXpl";
+                        pk = (String)jObject["Match_DxGG1"];
                         break;
                     case 6:
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c16_data(jObject, tag);
                         rltStr = "Match_Bgdy";
+                        pk = "0";
                         break;
                     case 7:
                         inputType = inputType + "-半场让球";
                         bateStr = DataUtils.get_c17_data(jObject, tag);
                         rltStr = "Match_BAo";
+                        pk = (String)jObject["Match_BRpk"];
                         break;
                     case 8:
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c18_data(jObject, tag);
                         rltStr = "Match_Bxpl";
+                        pk = (String)jObject["Match_Bdxpk2"];
                         break;
                     default:
                         return null;
@@ -2110,11 +2123,13 @@ namespace CxjText.utlis
                         inputType = inputType + "-独赢";
                         bateStr = DataUtils.get_c23_data(jObject, tag);
                         rltStr = "Match_BzH";
+                        pk = "0";
                         break;
                     case 6:
                         inputType = inputType + "-半场独赢";
                         bateStr = DataUtils.get_c26_data(jObject, tag);
                         rltStr = "Match_Bhdy";
+                        pk = "0";
                         break;
                     default:
                         return null;
@@ -2127,7 +2142,7 @@ namespace CxjText.utlis
 
 
             //下单前要请求的参数不能为空（B要先请求一个接口）
-            if (String.IsNullOrEmpty(rltStr))
+            if (String.IsNullOrEmpty(rltStr) || String.IsNullOrEmpty(pk))
             {
                 return null;
             }
@@ -2146,6 +2161,7 @@ namespace CxjText.utlis
             dataJObject["inputType"] = inputType; //下注类型
 
             dataJObject["inputMid"] = mid;
+            dataJObject["pk"] = pk;
             return rltStr;
         }
 

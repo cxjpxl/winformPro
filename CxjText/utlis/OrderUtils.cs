@@ -1994,7 +1994,8 @@ namespace CxjText.utlis
             String inputMid = (String)jobject["inputMid"];//mid
             String Match_Name = (String)jobject["Match_Name"];
             String key = (String)jobject["key"];
-            
+            String pk = (String)jobject["pk"];
+
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
@@ -2040,25 +2041,10 @@ namespace CxjText.utlis
                 "&pl="+pl+ 
                 "&matchname="+ WebUtility.UrlEncode(Match_Name)+
                 "&sort=" + WebUtility.UrlEncode("足球滚球") +
-                "&pk=0&bet_money=" +inputMoney;
-
-           ///////////////////////要删除/////////////////////////////  
-            {
-
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        MessageBox.Show(orderP);
-                    }
-                }));
-                return;
-
-            }
-            return;
-            ////////////////////////////////////////////////////  
+                "&pk="+ pk +
+                "&bet_money=" +inputMoney;
 
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
-            Console.WriteLine(orderRlt);
             if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
