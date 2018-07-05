@@ -2006,5 +2006,148 @@ namespace CxjText.utlis
 
             return rltStr;
         }
+
+
+        //O系统点击处理
+        public static String DataSysOClick(JObject dataJObject,
+             object obj, int numRow, int clickNum, String tag
+            )
+        {
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+            String mid = (String)jObject["Match_ID"]; //赛事ID的获取
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        rltStr = "Match_BzM";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        rltStr = "Match_Ho";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        rltStr = "Match_DxDpl";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        rltStr = "Match_Bmdy";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        rltStr = "Match_BHo";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        rltStr = "Match_Bdpl";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        rltStr = "Match_BzG";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        rltStr = "Match_Ao";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        rltStr = "Match_DxXpl";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        rltStr = "Match_Bgdy";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        rltStr = "Match_BAo";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        rltStr = "Match_Bxpl";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        rltStr = "Match_BzH";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        rltStr = "Match_Bhdy";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            //下单前要请求的参数不能为空（B要先请求一个接口）
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["Match_Name"]; //获取赛事
+            gameTeam = (String)jObject["Match_Master"] + "-" + (String)jObject["Match_Guest"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+
+            dataJObject["inputMid"] = mid;
+            return rltStr;
+        }
+
     }
 }

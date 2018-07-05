@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CxjText.utlis
 {
@@ -1875,6 +1876,7 @@ namespace CxjText.utlis
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
             int money = (int)jobject["money"];
+
             JObject headJObject = new JObject();
             /*****************获取cookie用的********************************/
             String dataUrl = user.dataUrl + "/hg_sports";
@@ -1981,6 +1983,155 @@ namespace CxjText.utlis
             }
 
 
+        }
+
+        //O下单
+        public static void OrderO(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+            //获取参数
+            int inputMoney =(int)jobject["money"];
+            String inputMid = (String)jobject["inputMid"];//mid
+            String Match_Name = (String)jobject["Match_Name"];
+            String key = (String)jobject["key"];
+            
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            String betUrl = user.dataUrl + "/HGSports/index.php?c=SportsMatchInfo&a=FTMatchInfo" ;
+            String betP = "match_id=" + inputMid + "&point_column=" + key + "&ball_sort=" + WebUtility.UrlEncode("足球滚球");
+            String betRlt = HttpUtils.HttpPostHeader(betUrl, betP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betRlt)|| betRlt.Contains("盘口已关闭"))
+            {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        String str = "配置订单失败";
+                        rltForm.RefershLineData(inputTag, str);
+                    }
+                }));
+                return;
+            }
+
+            float pl = 0f;
+            try
+            {
+                pl = float.Parse(betRlt);
+            }
+            catch (Exception e1) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        String str = "赔率获取有错误";
+                        rltForm.RefershLineData(inputTag, str);
+                    }
+                }));
+                return;
+            }
+
+
+            String orderUrl = user.dataUrl + "/HGSports/index.php?c=SportsOrder";
+            String orderP = "id="+ inputMid+ 
+                "&type="+ key+
+                "&pl="+pl+ 
+                "&matchname="+ WebUtility.UrlEncode(Match_Name)+
+                "&sort=" + WebUtility.UrlEncode("足球滚球") +
+                "&pk=0&bet_money=" +inputMoney;
+
+           ///////////////////////要删除/////////////////////////////  
+            {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        MessageBox.Show(orderP);
+                    }
+                }));
+                return;
+
+            }
+            return;
+            ////////////////////////////////////////////////////  
+
+            String orderRlt = HttpUtils.HttpPostHeader(orderUrl,orderP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
+            Console.WriteLine(orderRlt);
+            if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        String str = "下单失败";
+                        rltForm.RefershLineData(inputTag, str);
+                    }
+                }));
+                return;
+            }
+
+            JObject orderJObject = JObject.Parse(orderRlt);
+            if (((String)orderJObject["message"]) == null)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+
+
+            String message = (String)orderJObject["message"];
+            if (!message.Contains("交易成功")) {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, FormUtils.changeHtml(message));
+                    }
+                }));
+                return;
+            }
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetOMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
         }
     }
 }

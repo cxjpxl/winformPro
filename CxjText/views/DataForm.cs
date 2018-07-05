@@ -162,6 +162,12 @@ namespace CxjText.views
                         rltObj = DataUtils.updateUI(jObject, "H");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
+                    else if (userInfo.tag.Equals("O"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "O");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
                     else
                     {
                         mid = "";
@@ -289,6 +295,11 @@ namespace CxjText.views
                     JObject jObjectH = (JObject)obj;
                     if (jObjectH == null) return;
                     rltStr = DataClickUtlis.DataSysHClick(dataJObject, jObjectH, numRow, clickNum, "H");
+                    break;
+                case "O":
+                    JObject jObjectO = (JObject)obj;
+                    if (jObjectO == null) return;
+                    rltStr = DataClickUtlis.DataSysOClick(dataJObject, jObjectO, numRow, clickNum, "O");
                     break;
                 default:
                     break;

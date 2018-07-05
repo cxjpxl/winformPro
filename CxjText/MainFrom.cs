@@ -350,7 +350,9 @@ namespace CxjText
                         break;
                     case "H":
                         dataRtlStr = DataPramsUtils.getHData(userInfo);
-                       // Console.WriteLine(dataRtlStr);
+                        break;
+                    case "O":
+                        dataRtlStr = DataPramsUtils.getOData(userInfo);
                         break;
                     default:
                         break;

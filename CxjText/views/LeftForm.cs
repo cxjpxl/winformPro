@@ -446,6 +446,9 @@ namespace CxjText.views
                     case "H":
                         orderParmas = rltStr;
                         break;
+                    case "O":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -528,6 +531,13 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                 }
+                if (user.tag.Equals("O"))
+                { 
+                    jObject["money"] = inputMoney;
+                    jObject["inputMid"] = dataJObject["inputMid"];//mid
+                    jObject["Match_Name"] = gameName;//联赛名字
+                    jObject["key"] = rltStr;
+                }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
@@ -598,6 +608,9 @@ namespace CxjText.views
                         break;
                     case "H":
                         OrderUtils.OrderH(jobject, this, loginForm, rltForm);
+                        break;
+                    case "O":
+                        OrderUtils.OrderO(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;
@@ -1276,10 +1289,10 @@ namespace CxjText.views
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
             String lianSai = (String)jObject["lianSai"];
-            if (lianSai.Contains("俄罗斯") && lianSai.Contains("世界杯"))
+           /* if (lianSai.Contains("俄罗斯") && lianSai.Contains("世界杯"))
             {
                 return;
-            }
+            }*/
 
             //先将数据搜索出来
             if (mainFrom != null)

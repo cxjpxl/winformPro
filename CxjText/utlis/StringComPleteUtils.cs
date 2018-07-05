@@ -182,6 +182,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectH, tag);
                         obj = jObjectH;
                         break;
+                    case "O":
+                        JObject jObjectO = (JObject)jArray[i];
+                        lianSai = (String)jObjectO["Match_Name"];
+                        hStr = (String)jObjectO["Match_Master"];
+                        gStr = (String)jObjectO["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectO, tag);
+                        obj = jObjectO;
+                        break;
                     default:
                         return null;
 
@@ -456,6 +464,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectH, tag);
                         obj = jObjectH;
                         break;
+                    case "O":
+                        JObject jObjectO = (JObject)jArray[i];
+                        lianSai = (String)jObjectO["Match_Name"];
+                        hStr = (String)jObjectO["Match_Master"];
+                        gStr = (String)jObjectO["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectO, tag);
+                        obj = jObjectO;
+                        break;
                     default:
                         return null;
                 }
@@ -628,6 +644,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectH, tag);
                         obj = jObjectH;
                         break;
+                    case "O":
+                        JObject jObjectO = (JObject)jArray[i];
+                        lianSai = (String)jObjectO["Match_Name"];
+                        hStr = (String)jObjectO["Match_Master"];
+                        gStr = (String)jObjectO["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectO, tag);
+                        obj = jObjectO;
+                        break;
                     default:
                         return null;
                 }
@@ -767,6 +791,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectH["nameG"];
                         mid = DataUtils.getMid(jObjectH, tag);
                         obj = jObjectH;
+                        break;
+                    case "O":
+                        JObject jObjectO = (JObject)jArray[i];
+                        lianSai = (String)jObjectO["Match_Name"];
+                        hStr = (String)jObjectO["Match_Master"];
+                        gStr = (String)jObjectO["Match_Guest"];
+                        mid = DataUtils.getMid(jObjectO, tag);
+                        obj = jObjectO;
                         break;
                     default:
                         return null;

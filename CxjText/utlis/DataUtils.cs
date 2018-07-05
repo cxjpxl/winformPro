@@ -25,6 +25,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c00 = (String)jObjectB["Match_Name"];
@@ -101,6 +102,7 @@ namespace CxjText.utlis
                     time = (String)jObjectA["a19"] + "\n" + (String)jObjectA["a16"] + " - " + (String)jObjectA["a17"];
                     break;
                 case "B":
+                case "O":
                     JObject jObjectB = (JObject)obj;
                     time = (String)jObjectB["Match_Time"];
                     if (time.IndexOf("45") >= 0)
@@ -227,6 +229,7 @@ namespace CxjText.utlis
                     gBifen = (String)jObjectA["a17"];
                     break;
                 case "B":
+                case "O":
                     JObject jObjectB = (JObject)obj;
                     try
                     {
@@ -383,6 +386,7 @@ namespace CxjText.utlis
                     c02 = (String)jObjectA["a2"];
                     break;
                 case "B":
+                case "O":
                     JObject jObjectB = (JObject)obj;
                     c02 = (String)jObjectB["Match_Master"];
                     break;
@@ -441,6 +445,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c12 = (String)jObjectB["Match_Guest"]; 
@@ -516,6 +521,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_BzM = (String)jObjectB["Match_BzM"];
@@ -618,6 +624,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_ShowType = (String)jObjectB["Match_ShowType"];
@@ -814,6 +821,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_DxDpl = (String)jObjectB["Match_DxDpl"];
@@ -961,6 +969,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c06 = (String)jObjectB["Match_Bmdy"];
@@ -1061,6 +1070,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_Hr_ShowType = (String)jObjectB["Match_Hr_ShowType"];
@@ -1279,6 +1289,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_Bdpl = (String)jObjectB["Match_Bdpl"];
@@ -1434,6 +1445,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_BzG = (String)jObjectB["Match_BzG"];
@@ -1535,6 +1547,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_ShowType = (String)jObjectB["Match_ShowType"];
@@ -1740,6 +1753,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_DxXpl = (String)jObjectB["Match_DxXpl"];
@@ -1888,6 +1902,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c16 = (String)jObjectB["Match_Bgdy"];
@@ -1989,6 +2004,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_BAo = (String)jObjectB["Match_BAo"];
@@ -2209,6 +2225,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_Bdxpk2 = (String)jObjectB["Match_Bdxpk2"];
@@ -2364,6 +2381,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c23 = (String)jObjectB["Match_BzH"];
@@ -2471,6 +2489,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                         c26 = (String)jObjectB["Match_Bhdy"];
@@ -2651,6 +2670,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "O":
                     {
                         JObject jObjectB = (JObject)obj;
                          mid = (String)jObjectB["Match_ID"];
