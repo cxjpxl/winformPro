@@ -431,7 +431,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-          //  Console.WriteLine(moneyRlt);
+            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;
@@ -510,6 +510,23 @@ namespace CxjText.utlis
             user.money = moneyRlt;
             return 1;
 
+        }
+
+        //获取O的money 1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetOMoney(UserInfo user)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            String moneyUrl = user.dataUrl + "/HGSports/index.php?c=Member&a=GetAmount";
+            String moneyP = "t=" + FormUtils.getCurrentTime();
+            String bMoneyRlt = HttpUtils.HttpPostHeader(moneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(bMoneyRlt) || !FormUtils.IsJsonObject(bMoneyRlt)) return 0;
+            if (!bMoneyRlt.Contains("user_bal") ) return 0;
+            JObject jObject = JObject.Parse(bMoneyRlt);
+            if (jObject["user_bal"] == null) return 0;
+            user.money = (String)jObject["user_bal"];
+            return 1;
         }
     }
 }

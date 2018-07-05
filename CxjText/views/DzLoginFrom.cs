@@ -312,8 +312,8 @@ namespace CxjText.views
             {
                 DzUser dzUser = (DzUser)Config.dzUserList[i];
                 if (dzUser == null) continue;
-                //登录失败自动登录 3分钟检测一次
-                if (dzUser.status == 3 && dzUser.loginTime != -1 && dzUser.loginFailTime <= 15)
+                //登录失败自动登录 3分钟检测一次  连续100次登录失败就不登录了
+                if (dzUser.status == 3 && dzUser.loginTime != -1 && dzUser.loginFailTime <= 100)
                 {
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);

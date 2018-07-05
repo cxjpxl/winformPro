@@ -3,11 +3,7 @@ using CxjText.utils;
 using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CxjText.utlis
 {
@@ -26,9 +22,12 @@ namespace CxjText.utlis
                 int curTag = dzUser.httpTag;
 
                 // 一些不刷的条件判断
+
+                float money = 0;
+                int inputMoney = 0;
                 try
                 {
-                    float money = float.Parse(dzUser.money);
+                     money = float.Parse(dzUser.money);
                     if (money <= 10) {
                         dzUser.inputInfo = "增加MG,重新登录";
                         dzLoginForm.Invoke(new Action(() =>
@@ -39,9 +38,18 @@ namespace CxjText.utlis
                     } 
                 }
                 catch (Exception e1) {
+                    dzUser.loginFailTime++;
+                    dzUser.status = 3;
+                    dzUser.cookie = null;
+                    dzUser.inputInfo = "";
+                    dzLoginForm.Invoke(new Action(() =>
+                    {
+                        dzLoginForm.AddToListToUpDate(position);
+                    }));
                     return;
                 }
-
+                //输入金额是动态化
+                inputMoney = DzMoneyUtils.getYouXi1InputMoney((int)money);
                 while (dzUser.status == 2 && dzUser.httpTag == curTag )
                 {
                     Random r = new Random();
@@ -56,12 +64,13 @@ namespace CxjText.utlis
                     headJObject["Host"] = dzUser.jObject["Host"];
                     headJObject["Origin"] = dzUser.jObject["Origin"];
                     String targeturl = (String)dzUser.jObject["targeturl"];
+                    String inputMoneyStr = (inputMoney * 100) + "";
                     String inputP = "<Pkt><Id mid=\"" + dzUser.jObject["mid"]
                         + "\" cid=\"" + dzUser.jObject["cid"]
                         + "\" sid=\"" + dzUser.jObject["serverid"]
                         + "\" verb=\"Roll\" sessionid=\"" + dzUser.jObject["sessionid"]
                         + "\" clientLang=\"" + dzUser.jObject["ul"]
-                        + "\"/><Request><TableStatus UserBets=\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\"/></Request></Pkt>";
+                        + "\"/><Request><TableStatus UserBets=\"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"+ inputMoneyStr + ","+inputMoneyStr+",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\"/></Request></Pkt>";
 
 
                     if (dzUser.status != 2 || targeturl == null) break;
@@ -99,6 +108,7 @@ namespace CxjText.utlis
                             }));
                             break;
                         }
+                        inputMoney = DzMoneyUtils.getYouXi1InputMoney(balance);
                     }
                     catch (Exception e) {
 

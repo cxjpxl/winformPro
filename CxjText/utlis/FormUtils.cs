@@ -79,7 +79,7 @@ namespace CxjText.utlis
                 {
                     return -1;
                 }
-            } else if (userInfo.tag.Equals("B")) {
+            } else if (userInfo.tag.Equals("B") || userInfo.tag.Equals("O")) {
                 if (String.IsNullOrEmpty(dataStr)) {
                     return -1;
                 }

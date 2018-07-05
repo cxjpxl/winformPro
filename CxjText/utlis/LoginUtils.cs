@@ -44,6 +44,8 @@ namespace CxjText.utlis
                     break;
                 case "H":
                     break;
+                case "O":
+                    break;
                 default:
                     return false;
             }
@@ -216,6 +218,83 @@ namespace CxjText.utlis
             
         }
         /**************************B系统登录的处理****************************/
+
+        private static bool loginB1(UserInfo userInfo, int position) {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
+            String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
+            userInfo.cookie = new CookieContainer();
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (rltStr == null)
+            {
+                return false;
+            }
+
+            //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private static bool loginB2(UserInfo userInfo,int position)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String codeUrl = userInfo.loginUrl + "/include/vcode.php?bk=000&space=15&color=FFFFFF&mode=middle&name=loginVcode&rnd=" + FormUtils.getCurrentTime();
+            userInfo.cookie = new CookieContainer();
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (rltStr == null)
+            {
+                return false;
+            }
+
+            //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public static void loginB(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -245,65 +324,19 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
+            if (!loginB1(userInfo, position)) {
 
-            JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
-            String codeUrl = userInfo.loginUrl + "/yzm.php?_=" +FormUtils.getCurrentTime();
-            //登录请求
-            if (userInfo.cookie == null)
-            {
-                userInfo.cookie = new CookieContainer();
-            }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
-            if (codeNum < 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
-            if (String.IsNullOrEmpty(codeStrBuf))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+                if (!loginB2(userInfo, position)) {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                
             }
             
-            //获取登录的系统参数 
-            String paramsStr  = "r=" + FormUtils.getCurrentTime() + "&action=login&vlcodes=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
-            //获取登录的链接地址
-            String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["X-Requested-With"] = "XMLHttpRequest";
-            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            if (rltStr == null)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
-            //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
-            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
-            if (rltNum < 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
             //获取资金
             int moneyStatus = MoneyUtils.GetBMoney(userInfo);
             if (moneyStatus == 1)
@@ -1734,6 +1767,111 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
             return;
+
+        }
+
+        /************************O系统登录处理*************************************/
+        private static bool loginO1(UserInfo userInfo, int position)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
+            userInfo.cookie = new CookieContainer();
+            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "r=" + FormUtils.getCurrentTime() + "&action=login&randcode=" + codeStrBuf.ToString() + "&username=" + userInfo.user + "&password=" + userInfo.pwd;
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/logincheck.php";
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (rltStr == null)
+            {
+                return false;
+            }
+
+            //系统更改4  解析登录结果  (B系统这个时候还获取不到钱)
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public static void loginO(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.uid = "";
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
+                userInfo.cookie = null;
+                userInfo.cookie = new CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+
+            if (!loginO1(userInfo, position))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+
+            }
+
+            //获取资金
+            int moneyStatus = MoneyUtils.GetOMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+                userInfo.updateMoneyTime = userInfo.loginTime;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            else
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
 
         }
 

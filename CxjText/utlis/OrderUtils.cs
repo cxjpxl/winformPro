@@ -849,7 +849,7 @@ namespace CxjText.utlis
                 }
 
                 //延时大概500ms继续下注
-                Thread.Sleep(800);
+                Thread.Sleep(450);
                 betUrl = user.dataUrl + "/index.php/sports/bet/makebetshow";
                 betRlt = HttpUtils.HttpPostHeader(betUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
                 if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt))
@@ -1320,7 +1320,10 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
-            if (jobject["isJiaoQiu"] != null && (bool)(jobject["isJiaoQiu"]) == true) {
+            if (jobject["isJiaoQiu"] != null
+                && (bool)(jobject["isJiaoQiu"]) == true
+                && user.baseUrl.Contains("6686")
+                ) {
                 Thread.Sleep(250);
             }
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);

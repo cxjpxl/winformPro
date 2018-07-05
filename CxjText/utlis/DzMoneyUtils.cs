@@ -9,6 +9,20 @@ namespace CxjText.utlis
 {
     class DzMoneyUtils
     {
+
+        public static int getYouXi1InputMoney(int money) {
+            int inputMoney = 0;
+            if (money < 300) inputMoney = 5;
+            else if (money < 600) inputMoney = 8;
+            else if (money < 1000) inputMoney = 10;
+            else if (money < 2000) inputMoney = 20;
+            else if (money < 3000) inputMoney = 40;
+            else if (money < 10000) inputMoney = 50;
+            else inputMoney = 100;
+            return inputMoney;
+        }
+
+
         public static int GetUMoney(DzUser dzUser)
         {
 

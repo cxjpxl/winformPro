@@ -1208,12 +1208,14 @@ namespace CxjText
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
-           //   String p = "userMemo=" + WebUtility.UrlEncode("出款需审核");
+           // String changeUrl = userInfo.dataUrl + "/api/user/updateUserInfo";
+            //  String p = "userMemo=" + WebUtility.UrlEncode("出款需审核");
             String p = "userMemo=";
             if (!String.IsNullOrEmpty(text.Trim())) {
                 p = "userMemo="+ WebUtility.UrlEncode(text.Trim());
             }
             String rlt = HttpUtils.HttpPostHeader(changeUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(rlt);
             MoneyUtils.GetDMoney(userInfo);
             if (loginForm != null) {
                 loginForm.Invoke(new Action(() => {

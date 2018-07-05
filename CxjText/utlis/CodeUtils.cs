@@ -23,6 +23,8 @@ namespace CxjText.utlis
                 ms.Position = 0;
                 ms.Read(arr, 0, (int)ms.Length);
                 ms.Close();
+                bmp.Dispose();
+                bmp = null;
                 strbaser64 = Convert.ToBase64String(arr);
 
             }

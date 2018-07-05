@@ -389,6 +389,7 @@ namespace CxjText.utils
                 reader.Close();
                 reader.Dispose();
                 response.Close();
+                response.Dispose();
                 response = null;
                 reader = null;
                 request = null;
