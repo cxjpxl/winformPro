@@ -111,6 +111,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/app/member/FT_browse/body_browse.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&delay=&showtype=";
             String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
             if (String.IsNullOrEmpty(dataRlt)) return null;
+            dataRlt = dataRlt.Replace("\n			    '", "'");
             if (!dataRlt.Contains("parent.GameHead")) return null;
 
             if (!dataRlt.Contains("parent.GameFT["))
@@ -190,6 +191,7 @@ namespace CxjText.utlis
                     getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=" + t + "&league_id=";
                     dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
                     if (String.IsNullOrEmpty(dataRlt)) continue;
+                    dataRlt = dataRlt.Replace("\n			    '", "'");
                     if (!dataRlt.Contains("parent.GameHead")) continue;
                     if (!dataRlt.Contains("parent.GameFT[")) continue;
                     strs = dataRlt.Split('\n');

@@ -1328,7 +1328,6 @@ namespace CxjText.utlis
                 Thread.Sleep(250);
             }
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-            
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("下注成功"))
             {
                 if (rlt.Contains("check") && rlt.Contains("确定") && rlt.Contains("parent.close_bet"))
@@ -1336,21 +1335,27 @@ namespace CxjText.utlis
 
                 }
                 else {
-                    leftForm.Invoke(new Action(() => {
-                        if (rltForm != null)
-                        {
-                            if (!String.IsNullOrEmpty(rlt) && (rlt.Contains("赛程已关闭") || rlt.Contains("賽程已關閉")))
-                            {
-                                rltForm.RefershLineData(inputTag, "赛程已关闭");
-                            }
-                            else
-                            {
-                                rltForm.RefershLineData(inputTag, "下单失败");
-                            }
+                    if (rlt.Contains("成功提交注单"))
+                    {
 
-                        }
-                    }));
-                    return;
+                    }
+                    else {
+                        leftForm.Invoke(new Action(() => {
+                            if (rltForm != null)
+                            {
+                                if (!String.IsNullOrEmpty(rlt) && (rlt.Contains("赛程已关闭") || rlt.Contains("賽程已關閉")))
+                                {
+                                    rltForm.RefershLineData(inputTag, "赛程已关闭");
+                                }
+                                else
+                                {
+                                    rltForm.RefershLineData(inputTag, "下单失败");
+                                }
+
+                            }
+                        }));
+                        return;
+                    }
                 }
                 
             }

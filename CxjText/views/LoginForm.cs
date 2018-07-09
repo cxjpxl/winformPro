@@ -484,7 +484,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetKMoney(userInfo);
                         break;
                     case "C":
-                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 120)
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 90)
                         {
                          
                             userInfo.status = 0; //下线

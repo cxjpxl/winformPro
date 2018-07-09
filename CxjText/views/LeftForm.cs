@@ -388,7 +388,6 @@ namespace CxjText.views
 
                 if (dataJObject["gameMid"] != null) //判断是否已下
                 {
-                   // String gameMid = (String)dataJObject["gameMid"];
                     String baseUrl = user.baseUrl;
                     if (dataJObject["isJiaoQiu"] == null || (bool)(dataJObject["isJiaoQiu"]) == false)
                     {
@@ -403,7 +402,12 @@ namespace CxjText.views
                         if (autoData != null) continue;
                     }
                     else { //角球可以下
-                     //   OrderUtils.autoLists.RemoveAll(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl));
+                     /*   List<AutoData> autoDatas = null;
+                        if (user.tag.Equals("C"))
+                        {
+                            autoDatas = OrderUtils.autoLists.FindAll(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl) && j.userName.Equals(user.user));
+                        }*/
+                        //不拦截这里  注意成功那里也没有做处理现在
                     }
                 }
               
