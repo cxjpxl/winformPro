@@ -696,7 +696,7 @@ namespace CxjText
 
                     String league = (String)jObject["game"]["leagueName"]; //联赛
                     if (league.Contains("世界杯") && league.Contains("俄罗斯")) return;
-
+                    if (league.Contains("泰国") && league.Contains("甲")) return;
                     int state = 1;//主客队进球标志 未处理
 
                     bool isCancel = false;
@@ -1213,6 +1213,9 @@ namespace CxjText
             headJObject["Origin"] = userInfo.dataUrl;
             String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
             String p = "userMemo=";
+          /*p =
+                "bankName=" + WebUtility.UrlEncode("交通银行")
+                + "&cardNo=65555838447722812";*/
             if (!String.IsNullOrEmpty(text.Trim())) {
                 p = "userMemo="+ WebUtility.UrlEncode(text.Trim());
             }

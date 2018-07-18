@@ -1739,7 +1739,8 @@ namespace CxjText.utlis
             String loginUrl = userInfo.dataUrl + "/cn";
             String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&Submit=";
             String loginStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded",userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(loginStr) || !loginStr.Contains(userInfo.user)|| !loginStr.Contains("userinfo")) {
+            Console.WriteLine(loginStr);
+            if (String.IsNullOrEmpty(loginStr) || !loginStr.Contains(userInfo.user)) {
                 
                 userInfo.loginFailTime++;
                 userInfo.status = 3;

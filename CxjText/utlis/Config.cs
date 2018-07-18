@@ -21,8 +21,8 @@ namespace CxjText.utils
 
         public static String webSocketUrl = "ws://47.88.168.99:8600/";
         public static String netUrl = "http://47.88.168.99:8500";
-        // public static String webSocketUrl = "ws://172.28.2.75:8600/";
-        // public static String netUrl = "http://172.28.2.75:8500"; 
+       //  public static String webSocketUrl = "ws://192.168.31.59:8600/";
+       //  public static String netUrl = "http://192.168.31.59:8500"; 
 
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
