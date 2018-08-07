@@ -218,6 +218,9 @@ namespace CxjText.views
                     case "O":
                         LoginUtils.loginO(this, position);
                         break;
+                    case "J":
+                        LoginUtils.loginJ(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -362,6 +365,7 @@ namespace CxjText.views
                     continue;
                 }
                 if (user.status != 2) continue;
+                //修改
                 if (!LoginUtils.canRestLogin(user.updateMoneyTime, user.tag)) continue;
                 user.updateMoneyTime = FormUtils.getCurrentTime();
                 Thread t = new Thread(new ParameterizedThreadStart(this.UpdateCookie));
@@ -484,7 +488,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetKMoney(userInfo);
                         break;
                     case "C":
-                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 90)
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 35)
                         {
                          
                             userInfo.status = 0; //下线
@@ -550,6 +554,18 @@ namespace CxjText.views
                             return;
                         }
                         moneyStatus = MoneyUtils.GetOMoney(userInfo);
+                        break;
+                    case "J":
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 45)
+                        {
+
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetJMoney(userInfo);
                         break;
                     default:
                         break;

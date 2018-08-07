@@ -354,6 +354,9 @@ namespace CxjText
                     case "O":
                         dataRtlStr = DataPramsUtils.getOData(userInfo);
                         break;
+                    case "J":
+                        dataRtlStr = DataPramsUtils.getJData(userInfo);
+                        break;
                     default:
                         break;
                 }
@@ -679,7 +682,8 @@ namespace CxjText
                 isJiaoQiu = true;
             }
 
-            if (isJiaoQiu)//角球的情况
+            //角球的情况
+            if (isJiaoQiu)
             {
                 
 
@@ -921,12 +925,15 @@ namespace CxjText
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
 
-                if (cid.Equals("9926") || cid.Equals("9927"))
-                {
-                    listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                    listEnvets.Add(enventInfo);
-                    return;
+                if (!Config.noZhaDang) {
+                    if (cid.Equals("9926") || cid.Equals("9927"))
+                    {
+                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                        listEnvets.Add(enventInfo);
+                        return;
+                    }
                 }
+              
 
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
@@ -935,21 +942,25 @@ namespace CxjText
                     listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
                 }
-                //查找
-                EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
-                if (enventInfo1 == null) return;
+              
                 if (cid.Equals("2055")) //客队点球
                 {
-                    if (!enventInfo1.cid.Equals("9927"))
-                    {
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                        return;
+                    //查找
+                    if (!Config.noZhaDang) {
+                         EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
+                         if (enventInfo1 == null) return;
+                         if (!enventInfo1.cid.Equals("9927"))
+                         {
+                             listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                             return;
+                         }
+                         if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
+                         {
+                             listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                             return;
+                         }
                     }
-                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
-                    {
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                        return;
-                    }
+
                     //客队可以下注 
                     this.Invoke(new Action(() => {
                         speakStr("可以下注");
@@ -958,17 +969,27 @@ namespace CxjText
                     }));
                 }
                 else if (cid.Equals("1031"))
-                {  //主队点球
-                    if (!enventInfo1.cid.Equals("9926"))
+                {
+
+                    //查找
+                    if (!Config.noZhaDang)
                     {
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                        return;
+                         EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
+                           if (enventInfo1 == null) return;
+                        //主队点球
+                          if (!enventInfo1.cid.Equals("9926"))
+                          {
+                              listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                              return;
+                          }
+                        if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
+                        {
+                            listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
+                            return;
+                        }
                     }
-                    if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
-                    {
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                        return;
-                    }
+
+
                     //主队可以下注
                     this.Invoke(new Action(() => {
                         speakStr("可以下注");
@@ -1212,10 +1233,11 @@ namespace CxjText
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
+           // String p = "userMemo=&type=HY&hyLevel=1";
             String p = "userMemo=";
-          /*p =
-                "bankName=" + WebUtility.UrlEncode("交通银行")
-                + "&cardNo=65555838447722812";*/
+            /*p =
+                  "bankName=" + WebUtility.UrlEncode("交通银行")
+                  + "&cardNo=65555838447722812";*/
             if (!String.IsNullOrEmpty(text.Trim())) {
                 p = "userMemo="+ WebUtility.UrlEncode(text.Trim());
             }

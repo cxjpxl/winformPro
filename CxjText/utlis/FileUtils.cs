@@ -46,6 +46,10 @@ namespace CxjText.utlis
                     String pwd = strs[2].Trim();//密码
                     String baseUrl = strs[3].Trim();//网址
                     String dataUrl = strs[3].Trim(); //获取数据的接口
+                    String userExp = "";
+                    if (tag.Equals("B")&& strs.Length>4&&strs[4]!=null) {
+                        userExp = strs[4] + "";
+                    }
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
                     String loginUrl = dataUrl;//登录的链接地址 
@@ -84,7 +88,7 @@ namespace CxjText.utlis
                     userInfo.loginTime = -1;
                     userInfo.updateMoneyTime = FormUtils.getCurrentTime();
                     userInfo.leastMoney = 10;
-
+                    userInfo.userExp = userExp.Trim();
 
                     userInfo.status = loginStatus;
                     userList.Add(userInfo);

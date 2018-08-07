@@ -55,7 +55,12 @@ namespace CxjText.utlis
         public static String getBData(UserInfo userInfo)
         {
             //page是由0开始
-            String getDataUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
+            String getDataUrl = "";
+            getDataUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
+            if (userInfo.userExp.Equals("1")) {
+               getDataUrl =  userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
+            }
+
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
             if (String.IsNullOrEmpty(rlt)) return null;
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
@@ -74,7 +79,12 @@ namespace CxjText.utlis
             //循环获取当前数据
             for (int i = 1; i < p_page; i++)
             {
-                String pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
+                String pageUrl = "";
+                pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
+                if (userInfo.userExp.Equals("1"))
+                {
+                    pageUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage="+ i + "&_=" + FormUtils.getCurrentTime();
+                }
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
@@ -1585,6 +1595,128 @@ namespace CxjText.utlis
             //{list:[]}
             
             return jObject.ToString();
+        }
+
+        /***********************J系统获取数据*************************/
+
+        public static int changLength(JObject jObject,String name,int itemCount,int length) {
+            if (jObject[name] == null) return -1;
+            
+            JArray jArray = (JArray)jObject[name];
+            if (jArray == null || jArray.Count == 0) return -1;
+            if (jArray.Count / itemCount > length){
+                return jArray.Count / itemCount;
+            }
+            return  -1;
+        }
+
+        public static int getLength(JObject jObject) {
+            int length = 0;
+
+
+            int tempLength = changLength(jObject, "ah", 8, length);
+            if (tempLength != -1) {
+                length = tempLength;
+            }
+
+
+            tempLength = changLength(jObject, "ou", 8, length);
+            if (tempLength != -1)
+            {
+                length = tempLength;
+            }
+
+            tempLength = changLength(jObject, "1x2", 6, length);
+            if (tempLength != -1)
+            {
+                length = tempLength;
+            }
+
+            tempLength = changLength(jObject, "ah1st", 8, length);
+            if (tempLength != -1)
+            {
+                length = tempLength;
+            }
+
+            tempLength = changLength(jObject, "ou1st", 8, length);
+            if (tempLength != -1)
+            {
+                length = tempLength;
+            }
+
+            tempLength = changLength(jObject, "1x21st",6, length);
+            if (tempLength != -1)
+            {
+                length = tempLength;
+            }
+
+            return  length;
+        }
+
+
+        public static String getJData(UserInfo userInfo)
+        {
+            //page是由1开始
+            String getDataUrl = userInfo.dataUrl + "/odds2/d/getodds";
+            String dataP = "sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Origin"] = userInfo.dataUrl;
+            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl,dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject); 
+            JObject jObject = new JObject();
+            JArray jArray = new JArray();
+            jObject["list"] = jArray;
+
+            if (String.IsNullOrEmpty(dataRlt) 
+                || !FormUtils.IsJsonObject(dataRlt)
+                ||!dataRlt.Contains("i-ot") 
+                || !dataRlt.Contains("egs")) {
+                return jObject.ToString();
+            }
+
+            JObject rltJobject = JObject.Parse(dataRlt);
+            JArray i_ot = (JArray)rltJobject["i-ot"];
+            if (i_ot.Count == 0) {
+                return jObject.ToString();
+            }
+            for (int i = 0; i < i_ot.Count; i++) { //解析整个结构
+                JObject itemJObject = (JObject)i_ot[i];
+                JArray egs =(JArray) itemJObject["egs"];
+                if (egs.Count == 0) continue;
+                for (int j = 0; j < egs.Count; j++) { //解析联赛
+                    JObject egsItem = (JObject)egs[j];
+                    String lianSai =(String)egsItem["c"]["n"];
+                    String lianSaiK = (String)egsItem["c"]["k"];
+                    JArray es = (JArray)egsItem["es"];
+                    if (es.Count == 0) continue;
+                    for (int z = 0; z < es.Count; z++) { //解析比赛
+                        JObject esItem = (JObject)es[z];
+                        if (esItem["i"] == null) continue;
+                        String gameH = (String)esItem["i"][0]; //主队名字
+                        String gameG = (String)esItem["i"][1]; //客队名字
+                        String gameTime = (String)esItem["i"][5];//比赛时间
+                        String score = ((String)esItem["i"][10] + (String)esItem["i"][11]); //比分
+                        String iString = esItem["i"].ToString(); //把整个比赛有用的信息存起来
+                        String kStr =(String)esItem["k"]; //可能有用的信息
+                        if (kStr == null) continue;
+                        if (esItem["pci"] == null) continue;
+                        if (esItem["pci"]["ctn"] != null) {
+                            if (((String)esItem["pci"]["ctn"]).Contains("角球")) {
+                                gameH = gameH + "-角球数";
+                                gameG = gameG + "-角球数";
+                            }
+                        }
+                        JObject oJObject =(JObject)esItem["o"]; //赔率有关的数据
+                        if (oJObject == null) continue;
+                        int gameLength = getLength(oJObject); //总共有多少比赛的盘口
+                        if (gameLength <= 0) continue;
+
+                    }
+                }
+            }
+
+
+            return null;
         }
     }
 }

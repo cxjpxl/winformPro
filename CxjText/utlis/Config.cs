@@ -13,8 +13,9 @@ namespace CxjText.utils
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
         public static String softUserStr = "admin";
-        public static int softFun = 2; //0点 1角  2点+角  3电子
-        public static String vString = "V2.88";
+        public static bool noZhaDang = true;//不用管什么什么队炸弹
+        public static int softFun = 0; //0点 1角  2点+角  3电子
+        public static String vString = "V2.90";
 
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";

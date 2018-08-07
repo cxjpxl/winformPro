@@ -42,6 +42,31 @@ namespace CxjText.utlis
         //获取B的money 1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetBMoney(UserInfo user)
         {
+
+            if (user.userExp.Equals("1")) {
+                JObject hObject = new JObject();
+                hObject["Host"] = user.baseUrl;
+                hObject["Origin"] = user.dataUrl;
+                String moneyRlt = HttpUtils.HttpGetHeader(user.loginUrl + "/app/member/getdata.php?callback=&_=1532947415831", "", user.cookie, hObject);
+                if (moneyRlt == null) {
+                    return 0;
+                }
+
+                if (!moneyRlt.Contains("user_money")) {
+                    if (moneyRlt.Contains("重新登录")) {
+                        return -1;
+                    }
+                    return 0;
+                }
+
+                moneyRlt = moneyRlt.Replace("(", "").Replace(");", "").Trim();
+                if (!FormUtils.IsJsonObject(moneyRlt)) return 0;
+                JObject monJObject = JObject.Parse(moneyRlt);
+                if (monJObject["user_money"] == null || (String)monJObject["user_money"] == "null") return -1;
+                user.money =(String) monJObject["user_money"];
+                return 1;
+            }
+
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
@@ -526,6 +551,35 @@ namespace CxjText.utlis
             JObject jObject = JObject.Parse(bMoneyRlt);
             if (jObject["user_bal"] == null) return 0;
             user.money = (String)jObject["user_bal"];
+            return 1;
+        }
+
+        //获取J系统的money
+        public static int GetJMoney(UserInfo user) {
+
+            if (!LoginUtils.getCsrf(user)) {
+                return -1;
+            }
+            String moneyUrl = user.dataUrl + "/player/getBalanceInfo";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            String p = "_csrf=" + user.expJObject["csrf"];
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
+            if (String.IsNullOrEmpty(moneyRlt) || !moneyRlt.Contains("balance") || !FormUtils.IsJsonArray(moneyRlt)) return 0;
+            JArray jArray = JArray.Parse(moneyRlt);
+            JObject item = (JObject)jArray[0];
+            String money =(String) item["balance"];
+            try
+            {
+                float.Parse(money);
+
+            }
+            catch (Exception e) {
+                return - 1;
+            }
+
+            user.money = money;
             return 1;
         }
     }

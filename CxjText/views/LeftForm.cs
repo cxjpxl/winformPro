@@ -402,11 +402,12 @@ namespace CxjText.views
                         if (autoData != null) continue;
                     }
                     else { //角球可以下
-                     /*   List<AutoData> autoDatas = null;
+                     /*  List<AutoData> autoDatas = null;
                         if (user.tag.Equals("C"))
                         {
                             autoDatas = OrderUtils.autoLists.FindAll(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl) && j.userName.Equals(user.user));
-                        }*/
+                        }
+                        if (autoDatas != null && autoDatas.Count >0) continue;*/
                         //不拦截这里  注意成功那里也没有做处理现在
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -35,6 +36,9 @@ namespace CxjText.bean
         public int loginFailTime = 0;
 
         public String infoExp = "";//用户信息扩展  (目前有些D网能检测是否能出款)
+
+        public String userExp = ""; //user表扩展 
+        public JObject expJObject = new JObject();
 
         public UserInfo() {
             cookie = new CookieContainer();
