@@ -2165,5 +2165,263 @@ namespace CxjText.utlis
             return rltStr;
         }
 
+
+        //J系统点击处理
+        public static String DataSysJClick(JObject dataJObject,
+           object obj, int numRow, int clickNum, String tag
+            )
+        {
+            
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+
+            JObject betObject =(JObject) jObject["betInfo"];
+
+            String nameH = (String)jObject["nameH"];
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        betObject["sType"] = "had";
+                        betObject["betDetail"] = "h";
+                        betObject["odds1"] = jObject["dyBet"][1];
+                        betObject["id"] = jObject["dyBet"][0];
+                        betObject["betFormTitle"] = "滚球 独赢";
+                        betObject["betFormDetail"] = betObject["homeTeam"];
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        betObject["sType"] = "ah";
+                        betObject["betDetail"] = "h";
+                        betObject["h"] = jObject["rangBet"][1];
+                        betObject["a"] = jObject["rangBet"][3];
+                        betObject["odds1"] = jObject["rangBet"][5];
+                        betObject["id"] = jObject["rangBet"][4];
+                        betObject["betFormTitle"] = "滚球 让球";
+                        betObject["betFormDetail"] = betObject["homeTeam"];
+                        betObject["betFormH"] = betObject["h"];
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        betObject["sType"] = "ou";
+                        betObject["betDetail"] = "ov";
+                        betObject["h"] = jObject["daxiaoBet"][1];
+                        betObject["a"] = jObject["daxiaoBet"][3];
+                        betObject["odds1"] = jObject["daxiaoBet"][5];
+                        betObject["id"] = jObject["daxiaoBet"][4];
+                        if (nameH.Contains("角球"))
+                        {
+                            betObject["betFormTitle"] = "角球:滚球 大 / 小";
+                        }
+                        else {
+                            betObject["betFormTitle"] = "进球:滚球 大 / 小";
+                        }
+                        betObject["betFormDetail"] = "大";
+                        betObject["betFormH"] = betObject["h"];
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        betObject["sType"] = "had1st";
+                        betObject["betDetail"] = "h";
+                        betObject["odds1"] = jObject["bdyBet"][1];
+                        betObject["id"] = jObject["bdyBet"][0];
+                        betObject["betFormTitle"] = "滚球 独赢-上半场";
+                        betObject["betFormDetail"] = betObject["homeTeam"];
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        betObject["sType"] = "ah1st";
+                        betObject["betDetail"] = "h";
+                        betObject["h"] = jObject["brangBet"][1];
+                        betObject["a"] = jObject["brangBet"][3];
+                        betObject["odds1"] = jObject["brangBet"][5];
+                        betObject["id"] = jObject["brangBet"][4];
+                        betObject["betFormTitle"] = "滚球 让球-上半场";
+                        betObject["betFormDetail"] = betObject["homeTeam"];
+                        betObject["betFormH"] = betObject["h"];
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        betObject["sType"] = "ou1st";
+                        betObject["betDetail"] = "ov";
+                        betObject["h"] = jObject["bdaxiaoBet"][1];
+                        betObject["odds1"] = jObject["bdaxiaoBet"][5];
+                        betObject["id"] = jObject["bdaxiaoBet"][4];
+                        if (nameH.Contains("角球"))
+                        {
+                            betObject["betFormTitle"] = "角球:滚球 大 / 小-上半场";
+                        }
+                        else {
+                            betObject["betFormTitle"] = "进球:滚球 大 / 小-上半场";
+                        }
+                        betObject["betFormDetail"] = "大";
+                        betObject["betFormH"] = betObject["h"];
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        betObject["sType"] = "had";
+                        betObject["betDetail"] = "a";
+                        betObject["odds1"] = jObject["dyBet"][3];
+                        betObject["id"] = jObject["dyBet"][2];
+                        betObject["betFormTitle"] = "滚球 独赢";
+                        betObject["betFormDetail"] = betObject["awayTeam"];
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        betObject["sType"] = "ah";
+                        betObject["betDetail"] = "a";
+                        betObject["h"] = jObject["rangBet"][1];
+                        betObject["a"] = jObject["rangBet"][3];
+                        betObject["odds1"] = jObject["rangBet"][7];
+                        betObject["id"] = jObject["rangBet"][6];
+                        betObject["betFormTitle"] = "滚球 让球";
+                        betObject["betFormDetail"] = betObject["awayTeam"];
+                        betObject["betFormH"] = betObject["a"];
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        betObject["sType"] = "ou";
+                        betObject["betDetail"] = "un";
+                        betObject["h"] = jObject["daxiaoBet"][1];
+                        betObject["a"] = jObject["daxiaoBet"][3];
+                        betObject["odds1"] = jObject["daxiaoBet"][7];
+                        betObject["id"] = jObject["daxiaoBet"][6];
+                        if (nameH.Contains("角球"))
+                        {
+                            betObject["betFormTitle"] = "角球:滚球 大 / 小";
+                        }
+                        else
+                        {
+                            betObject["betFormTitle"] = "进球:滚球 大 / 小";
+                        }
+                        betObject["betFormDetail"] = "小";
+                        betObject["betFormH"] = betObject["a"];
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        betObject["sType"] = "had1st";
+                        betObject["betDetail"] = "a";
+                        betObject["odds1"] = jObject["bdyBet"][3];
+                        betObject["id"] = jObject["bdyBet"][2];
+                        betObject["betFormTitle"] = "滚球 独赢-上半场";
+                        betObject["betFormDetail"] = betObject["awayTeam"];
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        betObject["sType"] = "ah1st";
+                        betObject["betDetail"] = "a";
+                        betObject["h"] = jObject["brangBet"][1];
+                        betObject["a"] = jObject["brangBet"][3];
+                        betObject["odds1"] = jObject["brangBet"][7];
+                        betObject["id"] = jObject["brangBet"][6];
+                        betObject["betFormTitle"] = "滚球 让球-上半场";
+                        betObject["betFormDetail"] = betObject["awayTeam"];
+                        betObject["betFormH"] = betObject["a"];
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        betObject["sType"] = "ou1st";
+                        betObject["betDetail"] = "un";
+                        betObject["h"] = jObject["bdaxiaoBet"][1];
+                        betObject["odds1"] = jObject["bdaxiaoBet"][7];
+                        betObject["id"] = jObject["bdaxiaoBet"][6];
+                        if (nameH.Contains("角球"))
+                        {
+                            betObject["betFormTitle"] = "角球:滚球 大 / 小-上半场";
+                        }
+                        else
+                        {
+                            betObject["betFormTitle"] = "进球:滚球 大 / 小-上半场";
+                        }
+                        betObject["betFormDetail"] = "小";
+                        betObject["betFormH"] = betObject["h"];
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        betObject["sType"] = "had";
+                        betObject["betDetail"] = "d";
+                        betObject["odds1"] = jObject["dyBet"][5];
+                        betObject["id"] = jObject["dyBet"][4];
+                        betObject["betFormTitle"] = "滚球 独赢";
+                        betObject["betFormDetail"] = "和局";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        betObject["sType"] = "had1st";
+                        betObject["betDetail"] = "d";
+                        betObject["odds1"] = jObject["bdyBet"][5];
+                        betObject["id"] = jObject["bdyBet"][4];
+                        betObject["betFormTitle"] = "滚球 独赢-上半场";
+                        betObject["betFormDetail"] = "和局";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            rltStr = betObject.ToString();
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["lianSai"]; //获取赛事
+            gameTeam = (String)jObject["nameH"] + "-" + (String)jObject["nameG"]; //球队名称
+
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
+
     }
 }

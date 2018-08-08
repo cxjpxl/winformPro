@@ -168,6 +168,12 @@ namespace CxjText.views
                         rltObj = DataUtils.updateUI(jObject, "O");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
+                    else if (userInfo.tag.Equals("J"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "J");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
                     else
                     {
                         mid = "";
@@ -246,60 +252,65 @@ namespace CxjText.views
                     if (jObjectB == null) return;
                     rltStr = DataClickUtlis.DataSysBClick(dataJObject, jObjectB,  numRow, clickNum, "B");
                     break;
-                case "I":
-                    JArray jArrayI = (JArray)obj;
-                    if (jArrayI == null) return;
-                    rltStr = DataClickUtlis.DataSysIClick(dataJObject, jArrayI, numRow, clickNum, "I");
-                    break;
-                case "U":
-                    JArray jArrayU = (JArray)obj;
-                    if (jArrayU == null) return;
-                    rltStr = DataClickUtlis.DataSysUClick(dataJObject, jArrayU,  numRow, clickNum, "U");
-                    break;
-                case "R":
-                    JObject jObjectR = (JObject)obj;
-                    if (jObjectR == null) return;
-                    rltStr = DataClickUtlis.DataSysRClick(dataJObject, jObjectR,  numRow, clickNum, "R");
-                    break;
-                case "G":
-                    JObject jObjectG = (JObject)obj;
-                    if (jObjectG == null) return;
-                    rltStr = DataClickUtlis.DataSysGClick(dataJObject, jObjectG,  numRow, clickNum, "G");
-                    break;
-                case "K":
-                    JObject jObjectK = (JObject)obj;
-                    if (jObjectK == null) return;
-                    rltStr = DataClickUtlis.DataSysKClick(dataJObject, jObjectK, numRow, clickNum, "K");
-                    break;
                 case "C":
                     JObject jObjectC = (JObject)obj;
                     if (jObjectC == null) return;
                     rltStr = DataClickUtlis.DataSysCClick(dataJObject, jObjectC, numRow, clickNum, "C");
-                    break;
-                case "F":
-                    JObject jObjectF = (JObject)obj;
-                    if (jObjectF == null) return;
-                    rltStr = DataClickUtlis.DataSysFClick(dataJObject, jObjectF, numRow, clickNum, "F");
                     break;
                 case "D":
                     JObject jObjectD = (JObject)obj;
                     if (jObjectD == null) return;
                     rltStr = DataClickUtlis.DataSysDClick(dataJObject, jObjectD, numRow, clickNum, "D");
                     break;
-                case "E": //修改
+                case "E":
                     JObject jObjectE = (JObject)obj;
                     if (jObjectE == null) return;
                     rltStr = DataClickUtlis.DataSysEClick(dataJObject, jObjectE, numRow, clickNum, "E");
                     break;
-                case "H": 
+                case "F":
+                    JObject jObjectF = (JObject)obj;
+                    if (jObjectF == null) return;
+                    rltStr = DataClickUtlis.DataSysFClick(dataJObject, jObjectF, numRow, clickNum, "F");
+                    break;
+                case "G":
+                    JObject jObjectG = (JObject)obj;
+                    if (jObjectG == null) return;
+                    rltStr = DataClickUtlis.DataSysGClick(dataJObject, jObjectG, numRow, clickNum, "G");
+                    break;
+                case "H":
                     JObject jObjectH = (JObject)obj;
                     if (jObjectH == null) return;
                     rltStr = DataClickUtlis.DataSysHClick(dataJObject, jObjectH, numRow, clickNum, "H");
+                    break;
+                case "I":
+                    JArray jArrayI = (JArray)obj;
+                    if (jArrayI == null) return;
+                    rltStr = DataClickUtlis.DataSysIClick(dataJObject, jArrayI, numRow, clickNum, "I");
+                    break;
+                case "J": //修改
+                    JObject jObjectJ = (JObject)obj;
+                    if (jObjectJ == null) return;
+                    rltStr = DataClickUtlis.DataSysJClick(dataJObject, jObjectJ, numRow, clickNum, "J");
+                    break;
+                case "K":
+                    JObject jObjectK = (JObject)obj;
+                    if (jObjectK == null) return;
+                    rltStr = DataClickUtlis.DataSysKClick(dataJObject, jObjectK, numRow, clickNum, "K");
                     break;
                 case "O":
                     JObject jObjectO = (JObject)obj;
                     if (jObjectO == null) return;
                     rltStr = DataClickUtlis.DataSysOClick(dataJObject, jObjectO, numRow, clickNum, "O");
+                    break;
+                case "R":
+                    JObject jObjectR = (JObject)obj;
+                    if (jObjectR == null) return;
+                    rltStr = DataClickUtlis.DataSysRClick(dataJObject, jObjectR,  numRow, clickNum, "R");
+                    break;
+                case "U":
+                    JArray jArrayU = (JArray)obj;
+                    if (jArrayU == null) return;
+                    rltStr = DataClickUtlis.DataSysUClick(dataJObject, jArrayU, numRow, clickNum, "U");
                     break;
                 default:
                     break;

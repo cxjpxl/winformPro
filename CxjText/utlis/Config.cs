@@ -1,8 +1,6 @@
-﻿using CxjText.bean;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace CxjText.utils
 {

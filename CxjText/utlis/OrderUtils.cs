@@ -2150,5 +2150,102 @@ namespace CxjText.utlis
                 }));
             }
         }
+
+
+        private static String orderJ1(UserInfo user,String dataParams)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["platform"] = "desktop"; //这个也很重要
+            String url = user.dataUrl + "/player/submit_betting";
+
+
+            if (!LoginUtils.getCsrf(user))
+            {
+                return "获取Csrf失败";
+            }
+            String orderRlt = HttpUtils.HttpPostHeader(url, dataParams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("success"))
+            {
+                return "第一次下单失败";
+            }
+
+            JObject rltJObject = JObject.Parse(orderRlt);
+            if ((!(bool)rltJObject["success"]))
+            {
+                return "下单失败";
+            }
+            return null;
+        }
+
+        //J下单
+        public static void OrderJ(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+            //获取参数
+            String parmsStr = (String)jobject["rlt"];
+            parmsStr = parmsStr.Replace("+", "%2B");
+            int inputMoney = (int)jobject["money"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            JObject betJObject = JObject.Parse(parmsStr);
+            betJObject["singleBetAmount"] = inputMoney;
+            JArray jArray = new JArray();
+            jArray.Add(betJObject);
+            String dataParams = "acceptHigherOdds=true&betlistStr=" + jArray.ToString() + "&_csrf=" + user.expJObject["csrf"];
+
+            if (orderJ1(user, dataParams) != null) { //!null 表示下单失败
+                String orderRlt = orderJ1(user, dataParams); //第二次下单
+                if (orderRlt != null) {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            String str = orderRlt;
+                            rltForm.RefershLineData(inputTag, str);
+                        }
+                    }));
+                    return;
+                }
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetJMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+
+        }
     }
 }

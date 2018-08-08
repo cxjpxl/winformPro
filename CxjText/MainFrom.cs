@@ -546,6 +546,7 @@ namespace CxjText
 
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
                     if (userInfo == null) return;
+
                     //AUD
                     if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
                     {

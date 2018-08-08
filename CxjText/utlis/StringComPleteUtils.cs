@@ -119,6 +119,7 @@ namespace CxjText.utlis
                         obj = jObjectU;
                         break;
                     case "R":
+                    case "J":
                         JObject jObjectR = (JObject)jArray[i];
                         lianSai = (String)jObjectR["lianSai"];
                         hStr = (String)jObjectR["nameH"];
@@ -401,6 +402,7 @@ namespace CxjText.utlis
                         obj = jObjectU;
                         break;
                     case "R":
+                    case "J":
                         JObject jObjectR = (JObject)jArray[i];
                         lianSai = (String)jObjectR["lianSai"];
                         hStr = (String)jObjectR["nameH"];
@@ -581,6 +583,7 @@ namespace CxjText.utlis
                         obj = jObjectU;
                         break;
                     case "R":
+                    case "J":
                         JObject jObjectR = (JObject)jArray[i];
                         lianSai = (String)jObjectR["lianSai"];
                         hStr = (String)jObjectR["nameH"];
@@ -729,6 +732,7 @@ namespace CxjText.utlis
                         obj = jObjectU;
                         break;
                     case "R":
+                    case "J":
                         JObject jObjectR = (JObject)jArray[i];
                         lianSai = (String)jObjectR["lianSai"];
                         hStr = (String)jObjectR["nameH"];

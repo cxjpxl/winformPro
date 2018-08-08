@@ -1598,7 +1598,7 @@ namespace CxjText.utlis
         }
 
         /***********************J系统获取数据*************************/
-
+        //比赛长度的比较
         public static int changLength(JObject jObject,String name,int itemCount,int length) {
             if (jObject[name] == null) return -1;
             
@@ -1609,11 +1609,9 @@ namespace CxjText.utlis
             }
             return  -1;
         }
-
+        //总共有多少比赛
         public static int getLength(JObject jObject) {
             int length = 0;
-
-
             int tempLength = changLength(jObject, "ah", 8, length);
             if (tempLength != -1) {
                 length = tempLength;
@@ -1649,10 +1647,295 @@ namespace CxjText.utlis
             {
                 length = tempLength;
             }
-
-            return  length;
+            return length;
         }
+        //添加比赛数据
+        public static void addGame(int length, 
+            JObject gameInfo,
+            JObject gameO,
+            JArray gameJArray,
+            JObject esItem) {
 
+            for (int i = 0; i < length; i++) {
+                JObject gameJObject = new JObject();
+                gameJObject["lianSai"] = gameInfo["lianSai"]; //联赛
+                gameJObject["lianSaiK"] = gameInfo["lianSaiK"];//貌似联赛Id
+                gameJObject["nameH"] =  gameInfo["nameH"]; //主队名字
+                gameJObject["nameG"] = gameInfo["nameG"] ; //客队名字
+                gameJObject["gameTime"] = gameInfo["gameTime"];//比赛时间
+                gameJObject["score"] =  gameInfo["score"]; //比分
+                gameJObject["iString"] = gameInfo["iString"]; //把整个比赛有用的信息存起来
+                gameJObject["kStr"] = gameInfo["kStr"];//可能有用的信息 可以用来做比赛mid
+                gameJObject["mid"] =((int) gameInfo["kStr"]) + i; //cxj 手动add
+
+
+                //下注的时候需要用到的必要参数
+                JObject betJObect = new JObject();
+                betJObect["sId"] = "1";
+                betJObect["kId"] = esItem["k"];
+                betJObect["mId"] = esItem["k"];
+                betJObect["leagueId"] = gameInfo["lianSaiK"];
+                betJObect["league"] = gameInfo["lianSai"];
+                betJObect["homeTeam"] = esItem["i"][0];
+                betJObect["awayTeam"] = esItem["i"][1];
+                betJObect["homeScore"] = esItem["i"][10];
+                betJObect["awayScore"] = esItem["i"][11];
+                betJObect["ctid"] = esItem["pci"]["ctid"];
+                betJObect["date"] = esItem["i"][4];
+                betJObect["time"] = esItem["i"][5];
+                betJObect["isLive"] = true;
+                betJObect["isOr"] = false;
+                gameJObject["betInfo"] = betJObect;
+
+
+                //独赢
+                gameJObject["h_du_y"] = "";   
+                gameJObject["g_du_y"] = "";   
+                gameJObject["he_du_y"] = "";  
+
+                //全场让球
+                gameJObject["h_rang"] = "";   
+                gameJObject["g_rang"] = "";   
+
+                //全场大小
+                gameJObject["h_daxiao"] = "";   
+                gameJObject["g_daxiao"] = "";  
+
+                //半场独赢
+                gameJObject["bh_du_y"] = "";    
+                gameJObject["bg_du_y"] = "";    
+                gameJObject["bhe_du_y"] = "";  
+
+                //半场让球
+                gameJObject["bh_rang"] = "";    
+                gameJObject["bg_rang"] = "";  
+
+                //半场大小
+                gameJObject["bh_daxiao"] = "";   
+                gameJObject["bg_daxiao"] = "";   
+
+                //全场独赢的判断
+                if (gameO["1x2"] != null) {
+                    JArray dyJArray = (JArray)gameO["1x2"];
+                    if (dyJArray.Count > 0 && ((i + 1) * 6 <= dyJArray.Count)) {
+
+                        JArray dyBet = new JArray();
+                        dyBet.Add(dyJArray[i * 6 + 0]);
+                        dyBet.Add(dyJArray[i * 6 + 1]);
+                        dyBet.Add(dyJArray[i * 6 + 2]);
+                        dyBet.Add(dyJArray[i * 6 + 3]);
+                        dyBet.Add(dyJArray[i * 6 + 4]);
+                        dyBet.Add(dyJArray[i * 6 + 5]);
+
+                        gameJObject["dyBet"] = dyBet;
+
+                        String h_du_y = (String)dyJArray[i * 6 + 1]; //主队独赢赔率
+                       String g_du_y = (String)dyJArray[i * 6 + 3];//客队独赢赔率
+                       String he_du_y = (String)dyJArray[i * 6 + 5];//和独赢赔率
+
+                        if (!h_du_y.Trim().Equals("") && !h_du_y.Trim().Equals("0.00") && !h_du_y.Trim().Equals("0")) {
+                            gameJObject["h_du_y"] = h_du_y; //主队独赢赔率
+                        }
+
+                        if (!g_du_y.Trim().Equals("") && !g_du_y.Trim().Equals("0.00") && !g_du_y.Trim().Equals("0"))
+                        {
+                            gameJObject["g_du_y"] = g_du_y; //客队独赢赔率
+                        }
+
+
+                        if (!he_du_y.Trim().Equals("") && !he_du_y.Trim().Equals("0.00") && !he_du_y.Trim().Equals("0"))
+                        {
+                            gameJObject["he_du_y"] = he_du_y;//和独赢赔率
+                        }
+                    }
+                }
+
+                //全场让球的判断
+                if (gameO["ah"] != null)
+                {
+                    JArray ahJArray = (JArray)gameO["ah"];
+                    //要将全场让球数据添加到数组中
+                    if (ahJArray.Count > 0 && ((i + 1) * 8 <= ahJArray.Count))
+                    {
+
+                        JArray rangBet = new JArray();
+                        rangBet.Add(ahJArray[i * 8 + 0]);
+                        rangBet.Add(ahJArray[i * 8 + 1]);
+                        rangBet.Add(ahJArray[i * 8 + 2]);
+                        rangBet.Add(ahJArray[i * 8 + 3]);
+                        rangBet.Add(ahJArray[i * 8 + 4]);
+                        rangBet.Add(ahJArray[i * 8 + 5]);
+                        rangBet.Add(ahJArray[i * 8 + 6]);
+                        rangBet.Add(ahJArray[i * 8 + 7]);
+
+                        gameJObject["rangBet"] = rangBet;
+
+
+                        // 点击事件做扩展  
+                        String p1 = (String)ahJArray[i * 8 + 1];
+                        String p2 = (String)ahJArray[i * 8 + 3];
+                        String hPan = (String)ahJArray[i * 8 + 5];
+                        String gPan = (String)ahJArray[i * 8 + 7];
+                        if (!hPan.Equals("0.00") && !hPan.Equals("")&& !hPan.Equals("0")) {
+                            if (p1.Contains("-")||(p1.Equals("0")&& p2.Equals("0")))
+                            {
+                                gameJObject["h_rang"] = p1.Replace("+", "").Replace("-", "") + " " + hPan;
+                                gameJObject["g_rang"] = gPan;
+                            }
+                            else
+                            {
+                                gameJObject["h_rang"] = hPan;
+                                gameJObject["g_rang"] = p1.Replace("+", "").Replace("-", "") + " " + gPan;
+                            }
+                        }
+                    }
+                }
+
+                //全场大小的判断
+                if (gameO["ou"] != null) {
+                    JArray ouJArray = (JArray)gameO["ou"];
+                    if (ouJArray.Count > 0 && ((i + 1) * 8 <= ouJArray.Count)) {
+
+                        JArray daxiaoBet = new JArray();
+                        daxiaoBet.Add(ouJArray[i * 8 + 0]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 1]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 2]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 3]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 4]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 5]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 6]);
+                        daxiaoBet.Add(ouJArray[i * 8 + 7]);
+
+                        gameJObject["daxiaoBet"] = daxiaoBet;
+
+                        String p1 = (String)ouJArray[i * 8 + 1];
+                        String p2 = (String)ouJArray[i * 8 + 3];
+                        String hPan = (String)ouJArray[i * 8 + 5];
+                        String gPan = (String)ouJArray[i * 8 + 7];
+
+                        if (!hPan.Equals("0.00") && !hPan.Equals("")&& !hPan.Equals("0")) {
+                            gameJObject["h_daxiao"] = "O"+p1 + " " + hPan;
+                            gameJObject["g_daxiao"] = "U"+p2 + " " + gPan;
+                        }
+                       
+                    }
+                }
+
+                //半场独赢的判断
+                if (gameO["1x21st"] != null)
+                {
+                    JArray bDyJArray = (JArray)gameO["1x21st"];
+                    if (bDyJArray.Count > 0 && ((i + 1) * 6 <= bDyJArray.Count))
+                    {
+                        JArray bdyBet = new JArray();
+                        bdyBet.Add(bDyJArray[i * 6 + 0]);
+                        bdyBet.Add(bDyJArray[i * 6 + 1]);
+                        bdyBet.Add(bDyJArray[i * 6 + 2]);
+                        bdyBet.Add(bDyJArray[i * 6 + 3]);
+                        bdyBet.Add(bDyJArray[i * 6 + 4]);
+                        bdyBet.Add(bDyJArray[i * 6 + 5]);
+
+                        gameJObject["bdyBet"] = bdyBet;
+
+
+                        String bh_du_y = (String)bDyJArray[i * 6 + 1]; //半场主队独赢赔率
+                        String bg_du_y = (String)bDyJArray[i * 6 + 3];//半场客队独赢赔率
+                        String bhe_du_y = (String)bDyJArray[i * 6 + 5];//半场和独赢赔率
+
+                        if (!bh_du_y.Trim().Equals("") && !bh_du_y.Trim().Equals("0.00") && !bh_du_y.Trim().Equals("0"))
+                        {
+                            gameJObject["bh_du_y"] = bh_du_y; //半场主队独赢赔率
+                        }
+
+                        if (!bg_du_y.Trim().Equals("") && !bg_du_y.Trim().Equals("0.00") && !bg_du_y.Trim().Equals("0"))
+                        {
+                            gameJObject["bg_du_y"] = bg_du_y; //半场客队独赢赔率
+                        }
+
+
+                        if (!bhe_du_y.Trim().Equals("") && !bhe_du_y.Trim().Equals("0.00") && !bhe_du_y.Trim().Equals("0"))
+                        {
+                            gameJObject["bhe_du_y"] = bhe_du_y;//半场和独赢赔率
+                        }
+                    }
+                }
+
+
+                //半场让球的判断
+                if (gameO["ah1st"] != null)
+                {
+                    JArray ah1stJArray = (JArray)gameO["ah1st"];
+                    //要将全场让球数据添加到数组中
+                    if (ah1stJArray.Count > 0 && ((i + 1) * 8 <= ah1stJArray.Count))
+                    {
+
+                        JArray brangBet = new JArray();
+                        brangBet.Add(ah1stJArray[i * 8 + 0]);
+                        brangBet.Add(ah1stJArray[i * 8 + 1]);
+                        brangBet.Add(ah1stJArray[i * 8 + 2]);
+                        brangBet.Add(ah1stJArray[i * 8 + 3]);
+                        brangBet.Add(ah1stJArray[i * 8 + 4]);
+                        brangBet.Add(ah1stJArray[i * 8 + 5]);
+                        brangBet.Add(ah1stJArray[i * 8 + 6]);
+                        brangBet.Add(ah1stJArray[i * 8 + 7]);
+
+                        gameJObject["brangBet"] = brangBet;
+                        // 点击事件做扩展  
+                        String p1 = (String)ah1stJArray[i * 8 + 1];
+                        String p2 = (String)ah1stJArray[i * 8 + 3];
+                        String hPan = (String)ah1stJArray[i * 8 + 5];
+                        String gPan = (String)ah1stJArray[i * 8 + 7];
+                        if (!hPan.Equals("0.00")&& !hPan.Equals("") && !hPan.Equals("0"))
+                        {
+                            if (p1.Contains("-") || (p1.Equals("0") && p2.Equals("0")))
+                            {
+                                gameJObject["bh_rang"] = p1.Replace("+", "").Replace("-", "") + " " + hPan;
+                                gameJObject["bg_rang"] = gPan;
+                            }
+                            else
+                            {
+                                gameJObject["bh_rang"] = hPan;
+                                gameJObject["bg_rang"] = p1.Replace("-", "").Replace("+", "") + " " + gPan;
+                            }
+                        }
+                    }
+                }
+
+                //半场大小判断
+                if (gameO["ou1st"] != null)
+                {
+                    JArray ou1stJArray = (JArray)gameO["ou1st"];
+                    if (ou1stJArray.Count > 0 && ((i + 1) * 8 <= ou1stJArray.Count))
+                    {
+
+                        JArray bdaxiaoBet = new JArray();
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 0]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 1]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 2]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 3]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 4]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 5]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 6]);
+                        bdaxiaoBet.Add(ou1stJArray[i * 8 + 7]);
+
+                        gameJObject["bdaxiaoBet"] = bdaxiaoBet;
+
+                        String p1 = (String)ou1stJArray[i * 8 + 1];
+                        String p2 = (String)ou1stJArray[i * 8 + 3];
+                        String hPan = (String)ou1stJArray[i * 8 + 5];
+                        String gPan = (String)ou1stJArray[i * 8 + 7];
+                        if (!hPan.Equals("0.00") && !hPan.Equals("") && !hPan.Equals("0"))
+                        {
+                            gameJObject["bh_daxiao"] = "O"+p1 + " " + hPan;
+                            gameJObject["bg_daxiao"] = "U"+p2 + " " + gPan;
+                        }    
+                    }
+                }
+
+                if (gameJArray == null) gameJArray = new JArray();
+                gameJArray.Add(gameJObject);
+            }
+        }
 
         public static String getJData(UserInfo userInfo)
         {
@@ -1662,7 +1945,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl,dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject); 
+            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl,dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
             JObject jObject = new JObject();
             JArray jArray = new JArray();
             jObject["list"] = jArray;
@@ -1686,37 +1969,46 @@ namespace CxjText.utlis
                 for (int j = 0; j < egs.Count; j++) { //解析联赛
                     JObject egsItem = (JObject)egs[j];
                     String lianSai =(String)egsItem["c"]["n"];
-                    String lianSaiK = (String)egsItem["c"]["k"];
+                    int lianSaiK = (int)egsItem["c"]["k"];
                     JArray es = (JArray)egsItem["es"];
                     if (es.Count == 0) continue;
                     for (int z = 0; z < es.Count; z++) { //解析比赛
                         JObject esItem = (JObject)es[z];
                         if (esItem["i"] == null) continue;
-                        String gameH = (String)esItem["i"][0]; //主队名字
-                        String gameG = (String)esItem["i"][1]; //客队名字
-                        String gameTime = (String)esItem["i"][5];//比赛时间
-                        String score = ((String)esItem["i"][10] + (String)esItem["i"][11]); //比分
-                        String iString = esItem["i"].ToString(); //把整个比赛有用的信息存起来
-                        String kStr =(String)esItem["k"]; //可能有用的信息
-                        if (kStr == null) continue;
+                        JObject gameInfo = new JObject();
+                        gameInfo["lianSai"] = lianSai; //联赛
+                        gameInfo["lianSaiK"] = lianSaiK;//貌似联赛Id
+                        gameInfo["nameH"] = (String)esItem["i"][0]; //主队名字
+                        gameInfo["nameG"]  = (String)esItem["i"][1]; //客队名字
+                        gameInfo["gameTime"]  = (String)esItem["i"][5];//比赛时间
+
+                        if (((String)esItem["i"][12]).Equals("半场")) {
+                            gameInfo["gameTime"] = "半场";
+                        }
+
+                        gameInfo["score"]  = ((String)esItem["i"][10] + "-"+(String)esItem["i"][11]); //比分
+                        gameInfo["iString"] = esItem["i"].ToString(); //把整个比赛有用的信息存起来
+                        gameInfo["kStr"]  =(int)esItem["k"]; //可能有用的信息  可以用来做比赛mid
+                        if (gameInfo["kStr"] == null) continue;
                         if (esItem["pci"] == null) continue;
-                        if (esItem["pci"]["ctn"] != null) {
+                        if (esItem["pci"]["ctn"] != null) { //角球盘口的处理
                             if (((String)esItem["pci"]["ctn"]).Contains("角球")) {
-                                gameH = gameH + "-角球数";
-                                gameG = gameG + "-角球数";
+                                gameInfo["nameH"] = gameInfo["nameH"] + "-角球数";
+                                gameInfo["nameG"] = gameInfo["nameG"] + "-角球数";
                             }
                         }
                         JObject oJObject =(JObject)esItem["o"]; //赔率有关的数据
                         if (oJObject == null) continue;
                         int gameLength = getLength(oJObject); //总共有多少比赛的盘口
-                        if (gameLength <= 0) continue;
-
+                        if (gameLength <= 0 ) continue;
+                        //添加比赛
+                        addGame(gameLength, gameInfo,oJObject,jArray, esItem);
                     }
                 }
             }
-
-
-            return null;
+            jObject["list"] = jArray;
+            return jObject.ToString();
         }
+        /**************************************************************/
     }
 }

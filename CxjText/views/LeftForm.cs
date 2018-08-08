@@ -454,6 +454,9 @@ namespace CxjText.views
                     case "O":
                         orderParmas = rltStr;
                         break;
+                    case "J":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -536,13 +539,17 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                 }
-                if (user.tag.Equals("O"))
+                else if (user.tag.Equals("O"))
                 { 
                     jObject["money"] = inputMoney;
                     jObject["inputMid"] = dataJObject["inputMid"];//mid
                     jObject["Match_Name"] = gameName;//联赛名字
                     jObject["key"] = rltStr;
                     jObject["pk"] = dataJObject["pk"];//盘口
+                }
+                else if (user.tag.Equals("J"))
+                {
+                    jObject["money"] = inputMoney;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -617,6 +624,9 @@ namespace CxjText.views
                         break;
                     case "O":
                         OrderUtils.OrderO(jobject, this, loginForm, rltForm);
+                        break;
+                    case "J":
+                        OrderUtils.OrderJ(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;
