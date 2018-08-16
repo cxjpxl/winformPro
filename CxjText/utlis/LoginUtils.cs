@@ -108,7 +108,8 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.loginUrl;
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -120,7 +121,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -227,12 +228,13 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 return false;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 return false;
@@ -265,12 +267,13 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/include/vcode.php?bk=000&space=15&color=FFFFFF&mode=middle&name=loginVcode&rnd=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 return false;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 return false;
@@ -304,12 +307,13 @@ namespace CxjText.utlis
          //   headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 return false;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 return false;
@@ -330,7 +334,6 @@ namespace CxjText.utlis
             if (!rltStr.Trim().Equals("5")) return false;
             return true;
         }
-
 
         public static void loginB(LoginForm loginForm, int position)
         {
@@ -453,7 +456,8 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -463,7 +467,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -557,6 +561,7 @@ namespace CxjText.utlis
             
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
+            String codePathName = userInfo.tag + position + ".jpg";
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -564,7 +569,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -575,7 +580,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -709,7 +714,9 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, null); //这里要分系统获取验证码
+
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -720,7 +727,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -832,7 +839,8 @@ namespace CxjText.utlis
             }
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag+position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -842,7 +850,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -1019,7 +1027,8 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl+"/app/member/";
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -1029,7 +1038,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -1346,7 +1355,8 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/validCode?t=" + FormUtils.getCurrentTime();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -1357,7 +1367,7 @@ namespace CxjText.utlis
                 return;
             }
 
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -1587,7 +1597,8 @@ namespace CxjText.utlis
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
             {
                 String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
-                int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+                String codePathName = userInfo.tag + position + ".jpg";
+                int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
                 if (codeNum < 0)
                 {
                     userInfo.loginFailTime++;
@@ -1597,7 +1608,7 @@ namespace CxjText.utlis
                     }));
                     return;
                 }
-                String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+                String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
                 if (String.IsNullOrEmpty(codeStrBuf))
                 {
                     userInfo.loginFailTime++;
@@ -1680,7 +1691,8 @@ namespace CxjText.utlis
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Referer"] = userInfo.dataUrl + "/lotteryV3/index.do";
             String codeUrl = userInfo.dataUrl + "/verifycode.do?flag=false&timestamp=1522812116178";
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject);
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject);
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -1690,7 +1702,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -1832,12 +1844,13 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            int codeNum = HttpUtils.getImage(codeUrl, position + ".jpg", userInfo.cookie, headJObject); //这里要分系统获取验证码
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
                 return false;
             }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + position + ".jpg");
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 return false;

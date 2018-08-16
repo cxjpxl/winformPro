@@ -2,6 +2,7 @@
 using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,21 +20,76 @@ namespace CxjText
         }
 
 
-        
+
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+           
             dataInit();
             speakInit();
             userEdit.Focus();
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
+            readTxt();
             if (Config.softUserStr.Equals("admin")) {
-                  userEdit.Text = Config.softUserStr;
-                  codeUserEdit.Text = "cxj81886404";
-                  codePwdEdit.Text = "cxj13580127662";
+                deleteTxt();
+                userEdit.Text = Config.softUserStr;
+                codeUserEdit.Text = "cxj81886404";
+                codePwdEdit.Text = "cxj13580127662";
             }
+        }
+
+
+        private void deleteTxt() {
+            String name = "user.json";
+            if (Config.softUserStr.Equals("admin"))
+            {
+                System.IO.FileInfo file = new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + name);
+                if (file.Exists)
+                {
+                    file.Delete();
+                    return;
+                }
+            }
+        }
+
+        private void readTxt() {
+            String name = "user.json";
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + name))
+            {
+                return; 
+            }
+            System.IO.StreamReader st;
+            st = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + name, System.Text.Encoding.UTF8);
+            //UTF-8通用编码
+            string userString = st.ReadToEnd();
+            st.Close();
+
+            if (userString == null || FormUtils.IsJsonObject(userString)) {
+                return;
+            }
+
+            JObject jObject = JObject.Parse(userString);
+            if (jObject["user"] == null || jObject["codeUser"] == null || jObject["codePwd"] == null) return;
+            userEdit.Text =(String) jObject["user"];
+            codeUserEdit.Text = (String)jObject["codeUser"];
+            codePwdEdit.Text = (String)jObject["codePwd"];
+        }
+
+        private void writeTxt()
+        {
+            String name = "user.json";
+            if (Config.softUserStr.Equals("admin")) {
+                return;
+            }
+            StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + name);
+            JObject jObject = new JObject();
+            jObject["user"] = Config.softUserStr;
+            jObject["codeUser"] = Config.codeUserStr;
+            jObject["codePwd"] = Config.codePwdStr;
+            sw.WriteLine(jObject.ToString());
+            sw.Flush();//文件流
+            sw.Close();//最后要关闭写入状态
         }
 
 
@@ -50,8 +106,8 @@ namespace CxjText
             Config.speakJObject = new JObject();
             Config.speakJObject["9926"] = "可能主队炸弹";
             Config.speakJObject["9927"] = "可能客队炸弹";
-            Config.speakJObject["2055"] = "炸弹类型，客队可能点球";
-            Config.speakJObject["1031"] = "炸弹类型，主队可能点球";
+            Config.speakJObject["2055"] = "客队可能点球";//"炸弹类型，客队可能点球";
+            Config.speakJObject["1031"] = "主队可能点球";//"炸弹类型，主队可能点球";
             Config.speakJObject["9966"] = "点球失误";
             Config.speakJObject["9965"] = "点球失误";
             Config.speakJObject["144"] = "可能点球";
@@ -100,12 +156,14 @@ namespace CxjText
                     }));
                     return;
                 }
+                
                 Config.softTime = (long)loginObj["time"];
                 if (!userString.Contains("admin")) //不是admin用户没有权限
                 {
                     Config.urls = ((String)loginObj["urls"]).Replace(",", "\t");
                 }
                  Config.softFun = (int)(loginObj["fun"] == null ? "0" : loginObj["fun"]);
+                 Config.hasJinQiuFun = (bool)loginObj["hasJinQiuFun"];//是否有进球功能
             }
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
@@ -156,7 +214,7 @@ namespace CxjText
                 Config.codeUserStr = codeUserStr;
                 Config.codePwdStr = codePwdStr;
                 Config.softUserStr = userString;
-
+                writeTxt();
                 if (Config.softFun == 0 || Config.softFun == 1 || Config.softFun == 2)
                 {
                     MainFrom mainFrom = new MainFrom();

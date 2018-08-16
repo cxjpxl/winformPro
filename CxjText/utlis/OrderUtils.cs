@@ -1256,6 +1256,24 @@ namespace CxjText.utlis
                 if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
                 { //找到input字段
                     //获取name的值
+
+
+                    if (str.LastIndexOf("<input") > 0) {
+                        int tempPosition = str.LastIndexOf("<input");
+                        String twoStr = str.Substring(tempPosition, str.Length - tempPosition) ;
+                        int nameIndex1 = twoStr.IndexOf("name=\"");
+                        String str2 = twoStr.Substring(nameIndex1 + 6, twoStr.Length - (nameIndex1 + 6));
+                        nameIndex1 = str2.IndexOf('"');
+                        String nameKey1 = str2.Substring(0, nameIndex1);
+                        str2 = str2.Substring(nameIndex1, str2.Length - nameIndex1);
+                        nameIndex1 = str2.IndexOf("value=\"");
+                        str2 = str2.Substring(nameIndex1 + 7, str2.Length - (nameIndex1 + 7));
+                        nameIndex1 = str2.IndexOf('"');
+                        String valueStr1 = str2.Substring(0, nameIndex1);
+                        orderPrams = orderPrams + nameKey1 + "=" + valueStr1 + "&";
+                    }
+
+
                     int nameIndex = str.IndexOf("name=\"");
                     String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
                     nameIndex = str1.IndexOf('"');
@@ -1293,7 +1311,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
          
 
             if (String.IsNullOrEmpty(orderPrams))
@@ -2213,9 +2230,9 @@ namespace CxjText.utlis
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)
                 {
-                    if (jobject["gameMid"] != null)
+                    if (jobject["gameMid"] != null && (jobject["isJiaoQiu"] == null || (bool)(jobject["isJiaoQiu"]) == false)) //自动下注
                     {
-                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                        addAutoDataAndName(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"], user.user);
                     }
                     rltForm.RefershLineData(inputTag, "成功");
                 }

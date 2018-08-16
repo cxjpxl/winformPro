@@ -1992,10 +1992,9 @@ namespace CxjText.utlis
                         if (gameInfo["kStr"] == null) continue;
                         if (esItem["pci"] == null) continue;
                         if (esItem["pci"]["ctn"] != null) { //角球盘口的处理
-                            if (((String)esItem["pci"]["ctn"]).Contains("角球")) {
-                                gameInfo["nameH"] = gameInfo["nameH"] + "-角球数";
-                                gameInfo["nameG"] = gameInfo["nameG"] + "-角球数";
-                            }
+                            if (!((String)esItem["pci"]["ctn"]).Contains("角球")) continue;
+                            gameInfo["nameH"] = gameInfo["nameH"] + "-角球数";
+                            gameInfo["nameG"] = gameInfo["nameG"] + "-角球数";
                         }
                         JObject oJObject =(JObject)esItem["o"]; //赔率有关的数据
                         if (oJObject == null) continue;

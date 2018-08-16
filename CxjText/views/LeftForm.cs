@@ -392,7 +392,7 @@ namespace CxjText.views
                     if (dataJObject["isJiaoQiu"] == null || (bool)(dataJObject["isJiaoQiu"]) == false)
                     {
                         AutoData autoData = null;
-                        if (user.tag.Equals("C"))
+                        if (user.tag.Equals("C")|| user.tag.Equals("J"))
                         {
                             autoData = OrderUtils.autoLists.Find(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl)&&j.userName.Equals(user.user));
                         }
@@ -692,10 +692,7 @@ namespace CxjText.views
                 bool autoCheck = mainFrom.isAuto(); //是否自动下注
                 if (!autoCheck) return;
 
-                //只下炸弹的时候出现直接下注类型  直接返回
-                if (mainFrom.GetAutoPutType() == 2 && enventInfo.isDriect) {
-                    return;
-                }
+               
 
                 if (Config.softFun == 2 )
                 {  //点球用户处理
@@ -720,7 +717,9 @@ namespace CxjText.views
             if (searchArray.Count == 0) return;
 
             //判断进球比分是否可以下注
+            bool canPingban = Config.isPingBang;
             if (enventInfo.scoreArray != null) {
+                canPingban = false;
                 JArray localScoreArray = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
                 int localHScore = (int)localScoreArray[0];
                 int localGScore = (int)localScoreArray[1];
@@ -739,16 +738,18 @@ namespace CxjText.views
                     if (localHScore != netHScore) return;
                     if (netGScore - localGScore != 1) return;
                 }
+
+                if (Config.hasJinQiuFun) {  //有进球功能的话是进球类型直接下大小  
+                    enventInfo.inputType = 1; //下大小
+                }
             }
           
 
 
             object obj = null; //要下注的对象
 
-            bool canPingban = true;
-            if (enventInfo.isDriect && !Config.isPingBang) {
-                canPingban = false;
-            }
+         
+
 
             /**********************处理自动下注开始*****************************/
             if (enventInfo.inputType == 1)   //选择大小的情况处理

@@ -45,9 +45,9 @@
             this.userText.ForeColor = System.Drawing.Color.Brown;
             this.userText.Location = new System.Drawing.Point(111, 19);
             this.userText.Name = "userText";
-            this.userText.Size = new System.Drawing.Size(250, 24);
+            this.userText.Size = new System.Drawing.Size(106, 24);
             this.userText.TabIndex = 0;
-            this.userText.Text = "体育投注数据管理系统";
+            this.userText.Text = "管理系统";
             // 
             // codeUserLable
             // 

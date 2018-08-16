@@ -9,7 +9,6 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
-using System.Net;
 
 namespace CxjText
 {
@@ -35,21 +34,6 @@ namespace CxjText
 
 
         private void uiInit() {
-            //更改按键的处理
-            if (!(Config.softUserStr.Equals("admin")
-                || Config.softUserStr.Equals("admin-vip")
-                || Config.softUserStr.Equals("admin-ying")
-                || Config.softUserStr.Equals("admin-tai")
-                || Config.softUserStr.Equals("admin-client-ming")
-                 || Config.softUserStr.Equals("admin-cly200w")
-                ))
-            {
-                genggai_ben.Enabled = false;
-                genggai_ben.Visible = false;
-                genGai_pan.Visible = false;
-            }
-
-
             //按键权限的控制
 
             if (Config.softFun == 0)
@@ -74,10 +58,8 @@ namespace CxjText
                 jiaoqiu_checkBox.Enabled = false;
 
                 panel1.Visible = false; //显示让球和大小的选择框
-                groupBox1.Visible = false; //直接下注金额设置
                 groupBox2.Visible = true; //炸弹下注金额设置
                 groupBox2.Text = "角球金额设置";//（就是当炸弹来下注）
-                groupBox5.Visible = false; // 自动下注类型选择显示处理
                 jiaoQiuTime.Visible = true;
                 Config.jiaoQiuGouXuan = jiaoQiuTime.Checked;
 
@@ -86,8 +68,7 @@ namespace CxjText
             }
             else if (Config.softFun == 2) {
                 //全部显示
-                groupBox2.Text = "炸+进+角-金额";
-                putZaDan.Text= "炸+进+角";
+                groupBox2.Text = "点+进+角-金额";
                 Config.jiaoQiuGouXuan = jiaoQiuTime.Checked;
 
                 dianQiu_check.Visible = true;
@@ -547,15 +528,24 @@ namespace CxjText
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
                     if (userInfo == null) return;
 
-                    //AUD
-                    if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
+                  
+                    if ((userInfo.tag.Equals("J") || userInfo.tag.Equals("C")) && Config.hasJinQiuFun)
                     {
-                        return;
+                        //C和J有进球功能
                     }
-                    if (!((gameTime >= 86 && gameTime <= 89)))
-                    {
-                        return;
+                    else {
+                        //AUD
+                        if (!(userInfo.tag.Equals("A") || userInfo.tag.Equals("U") || userInfo.tag.Equals("D")))
+                        {
+                            return;
+                        }
+                        if (!((gameTime >= 86 && gameTime <= 89)))
+                        {
+                            return;
+                        }
+
                     }
+
                     gameTime = gameTime * 60 * 1000; //计算当前比赛时间 毫秒
                     String shijianStr = "";
                     int teamColor = 0;
@@ -646,12 +636,8 @@ namespace CxjText
                 {
                     if (eidInt - eid.eid > 0)
                     {
-                        listEid.RemoveAll(j => j.mid.Equals(mid));
-                        Eid eidEvent = new Eid();
-                        eidEvent.mid = mid;
-                        eidEvent.eid = eidInt;
-                        eidEvent.time = FormUtils.getCurrentTime();
-                        listEid.Add(eidEvent);
+                        eid.eid = eidInt;
+                        eid.time = FormUtils.getCurrentTime();
                     }
                     else
                     {
@@ -671,7 +657,7 @@ namespace CxjText
             }
             catch (Exception e11)
             {
-
+                return;
             }
 
 
@@ -818,6 +804,8 @@ namespace CxjText
             }
 
             //点球下注处理
+            Console.WriteLine("----------有事件过来----------");
+            Console.WriteLine(jObject.ToString());
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
             enventInfo.cid = cid;
@@ -857,7 +845,7 @@ namespace CxjText
                 
                 if (Config.speakJObject[cid] != null)
                 {
-                    if (enventInfo.info.Contains("Cancelled"))
+                    if (enventInfo.info.Contains("Cancelled")||enventInfo.info.Equals("No penalty"))
                     {
                         if (cid.Equals("1031"))
                         {
@@ -925,17 +913,7 @@ namespace CxjText
 
             if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
             {
-
-                if (!Config.noZhaDang) {
-                    if (cid.Equals("9926") || cid.Equals("9927"))
-                    {
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                        listEnvets.Add(enventInfo);
-                        return;
-                    }
-                }
-              
-
+                
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
                 if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
@@ -946,22 +924,7 @@ namespace CxjText
               
                 if (cid.Equals("2055")) //客队点球
                 {
-                    //查找
-                    if (!Config.noZhaDang) {
-                         EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
-                         if (enventInfo1 == null) return;
-                         if (!enventInfo1.cid.Equals("9927"))
-                         {
-                             listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                             return;
-                         }
-                         if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
-                         {
-                             listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                             return;
-                         }
-                    }
-
+                   
                     //客队可以下注 
                     this.Invoke(new Action(() => {
                         speakStr("可以下注");
@@ -971,26 +934,6 @@ namespace CxjText
                 }
                 else if (cid.Equals("1031"))
                 {
-
-                    //查找
-                    if (!Config.noZhaDang)
-                    {
-                         EnventInfo enventInfo1 = listEnvets.Find(j => j.mid.Equals(mid));
-                           if (enventInfo1 == null) return;
-                        //主队点球
-                          if (!enventInfo1.cid.Equals("9926"))
-                          {
-                              listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                              return;
-                          }
-                        if (FormUtils.getCurrentTime() - enventInfo1.time > 30 * 1000)
-                        {
-                            listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
-                            return;
-                        }
-                    }
-
-
                     //主队可以下注
                     this.Invoke(new Action(() => {
                         speakStr("可以下注");
@@ -1071,26 +1014,7 @@ namespace CxjText
         //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3  3/4 返回4
         public int GetAmountSelected(bool isDriect)
         {
-            if (isDriect)
-            {
-                if (rbAmount_1_2.Checked)
-                {
-                    return 1;
-                }
-                else if (rbAmount_1_3.Checked)
-                {
-                    return 2;
-                }
-                else if (rbAmount_1_4.Checked)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            else {
+            
                 if (z_2_rd.Checked)
                 {
                     return 1;
@@ -1107,23 +1031,9 @@ namespace CxjText
                 {
                     return 0;
                 }
-            }
              
         }
-        //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3
-        public int GetAutoPutType()
-        {
-
-            if (putAuto.Checked) //默认
-            {
-                return 1;
-            }
-            else  //炸弹类型
-            {
-                return 2;
-            }
-           
-        }
+     
 
         // 消息列表 初始化
         private void MsgShowFormInit()
@@ -1217,53 +1127,8 @@ namespace CxjText
         {
             Config.isPingBang = pingbanCheckBox.Checked;
         }
-
-        /*****************更改的处理*********************/
-
-        private void changeAllD(Object obj)
-        {
-            String text = genggai_text.Text.ToString();
-            int position = (int)obj;
-            if (position > Config.userList.Count) return;
-            UserInfo userInfo = (UserInfo)Config.userList[position];
-            if (userInfo == null) return;
-            if (!userInfo.tag.Equals("D")) return;
-            if (userInfo.status != 2) return;
-            //if (String.IsNullOrEmpty(userInfo.infoExp)) return;
-            JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.dataUrl;
-            String changeUrl = userInfo.dataUrl + "/api/user/modifyUserInfo";
-           // String p = "userMemo=&type=HY&hyLevel=1";
-            String p = "userMemo=";
-            /*p =
-                  "bankName=" + WebUtility.UrlEncode("交通银行")
-                  + "&cardNo=65555838447722812";*/
-            if (!String.IsNullOrEmpty(text.Trim())) {
-                p = "userMemo="+ WebUtility.UrlEncode(text.Trim());
-            }
-            String rlt = HttpUtils.HttpPostHeader(changeUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            Console.WriteLine(rlt);
-            MoneyUtils.GetDMoney(userInfo);
-            if (loginForm != null) {
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-            }
-        }
-
         
-
-        private void genggai_ben_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < Config.userList.Count; i++)
-            {
-                UserInfo userInfo = (UserInfo)Config.userList[i];
-                if (!userInfo.tag.Equals("D")) continue;
-                Thread t = new Thread(new ParameterizedThreadStart(this.changeAllD));
-                t.Start(i);
-            }
-        }
+      
 
         private void jiaoqiu_checkBox_CheckedChanged(object sender, EventArgs e)
         {

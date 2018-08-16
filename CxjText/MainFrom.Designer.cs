@@ -46,11 +46,6 @@
             this.AutoBanChang = new System.Windows.Forms.RadioButton();
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
-            this.rbAmount_MoRen = new System.Windows.Forms.RadioButton();
-            this.rbAmount_1_3 = new System.Windows.Forms.RadioButton();
-            this.rbAmount_1_2 = new System.Windows.Forms.RadioButton();
-            this.rbAmount_1_4 = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.fitterBox = new System.Windows.Forms.GroupBox();
             this.dianQiu_check = new System.Windows.Forms.CheckBox();
             this.fitBox = new System.Windows.Forms.CheckBox();
@@ -58,26 +53,17 @@
             this.jiaoqiu_checkBox = new System.Windows.Forms.CheckBox();
             this.jiaoQiuTime = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.z_4_rd = new System.Windows.Forms.RadioButton();
             this.z_3_rd = new System.Windows.Forms.RadioButton();
             this.z_2_rd = new System.Windows.Forms.RadioButton();
             this.z_moren_rd = new System.Windows.Forms.RadioButton();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.putZaDan = new System.Windows.Forms.RadioButton();
-            this.putAuto = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
-            this.genGai_pan = new System.Windows.Forms.Panel();
-            this.genggai_text = new System.Windows.Forms.TextBox();
-            this.genggai_ben = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.z_4_rd = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.genGai_pan.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -251,64 +237,6 @@
             this.quanCRadio.Text = "全场";
             this.quanCRadio.UseVisualStyleBackColor = true;
             // 
-            // rbAmount_MoRen
-            // 
-            this.rbAmount_MoRen.AutoSize = true;
-            this.rbAmount_MoRen.Checked = true;
-            this.rbAmount_MoRen.Location = new System.Drawing.Point(6, 22);
-            this.rbAmount_MoRen.Name = "rbAmount_MoRen";
-            this.rbAmount_MoRen.Size = new System.Drawing.Size(47, 16);
-            this.rbAmount_MoRen.TabIndex = 16;
-            this.rbAmount_MoRen.TabStop = true;
-            this.rbAmount_MoRen.Text = "默认";
-            this.rbAmount_MoRen.UseVisualStyleBackColor = true;
-            // 
-            // rbAmount_1_3
-            // 
-            this.rbAmount_1_3.AutoSize = true;
-            this.rbAmount_1_3.Location = new System.Drawing.Point(92, 22);
-            this.rbAmount_1_3.Name = "rbAmount_1_3";
-            this.rbAmount_1_3.Size = new System.Drawing.Size(41, 16);
-            this.rbAmount_1_3.TabIndex = 18;
-            this.rbAmount_1_3.TabStop = true;
-            this.rbAmount_1_3.Text = "1/3";
-            this.rbAmount_1_3.UseVisualStyleBackColor = true;
-            // 
-            // rbAmount_1_2
-            // 
-            this.rbAmount_1_2.AutoSize = true;
-            this.rbAmount_1_2.Location = new System.Drawing.Point(53, 22);
-            this.rbAmount_1_2.Name = "rbAmount_1_2";
-            this.rbAmount_1_2.Size = new System.Drawing.Size(41, 16);
-            this.rbAmount_1_2.TabIndex = 17;
-            this.rbAmount_1_2.TabStop = true;
-            this.rbAmount_1_2.Text = "1/2";
-            this.rbAmount_1_2.UseVisualStyleBackColor = true;
-            // 
-            // rbAmount_1_4
-            // 
-            this.rbAmount_1_4.AutoSize = true;
-            this.rbAmount_1_4.Location = new System.Drawing.Point(133, 22);
-            this.rbAmount_1_4.Name = "rbAmount_1_4";
-            this.rbAmount_1_4.Size = new System.Drawing.Size(41, 16);
-            this.rbAmount_1_4.TabIndex = 19;
-            this.rbAmount_1_4.TabStop = true;
-            this.rbAmount_1_4.Text = "1/4";
-            this.rbAmount_1_4.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.rbAmount_1_4);
-            this.groupBox1.Controls.Add(this.rbAmount_MoRen);
-            this.groupBox1.Controls.Add(this.rbAmount_1_3);
-            this.groupBox1.Controls.Add(this.rbAmount_1_2);
-            this.groupBox1.Location = new System.Drawing.Point(177, 100);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(174, 44);
-            this.groupBox1.TabIndex = 21;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "直接类型金額";
-            // 
             // fitterBox
             // 
             this.fitterBox.Controls.Add(this.dianQiu_check);
@@ -318,11 +246,8 @@
             this.fitterBox.Controls.Add(this.jiaoQiuTime);
             this.fitterBox.Controls.Add(this.groupBox2);
             this.fitterBox.Controls.Add(this.panel1);
-            this.fitterBox.Controls.Add(this.groupBox5);
             this.fitterBox.Controls.Add(this.groupBox3);
             this.fitterBox.Controls.Add(this.autoCheck);
-            this.fitterBox.Controls.Add(this.groupBox1);
-            this.fitterBox.Controls.Add(this.genGai_pan);
             this.fitterBox.Location = new System.Drawing.Point(999, 454);
             this.fitterBox.Name = "fitterBox";
             this.fitterBox.Size = new System.Drawing.Size(356, 202);
@@ -404,7 +329,18 @@
             this.groupBox2.Size = new System.Drawing.Size(171, 43);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "炸弹+进球金额";
+            this.groupBox2.Text = "点球+进球金额";
+            // 
+            // z_4_rd
+            // 
+            this.z_4_rd.AutoSize = true;
+            this.z_4_rd.Location = new System.Drawing.Point(130, 19);
+            this.z_4_rd.Name = "z_4_rd";
+            this.z_4_rd.Size = new System.Drawing.Size(41, 16);
+            this.z_4_rd.TabIndex = 0;
+            this.z_4_rd.TabStop = true;
+            this.z_4_rd.Text = "3/4";
+            this.z_4_rd.UseVisualStyleBackColor = true;
             // 
             // z_3_rd
             // 
@@ -438,40 +374,6 @@
             this.z_moren_rd.Text = "默认";
             this.z_moren_rd.UseVisualStyleBackColor = true;
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.putZaDan);
-            this.groupBox5.Controls.Add(this.putAuto);
-            this.groupBox5.Location = new System.Drawing.Point(9, 149);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(149, 48);
-            this.groupBox5.TabIndex = 24;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "自动下注类型";
-            // 
-            // putZaDan
-            // 
-            this.putZaDan.AutoSize = true;
-            this.putZaDan.Location = new System.Drawing.Point(65, 20);
-            this.putZaDan.Name = "putZaDan";
-            this.putZaDan.Size = new System.Drawing.Size(77, 16);
-            this.putZaDan.TabIndex = 1;
-            this.putZaDan.TabStop = true;
-            this.putZaDan.Text = "炸弹+进球";
-            this.putZaDan.UseVisualStyleBackColor = true;
-            // 
-            // putAuto
-            // 
-            this.putAuto.AutoSize = true;
-            this.putAuto.Checked = true;
-            this.putAuto.Location = new System.Drawing.Point(10, 20);
-            this.putAuto.Name = "putAuto";
-            this.putAuto.Size = new System.Drawing.Size(47, 16);
-            this.putAuto.TabIndex = 0;
-            this.putAuto.TabStop = true;
-            this.putAuto.Text = "默认";
-            this.putAuto.UseVisualStyleBackColor = true;
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.shangBcrBtn);
@@ -496,32 +398,6 @@
             this.shangBcrBtn.Text = "上半场";
             this.shangBcrBtn.UseVisualStyleBackColor = true;
             // 
-            // genGai_pan
-            // 
-            this.genGai_pan.Controls.Add(this.genggai_text);
-            this.genGai_pan.Controls.Add(this.genggai_ben);
-            this.genGai_pan.Location = new System.Drawing.Point(171, 149);
-            this.genGai_pan.Name = "genGai_pan";
-            this.genGai_pan.Size = new System.Drawing.Size(174, 50);
-            this.genGai_pan.TabIndex = 28;
-            // 
-            // genggai_text
-            // 
-            this.genggai_text.Location = new System.Drawing.Point(70, 17);
-            this.genggai_text.Name = "genggai_text";
-            this.genggai_text.Size = new System.Drawing.Size(93, 21);
-            this.genggai_text.TabIndex = 28;
-            // 
-            // genggai_ben
-            // 
-            this.genggai_ben.Location = new System.Drawing.Point(3, 17);
-            this.genggai_ben.Name = "genggai_ben";
-            this.genggai_ben.Size = new System.Drawing.Size(60, 23);
-            this.genggai_ben.TabIndex = 27;
-            this.genggai_ben.Text = "更改";
-            this.genggai_ben.UseVisualStyleBackColor = true;
-            this.genggai_ben.Click += new System.EventHandler(this.genggai_ben_Click);
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.timeText);
@@ -534,17 +410,6 @@
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
-            // 
-            // z_4_rd
-            // 
-            this.z_4_rd.AutoSize = true;
-            this.z_4_rd.Location = new System.Drawing.Point(130, 19);
-            this.z_4_rd.Name = "z_4_rd";
-            this.z_4_rd.Size = new System.Drawing.Size(41, 16);
-            this.z_4_rd.TabIndex = 0;
-            this.z_4_rd.TabStop = true;
-            this.z_4_rd.Text = "3/4";
-            this.z_4_rd.UseVisualStyleBackColor = true;
             // 
             // MainFrom
             // 
@@ -564,18 +429,12 @@
             this.Load += new System.EventHandler(this.MainFrom_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.fitterBox.ResumeLayout(false);
             this.fitterBox.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.genGai_pan.ResumeLayout(false);
-            this.genGai_pan.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -601,17 +460,9 @@
         private System.Windows.Forms.RadioButton AutoBanChang;
         private System.Windows.Forms.RadioButton bangCRadio;
         private System.Windows.Forms.RadioButton quanCRadio;
-        private System.Windows.Forms.RadioButton rbAmount_MoRen;
-        private System.Windows.Forms.RadioButton rbAmount_1_3;
-        private System.Windows.Forms.RadioButton rbAmount_1_2;
-        private System.Windows.Forms.RadioButton rbAmount_1_4;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox fitterBox;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.RadioButton putZaDan;
-        private System.Windows.Forms.RadioButton putAuto;
         private System.Windows.Forms.RadioButton shangBcrBtn;
         private System.Windows.Forms.CheckBox fitBox;
         private System.Windows.Forms.CheckBox pingbanCheckBox;
@@ -619,9 +470,6 @@
         private System.Windows.Forms.RadioButton z_3_rd;
         private System.Windows.Forms.RadioButton z_2_rd;
         private System.Windows.Forms.RadioButton z_moren_rd;
-        private System.Windows.Forms.Button genggai_ben;
-        private System.Windows.Forms.Panel genGai_pan;
-        private System.Windows.Forms.TextBox genggai_text;
         private System.Windows.Forms.CheckBox jiaoqiu_checkBox;
         private System.Windows.Forms.CheckBox jiaoQiuTime;
         private System.Windows.Forms.CheckBox dianQiu_check;
