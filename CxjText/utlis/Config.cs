@@ -10,7 +10,7 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static String softUserStr = "";
+        public static String softUserStr = "admin";
         public static bool noZhaDang = true;//不用管什么什么队炸弹
 
         public static bool hasJinQiuFun = false;//是否有进球的功能
@@ -28,7 +28,7 @@ namespace CxjText.utils
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
-        public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3269.3 Safari/537.36";
+        public static String userAgent ="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";

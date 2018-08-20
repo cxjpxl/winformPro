@@ -45,6 +45,7 @@ namespace CxjText.utlis
                     }
                 case "R":
                 case "J":
+                case "L":
                     {
                         JObject jObjectR = (JObject)obj;
                         c00 = (String)jObjectR["lianSai"];
@@ -217,6 +218,10 @@ namespace CxjText.utlis
                     JObject jObjectJ = (JObject)obj;
                     time = (String)jObjectJ["gameTime"] + "\n" + (String)jObjectJ["score"];
                     break;
+                case "L":
+                    JObject jObjectL = (JObject)obj;
+                    time = (String)jObjectL["time"] ;
+                    break;
                 default:
                     break;
             }
@@ -348,6 +353,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "J":
+                case "L":
                     JObject jObjectJ = (JObject)obj;
                     try
                     {
@@ -420,6 +426,7 @@ namespace CxjText.utlis
                     break;
                 case "R":
                 case "J":
+                case "L":
                     JObject jObjectR = (JObject)obj;
                     c02 = (String)jObjectR["nameH"];
                     break;
@@ -486,6 +493,7 @@ namespace CxjText.utlis
                     }
                 case "R":
                 case "J":
+                case "L":
                     {
                         JObject jObjectR = (JObject)obj;
                         c12 = (String)jObjectR["nameG"];
@@ -527,6 +535,9 @@ namespace CxjText.utlis
             }
             return c12;
         }
+
+
+
 
 
 
@@ -627,6 +638,21 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c03 = (String)jObjectH["h_du_y"];
+                        break;
+                    }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["duying"];
+
+                        if (duyingJArray == null) {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[2])) {
+                            c03 = (String)duyingJArray[2];
+                        }
+
                         break;
                     }
                 default:
@@ -827,6 +853,42 @@ namespace CxjText.utlis
                         c04 = (String)jObjectH["h_rang"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null) {
+                            c04 = "";
+                            break;
+                        }
+                        JArray rangJObject= (JArray)jObjectL["rang"];
+                        if (rangJObject == null) {
+                            c04 = "";
+                            break;
+                        }
+
+                        String aStr =(String) rangJObject[2];
+                        String panKStr = (String)rangJObject[3];
+                        if (!FormUtils.isDaYu0((String)rangJObject[4])) {
+                            c04 = "";
+                            break;
+                        }
+                        
+
+                        if (aStr.Equals("a")) //盘口在主队
+                        {
+                            if (panKStr.Equals("0"))
+                            {
+                                c04 = (String)rangJObject[4];
+                            }
+                            else {
+                                c04 = panKStr + " " + (String)rangJObject[4];
+                            }
+                        }
+                        else {
+                            c04 = (String)rangJObject[4];
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -976,6 +1038,37 @@ namespace CxjText.utlis
                         c05 = (String)jObjectH["h_daxiao"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c05 = "";
+                            break;
+                        }
+                        JArray daxiaoJArray = (JArray)jObjectL["daxiao"];
+                        if (daxiaoJArray == null)
+                        {
+                            c05 = "";
+                            break;
+                        }
+
+                  
+                        String panKStr = (String)daxiaoJArray[2];
+                        if (String.IsNullOrEmpty(panKStr) || panKStr.Equals("0") || panKStr.Trim().Equals("")) 
+                        {
+                            c05 = "";
+                            break;
+                        }
+
+                       
+                        if (FormUtils.isDaYu0((String)daxiaoJArray[3]))
+                        {
+                            c05 = "大"+ panKStr + " " + (String)daxiaoJArray[3];
+                            break;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1076,6 +1169,23 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c06 = (String)jObjectH["bh_du_y"];
+                        break;
+                    }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["b_duying"];
+
+                        if (duyingJArray == null)
+                        {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[2]))
+                        {
+                            c06 = (String)duyingJArray[2];
+                        }
+
                         break;
                     }
                 default:
@@ -1298,6 +1408,47 @@ namespace CxjText.utlis
                         c07 = (String)jObjectH["bh_rang"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c07 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["b_rang"];
+                        if (rangJObject == null)
+                        {
+                            c07 = "";
+                            break;
+                        }
+
+                        String aStr = (String)rangJObject[2];
+                        String panKStr = (String)rangJObject[3];
+
+                        if (!FormUtils.isDaYu0((String)rangJObject[4])) {
+                            c07 = "";
+                            break;
+                        }
+
+
+                        if (aStr.Equals("a")) //盘口在主队
+                        {
+                            if (panKStr.Equals("0"))
+                            {
+                                c07 = (String)rangJObject[4];
+                            }
+                            else
+                            {
+                                c07 = panKStr + " " + (String)rangJObject[4];
+                            }
+                        }
+                        else
+                        {
+                            c07 = (String)rangJObject[4];
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1453,6 +1604,36 @@ namespace CxjText.utlis
                         c08 = (String)jObjectH["bh_daxiao"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c08 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["b_daxiao"];
+                        if (rangJObject == null)
+                        {
+                            c08 = "";
+                            break;
+                        }
+
+
+                        String panKStr = (String)rangJObject[2];
+                        if (String.IsNullOrEmpty(panKStr) || panKStr.Equals("0") || panKStr.Trim().Equals(""))
+                        {
+                            c08 = "";
+                            break;
+                        }
+                        
+                        if (FormUtils.isDaYu0((String)rangJObject[3]))
+                        {
+                            c08 = "大" + panKStr + " " + (String)rangJObject[3];
+                            break;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1556,6 +1737,23 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c13 = (String)jObjectH["g_du_y"];
+                        break;
+                    }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["duying"];
+
+                        if (duyingJArray == null)
+                        {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[3]))
+                        {
+                            c13 = (String)duyingJArray[3];
+                        }
+
                         break;
                     }
                 default:
@@ -1765,6 +1963,46 @@ namespace CxjText.utlis
                         c14 = (String)jObjectH["g_rang"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c14 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["rang"];
+                        if (rangJObject == null)
+                        {
+                            c14 = "";
+                            break;
+                        }
+
+                        String aStr = (String)rangJObject[2];
+                        String panKStr = (String)rangJObject[3];
+                        if (!FormUtils.isDaYu0((String)rangJObject[5]))
+                        {
+                            c14 = "";
+                            break;
+                        }
+
+                        if (aStr.Equals("b")) //盘口在客队
+                        {
+                            if (panKStr.Equals("0"))
+                            {
+                                c14 = (String)rangJObject[5];
+                            }
+                            else
+                            {
+                                c14 = panKStr + " " + (String)rangJObject[5];
+                            }
+                        }
+                        else
+                        {
+                            c14 = (String)rangJObject[5];
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1915,6 +2153,37 @@ namespace CxjText.utlis
                         c15 = (String)jObjectH["g_daxiao"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c15 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["daxiao"];
+                        if (rangJObject == null)
+                        {
+                            c15 = "";
+                            break;
+                        }
+
+
+                        String panKStr = (String)rangJObject[2];
+                        if (String.IsNullOrEmpty(panKStr) || panKStr.Equals("0") || panKStr.Trim().Equals(""))
+                        {
+                            c15 = "";
+                            break;
+                        }
+
+
+                        if (FormUtils.isDaYu0((String)rangJObject[4]))
+                        {
+                            c15 = "小" + panKStr + " " + (String)rangJObject[4];
+                            break;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2016,6 +2285,23 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c16 = (String)jObjectH["bg_du_y"];
+                        break;
+                    }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["b_duying"];
+
+                        if (duyingJArray == null)
+                        {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[3]))
+                        {
+                            c16 = (String)duyingJArray[3];
+                        }
+
                         break;
                     }
                 default:
@@ -2240,6 +2526,47 @@ namespace CxjText.utlis
                         c17 = (String)jObjectH["bg_rang"];
                         break;
                     }
+
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c17 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["b_rang"];
+                        if (rangJObject == null)
+                        {
+                            c17 = "";
+                            break;
+                        }
+
+                        String aStr = (String)rangJObject[2];
+                        String panKStr = (String)rangJObject[3];
+                        if (!FormUtils.isDaYu0((String)rangJObject[5]))
+                        {
+                            c17 = "";
+                            break;
+                        }
+                        if (aStr.Equals("b")) //盘口在客队
+                        {
+                            if (panKStr.Equals("0"))
+                            {
+                                c17 = (String)rangJObject[5];
+                            }
+                            else
+                            {
+                                c17 = panKStr + " " + (String)rangJObject[5];
+                            }
+                        }
+                        else
+                        {
+                            c17 = (String)rangJObject[5];
+                        }
+                        break;
+                    }
+
                 default:
                     break;
             }
@@ -2396,6 +2723,37 @@ namespace CxjText.utlis
                         c18 = (String)jObjectH["bg_daxiao"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        if (jObjectL == null)
+                        {
+                            c18 = "";
+                            break;
+                        }
+                        JArray rangJObject = (JArray)jObjectL["b_daxiao"];
+                        if (rangJObject == null)
+                        {
+                            c18 = "";
+                            break;
+                        }
+
+
+                        String panKStr = (String)rangJObject[2];
+                        if (String.IsNullOrEmpty(panKStr) || panKStr.Equals("0") || panKStr.Trim().Equals(""))
+                        {
+                            c18 = "";
+                            break;
+                        }
+
+
+                        if (FormUtils.isDaYu0((String)rangJObject[4]))
+                        {
+                            c18 = "小"+panKStr + " " + (String)rangJObject[4];
+                            break;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2506,6 +2864,22 @@ namespace CxjText.utlis
                         c23 = (String)jObjectH["he_du_y"];
                         break;
                     }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["duying"];
+
+                        if (duyingJArray == null)
+                        {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[4]))
+                        {
+                            c23 = (String)duyingJArray[4];
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2607,6 +2981,23 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c26 = (String)jObjectH["bhe_du_y"];
+                        break;
+                    }
+                case "L":
+                    {
+                        JObject jObjectL = (JObject)obj;
+                        JArray duyingJArray = (JArray)jObjectL["b_duying"];
+
+                        if (duyingJArray == null)
+                        {
+                            break;
+                        }
+
+                        if (FormUtils.isDaYu0((String)duyingJArray[4]))
+                        {
+                            c26 = (String)duyingJArray[4];
+                        }
+
                         break;
                     }
                 default:
@@ -2726,6 +3117,7 @@ namespace CxjText.utlis
                     }
                 case "R":
                 case "J":
+                case "L":
                     {
                         JObject jObjectR = (JObject)obj;
                          mid = (String)jObjectR["mid"];

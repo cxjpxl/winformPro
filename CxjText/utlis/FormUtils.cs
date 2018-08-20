@@ -14,6 +14,24 @@ namespace CxjText.utlis
     class FormUtils
     {
 
+
+        public static bool isDaYu0(String data) {
+            if (String.IsNullOrEmpty(data) || data.Trim().Equals("")) {
+                return false;
+            }
+
+            try
+            {
+                float dataNum = float.Parse(data);
+                if (dataNum > 0.01) return true;
+            }
+            catch (Exception e) {
+
+            }
+            return false;
+
+        }
+
         public static bool isChaoXianDing(UserInfo userInfo) {
 
             if (userInfo.status != 2) {
@@ -57,7 +75,7 @@ namespace CxjText.utlis
             {
                 if (dataStr[dataStr.Length - 1] == ')')
                 {
-                    dataStr = dataStr.Substring(1, dataStr.Length - 2);
+                    dataStr = dataStr.Replace("(", "").Replace(")", "").Trim();
                     try
                     {
                         JObject jObject = JObject.Parse(dataStr);
@@ -226,6 +244,12 @@ namespace CxjText.utlis
                     break;
                 case "J":
                     if (currentTime - userTime >= 5 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "L":
+                    if (currentTime - userTime >= 10 * 1000)
                     {
                         isUpdate = true;
                     }

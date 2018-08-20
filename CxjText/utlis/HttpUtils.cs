@@ -51,17 +51,25 @@ namespace CxjText.utils
             request.Timeout = 15 * 1000;
             request.ReadWriteTimeout = 15 * 1000;
             request.UserAgent = Config.userAgent;
+
+          //  if (headJObject != null && headJObject["myExp"] != null) {
+               // request.AllowAutoRedirect = false;
+        //    }
+
             if (headJObject != null)
             {
                 IEnumerable<JProperty> properties = headJObject.Properties();
                 foreach (JProperty item in properties)
                 {
-                    SetHeaderValue(request.Headers, item.Name, (String)item.Value);
+                    if (!item.Name.Equals("myExp"))
+                    {
+                        SetHeaderValue(request.Headers, item.Name, (String)item.Value);
+                    }
                 }
             }
+            
 
-
-            if (String.IsNullOrEmpty(contentType))
+                if (String.IsNullOrEmpty(contentType))
             {
                 //request.ContentType = "application/json;charset=UTF-8";
             }
@@ -86,6 +94,10 @@ namespace CxjText.utils
                 string strValue = "";
                 Reader = new StreamReader(s, Encoding.UTF8);
                 strValue = Reader.ReadToEnd();
+                if (headJObject != null && headJObject["myExp"] != null)
+                {
+                    headJObject["myExp"] = (String)response.ResponseUri.ToString();
+                }
                 Reader.Close();
                 response.Close();
                 response = null;
@@ -135,7 +147,9 @@ namespace CxjText.utils
                 IEnumerable<JProperty> properties = headJObject.Properties();
                 foreach (JProperty item in properties)
                 {
-                    SetHeaderValue(request.Headers, item.Name, (String)item.Value);
+                    if (!item.Name.Equals("myExp")) {
+                        SetHeaderValue(request.Headers, item.Name, (String)item.Value);
+                    }
                 }
             }
 
@@ -175,6 +189,11 @@ namespace CxjText.utils
                 string strValue = "";
                 Reader = new StreamReader(s, Encoding.UTF8);
                 strValue = Reader.ReadToEnd();
+
+                if (headJObject != null && headJObject["myExp"] != null && response.GetResponseHeader("Location")!=null) {
+                    headJObject["myExp"] = (String)response.GetResponseHeader("Location");
+                }
+
                 Reader.Close();
                 response.Close();
                 response = null;

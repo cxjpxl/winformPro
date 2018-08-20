@@ -48,6 +48,8 @@ namespace CxjText.utlis
                     break;
                 case "J":
                     break;
+                case "L":
+                    break;
                 default:
                     return false;
             }
@@ -185,7 +187,7 @@ namespace CxjText.utlis
                     userInfo.uid = uid;
                 }
             }
-            
+            Console.WriteLine(uid);
             if (String.IsNullOrEmpty(uid))
             {
                 userInfo.loginFailTime++;
@@ -198,6 +200,7 @@ namespace CxjText.utlis
 
             userInfo.uid = uid; //获取到uid
             int moneyStatus = MoneyUtils.GetAMoney(userInfo);
+            Console.WriteLine(moneyStatus);
             if (moneyStatus == 1)
             {
                 userInfo.loginFailTime = 0;
@@ -2078,5 +2081,235 @@ namespace CxjText.utlis
 
         }
         /***********************************************************************/
+
+        /**********************L系统登录处理**************/
+        public static void loginL(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                userInfo.uid = "";
+                // HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new CookieContainer();
+            }
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Referer"] = userInfo.loginUrl;
+            String codePathName = userInfo.tag + position + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+
+                return;
+            }
+
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&captcha=" + codeStrBuf.ToString();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/member/aspx/do.aspx?action=checklogin";
+
+            String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+            if (String.IsNullOrEmpty(rltStr)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            rltStr = rltStr.Replace("(", "").Replace(")", "").Trim();
+            if (!FormUtils.IsJsonObject(rltStr)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            JObject rltJObject = JObject.Parse(rltStr);
+            if (rltJObject["result"] == null) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            String rltNo =(String) rltJObject["result"];
+            if (!rltNo.Equals("3")) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+
+            //获取token的url  目的是拿到体育投注的登录的url
+             headJObject = new JObject();
+        //    headJObject[":authority"] = FileUtils.changeBaseUrl(userInfo.loginUrl);
+         //   headJObject[":method"] = "GET";
+        //    headJObject[":path"] = "/ts_sport.aspx";
+            headJObject["referer"] = userInfo.loginUrl+ "/ts_sport.aspx";
+        //    headJObject["upgrade-insecure-requests"] = "1";
+        //    headJObject[":scheme"] = userInfo.loginUrl.Contains("https:") ? "https" : "http";
+            String ts_sport_Url = userInfo.loginUrl + "/ts_sport.aspx";
+            String sportRlt = HttpUtils.HttpGetHeader(ts_sport_Url, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(sportRlt) || !sportRlt.Contains("mainFrame") || !sportRlt.Contains("token"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //解析
+            String tokenUrl = "";
+            String[] strs = sportRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (str.Contains("token=") && str.Contains("mainFrame") && str.Contains("src"))
+                {
+                    int startIndex = str.IndexOf("src=");
+                    int endIndex = str.IndexOf("allowtransparency");
+                    String dataUrl = str.Substring(startIndex, endIndex - startIndex);
+                    tokenUrl = dataUrl.Replace("src=", "").Replace("\"", "").Trim();
+                }
+            }
+
+
+
+            if (String.IsNullOrEmpty(tokenUrl)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //访问token的数据
+            Console.WriteLine("tokenUrl:"+tokenUrl);
+            int startIndex1 = tokenUrl.IndexOf("?");
+            String myDataUrl = tokenUrl.Substring(0, startIndex1).Replace("/sport","").Trim();
+            String qetBaseUrl = myDataUrl.Replace("http://", "").Replace("https://", "");
+            headJObject = new JObject();
+            headJObject["Host"] = qetBaseUrl;
+            headJObject["Referer"] = userInfo.loginUrl+ "/ts_sport.aspx";
+            headJObject["myExp"] = "111"; //获取local的标志
+            //这个接口会帮你重定向  获取相应的cookie
+            String getTsLoginRlt = HttpUtils.HttpGetHeader(tokenUrl,"", userInfo.cookie,headJObject);
+            if (getTsLoginRlt == null) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            //这个时候会拿到用户数据请求接口
+            String tsDataUrl =(String) headJObject["myExp"]; //投注体育的登录
+            if (String.IsNullOrEmpty(tsDataUrl) || !tsDataUrl.Contains(".com")) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            startIndex1 = tsDataUrl.IndexOf(".com");
+            tsDataUrl = tsDataUrl.Substring(0, startIndex1+4);
+            Console.WriteLine(tsDataUrl);
+            userInfo.dataUrl = tsDataUrl;
+
+            //获取资金
+            int moneyStatus = MoneyUtils.GetLMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+                userInfo.updateMoneyTime = userInfo.loginTime;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            else
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+        }
     }
 }

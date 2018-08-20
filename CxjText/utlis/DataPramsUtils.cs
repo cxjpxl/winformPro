@@ -58,7 +58,7 @@ namespace CxjText.utlis
             String getDataUrl = "";
             getDataUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
             if (userInfo.userExp.Equals("1")) {
-               getDataUrl =  userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
+                getDataUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
             }
 
             String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
@@ -83,7 +83,7 @@ namespace CxjText.utlis
                 pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
                 if (userInfo.userExp.Equals("1"))
                 {
-                    pageUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage="+ i + "&_=" + FormUtils.getCurrentTime();
+                    pageUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
                 }
                 String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
@@ -882,8 +882,8 @@ namespace CxjText.utlis
             jArray = (JArray)jObject["zqInfo"];
 
             for (int i = 2; i <= pageSize; i++) {
-                 pStr = "task=matches&Type=3020000&pageNo="+i+"&Live=1&Lsids=&special=";
-                 rltStr = HttpUtils.HttpPostHeader(dataUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                pStr = "task=matches&Type=3020000&pageNo=" + i + "&Live=1&Lsids=&special=";
+                rltStr = HttpUtils.HttpPostHeader(dataUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
                     continue;
@@ -905,16 +905,16 @@ namespace CxjText.utlis
         public static String getDData(UserInfo userInfo)
         {
             JObject headJObject = new JObject();
-            String dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=1&legName=&selection=-1&_="+FormUtils.getCurrentTime();
+            String dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=1&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
-            String rltStr = HttpUtils.HttpGetHeader(dataUrl,"", userInfo.cookie, headJObject);
+            String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {
                 return null;
             }
             JObject jObject = JObject.Parse(rltStr);
-        
+
             JArray jArray = new JArray();
             if (jObject["matchList"] == null)
             {
@@ -927,7 +927,7 @@ namespace CxjText.utlis
 
             for (int i = 2; i <= page; i++)
             {
-                dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page="+i+"&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+                dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=" + i + "&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
                 rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
@@ -955,7 +955,7 @@ namespace CxjText.utlis
             String dataUrl = userInfo.dataUrl + "/sports/hg/getData.do";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] =userInfo.dataUrl+ "/sports/hg/goPage.do?dataType=RB_FT_MN";
+            headJObject["Referer"] = userInfo.dataUrl + "/sports/hg/goPage.do?dataType=RB_FT_MN";
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             String dataP = "pageNo=1&gameType=FT_RB_MN&sortType=1";
             String rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
@@ -978,7 +978,7 @@ namespace CxjText.utlis
                 return jObject.ToString();
             }
 
-            JArray headerKeys =(JArray) dataJObject["headers"];
+            JArray headerKeys = (JArray)dataJObject["headers"];
             JArray gameJArrays = (JArray)dataJObject["games"];
             if (headerKeys.Count == 0 || gameJArrays.Count == 0) {
                 return jObject.ToString();
@@ -991,7 +991,7 @@ namespace CxjText.utlis
                     continue;
                 }
                 for (int j = 0; j < headerKeys.Count; j++) {
-                    itemJObject[headerKeys[j]+""] = itemJArray[j];
+                    itemJObject[headerKeys[j] + ""] = itemJArray[j];
                 }
                 jArray.Add(itemJObject);
             }
@@ -999,20 +999,20 @@ namespace CxjText.utlis
 
 
             for (int pageNo = 2; pageNo <= pageCount; pageNo++) {
-                 dataP = "pageNo="+pageNo+"&gameType=FT_RB_MN&sortType=1";
-                 rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
+                dataP = "pageNo=" + pageNo + "&gameType=FT_RB_MN&sortType=1";
+                rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
                     continue;
                 }
-                 
-                 dataJObject = JObject.Parse(rltStr);
-                if (dataJObject["games"] == null ||  dataJObject["pageCount"] == null)
+
+                dataJObject = JObject.Parse(rltStr);
+                if (dataJObject["games"] == null || dataJObject["pageCount"] == null)
                 {
                     continue;
                 }
-                 gameJArrays = (JArray)dataJObject["games"];
-                if ( gameJArrays.Count == 0)
+                gameJArrays = (JArray)dataJObject["games"];
+                if (gameJArrays.Count == 0)
                 {
                     continue;
                 }
@@ -1027,14 +1027,14 @@ namespace CxjText.utlis
                     }
                     for (int j = 0; j < headerKeys.Count; j++)
                     {
-                        itemJObject[headerKeys[j]+""] = itemJArray[j];
+                        itemJObject[headerKeys[j] + ""] = itemJArray[j];
                     }
                     jArray.Add(itemJObject);
                 }
             }
 
             jObject["list"] = jArray;
-            return jObject.ToString() ;
+            return jObject.ToString();
         }
         /***********************H系统获取数据*************************/
         public static String getHData(UserInfo userInfo)
@@ -1182,7 +1182,7 @@ namespace CxjText.utlis
                     String h_rang_value = hRqValueNode != null ? hRqValueNode.InnerText.ToString().Trim() : "";
                     String g_rang_value = gRqValueNode != null ? gRqValueNode.InnerText.ToString().Trim() : "";
 
-                    String h_rang = h_rang_key.Replace(" ","") + " " + h_rang_value.Replace(" ", "");
+                    String h_rang = h_rang_key.Replace(" ", "") + " " + h_rang_value.Replace(" ", "");
                     String g_rang = g_rang_key.Replace(" ", "") + " " + g_rang_value.Replace(" ", "");
 
                     String h_rang_click = "", g_rang_click = "";
@@ -1556,15 +1556,15 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            String rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(rlt)|| !FormUtils.IsJsonObject(rlt)) return null;
+            String rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             if (jObject["list"] == null) {
                 jObject["list"] = new JArray();
                 return jObject.ToString();
             }
-           
+
             JArray jArry = (JArray)jObject["list"];
             if (jArry == null || jArry.Count == 0)
             {
@@ -1578,9 +1578,9 @@ namespace CxjText.utlis
             //循环获取当前数据
             for (int i = 2; i <= p_page; i++)
             {
-                 getDataUrl = userInfo.dataUrl + "/HGSports/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
-                 dataP = "leagueName=&pageIndex="+i;
-                 rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                getDataUrl = userInfo.dataUrl + "/HGSports/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
+                dataP = "leagueName=&pageIndex=" + i;
+                rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) continue;
                 JObject pageJObject = JObject.Parse(rlt);
                 if (pageJObject == null) continue;
@@ -1593,21 +1593,21 @@ namespace CxjText.utlis
                 }
             }
             //{list:[]}
-            
+
             return jObject.ToString();
         }
 
         /***********************J系统获取数据*************************/
         //比赛长度的比较
-        public static int changLength(JObject jObject,String name,int itemCount,int length) {
+        public static int changLength(JObject jObject, String name, int itemCount, int length) {
             if (jObject[name] == null) return -1;
-            
+
             JArray jArray = (JArray)jObject[name];
             if (jArray == null || jArray.Count == 0) return -1;
-            if (jArray.Count / itemCount > length){
+            if (jArray.Count / itemCount > length) {
                 return jArray.Count / itemCount;
             }
-            return  -1;
+            return -1;
         }
         //总共有多少比赛
         public static int getLength(JObject jObject) {
@@ -1642,7 +1642,7 @@ namespace CxjText.utlis
                 length = tempLength;
             }
 
-            tempLength = changLength(jObject, "1x21st",6, length);
+            tempLength = changLength(jObject, "1x21st", 6, length);
             if (tempLength != -1)
             {
                 length = tempLength;
@@ -1650,7 +1650,7 @@ namespace CxjText.utlis
             return length;
         }
         //添加比赛数据
-        public static void addGame(int length, 
+        public static void addGame(int length,
             JObject gameInfo,
             JObject gameO,
             JArray gameJArray,
@@ -1660,13 +1660,13 @@ namespace CxjText.utlis
                 JObject gameJObject = new JObject();
                 gameJObject["lianSai"] = gameInfo["lianSai"]; //联赛
                 gameJObject["lianSaiK"] = gameInfo["lianSaiK"];//貌似联赛Id
-                gameJObject["nameH"] =  gameInfo["nameH"]; //主队名字
-                gameJObject["nameG"] = gameInfo["nameG"] ; //客队名字
+                gameJObject["nameH"] = gameInfo["nameH"]; //主队名字
+                gameJObject["nameG"] = gameInfo["nameG"]; //客队名字
                 gameJObject["gameTime"] = gameInfo["gameTime"];//比赛时间
-                gameJObject["score"] =  gameInfo["score"]; //比分
+                gameJObject["score"] = gameInfo["score"]; //比分
                 gameJObject["iString"] = gameInfo["iString"]; //把整个比赛有用的信息存起来
                 gameJObject["kStr"] = gameInfo["kStr"];//可能有用的信息 可以用来做比赛mid
-                gameJObject["mid"] =((int) gameInfo["kStr"]) + i; //cxj 手动add
+                gameJObject["mid"] = ((int)gameInfo["kStr"]) + i; //cxj 手动add
 
 
                 //下注的时候需要用到的必要参数
@@ -1689,30 +1689,30 @@ namespace CxjText.utlis
 
 
                 //独赢
-                gameJObject["h_du_y"] = "";   
-                gameJObject["g_du_y"] = "";   
-                gameJObject["he_du_y"] = "";  
+                gameJObject["h_du_y"] = "";
+                gameJObject["g_du_y"] = "";
+                gameJObject["he_du_y"] = "";
 
                 //全场让球
-                gameJObject["h_rang"] = "";   
-                gameJObject["g_rang"] = "";   
+                gameJObject["h_rang"] = "";
+                gameJObject["g_rang"] = "";
 
                 //全场大小
-                gameJObject["h_daxiao"] = "";   
-                gameJObject["g_daxiao"] = "";  
+                gameJObject["h_daxiao"] = "";
+                gameJObject["g_daxiao"] = "";
 
                 //半场独赢
-                gameJObject["bh_du_y"] = "";    
-                gameJObject["bg_du_y"] = "";    
-                gameJObject["bhe_du_y"] = "";  
+                gameJObject["bh_du_y"] = "";
+                gameJObject["bg_du_y"] = "";
+                gameJObject["bhe_du_y"] = "";
 
                 //半场让球
-                gameJObject["bh_rang"] = "";    
-                gameJObject["bg_rang"] = "";  
+                gameJObject["bh_rang"] = "";
+                gameJObject["bg_rang"] = "";
 
                 //半场大小
-                gameJObject["bh_daxiao"] = "";   
-                gameJObject["bg_daxiao"] = "";   
+                gameJObject["bh_daxiao"] = "";
+                gameJObject["bg_daxiao"] = "";
 
                 //全场独赢的判断
                 if (gameO["1x2"] != null) {
@@ -1730,8 +1730,8 @@ namespace CxjText.utlis
                         gameJObject["dyBet"] = dyBet;
 
                         String h_du_y = (String)dyJArray[i * 6 + 1]; //主队独赢赔率
-                       String g_du_y = (String)dyJArray[i * 6 + 3];//客队独赢赔率
-                       String he_du_y = (String)dyJArray[i * 6 + 5];//和独赢赔率
+                        String g_du_y = (String)dyJArray[i * 6 + 3];//客队独赢赔率
+                        String he_du_y = (String)dyJArray[i * 6 + 5];//和独赢赔率
 
                         if (!h_du_y.Trim().Equals("") && !h_du_y.Trim().Equals("0.00") && !h_du_y.Trim().Equals("0")) {
                             gameJObject["h_du_y"] = h_du_y; //主队独赢赔率
@@ -1776,8 +1776,8 @@ namespace CxjText.utlis
                         String p2 = (String)ahJArray[i * 8 + 3];
                         String hPan = (String)ahJArray[i * 8 + 5];
                         String gPan = (String)ahJArray[i * 8 + 7];
-                        if (!hPan.Equals("0.00") && !hPan.Equals("")&& !hPan.Equals("0")) {
-                            if (p1.Contains("-")||(p1.Equals("0")&& p2.Equals("0")))
+                        if (!hPan.Equals("0.00") && !hPan.Equals("") && !hPan.Equals("0")) {
+                            if (p1.Contains("-") || (p1.Equals("0") && p2.Equals("0")))
                             {
                                 gameJObject["h_rang"] = p1.Replace("+", "").Replace("-", "") + " " + hPan;
                                 gameJObject["g_rang"] = gPan;
@@ -1813,11 +1813,11 @@ namespace CxjText.utlis
                         String hPan = (String)ouJArray[i * 8 + 5];
                         String gPan = (String)ouJArray[i * 8 + 7];
 
-                        if (!hPan.Equals("0.00") && !hPan.Equals("")&& !hPan.Equals("0")) {
-                            gameJObject["h_daxiao"] = "O"+p1 + " " + hPan;
-                            gameJObject["g_daxiao"] = "U"+p2 + " " + gPan;
+                        if (!hPan.Equals("0.00") && !hPan.Equals("") && !hPan.Equals("0")) {
+                            gameJObject["h_daxiao"] = "O" + p1 + " " + hPan;
+                            gameJObject["g_daxiao"] = "U" + p2 + " " + gPan;
                         }
-                       
+
                     }
                 }
 
@@ -1885,7 +1885,7 @@ namespace CxjText.utlis
                         String p2 = (String)ah1stJArray[i * 8 + 3];
                         String hPan = (String)ah1stJArray[i * 8 + 5];
                         String gPan = (String)ah1stJArray[i * 8 + 7];
-                        if (!hPan.Equals("0.00")&& !hPan.Equals("") && !hPan.Equals("0"))
+                        if (!hPan.Equals("0.00") && !hPan.Equals("") && !hPan.Equals("0"))
                         {
                             if (p1.Contains("-") || (p1.Equals("0") && p2.Equals("0")))
                             {
@@ -1926,9 +1926,9 @@ namespace CxjText.utlis
                         String gPan = (String)ou1stJArray[i * 8 + 7];
                         if (!hPan.Equals("0.00") && !hPan.Equals("") && !hPan.Equals("0"))
                         {
-                            gameJObject["bh_daxiao"] = "O"+p1 + " " + hPan;
-                            gameJObject["bg_daxiao"] = "U"+p2 + " " + gPan;
-                        }    
+                            gameJObject["bh_daxiao"] = "O" + p1 + " " + hPan;
+                            gameJObject["bg_daxiao"] = "U" + p2 + " " + gPan;
+                        }
                     }
                 }
 
@@ -1945,14 +1945,14 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl,dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
             JObject jObject = new JObject();
             JArray jArray = new JArray();
             jObject["list"] = jArray;
 
-            if (String.IsNullOrEmpty(dataRlt) 
+            if (String.IsNullOrEmpty(dataRlt)
                 || !FormUtils.IsJsonObject(dataRlt)
-                ||!dataRlt.Contains("i-ot") 
+                || !dataRlt.Contains("i-ot")
                 || !dataRlt.Contains("egs")) {
                 return jObject.ToString();
             }
@@ -1964,11 +1964,11 @@ namespace CxjText.utlis
             }
             for (int i = 0; i < i_ot.Count; i++) { //解析整个结构
                 JObject itemJObject = (JObject)i_ot[i];
-                JArray egs =(JArray) itemJObject["egs"];
+                JArray egs = (JArray)itemJObject["egs"];
                 if (egs.Count == 0) continue;
                 for (int j = 0; j < egs.Count; j++) { //解析联赛
                     JObject egsItem = (JObject)egs[j];
-                    String lianSai =(String)egsItem["c"]["n"];
+                    String lianSai = (String)egsItem["c"]["n"];
                     int lianSaiK = (int)egsItem["c"]["k"];
                     JArray es = (JArray)egsItem["es"];
                     if (es.Count == 0) continue;
@@ -1979,16 +1979,16 @@ namespace CxjText.utlis
                         gameInfo["lianSai"] = lianSai; //联赛
                         gameInfo["lianSaiK"] = lianSaiK;//貌似联赛Id
                         gameInfo["nameH"] = (String)esItem["i"][0]; //主队名字
-                        gameInfo["nameG"]  = (String)esItem["i"][1]; //客队名字
-                        gameInfo["gameTime"]  = (String)esItem["i"][5];//比赛时间
+                        gameInfo["nameG"] = (String)esItem["i"][1]; //客队名字
+                        gameInfo["gameTime"] = (String)esItem["i"][5];//比赛时间
 
                         if (((String)esItem["i"][12]).Equals("半场")) {
                             gameInfo["gameTime"] = "半场";
                         }
 
-                        gameInfo["score"]  = ((String)esItem["i"][10] + "-"+(String)esItem["i"][11]); //比分
+                        gameInfo["score"] = ((String)esItem["i"][10] + "-" + (String)esItem["i"][11]); //比分
                         gameInfo["iString"] = esItem["i"].ToString(); //把整个比赛有用的信息存起来
-                        gameInfo["kStr"]  =(int)esItem["k"]; //可能有用的信息  可以用来做比赛mid
+                        gameInfo["kStr"] = (int)esItem["k"]; //可能有用的信息  可以用来做比赛mid
                         if (gameInfo["kStr"] == null) continue;
                         if (esItem["pci"] == null) continue;
                         if (esItem["pci"]["ctn"] != null) { //角球盘口的处理
@@ -1996,12 +1996,12 @@ namespace CxjText.utlis
                             gameInfo["nameH"] = gameInfo["nameH"] + "-角球数";
                             gameInfo["nameG"] = gameInfo["nameG"] + "-角球数";
                         }
-                        JObject oJObject =(JObject)esItem["o"]; //赔率有关的数据
+                        JObject oJObject = (JObject)esItem["o"]; //赔率有关的数据
                         if (oJObject == null) continue;
                         int gameLength = getLength(oJObject); //总共有多少比赛的盘口
-                        if (gameLength <= 0 ) continue;
+                        if (gameLength <= 0) continue;
                         //添加比赛
-                        addGame(gameLength, gameInfo,oJObject,jArray, esItem);
+                        addGame(gameLength, gameInfo, oJObject, jArray, esItem);
                     }
                 }
             }
@@ -2009,5 +2009,165 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
         /**************************************************************/
+
+        /**********************获取L的数据*********************************/
+
+        public static void addGame(JObject dataJObject,String lianSai,JArray jarray) {
+
+            if (dataJObject["R"] == null) return ;
+         
+            String time = (String)dataJObject["R"][0];
+            String score = (String)dataJObject["R"][3]+"-"+ (String)dataJObject["R"][4];
+            time = time + "\n" + score; //比赛时间和比分
+            
+            //剩下要什么数据等下再拿
+
+            //获取这个数据里面有多少种的盘口的比赛
+            int gameNum = (int)dataJObject["N"][0];
+            if (gameNum == 0) return;
+            for (int i = 1; i <= gameNum; i++) {
+                JObject gameJObject = new JObject();
+                gameJObject["lianSai"] = lianSai;
+                gameJObject["nameH"] = (String)dataJObject["N"][3];//主队的名字
+                gameJObject["nameG"] = (String)dataJObject["N"][4]; //客队的名字
+                gameJObject["time"] = time; //比赛时间和比分
+                gameJObject["score"] = score;
+                String mid = (String)dataJObject["N"][1] + i; //唯一Id  为了记录位置用的  没有别的作用
+                gameJObject["mid"] = mid;
+
+                //让球的数据源
+                if (dataJObject["ah" + i] != null) {
+                    gameJObject["rang"] = dataJObject["ah" + i];
+                }
+
+                //大小的数据源
+                if (dataJObject["ou" + i] != null)
+                {
+                    gameJObject["daxiao"] = dataJObject["ou" + i];
+                }
+
+                //半场让球的数据源
+                if (dataJObject["ahht" + i] != null)
+                {
+                    gameJObject["b_rang"] = dataJObject["ahht" + i];
+                }
+
+                //半场大小的数据源
+                if (dataJObject["ouht" + i] != null)
+                {
+                    gameJObject["b_daxiao"] = dataJObject["ouht" + i];
+                }
+
+                //独赢的数据源
+                if (dataJObject["vr1x2" + i] != null)
+                {
+                    gameJObject["duying"] = dataJObject["vr1x2" + i];
+                }
+
+                //半场独赢的数据源
+                if (dataJObject["vrh1x2" + i] != null)
+                {
+                    gameJObject["b_duying"] = dataJObject["vrh1x2" + i];
+                }
+
+                gameJObject["U"] = dataJObject["U"];
+                gameJObject["R"] = dataJObject["R"];
+                gameJObject["N"] = dataJObject["N"];
+
+                jarray.Add(gameJObject);
+
+            }
+        }        
+
+        public static String getLData(UserInfo userInfo) {
+            if (userInfo.status != 2) return null;
+            String dataUrl = userInfo.dataUrl 
+                + "/sbo/betting-matches-qs-action.php?rb=1&action=0&leagueid=&early=0&oth=&sortmethod=1&og=c&ot=12&lg=2";
+            JObject jObect = new JObject();
+            JArray jArray = new JArray();
+            jObect["list"] = jArray;
+            JObject headJObject = new JObject();
+            headJObject["referer"] = userInfo.dataUrl + "/sbo/betting-matches-qs.php?rah";
+            String dataRlt = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(dataRlt)
+                || !dataRlt.Contains("sort_main_matchindex_array")
+                || !dataRlt.Contains("mleague")
+                || !dataRlt.Contains("var m=")) {
+                return jObect.ToString();
+            }
+
+            String[] strs = dataRlt.Split('\n');
+            if (strs.Length == 0) return jObect.ToString();
+
+            String sort_main_matchindex_array = null;
+            String mleague = null;
+            String m = null;
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (String.IsNullOrEmpty(str)) continue;
+
+                if (str.Contains("var sort_main_matchindex_array =")) {
+                    sort_main_matchindex_array = str.Replace("var sort_main_matchindex_array =", "").Replace("};", "}").Trim();
+                    sort_main_matchindex_array = sort_main_matchindex_array.Replace("var sort_main_matchindex_array =", "").Replace("];", "]").Trim();
+                    continue;
+                }
+
+                if (str.Contains("var mleague ="))
+                {
+                    mleague = str.Replace("var mleague =", "").Replace("};", "}").Trim();
+                    continue;
+                }
+
+                if (str.Contains("var m=")) {
+                    m = str.Replace("var m=", "").Replace("};", "}").Trim();
+                    continue;
+                }
+
+            }
+            
+
+            if (String.IsNullOrEmpty(sort_main_matchindex_array)
+                || String.IsNullOrEmpty(mleague)
+                || String.IsNullOrEmpty(m)
+                ||(!FormUtils.IsJsonObject(sort_main_matchindex_array) && !FormUtils.IsJsonArray(sort_main_matchindex_array))
+                || !FormUtils.IsJsonObject(mleague)
+                || !FormUtils.IsJsonObject(m)
+                ) {
+                return jObect.ToString();
+            }
+
+
+            if (FormUtils.IsJsonArray(sort_main_matchindex_array)) {
+                JArray lianSaiArray = JArray.Parse(sort_main_matchindex_array);
+                if (lianSaiArray.Count == 0) {
+                    return jObect.ToString();
+                }
+
+                JObject lianSaiJobject = new JObject();
+                for (int i = 0; i < lianSaiArray.Count; i++) {
+                    lianSaiJobject["" + i] = lianSaiArray[i];
+                }
+                sort_main_matchindex_array = lianSaiJobject.ToString();
+            }
+            JObject sort_main_matchindex_array_JObject = JObject.Parse(sort_main_matchindex_array);
+            JObject mleagueJObject = JObject.Parse(mleague);
+            JObject mJObject = JObject.Parse(m);
+            IEnumerable<JProperty> properties = sort_main_matchindex_array_JObject.Properties();
+            foreach (JProperty item in properties) //开始遍历联赛的列表
+            {
+                String lianSaiValue = (String)item.Value;  //获取到联赛的value
+                if (String.IsNullOrEmpty(lianSaiValue)) continue;
+                String mleagueStr =(String) mleagueJObject[lianSaiValue]; //可能有用的联赛数据
+                if (String.IsNullOrEmpty(mleagueStr)) continue;
+                //获取这个联赛下面的比赛
+                JObject matchJbjects = (JObject)mJObject[lianSaiValue];
+                if (matchJbjects["N"] == null) continue;
+                String lianSai = (String)matchJbjects["N"][2]; //联赛名字
+                if (lianSai.Contains("特别投注")) continue; //把特别投注过滤掉  不通用
+                addGame(matchJbjects, lianSai, jArray); //添加比赛
+            }
+            jObect["list"] = jArray;
+            return jObect.ToString(); ;
+        }
     }
 }

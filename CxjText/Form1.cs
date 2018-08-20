@@ -32,7 +32,7 @@ namespace CxjText
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
             readTxt();
             if (Config.softUserStr.Equals("admin")) {
-                deleteTxt();
+                deleteTxt();//这样做的话方便自己打包  把use删除掉
                 userEdit.Text = Config.softUserStr;
                 codeUserEdit.Text = "cxj81886404";
                 codePwdEdit.Text = "cxj13580127662";

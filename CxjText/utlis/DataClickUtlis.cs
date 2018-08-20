@@ -2426,5 +2426,170 @@ namespace CxjText.utlis
             return rltStr;
         }
 
+        //L系统点击处理
+        public static String DataSysLClick(JObject dataJObject,
+             object obj, int numRow, int clickNum, String tag
+            )
+        {
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+            JArray dataJarray = null;
+            bool isDuYing = false;
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        dataJarray = (JArray)jObject["duying"];
+                        rltStr = "1x2="+dataJarray[0]+",1,R1X2";
+                        isDuYing = true;
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        dataJarray = (JArray)jObject["rang"];
+                        rltStr = "m=" + dataJarray[0] + ",1,RAH";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        dataJarray = (JArray)jObject["daxiao"];
+                        rltStr = "m=" + dataJarray[0] + ",1,ROU";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_duying"];
+                        rltStr = "1x2=" + dataJarray[0] + ",1,RH1X2";
+                        isDuYing = true;
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_rang"];
+                        rltStr = "m=" + dataJarray[0] + ",1,RAHHT";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_daxiao"];
+                        rltStr = "ouht=1&m=" + dataJarray[0] + ",1,ROUHT";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        dataJarray = (JArray)jObject["duying"];
+                        rltStr = "1x2=" + dataJarray[0] + ",2,R1X2";
+                        isDuYing = true;
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        dataJarray = (JArray)jObject["rang"];
+                        rltStr = "m=" + dataJarray[0] + ",2,RAH";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        dataJarray = (JArray)jObject["daxiao"];
+                        rltStr = "m=" + dataJarray[0] + ",2,ROU";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_duying"];
+                        rltStr = "1x2=" + dataJarray[0] + ",2,RH1X2";
+                        isDuYing = true;
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_rang"];
+                        rltStr = "m=" + dataJarray[0] + ",2,RAHHT";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_daxiao"];
+                        rltStr = "ouht=1&m=" + dataJarray[0] + ",2,ROUHT";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        dataJarray = (JArray)jObject["duying"];
+                        rltStr = "1x2=" + dataJarray[0] + ",x,R1X2";
+                        isDuYing = true;
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        dataJarray = (JArray)jObject["b_duying"];
+                        rltStr = "1x2=" + dataJarray[0] + ",x,RH1X2";
+                        isDuYing = true;
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            //下单前要请求的参数不能为空（B要先请求一个接口）
+            if (String.IsNullOrEmpty(rltStr) )
+            {
+                return null;
+            }
+
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["lianSai"]; //获取赛事
+            gameTeam = (String)jObject["nameH"] + "-" + (String)jObject["nameG"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+
+            dataJObject["isDuYing"] = isDuYing;
+
+
+            return rltStr;
+        }
+
+
     }
 }

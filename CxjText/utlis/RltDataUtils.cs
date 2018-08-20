@@ -183,7 +183,7 @@ namespace CxjText.utlis
                     }
                 }
             }
-            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J"))
+            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J")|| userInfo.tag.Equals("L"))
             {
                 JArray jArray = (JArray)jObject["list"];
                 if (jArray == null || jArray.Count == 0)
@@ -484,7 +484,7 @@ namespace CxjText.utlis
             {
                 title = currentArray[0][2].ToString();
             }
-            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J"))
+            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J") || userInfo.tag.Equals("L"))
             {
                 title = currentArray[0]["lianSai"].ToString();
             }
@@ -534,7 +534,7 @@ namespace CxjText.utlis
             {
                 mid = (String)jArray[index][0][0] + ""; //唯一标识
             }
-            else if (userInfo.tag.Equals("R") || userInfo.tag.Equals("J"))
+            else if (userInfo.tag.Equals("R") || userInfo.tag.Equals("J") || userInfo.tag.Equals("L"))
             {
                 mid = (String)jArray[index][0]["mid"] + ""; //唯一标识
             }
@@ -594,7 +594,7 @@ namespace CxjText.utlis
             {
 
             }
-            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J"))
+            else if (userInfo.tag.Equals("R")|| userInfo.tag.Equals("J") || userInfo.tag.Equals("L"))
             {
                 String nameH = (String)jObject["nameH"];
                 String nameG = (String)jObject["nameG"];

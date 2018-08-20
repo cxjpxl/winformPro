@@ -457,6 +457,9 @@ namespace CxjText.views
                     case "J":
                         orderParmas = rltStr;
                         break;
+                    case "L":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -551,6 +554,11 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                 }
+                else if (user.tag.Equals("L"))
+                {
+                    jObject["money"] = inputMoney;
+                    jObject["isDuYing"] = dataJObject["isDuYing"];
+                }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
                 Thread t = new Thread(new ParameterizedThreadStart(postOrder));
@@ -627,6 +635,9 @@ namespace CxjText.views
                         break;
                     case "J":
                         OrderUtils.OrderJ(jobject, this, loginForm, rltForm);
+                        break;
+                    case "L":
+                        OrderUtils.OrderL(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

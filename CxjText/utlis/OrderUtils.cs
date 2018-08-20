@@ -1360,7 +1360,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = betUrl;
             String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
-
+            Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt)) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
@@ -2251,6 +2251,266 @@ namespace CxjText.utlis
                     }
                 }));
             }else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+
+        }
+
+
+        //L下单
+        public static void OrderL(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+            //获取参数
+            String parmsStr = (String)jobject["rlt"];
+            int inputMoney = (int)jobject["money"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+
+            String betUrl = user.dataUrl + "/sbo/betting-entry.php?"+parmsStr;
+            JObject headJObject = new JObject();
+            String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
+
+            if (String.IsNullOrEmpty(betRlt) 
+                || !betRlt.Contains("fr_credit")
+                || !betRlt.Contains("fr_minbet")
+                || !betRlt.Contains("myForm2")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "构建订单失败！");
+                    }
+                }));
+                return;
+            }
+
+
+            //解析订单的html数据
+            int myForm2Index = betRlt.IndexOf("myForm2");
+            String betForm1Str = betRlt.Substring(0,myForm2Index);
+            String betForm2Str = betRlt.Substring(myForm2Index, betRlt.Length - myForm2Index);
+
+            //先解析表格1
+            String params1 = "";
+            String maxStr = "";
+            String minStr = "";
+            String[] strs = betForm1Str.Split('\n');
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (String.IsNullOrEmpty(str) || str.Length == 0) {
+                    continue;
+                }
+
+                if (str.Contains("<input") 
+                    && str.Contains("hidden") 
+                    && str.Contains("id=")
+                    && str.Contains("name")
+                    && str.Contains("value")) {
+
+                   
+                    //解析
+                    str = str.Replace("id=\"fr_odds\"", "").Replace("id=\"fr_odds_cap\"", "").Trim();
+                    int startIndex = str.IndexOf("name=\"");
+                    str = str.Substring(startIndex + 6, str.Length - (startIndex + 6));
+                    startIndex = str.IndexOf("\"");
+                    String key = str.Substring(0, startIndex);
+                    String value = str.Replace(key + "\"", "").Replace("value=\"", "").Replace("\">", "").Trim();
+                    if (key.Equals("get_m_for_rb_refresh")) {
+                        value = value.Replace("id=\"","").Trim();
+                    }
+
+                    if (key.Equals("fr_confirmed")) {
+                        value = "1";
+                    }
+
+                    if (!key.Equals("fr_estimate_payout")) {
+                        params1 = params1 + key + "=" + WebUtility.UrlEncode(value) + "&";
+                    }
+
+                    if (key.Equals("fr_odds")) {
+                        float odd = float.Parse(value);
+                        int yingMoney =(int) (odd * inputMoney);
+                        if (((bool)jobject["isDuYing"])) {
+                            yingMoney = yingMoney + inputMoney;
+                        }
+                        params1 = params1 + "fr_estimate_payout=" + yingMoney + "&";
+                    }
+
+
+                    if (key.Equals("fr_minbet")) {
+                        minStr = value;
+                    }
+
+                    if (key.Equals("fr_maxbet"))
+                    {
+                        maxStr = value;
+                    }
+                    
+                }
+            }
+            
+
+
+            try
+            {
+                float maxMoney = float.Parse(maxStr);
+                float minMoney = float.Parse(minStr);
+
+                if(maxMoney < inputMoney)
+                {
+
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "下注金额太大！");
+                        }
+                    }));
+                    return;
+                }
+
+                if (minMoney > inputMoney)
+                {
+
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "下注金额太小！");
+                        }
+                    }));
+                    return;
+                }
+            }
+            catch (Exception e) {
+
+            }
+
+
+
+            String params2 = "";
+            String betProcessStr = "";
+             strs = betForm2Str.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (String.IsNullOrEmpty(str) || str.Length == 0)
+                {
+                    continue;
+                }
+
+                //获取下单接口1
+
+                if (str.Contains("<form") && str.Contains("betForm")) {
+                    int startIndex = str.IndexOf("action=\"");
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
+                    startIndex = str.IndexOf("\"");
+                    betProcessStr = str.Substring(0, startIndex);
+                    continue;
+                }
+
+
+                if (str.Contains("<input")
+                    && str.Contains("hidden")
+                    && str.Contains("id")
+                    && str.Contains("name")
+                    && str.Contains("value"))
+                {
+
+
+                   
+                    //解析
+                    int startIndex = str.IndexOf("value=\"");
+                    str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                    startIndex = str.IndexOf("\"");
+                    String value = str.Substring(0, startIndex);
+                    str = str.Substring(startIndex + 1, str.Length - (startIndex + 1));
+                    startIndex = str.IndexOf("name=\"");
+                    str = str.Substring(startIndex + 6, str.Length - (startIndex + 6));
+                    startIndex = str.IndexOf("\"");
+                    String key = str.Substring(0, startIndex).Trim();
+                    params2 = params2 + key + "=" + WebUtility.UrlEncode(value) +"&";
+                }
+            }
+
+            if(String.IsNullOrEmpty(params1) 
+                || String.IsNullOrEmpty(params2)
+                || String.IsNullOrEmpty(betProcessStr))
+            {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败！");
+                    }
+                }));
+                return;
+            }
+
+            betProcessStr = user.dataUrl + "/sbo/" + betProcessStr;
+            headJObject = new JObject();
+            headJObject["origin"] = user.dataUrl;
+            String betPRlt = HttpUtils.HttpPostHeader(betProcessStr, params2, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betPRlt) || !betPRlt.Contains("parent.document.myForm.submit")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败！");
+                    }
+                }));
+                return;
+            }
+
+
+            //最后一个接口
+
+            String orderStr = user.dataUrl + "/sbo/betting-entry.php?";
+            params1 = params1 + "fr_auto_accept_better_odds=on&fr_betamount=" + inputMoney;
+            String orderRlt = HttpUtils.HttpPostHeader(orderStr,params1, "application/x-www-form-urlencoded",user.cookie,headJObject);
+            Console.WriteLine(orderRlt);
+            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("请检查您的投注历史")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败！");
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetLMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
             {
                 //交易成功 , 更新UI 并更新钱
                 leftForm.Invoke(new Action(() =>

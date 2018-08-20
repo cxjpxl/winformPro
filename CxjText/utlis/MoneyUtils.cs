@@ -582,5 +582,30 @@ namespace CxjText.utlis
             user.money = money;
             return 1;
         }
+
+
+        //获取L money
+        public static int GetLMoney(UserInfo user)
+        {
+            
+            String moneyUrl = user.dataUrl + "/sbo/ajax-cashbalance.php";
+            JObject headJObject = new JObject();
+            headJObject["origin"] = user.dataUrl;
+            String rlt = HttpUtils.HttpPostHeader(moneyUrl, "opt=1", "application/x-www-form-urlencoded", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt)) return 0; //获取失败
+
+            rlt = rlt.Replace("~", "").Trim();
+
+            try
+            {
+                float.Parse(rlt);
+                user.money = rlt;
+            }
+            catch (Exception e) {
+                return -1;
+            }
+
+            return 1;
+        }
     }
 }
