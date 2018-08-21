@@ -124,6 +124,7 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             String betMatchUrl = "";
+            bool isApp = false;
             if (user.userExp.Equals("1")) {
                 betMatchUrl = "/app_hg/member/ajaxleft/bet_match.php";
             } else
@@ -131,6 +132,13 @@ namespace CxjText.utlis
                 betMatchUrl = "/ajaxleft/bet_match.php";
             }
             String bRlt = HttpUtils.HttpPostHeader(user.dataUrl + betMatchUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+
+            if (user.userExp.Equals("1") && bRlt == null) {
+                isApp = true;
+                betMatchUrl = "/app/member/ajaxleft/bet_match.php";
+                bRlt = HttpUtils.HttpPostHeader(user.dataUrl + betMatchUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            }
+
             if (String.IsNullOrEmpty(bRlt) || bRlt.IndexOf("足球滚球") < 0)
             {
                 leftForm.Invoke(new Action(() =>
@@ -258,7 +266,14 @@ namespace CxjText.utlis
             if (user.userExp.Equals("1")) {
                 myOrderUrl = "/app_hg/member/bet.php";
                 headJObject["Referer"] = user.dataUrl + "/app_hg/member/left.php";
+                if (isApp) {
+                    myOrderUrl = "/app/member/bet.php";
+                    headJObject["Referer"] = user.dataUrl + "/app/member/left.php";
+                }
             }
+            Console.WriteLine(myOrderUrl);
+           // return;
+
             String orderRlt = HttpUtils.HttpPostHeader(user.dataUrl + myOrderUrl, orderStr,
                 "application/x-www-form-urlencoded", user.cookie, headJObject);
             if (String.IsNullOrEmpty(orderRlt) || orderRlt.IndexOf("交易确认中") < 0)
@@ -2276,6 +2291,9 @@ namespace CxjText.utlis
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
             UserInfo user = (UserInfo)Config.userList[index];
+            
+            //先获取数据接口 只访问不处理
+
 
             String betUrl = user.dataUrl + "/sbo/betting-entry.php?"+parmsStr;
             JObject headJObject = new JObject();
@@ -2339,10 +2357,10 @@ namespace CxjText.utlis
 
                     if (key.Equals("fr_odds")) {
                         float odd = float.Parse(value);
-                        int yingMoney =(int) (odd * inputMoney);
-                        if (((bool)jobject["isDuYing"])) {
-                            yingMoney = yingMoney + inputMoney;
-                        }
+                       double yingMoney = Math.Round(odd* inputMoney,0);
+                          if (((bool)jobject["isDuYing"])) {
+                              yingMoney = yingMoney + inputMoney;
+                          }
                         params1 = params1 + "fr_estimate_payout=" + yingMoney + "&";
                     }
 
@@ -2441,6 +2459,7 @@ namespace CxjText.utlis
                 }
             }
 
+
             if(String.IsNullOrEmpty(params1) 
                 || String.IsNullOrEmpty(params2)
                 || String.IsNullOrEmpty(betProcessStr))
@@ -2454,6 +2473,11 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+            if (params2.LastIndexOf("&") == params2.Length - 1) {
+                params2 = params2.Substring(0,params2.Length-2);
+            }
+
 
             betProcessStr = user.dataUrl + "/sbo/" + betProcessStr;
             headJObject = new JObject();
@@ -2474,13 +2498,27 @@ namespace CxjText.utlis
 
             String orderStr = user.dataUrl + "/sbo/betting-entry.php?";
             params1 = params1 + "fr_auto_accept_better_odds=on&fr_betamount=" + inputMoney;
+
+
+           /* Console.WriteLine(params2);
+            Console.WriteLine("用户;" + user.user +" "+user.baseUrl + "---" + params1 +"----"+orderStr);
+            return;*/
+
             String orderRlt = HttpUtils.HttpPostHeader(orderStr,params1, "application/x-www-form-urlencoded",user.cookie,headJObject);
-            Console.WriteLine(orderRlt);
-            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("请检查您的投注历史")) {
+            if (String.IsNullOrEmpty(orderRlt) 
+                || !(orderRlt.Contains("请检查您的")&& orderRlt.Contains("投注历史"))
+                ) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "下单失败！");
+                        Console.WriteLine(orderRlt);
+                        String str = "下单失败!";
+                        if (orderStr.Contains("赔率已更改")) {
+                            str = "失败,赔率已更改";
+                        }else if(orderStr.Contains("盘口已更改")){
+                            str = "失败,盘口已更改";
+                        }
+                        rltForm.RefershLineData(inputTag, str);
                     }
                 }));
                 return;

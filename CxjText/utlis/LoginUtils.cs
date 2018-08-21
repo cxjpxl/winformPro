@@ -49,6 +49,7 @@ namespace CxjText.utlis
                 case "J":
                     break;
                 case "L":
+                 //    timeOffest = 1000 * 60 * 2;
                     break;
                 default:
                     return false;

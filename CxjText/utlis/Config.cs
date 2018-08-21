@@ -10,7 +10,7 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static String softUserStr = "admin";
+        public static String softUserStr = "";
         public static bool noZhaDang = true;//不用管什么什么队炸弹
 
         public static bool hasJinQiuFun = false;//是否有进球的功能

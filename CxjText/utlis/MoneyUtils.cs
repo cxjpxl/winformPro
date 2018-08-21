@@ -587,9 +587,15 @@ namespace CxjText.utlis
         //获取L money
         public static int GetLMoney(UserInfo user)
         {
-            
-            String moneyUrl = user.dataUrl + "/sbo/ajax-cashbalance.php";
+
+            String dataUrl = user.dataUrl+ "/sbo/betting-matches-qs-action.php?rb=1&action=0&leagueid=&early=0&oth=&sortmethod=1&og=c&ot=12&lg=2";
             JObject headJObject = new JObject();
+            headJObject["referer"] = user.dataUrl + "/sbo/betting-matches-qs.php?rah";
+            String dataRlt = HttpUtils.HttpGetHeader(dataUrl, "", user.cookie, headJObject);
+
+
+            String moneyUrl = user.dataUrl + "/sbo/ajax-cashbalance.php";
+             headJObject = new JObject();
             headJObject["origin"] = user.dataUrl;
             String rlt = HttpUtils.HttpPostHeader(moneyUrl, "opt=1", "application/x-www-form-urlencoded", user.cookie, headJObject);
             if (String.IsNullOrEmpty(rlt)) return 0; //获取失败

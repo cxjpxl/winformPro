@@ -2080,12 +2080,12 @@ namespace CxjText.utlis
         }        
 
         public static String getLData(UserInfo userInfo) {
-            if (userInfo.status != 2) return null;
-            String dataUrl = userInfo.dataUrl 
-                + "/sbo/betting-matches-qs-action.php?rb=1&action=0&leagueid=&early=0&oth=&sortmethod=1&og=c&ot=12&lg=2";
             JObject jObect = new JObject();
             JArray jArray = new JArray();
             jObect["list"] = jArray;
+            if (userInfo.status != 2) return jObect.ToString();
+            String dataUrl = userInfo.dataUrl 
+                + "/sbo/betting-matches-qs-action.php?rb=1&action=0&leagueid=&early=0&oth=&sortmethod=1&og=c&ot=12&lg=2";
             JObject headJObject = new JObject();
             headJObject["referer"] = userInfo.dataUrl + "/sbo/betting-matches-qs.php?rah";
             String dataRlt = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
