@@ -262,7 +262,7 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/left.php";
-            String myOrderUrl = "bet.php";
+            String myOrderUrl = "/bet.php";
             if (user.userExp.Equals("1")) {
                 myOrderUrl = "/app_hg/member/bet.php";
                 headJObject["Referer"] = user.dataUrl + "/app_hg/member/left.php";
@@ -271,8 +271,8 @@ namespace CxjText.utlis
                     headJObject["Referer"] = user.dataUrl + "/app/member/left.php";
                 }
             }
-            Console.WriteLine(myOrderUrl);
-           // return;
+         //   Console.WriteLine(myOrderUrl);
+        //   return;
 
             String orderRlt = HttpUtils.HttpPostHeader(user.dataUrl + myOrderUrl, orderStr,
                 "application/x-www-form-urlencoded", user.cookie, headJObject);

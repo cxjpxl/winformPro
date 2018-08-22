@@ -613,5 +613,64 @@ namespace CxjText.utlis
 
             return 1;
         }
+
+        //获取M money
+        public static int GetMMoney(UserInfo user)
+        {
+
+            JObject headJObject = new JObject();
+           headJObject["Host"] = user.baseUrl;
+            String cusHomeUrl = user.loginUrl + "/Custom/Home";
+            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", user.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                return 0;
+            }
+
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken"))
+                {
+                    continue;
+                }
+
+                int startIndex = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+            if (String.IsNullOrEmpty(value)) return -1;
+            user.expJObject["__RequestVerificationToken"] = value;
+
+            String dataUrl = user.loginUrl + "/Account/GetUserAllMoney";
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.loginUrl;
+            headJObject["referer"] = user.loginUrl + "/Custom/Home";
+            headJObject["X-Requested-With"] ="XMLHttpRequest";
+            String moneyUrl = user.loginUrl + "/Account/GetUserAllMoney";
+            String moneyP = "__RequestVerificationToken=" + user.expJObject["__RequestVerificationToken"];
+            String rlt = HttpUtils.HttpPostHeader(moneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt) ||!rlt.Contains("Error") || !rlt.Contains("SL")) return 0; //获取失败
+            rlt = rlt.Substring(0,rlt.Length-1);
+            rlt = rlt.Substring(1, rlt.Length - 1);
+            rlt = rlt.Replace("\\","").Trim();
+            try
+            {
+                JObject jObject = JObject.Parse(rlt);
+                if (((int)jObject["Error"]) != 0) return -1;
+                user.money = (String)jObject["SL"];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return 0;
+            }
+
+            return 1;
+        }
     }
 }

@@ -51,6 +51,9 @@ namespace CxjText.utlis
                 case "L":
                  //    timeOffest = 1000 * 60 * 2;
                     break;
+                case "M":
+                    //    timeOffest = 1000 * 60 * 2;
+                    break;
                 default:
                     return false;
             }
@@ -111,7 +114,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.loginUrl;
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -232,7 +235,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -271,7 +274,7 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/include/vcode.php?bk=000&space=15&color=FFFFFF&mode=middle&name=loginVcode&rnd=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -311,7 +314,7 @@ namespace CxjText.utlis
          //   headJObject["Referer"] = userInfo.dataUrl + "/myhome.php";
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -460,7 +463,7 @@ namespace CxjText.utlis
             {
                 userInfo.cookie = new System.Net.CookieContainer();
             }
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -565,7 +568,7 @@ namespace CxjText.utlis
             
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
             //下载图片
             //登录请求
@@ -719,7 +722,7 @@ namespace CxjText.utlis
                 userInfo.cookie = new System.Net.CookieContainer();
             }
 
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, null); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -843,7 +846,7 @@ namespace CxjText.utlis
             }
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            String codePathName = userInfo.tag+position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -1031,7 +1034,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.dataUrl+"/app/member/";
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -1359,7 +1362,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/validCode?t=" + FormUtils.getCurrentTime();
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -1601,7 +1604,7 @@ namespace CxjText.utlis
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
             {
                 String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
-                String codePathName = userInfo.tag + position + ".jpg";
+                String codePathName = position + userInfo.tag + ".jpg";
                 int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
                 if (codeNum < 0)
                 {
@@ -1695,7 +1698,7 @@ namespace CxjText.utlis
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Referer"] = userInfo.dataUrl + "/lotteryV3/index.do";
             String codeUrl = userInfo.dataUrl + "/verifycode.do?flag=false&timestamp=1522812116178";
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject);
             if (codeNum < 0)
             {
@@ -1848,7 +1851,7 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=" + FormUtils.getCurrentTime();
             userInfo.cookie = new CookieContainer();
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -2136,7 +2139,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Referer"] = userInfo.loginUrl;
-            String codePathName = userInfo.tag + position + ".jpg";
+            String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
             if (codeNum < 0)
             {
@@ -2309,6 +2312,189 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+
+        }
+
+
+        /**********************M系统登录处理**************/
+        public static void loginM(LoginForm loginForm, int position)
+        {
+            UserInfo userInfo = (UserInfo)Config.userList[position];
+            if (userInfo == null) return;
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.loginTime = -1;
+                userInfo.updateMoneyTime = -1;
+                userInfo.status = 0;
+                loginForm.Invoke(new Action(() =>
+                {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                userInfo.uid = "";
+                // HttpUtils.httpGet(userInfo.loginUrl + "/member/aspx/do.aspx?action=logout&backurl=" + userInfo.loginUrl, "", userInfo.cookie);
+                userInfo.cookie = null;
+                userInfo.cookie = new System.Net.CookieContainer();
+                return;
+            }
+
+            int preStatus = status;
+            userInfo.status = 1; //请求中 要刷新UI
+            loginForm.Invoke(new Action(() => {
+                loginForm.AddToListToUpDate(position);
+            }));
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            userInfo.cookie = new CookieContainer();
+            //先访问主页   拿到对应的cook
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String homeRlt = HttpUtils.HttpGetHeader(userInfo.loginUrl,"",userInfo.cookie,headJObject);
+            if(homeRlt == null)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //获取请求必要的cook
+            String cusHomeUrl = userInfo.loginUrl + "/Custom/Home";
+            homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+
+            //获取验证码
+            String time = FormUtils.getCurrentTime() + "";
+            String codeUrl = userInfo.loginUrl + "/Account/ValidateCode/" + time.Substring(time.Length-5,4);
+            headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String codePathName = position + userInfo.tag + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+
+                return;
+            }
+
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.loginUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            headJObject["Referer"] = userInfo.loginUrl + "/Custom/Home";
+            //获取 __RequestVerificationToken
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken")) {
+                    continue;
+                }
+
+                int startIndex  = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+
+            if (String.IsNullOrEmpty(value)) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            userInfo.expJObject = new JObject();
+            userInfo.expJObject["__RequestVerificationToken"] = value;
+            String loginUrl = userInfo.loginUrl + "/Account/Login";
+            String loginP = "username="+userInfo.user+"&passwd="+userInfo.pwd+"&rmNum="+codeStrBuf.ToString()+ "&__RequestVerificationToken=" + value;
+            String loginRlt = HttpUtils.HttpPostHeader(loginUrl,loginP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(loginRlt) || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("error")) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            JObject loginJObject = JObject.Parse(loginRlt);
+            if (((int)loginJObject["error"]) != 0) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
+            //获取金额
+
+            //获取资金
+            int moneyStatus = MoneyUtils.GetMMoney(userInfo);
+            if (moneyStatus == 1)
+            {
+                userInfo.loginFailTime = 0;
+                userInfo.status = 2; //成功
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+                userInfo.updateMoneyTime = userInfo.loginTime;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            else
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+
 
 
         }

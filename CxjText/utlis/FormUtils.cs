@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Drawing;
 using System.IO;
 using CxjText.utils;
+using System.Collections.Generic;
+using System.Net;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -549,6 +551,21 @@ namespace CxjText.utlis
         }
 
 
+        public static String getCookValue(UserInfo user,String key)
+        {
+            if (user == null || user.cookie == null) return null;
+            List<Cookie> list = FileUtils.GetAllCookies(user.cookie);
+            if (list == null || list.Count == 0) return null;
+            for (int i = 0; i < list.Count; i++)
+            {
+                Cookie c = list[i];
+                if (c.Name.Equals(key))
+                {
+                    return  c.Value;
+                }
+            }
+            return null;
+        }
    
     }
 }
