@@ -619,34 +619,9 @@ namespace CxjText.utlis
         {
 
             JObject headJObject = new JObject();
-           headJObject["Host"] = user.baseUrl;
-            String cusHomeUrl = user.loginUrl + "/Custom/Home";
-            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", user.cookie, headJObject);
-            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
-            {
-                return 0;
-            }
-
-            String value = null;
-            String[] strs = homeRlt.Split('\n');
-            for (int i = 0; i < strs.Length; i++)
-            {
-                String str = strs[i].Trim();
-                if (!str.Contains("__RequestVerificationToken"))
-                {
-                    continue;
-                }
-
-                int startIndex = str.IndexOf("value=\"");
-                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
-                startIndex = str.IndexOf("\"");
-                value = str.Substring(0, startIndex);
-            }
-            if (String.IsNullOrEmpty(value)) return -1;
-            user.expJObject["__RequestVerificationToken"] = value;
-
+            LoginUtils.getMToken(user);
+          //  LoginUtils.getMOrderToken(user);
             String dataUrl = user.loginUrl + "/Account/GetUserAllMoney";
-            headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.loginUrl;
             headJObject["referer"] = user.loginUrl + "/Custom/Home";

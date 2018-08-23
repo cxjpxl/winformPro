@@ -2355,6 +2355,8 @@ namespace CxjText.utlis
                         params1 = params1 + key + "=" + WebUtility.UrlEncode(value) + "&";
                     }
 
+                //    Console.WriteLine(key + ":" + value);
+
                     if (key.Equals("fr_odds")) {
                         float odd = float.Parse(value);
                        double yingMoney = Math.Round(odd* inputMoney,0);
@@ -2376,7 +2378,6 @@ namespace CxjText.utlis
                     
                 }
             }
-            
 
 
             try
@@ -2561,6 +2562,139 @@ namespace CxjText.utlis
                 }));
             }
 
+        }
+
+        //M下单
+        public static void OrderM(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+            //获取参数
+            String parmsStr = (String)jobject["rlt"];
+            int inputMoney = (int)jobject["money"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+
+            //先获取数据接口 只访问不处理
+            String token =(String) user.expJObject["__RequestVerificationToken"];
+
+            String moneyLimmitUrl = user.dataUrl + "/Sports/queryBetLimitInfo";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.loginUrl;
+            headJObject["referer"] = user.loginUrl + "/Sports/left";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String moneyP = "query=1&__RequestVerificationToken="+token;
+            String moneyLimitRlt = HttpUtils.HttpPostHeader(moneyLimmitUrl,moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
+            if (String.IsNullOrEmpty(moneyLimitRlt) || !FormUtils.IsJsonObject(moneyLimitRlt)) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "限制接口获取失败！");
+                    }
+                }));
+                return;
+            }
+
+            JObject limitJobject = JObject.Parse(moneyLimitRlt);
+            if (!((bool)limitJobject["success"])) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "限制接口获取失败！");
+                    }
+                }));
+                return;
+            }
+
+            float money = (float)limitJobject["money"];
+            int betmin = (int)limitJobject["betmin"];
+            int betmax = (int)limitJobject["betmax"];
+
+           /* if (money > betmax || money < betmin) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "超过限额！");
+                    }
+                }));
+                return;
+            }*/
+
+            String orderUrl = user.dataUrl + "/SportsFt/addBetOrder";
+            parmsStr = parmsStr + "&bet_money=" + inputMoney + "&__RequestVerificationToken=" + token;
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.loginUrl;
+            headJObject["referer"] = user.loginUrl + "/Custom/Sports";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            Console.WriteLine(parmsStr);
+            String orderRlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(orderRlt);
+            if (String.IsNullOrEmpty(orderRlt) || !FormUtils.IsJsonObject(orderRlt))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败！");
+                    }
+                }));
+                return;
+            }
+
+            JObject orderJobject = JObject.Parse(orderRlt);
+            if (orderJobject==null || orderJobject["success"] == null ||!((bool)orderJobject["success"]))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        String str = "下单失败!";
+                        if (orderJobject!=null&&orderJobject["message"] != null) {
+                            str = (String)orderJobject["message"];
+                        }
+                        rltForm.RefershLineData(inputTag, str);
+                    }
+                }));
+                return;
+            }
+
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetMMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
         }
     }
 }

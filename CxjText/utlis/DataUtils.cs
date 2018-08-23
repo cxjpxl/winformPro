@@ -88,6 +88,12 @@ namespace CxjText.utlis
                         c00 = (String)jObjectH["lianSai"];
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        c00 = (String)jObjectM["league"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -221,6 +227,11 @@ namespace CxjText.utlis
                 case "L":
                     JObject jObjectL = (JObject)obj;
                     time = (String)jObjectL["time"] ;
+                    break;
+                case "M":
+                    JObject jObjectM = (JObject)obj;
+                    time = (String)jObjectM["bowlingtime"];
+                    time = time + "\n" + jObjectM["score_h_now"] + "-" + jObjectM["score_v_now"];
                     break;
                 default:
                     break;
@@ -368,6 +379,11 @@ namespace CxjText.utlis
                         gBifen = "";
                     }
                     break;
+                case "M":
+                    JObject jObjectM = (JObject)obj;
+                    hBifen = (String)jObjectM["score_h_now"];
+                    gBifen = (String)jObjectM["score_v_now"];
+                    break;
                 default:
                     break;
             }
@@ -455,6 +471,10 @@ namespace CxjText.utlis
                     JObject jObjectH = (JObject)obj;
                     c02 = (String)jObjectH["nameH"];
                     break;
+                case "M":
+                    JObject jObjectM = (JObject)obj;
+                    c02 = (String)jObjectM["hostteam"];
+                    break;
                 default:
                     break;
             }
@@ -528,6 +548,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         c12 = (String)jObjectH["nameG"];
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        c12 = (String)jObjectM["visitteam"];
                         break;
                     }
                 default:
@@ -655,6 +681,15 @@ namespace CxjText.utlis
 
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_winhostodd"];
+                        if (FormUtils.isDaYu0(data)) {
+                            c03 = data;
+                        }
+                        break;
+                    } 
                 default:
                     break;
             }
@@ -889,6 +924,25 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String zhu = (String)jObjectM["ds_strongteam"];
+                        String pkString = (String)jObjectM["ds_strongscore"];
+                        String pvString = (String)jObjectM["ds_stronghostodd"];
+                        if (!FormUtils.isDaYu0(pvString)) {
+                            c04 = "";
+                            break;
+                        }
+                        if (zhu.Equals("C"))
+                        {
+                            c04 = pvString;
+                        }
+                        else {
+                            c04 = pkString + " "+pvString;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1069,6 +1123,18 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String pk = (String)jObjectM["ds_overscore"];
+                        String pv = (String)jObjectM["ds_overscoreodd"];
+                        if (!FormUtils.isDaYu0(pv)) {
+                            c05 = "";
+                            break;
+                        }
+                        c05 = "大" + pk + " " + pv;
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1185,7 +1251,16 @@ namespace CxjText.utlis
                         {
                             c06 = (String)duyingJArray[2];
                         }
-
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_winhostodd_ht"];
+                        if (FormUtils.isDaYu0(data))
+                        {
+                            c06 = data;
+                        }
                         break;
                     }
                 default:
@@ -1449,6 +1524,27 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String zhu = (String)jObjectM["ds_strongteam_ht"];
+                        String pkString = (String)jObjectM["ds_strongscore_ht"];
+                        String pvString = (String)jObjectM["ds_stronghostodd_ht"];
+                        if (!FormUtils.isDaYu0(pvString))
+                        {
+                            c07 = "";
+                            break;
+                        }
+                        if (zhu.Equals("C"))
+                        {
+                            c07 = pvString;
+                        }
+                        else
+                        {
+                            c07 = pkString + " " + pvString;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1634,6 +1730,19 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String pk = (String)jObjectM["ds_overscore_ht"];
+                        String pv = (String)jObjectM["ds_overscoreodd_ht"];
+                        if (!FormUtils.isDaYu0(pv))
+                        {
+                            c08 = "";
+                            break;
+                        }
+                        c08 = "大" + pk + " " + pv;
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1754,6 +1863,16 @@ namespace CxjText.utlis
                             c13 = (String)duyingJArray[3];
                         }
 
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_winvisitodd"];
+                        if (FormUtils.isDaYu0(data))
+                        {
+                            c13 = data;
+                        }
                         break;
                     }
                 default:
@@ -2003,6 +2122,27 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String zhu = (String)jObjectM["ds_strongteam"];
+                        String pkString = (String)jObjectM["ds_strongscore"];
+                        String pvString = (String)jObjectM["ds_strongvisitodd"];
+                        if (!FormUtils.isDaYu0(pvString))
+                        {
+                            c14 = "";
+                            break;
+                        }
+                        if (zhu.Equals("H"))
+                        {
+                            c14 = pvString;
+                        }
+                        else
+                        {
+                            c14 = pkString + " " + pvString;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2184,6 +2324,19 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String pk = (String)jObjectM["ds_underscore"];
+                        String pv = (String)jObjectM["ds_underscoreodd"];
+                        if (!FormUtils.isDaYu0(pv))
+                        {
+                            c15 = "";
+                            break;
+                        }
+                        c15 = "小" + pk + " " + pv;
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2302,6 +2455,16 @@ namespace CxjText.utlis
                             c16 = (String)duyingJArray[3];
                         }
 
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_winvisitodd_ht"];
+                        if (FormUtils.isDaYu0(data))
+                        {
+                            c16 = data;
+                        }
                         break;
                     }
                 default:
@@ -2566,6 +2729,27 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String zhu = (String)jObjectM["ds_strongteam_ht"];
+                        String pkString = (String)jObjectM["ds_strongscore_ht"];
+                        String pvString = (String)jObjectM["ds_strongvisitodd_ht"];
+                        if (!FormUtils.isDaYu0(pvString))
+                        {
+                            c17 = "";
+                            break;
+                        }
+                        if (zhu.Equals("H"))
+                        {
+                            c17 = pvString;
+                        }
+                        else
+                        {
+                            c17 = pkString + " " + pvString;
+                        }
+                        break;
+                    }
 
                 default:
                     break;
@@ -2754,6 +2938,19 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String pk = (String)jObjectM["ds_underscore_ht"];
+                        String pv = (String)jObjectM["ds_underscoreodd_ht"];
+                        if (!FormUtils.isDaYu0(pv))
+                        {
+                            c18 = "";
+                            break;
+                        }
+                        c18 = "小" + pk + " " + pv;
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2880,6 +3077,16 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_wintieodd"];
+                        if (FormUtils.isDaYu0(data))
+                        {
+                            c23 = data;
+                        }
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2998,6 +3205,16 @@ namespace CxjText.utlis
                             c26 = (String)duyingJArray[4];
                         }
 
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        String data = (String)jObjectM["ds_wintieodd_ht"];
+                        if (FormUtils.isDaYu0(data))
+                        {
+                            c26 = data;
+                        }
                         break;
                     }
                 default:
@@ -3163,6 +3380,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectH = (JObject)obj;
                         mid = (String)jObjectH["mid"];
+                        break;
+                    }
+                case "M":
+                    {
+                        JObject jObjectM = (JObject)obj;
+                        mid = (String)jObjectM["matchid"];
                         break;
                     }
                 default:

@@ -2169,5 +2169,90 @@ namespace CxjText.utlis
             jObect["list"] = jArray;
             return jObect.ToString(); ;
         }
+
+
+        /***********************获取M系统的数据****************************/
+        public static String getMData(UserInfo userInfo)
+        {
+            JObject jObect = new JObject();
+            JArray jArray = new JArray();
+            jObect["db"] = jArray;
+
+            String token = null;
+            if (userInfo.status != 2)
+            {
+                if (userInfo.expJObject != null && userInfo.expJObject["__RequestVerificationToken"] != null)
+                {
+                    token = (String)userInfo.expJObject["__RequestVerificationToken"];
+                }
+                else
+                {
+                    LoginUtils.getMToken(userInfo);
+                    if (userInfo.expJObject != null && userInfo.expJObject["__RequestVerificationToken"] != null)
+                    {
+                        token = (String)userInfo.expJObject["__RequestVerificationToken"];
+                    }
+                    else
+                    {
+                        return jObect.ToString();
+                    }
+                }
+            }
+            else {
+                token = (String)userInfo.expJObject["__RequestVerificationToken"];
+            }
+
+            String dataString = userInfo.dataUrl + "/SportsFt/listData";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/Sports/toForwardUrl?ty1=rb&ty2=ft&ty3=ds";
+            String dataP = "page=1&class1=rb&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken="+token;
+            String dataRlt = HttpUtils.HttpPostHeader(dataString, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db")) {
+                return jObect.ToString();
+            }
+
+            JObject dataJObject = JObject.Parse(dataRlt);
+            int allPage = 1;
+            //获取总页数
+            if (((int)dataJObject["fy"]["p_page"]) >= ((int)dataJObject["fy"]["page"]))
+            {
+                allPage = ((int)dataJObject["fy"]["p_page"]);
+            }
+            else {
+                allPage = ((int)dataJObject["fy"]["page"]);
+            }
+
+            JArray db = (JArray)dataJObject["db"];
+
+            if (db.Count == 0){
+                return jObect.ToString();
+            }
+
+            for (int i = 0; i < db.Count; i++) {
+                jArray.Add(db[i]);
+            }
+
+            for (int i = 2; i <= allPage; i++) {
+                 dataP = "page="+i+"&class1=rb&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken=" + token;
+                 dataRlt = HttpUtils.HttpPostHeader(dataString, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db"))
+                {
+                    continue;
+                }
+
+                dataJObject = JObject.Parse(dataRlt);
+                db = (JArray)dataJObject["db"];
+                if (db.Count == 0) continue;
+                for (int j = 0; j < db.Count; j++)
+                {
+                    jArray.Add(db[j]);
+                }
+            }
+
+            jObect["db"] = jArray;
+           return jObect.ToString(); ;
+        }
     }
 }

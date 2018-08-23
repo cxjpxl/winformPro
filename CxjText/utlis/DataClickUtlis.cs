@@ -2591,5 +2591,340 @@ namespace CxjText.utlis
         }
 
 
+
+        //M系统点击处理
+        public static String DataSysMClick(JObject dataJObject,
+             object obj, int numRow, int clickNum, String tag
+            )
+        {
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        rltStr = "point_column=ds_winhostodd" +
+                                "&match_id=" + jObject["matchid"] +
+                                "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                "&match_type=2" +
+                                "&bet_info=" + WebUtility.UrlEncode("独赢-" + (String)jObject["hostteam"] + " @ " + (String)jObject["ds_winhostodd"]) +
+                                "&match_showtype=" +
+                                "&match_rgg=" +
+                                "&match_dxgg=" +
+                                "&bet_point=" + (String)jObject["ds_winhostodd"] +
+                                "&isAutoGoodOdds=1";
+                         break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        String zhuStr = "让球-主让";
+                        if (((String)jObject["ds_strongteam"]).Equals("C")) {
+                            zhuStr = "让球-客让";
+                        }
+                        rltStr = "point_column=ds_stronghostodd" +
+                              "&match_id=" + jObject["matchid"] +
+                              "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                              "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                              "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                              "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                              "&match_type=2" +
+                              "&bet_info=" + WebUtility.UrlEncode(zhuStr + (String)jObject["ds_strongscore"] + "-" + (String)jObject["hostteam"] + " @ " + (String)jObject["ds_stronghostodd"]) +
+                              "&match_showtype=" + (String)jObject["ds_strongteam"]+
+                              "&match_rgg=" + WebUtility.UrlEncode((String)jObject["ds_strongscore"])+
+                              "&match_dxgg=" +
+                              "&bet_point=" + (String)jObject["ds_stronghostodd"] +
+                              "&isAutoGoodOdds=1";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+
+                        rltStr = "point_column=ds_overscoreodd" +
+                         "&match_id=" + jObject["matchid"] +
+                         "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                         "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                         "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                         "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                         "&match_type=2" +
+                         "&bet_info=" + WebUtility.UrlEncode("大小-O" + (String)jObject["ds_overscore"] + " @ " + (String)jObject["ds_overscoreodd"]) +
+                         "&match_showtype=" +
+                         "&match_rgg=" +
+                         "&match_dxgg=" + WebUtility.UrlEncode((String)jObject["ds_overscore"])+
+                         "&bet_point=" + (String)jObject["ds_overscoreodd"] +
+                         "&isAutoGoodOdds=1";
+
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        rltStr = "point_column=ds_winhostodd_ht" +
+                                  "&match_id=" + jObject["matchid"] +
+                                  "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                  "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                  "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                  "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                  "&match_type=2" +
+                                  "&bet_info=" + WebUtility.UrlEncode("上半场独赢-" + (String)jObject["hostteam"] + " @ " + (String)jObject["ds_winhostodd_ht"]) +
+                                  "&match_showtype=" +
+                                  "&match_rgg=" +
+                                  "&match_dxgg=" +
+                                  "&bet_point=" + (String)jObject["ds_winhostodd_ht"] +
+                                  "&isAutoGoodOdds=1";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        String zhuStr1 = "上半场主让";
+                        if (((String)jObject["ds_strongteam"]).Equals("C"))
+                        {
+                            zhuStr1 = "上半场客让";
+                        }
+
+                        rltStr = "point_column=ds_stronghostodd_ht" +
+                              "&match_id=" + jObject["matchid"] +
+                              "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                              "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                              "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                              "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                              "&match_type=2" +
+                              "&bet_info=" + WebUtility.UrlEncode(zhuStr1+"-" + (String)jObject["ds_strongscore_ht"] + "-" + (String)jObject["hostteam"] + " @ " + (String)jObject["ds_stronghostodd_ht"]) +
+                              "&match_showtype=" + (String)jObject["ds_strongteam_ht"] +
+                              "&match_rgg=" + WebUtility.UrlEncode((String)jObject["ds_strongscore_ht"]) +
+                              "&match_dxgg=" +
+                              "&bet_point=" + (String)jObject["ds_stronghostodd_ht"] +
+                              "&isAutoGoodOdds=1";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        rltStr = "point_column=ds_overscoreodd_ht" +
+                            "&match_id=" + jObject["matchid"] +
+                            "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                            "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                            "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                            "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                            "&match_type=2" +
+                            "&bet_info=" + WebUtility.UrlEncode("上半场大小-O" + (String)jObject["ds_overscore_ht"] + " @ " + (String)jObject["ds_overscoreodd_ht"]) +
+                            "&match_showtype=" +
+                            "&match_rgg=" +
+                            "&match_dxgg=" + WebUtility.UrlEncode((String)jObject["ds_overscore_ht"])+
+                            "&bet_point=" + (String)jObject["ds_overscoreodd_ht"] +
+                            "&isAutoGoodOdds=1";
+
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        rltStr = "point_column=ds_winvisitodd" +
+                                "&match_id=" + jObject["matchid"] +
+                                "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                "&match_type=2" +
+                                "&bet_info=" + WebUtility.UrlEncode("独赢-" + (String)jObject["visitteam"] + " @ " + (String)jObject["ds_winvisitodd"]) +
+                                "&match_showtype=" +
+                                "&match_rgg=" +
+                                "&match_dxgg=" +
+                                "&bet_point=" + (String)jObject["ds_winvisitodd"] +
+                                "&isAutoGoodOdds=1";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        String zhuStr = "让球-主让";
+                        if (((String)jObject["ds_strongteam"]).Equals("C"))
+                        {
+                            zhuStr = "让球-客让";
+                        }
+
+                        rltStr = "point_column=ds_strongvisitodd" +
+                              "&match_id=" + jObject["matchid"] +
+                              "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                              "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                              "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                              "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                              "&match_type=2" +
+                              "&bet_info=" + WebUtility.UrlEncode(zhuStr + (String)jObject["ds_strongscore"] + "-" + (String)jObject["visitteam"] + " @ " + (String)jObject["ds_strongvisitodd"]) +
+                              "&match_showtype=" + (String)jObject["ds_strongteam"] +
+                              "&match_rgg=" + WebUtility.UrlEncode((String)jObject["ds_strongscore"]) +
+                              "&match_dxgg=" +
+                              "&bet_point=" + (String)jObject["ds_strongvisitodd"] +
+                              "&isAutoGoodOdds=1";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        rltStr = "point_column=ds_underscoreodd" +
+                          "&match_id=" + jObject["matchid"] +
+                          "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                          "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                          "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                          "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                          "&match_type=2" +
+                          "&bet_info=" + WebUtility.UrlEncode("大小-U" + (String)jObject["ds_underscore"] + " @ " + (String)jObject["ds_underscoreodd"]) +
+                          "&match_showtype=" +
+                          "&match_rgg=" +
+                          "&match_dxgg=" + WebUtility.UrlEncode((String)jObject["ds_underscore"]) +
+                          "&bet_point=" + (String)jObject["ds_underscoreodd"] +
+                          "&isAutoGoodOdds=1";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        rltStr = "point_column=ds_winvisitodd_ht" +
+                                 "&match_id=" + jObject["matchid"] +
+                                 "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                 "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                 "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                 "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                 "&match_type=2" +
+                                 "&bet_info=" + WebUtility.UrlEncode("上半场独赢-" + (String)jObject["visitteam"] + " @ " + (String)jObject["ds_winvisitodd_ht"]) +
+                                 "&match_showtype=" +
+                                 "&match_rgg=" +
+                                 "&match_dxgg=" +
+                                 "&bet_point=" + (String)jObject["ds_winvisitodd_ht"] +
+                                 "&isAutoGoodOdds=1";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        String zhuStr1 = "上半场主让";
+                        if (((String)jObject["ds_strongteam"]).Equals("C"))
+                        {
+                            zhuStr1 = "上半场客让";
+                        }
+                        rltStr = "point_column=ds_strongvisitodd_ht" +
+                                 "&match_id=" + jObject["matchid"] +
+                                 "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                 "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                 "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                 "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                 "&match_type=2" +
+                                 "&bet_info=" + WebUtility.UrlEncode(zhuStr1 + "-" + (String)jObject["ds_strongscore_ht"] + "-" + (String)jObject["visitteam"] + " @ " + (String)jObject["ds_strongvisitodd_ht"]) +
+                                 "&match_showtype=" + (String)jObject["ds_strongteam_ht"] +
+                                 "&match_rgg=" + WebUtility.UrlEncode((String)jObject["ds_strongscore_ht"]) +
+                                 "&match_dxgg=" +
+                                 "&bet_point=" + (String)jObject["ds_strongvisitodd_ht"] +
+                                 "&isAutoGoodOdds=1";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        rltStr = "point_column=ds_underscoreodd_ht" +
+                            "&match_id=" + jObject["matchid"] +
+                            "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                            "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                            "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                            "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                            "&match_type=2" +
+                            "&bet_info=" + WebUtility.UrlEncode("上半场大小-U" + (String)jObject["ds_underscore_ht"] + " @ " + (String)jObject["ds_underscoreodd_ht"]) +
+                            "&match_showtype=" +
+                            "&match_rgg=" +
+                            "&match_dxgg=" + WebUtility.UrlEncode((String)jObject["ds_underscore_ht"]) +
+                            "&bet_point=" + (String)jObject["ds_underscoreodd_ht"] +
+                            "&isAutoGoodOdds=1";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        rltStr = "point_column=ds_wintieodd" +
+                                    "&match_id=" + jObject["matchid"] +
+                                    "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                    "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                    "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                    "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                    "&match_type=2" +
+                                    "&bet_info=" + WebUtility.UrlEncode("独赢-和局"  + " @ " + (String)jObject["ds_wintieodd"]) +
+                                    "&match_showtype=" +
+                                    "&match_rgg=" +
+                                    "&match_dxgg=" +
+                                    "&bet_point=" + (String)jObject["ds_wintieodd"] +
+                                    "&isAutoGoodOdds=1";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        rltStr = "point_column=ds_wintieodd_ht" +
+                                    "&match_id=" + jObject["matchid"] +
+                                    "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
+                                    "&match_name=" + WebUtility.UrlEncode((String)jObject["league"]) +
+                                    "&hostteam=" + WebUtility.UrlEncode((String)jObject["hostteam"]) +
+                                    "&visitteam=" + WebUtility.UrlEncode((String)jObject["visitteam"]) +
+                                    "&match_type=2" +
+                                    "&bet_info=" + WebUtility.UrlEncode("上半场独赢-和局" + " @ " + (String)jObject["ds_wintieodd_ht"]) +
+                                    "&match_showtype=" +
+                                    "&match_rgg=" +
+                                    "&match_dxgg=" +
+                                    "&bet_point=" + (String)jObject["ds_wintieodd_ht"] +
+                                    "&isAutoGoodOdds=1";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+    
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+
+
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["league"]; //获取赛事
+            gameTeam = (String)jObject["hostteam"] + "-" + (String)jObject["visitteam"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+
+            return rltStr;
+        }
+
     }
 }

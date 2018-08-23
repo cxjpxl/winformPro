@@ -2318,6 +2318,90 @@ namespace CxjText.utlis
 
 
         /**********************M系统登录处理**************/
+
+        public static void getMToken(UserInfo userInfo) {
+            //获取请求必要的cook
+            String cusHomeUrl = userInfo.loginUrl + "/Custom/Home";
+            if (userInfo.cookie == null) {
+                userInfo.cookie = new CookieContainer();
+            }
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                return;   
+            }
+
+
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken"))
+                {
+                    continue;
+                }
+
+                int startIndex = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (userInfo.expJObject == null) {
+                userInfo.expJObject = new JObject();
+            }
+            userInfo.expJObject["__RequestVerificationToken"] = value;
+
+        }
+        public static void getMOrderToken(UserInfo userInfo)
+        {
+            //获取请求必要的cook
+            String cusHomeUrl = userInfo.loginUrl + "/Custom/Sports";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                return;
+            }
+
+
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken"))
+                {
+                    continue;
+                }
+
+                int startIndex = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (userInfo.expJObject == null)
+            {
+                userInfo.expJObject = new JObject();
+            }
+            userInfo.expJObject["oredrToken"] = value;
+
+        }
         public static void loginM(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -2376,19 +2460,7 @@ namespace CxjText.utlis
             }
 
             //获取请求必要的cook
-            String cusHomeUrl = userInfo.loginUrl + "/Custom/Home";
-            homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
-            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
-
+            getMToken(userInfo);
             //获取验证码
             String time = FormUtils.getCurrentTime() + "";
             String codeUrl = userInfo.loginUrl + "/Account/ValidateCode/" + time.Substring(time.Length-5,4);
@@ -2424,20 +2496,7 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Referer"] = userInfo.loginUrl + "/Custom/Home";
             //获取 __RequestVerificationToken
-            String value = null;
-            String[] strs = homeRlt.Split('\n');
-            for (int i = 0; i < strs.Length; i++) {
-                String str = strs[i].Trim();
-                if (!str.Contains("__RequestVerificationToken")) {
-                    continue;
-                }
-
-                int startIndex  = str.IndexOf("value=\"");
-                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
-                startIndex = str.IndexOf("\"");
-                value = str.Substring(0, startIndex);
-            }
-
+            String value = userInfo.expJObject != null? (String)userInfo.expJObject["__RequestVerificationToken"]:null;
             if (String.IsNullOrEmpty(value)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -2446,9 +2505,6 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-
-            userInfo.expJObject = new JObject();
-            userInfo.expJObject["__RequestVerificationToken"] = value;
             String loginUrl = userInfo.loginUrl + "/Account/Login";
             String loginP = "username="+userInfo.user+"&passwd="+userInfo.pwd+"&rmNum="+codeStrBuf.ToString()+ "&__RequestVerificationToken=" + value;
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl,loginP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);

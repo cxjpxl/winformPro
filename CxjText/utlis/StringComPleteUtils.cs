@@ -192,6 +192,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectO, tag);
                         obj = jObjectO;
                         break;
+                    case "M":
+                        JObject jObjectM = (JObject)jArray[i];
+                        lianSai = (String)jObjectM["league"];
+                        hStr = (String)jObjectM["hostteam"];
+                        gStr = (String)jObjectM["visitteam"];
+                        mid = DataUtils.getMid(jObjectM, tag);
+                        obj = jObjectM;
+                        break;
                     default:
                         return null;
 
@@ -476,6 +484,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectO, tag);
                         obj = jObjectO;
                         break;
+                    case "M":
+                        JObject jObjectM = (JObject)jArray[i];
+                        lianSai = (String)jObjectM["league"];
+                        hStr = (String)jObjectM["hostteam"];
+                        gStr = (String)jObjectM["visitteam"];
+                        mid = DataUtils.getMid(jObjectM, tag);
+                        obj = jObjectM;
+                        break;
                     default:
                         return null;
                 }
@@ -658,6 +674,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectO, tag);
                         obj = jObjectO;
                         break;
+                    case "M":
+                        JObject jObjectM = (JObject)jArray[i];
+                        lianSai = (String)jObjectM["league"];
+                        hStr = (String)jObjectM["hostteam"];
+                        gStr = (String)jObjectM["visitteam"];
+                        mid = DataUtils.getMid(jObjectM, tag);
+                        obj = jObjectM;
+                        break;
                     default:
                         return null;
                 }
@@ -807,6 +831,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectO["Match_Guest"];
                         mid = DataUtils.getMid(jObjectO, tag);
                         obj = jObjectO;
+                        break;
+                    case "M":
+                        JObject jObjectM = (JObject)jArray[i];
+                        lianSai = (String)jObjectM["league"];
+                        hStr = (String)jObjectM["hostteam"];
+                        gStr = (String)jObjectM["visitteam"];
+                        mid = DataUtils.getMid(jObjectM, tag);
+                        obj = jObjectM;
                         break;
                     default:
                         return null;
