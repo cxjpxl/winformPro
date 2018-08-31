@@ -9,6 +9,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
+using System.Net;
 
 namespace CxjText
 {
@@ -20,7 +21,6 @@ namespace CxjText
         private MsgShowForm msgShowForm = null;// 消息列表的界面
         private bool isFinish = false;
         private WebSocketUtils webSocketUtils = null;
-        private List<EnventInfo> listEnvets = new List<EnventInfo>();
         private SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
 
         private List<Eid> listEid = new List<Eid>(); //eid事件储存
@@ -45,6 +45,9 @@ namespace CxjText
 
                 dianQiu_check.Visible = false;
                 dianQiu_check.Enabled = false;
+
+                
+
             }
             else if (Config.softFun == 1)
             { //角  直接下角球  不用角球显示器
@@ -65,6 +68,7 @@ namespace CxjText
 
                 dianQiu_check.Visible = false;
                 dianQiu_check.Enabled = false;
+                
             }
             else if (Config.softFun == 2) {
                 //全部显示
@@ -75,6 +79,7 @@ namespace CxjText
                 dianQiu_check.Enabled = true;
                 Config.dianQiuGouXuan = dianQiu_check.Checked;
                 Config.jiaoQiuEnble = jiaoqiu_checkBox.Checked;
+
             }
 
         }
@@ -180,6 +185,9 @@ namespace CxjText
                 if (userInfo != null && !String.IsNullOrEmpty(userInfo.money)) {
                     JObject temp = new JObject();
                     temp["sys"] = userInfo.tag; //系统
+                    if (userInfo.tag.Equals("B") && !String.IsNullOrEmpty(userInfo.userExp) && userInfo.userExp.Equals("1")) {
+                        temp["sys"] = "B_1";
+                    }
                     temp["money"] = userInfo.money;//钱
                     temp["url"] = userInfo.baseUrl;
                     temp["webUser"] = userInfo.user;
@@ -424,35 +432,32 @@ namespace CxjText
 
         private void speak(String cid, String info)
         {
-
             try
             {
-                //  String cid = (String)cidObj;
                 if (Config.speakJObject[cid] != null)
                 {
                     String speakStr = (String)Config.speakJObject[cid];
-                    if (info.Contains("Cancelled"))
-                    {
-                        if (cid.Equals("1031"))
-                        {
-                            speakStr = "主队点球取消";
-                        }
-                        else if (cid.Equals("2055"))
-                        {
-                            speakStr = "客队点球取消";
-                        }
-                        
-                    }
-                    else if (info.Contains("Confirmed")||info.Equals("Penalty Home")) {
-                        if (cid.Equals("1031"))
-                        {
-                            speakStr = "主队点球";
-                        }
-                        else if (cid.Equals("2055")) {
-                            speakStr = "客队点球";
-                        }
-                    }
 
+                    if (cid.Equals("2055") || cid.Equals("1031"))
+                    {
+                        if (info.ToLower().Contains("cancle"))
+                        {
+                            speakStr = "点球取消";
+                        }
+                        else if (info.ToLower().Contains("miss")) {
+                            speakStr = "点球失误！";
+                        }
+                    }else if(cid.Equals("142") || cid.Equals("146"))
+                    {
+                        if (info.ToLower().Contains("cancle"))
+                        {
+                            speakStr = "点球取消";
+                        }
+                        else if (info.ToLower().Contains("miss"))
+                        {
+                            speakStr = "点球失误！";
+                        }
+                    }
                     speechSynthesizer.Rate = 6;
                     speechSynthesizer.SpeakAsync(speakStr);
                 }
@@ -684,7 +689,7 @@ namespace CxjText
                 {
                     return;
                 }
-                listEnvets.RemoveAll(j => j.mid.Equals(mid));
+
                 this.Invoke(new Action(() => {
                     int curPosition = loginForm.getCurrentSelectRow();
                     if (curPosition >= Config.userList.Count) return;
@@ -700,9 +705,9 @@ namespace CxjText
                     bool isCancel = false;
                     bool isConfirme = false;
                     String dataInfo = (String)jObject["data"]["Info"];
-                    if (dataInfo.Contains("Cancelled") || dataInfo.Contains("Confirmed"))
+                    if (dataInfo.ToLower().Contains("cancel") || dataInfo.Contains("Confirmed"))
                     {
-                        if (dataInfo.Contains("Cancelled")) {
+                        if (dataInfo.ToLower().Contains("cancel")) {
                             isCancel = true;
                         }
 
@@ -760,7 +765,7 @@ namespace CxjText
                     {
                        shiDuan = "全场";
                     }
-                    speakStr(shiDuan + shijianStr);
+                  //  speakStr(shiDuan + shijianStr);
 
                     //事件的显示
                     EnventShowInfo jiaoQiuShowInfo = getShowInfo(gameTime,
@@ -794,7 +799,6 @@ namespace CxjText
                     jiaoQiuEnventInfo.scoreArray = null; 
                     //角球下注处理
                     if (!isCancel && !isConfirme) {
-                        speakStr("有角球要下注");
                         leftForm.setJiaoQiuComplete(jiaoQiuEnventInfo);
                     }
                     Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
@@ -811,8 +815,7 @@ namespace CxjText
             }
 
             //点球下注处理
-            Console.WriteLine("----------有事件过来----------");
-            Console.WriteLine(jObject.ToString());
+         //   Console.WriteLine(jObject.ToString());
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
             enventInfo.cid = cid;
@@ -824,10 +827,10 @@ namespace CxjText
             enventInfo.T = (String)jObject["data"]["T"];
             enventInfo.bangchangType = GetBanChangSelected(); //半场的下注类型
 
+            //有改革这里要更改
             speak(cid, enventInfo.info); //语音播报
             //事件显示和弹框的处理
             this.Invoke(new Action(() => {
-           
                 String shiDuan = "全场";
                 String enventString = "";
                 int teamColor = 0;
@@ -848,41 +851,31 @@ namespace CxjText
                 {
 
                 }
-               
-                
+
+                //有改革这里要更改
                 if (Config.speakJObject[cid] != null)
                 {
-                    if (enventInfo.info.Contains("Cancelled")||enventInfo.info.Equals("No penalty"))
+                    enventString = "事件:" + (String)Config.speakJObject[cid];
+                    if (cid.Equals("2055") || cid.Equals("1031"))
                     {
-                        if (cid.Equals("1031"))
+                        if (enventInfo.info.ToLower().Contains("cancle"))
                         {
-                            enventString = "事件:主队点球取消";
+                            enventString = "事件:点球取消!";
                         }
-                        else if (cid.Equals("2055"))
+                        else if (enventInfo.info.ToLower().Contains("miss"))
                         {
-                            enventString = "事件:客队点球取消";
-                        }
-                        else {
-                            enventString = "事件:" + (String)Config.speakJObject[cid];
-                        }
-
-                    }
-                    else if (enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
-                    {
-                        if (cid.Equals("1031"))
-                        {
-                            enventString = "事件:主队点球";
-                        }
-                        else if (cid.Equals("2055"))
-                        {
-                            enventString = "事件:客队点球";
-                        }
-                        else {
-                            enventString = "事件:" + (String)Config.speakJObject[cid];
+                            enventString = "事件:点球失误!";
                         }
                     }
-                    else {
-                        enventString = "事件:" + (String)Config.speakJObject[cid];
+                    else if (cid.Equals("142") || cid.Equals("146")) {
+                        if (enventInfo.info.ToLower().Contains("cancle"))
+                        {
+                            enventString = "事件:点球取消!";
+                        }
+                        else if (enventInfo.info.ToLower().Contains("miss"))
+                        {
+                            enventString = "事件:点球失误!";
+                        }
                     }
                 }
                 else
@@ -918,41 +911,48 @@ namespace CxjText
             }));
 
 
-            if (cid.Equals("9926") || cid.Equals("9927") || cid.Equals("2055") || cid.Equals("1031"))
+            if (cid.Equals("9926") || cid.Equals("9927"))
             {
-                
+                speakStr("炸弹重现江湖！");
+                speakStr("炸弹重现江湖！");
+                return;
+            }
+
+
+            //有改革要更改
+            if (cid.Equals("2055") || cid.Equals("1031"))
+            {
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
-                if (enventInfo.info.Contains("Cancelled")|| enventInfo.info.Contains("Confirmed")||enventInfo.info.Equals("Penalty Home"))
+                if (enventInfo.info.ToLower().Contains("cancel")|| enventInfo.info.ToLower().Contains("miss"))
                 {
-                    listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     return;
                 }
-              
+                speakStr("点球,物物物");
+
                 if (cid.Equals("2055")) //客队点球
                 {
-                   
                     //客队可以下注 
                     this.Invoke(new Action(() => {
-                        speakStr("可以下注");
                         leftForm.setComplete(enventInfo);
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
                 }
-                else if (cid.Equals("1031"))
+                else if (cid.Equals("1031"))//主队点球
                 {
                     //主队可以下注
                     this.Invoke(new Action(() => {
-                        speakStr("可以下注");
                         leftForm.setComplete(enventInfo);
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
                 }
             }
             else
             {
                 //默认选项且为直接下注的类型
-                if (cid.Equals("2086") || cid.Equals("1062")) { 
+                if (cid.Equals("2086") || cid.Equals("1062")) {
+
+
+                   
+
                     if (cid.Equals("2086"))
                     {
                         enventInfo.cid = "2055";//客队点球
@@ -963,13 +963,9 @@ namespace CxjText
                     this.Invoke(new Action(() => {
                         enventInfo.isDriect = true;  //直接下注类型
                         leftForm.setComplete(enventInfo);
-                        if (listEnvets.Count == 0) return;
-                        listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                     }));
                     return;
                 }
-                if (listEnvets.Count == 0) return;
-                listEnvets.RemoveAll(j => j.mid.Equals(mid)); //删除时间记录列表
                 return;
             }
         }
@@ -1151,5 +1147,42 @@ namespace CxjText
         {
             Config.dianQiuGouXuan = dianQiu_check.Checked;
         }
+
+     
+
+     
+
+
+        //改变
+        private void changeData() {
+            for (int i = 0; i < Config.userList.Count; i++) {
+                UserInfo user = (UserInfo)Config.userList[i];
+                if (user == null || user.status != 2 || !user.tag.Equals("D")) {
+                    continue;
+                }
+                Thread t = new Thread(new ParameterizedThreadStart(this.changeUserInfoD));
+                t.Start(i);
+
+            }
+        }
+
+
+        private void changeUserInfoD(object obj) {
+            int position = (int)obj;
+            UserInfo user =(UserInfo) Config.userList[position];
+            if (user == null || user.status != 2 || !user.tag.Equals("D"))
+            {
+                return ;
+            }
+
+            JObject headJobject = new JObject();
+            headJobject["Host"] = user.baseUrl;
+            headJobject["Origin"] = user.loginUrl;
+            String p = "userMemo=";
+            String url = user.dataUrl + "/api/user/modifyUserInfo";
+            String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
+            MoneyUtils.GetDMoney(user);
+        }
+
     }
 }

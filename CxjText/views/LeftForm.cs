@@ -334,45 +334,46 @@ namespace CxjText.views
             bool hasData = false;
             String tag = userInfo.tag;
             for (int i = 0; i < Config.userList.Count; i++) {
-              
+
                 UserInfo user = (UserInfo)Config.userList[i];
                 if (user == null) continue;
+
                 if (!user.tag.Equals(tag)) continue;
-                if (user.status != 2) continue;
+                if (user.status != 2 ||  String.IsNullOrEmpty(user.money)) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
                 if (dataJObject["gameMid"] != null&&mainFrom.isAuto() && dataJObject["isDriect"]!=null) {
                     try
                     {
                         bool isDriect = (bool) dataJObject["isDriect"];
-                        float moneyAll = float.Parse(user.money);
+                        float moneyAll = float.Parse(user.money.Trim());
                         int selectNum = mainFrom.GetAmountSelected(isDriect);
                         if (selectNum == 1) //1/2
                         {
                             inputMoney = (int)(moneyAll / 2);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                             if (inputMoney < 10) inputMoney = 10;
-                            if (moneyAll < 10) return;
+                            if (moneyAll < 10) continue;
                         }
                         else if (selectNum == 2)//1/3
                         {
                             inputMoney = (int)(moneyAll / 3);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                             if (inputMoney < 10) inputMoney = 10;
-                            if (moneyAll < 10) return;
+                            if (moneyAll < 10) continue;
                         }
                         else if (selectNum == 3)//1/4
                         {
                             inputMoney = (int)(moneyAll / 4);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                             if (inputMoney < 10) inputMoney = 10;
-                            if (moneyAll < 10) return;
+                            if (moneyAll < 10) continue;
                         }
                         else if (selectNum == 4) {
                             inputMoney = (int)(moneyAll*3/4);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                             if (inputMoney < 10) inputMoney = 10;
-                            if (moneyAll < 10) return;
+                            if (moneyAll < 10) continue;
                         }
                         else
                         {
@@ -402,16 +403,10 @@ namespace CxjText.views
                         if (autoData != null) continue;
                     }
                     else { //角球可以下
-                     /*  List<AutoData> autoDatas = null;
-                        if (user.tag.Equals("C"))
-                        {
-                            autoDatas = OrderUtils.autoLists.FindAll(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl) && j.userName.Equals(user.user));
-                        }
-                        if (autoDatas != null && autoDatas.Count >0) continue;*/
-                        //不拦截这里  注意成功那里也没有做处理现在
+                   
                     }
                 }
-              
+       
 
                 //下单参数的处理
                 String orderParmas = "";
@@ -671,6 +666,7 @@ namespace CxjText.views
 
         //自动下单
         private AutoData lastAutoData = new AutoData();
+        private List<AutoData> tempLists = new List<AutoData> ();
         public void setComplete(EnventInfo enventInfo) {
             if (enventInfo.inputType < 0) return;
             if (this.cIndex < 0) return;
@@ -1239,14 +1235,29 @@ namespace CxjText.views
                        + "\n是否强制下大小:" + selectDaXiao);
 
 
-            //判断是2s前保存的队伍
+            //判断是5s前保存的队伍
             String gameTeamStr = nameH + "-" + nameG;
-            if (lastAutoData.gameTeam.Equals(gameTeamStr) && FormUtils.getCurrentTime() - lastAutoData.time < 2000) {
+            if(tempLists == null)
+            {
+                tempLists = new List<AutoData>();
+            }
+
+            AutoData autoTempData = tempLists.Find(j => j.gameTeam.Equals(gameTeamStr));
+            if (autoTempData != null && FormUtils.getCurrentTime() - autoTempData.time < 10000)
+            {
                 return;
             }
-            //记录当前下单队伍和时间
-            lastAutoData.gameTeam = gameTeamStr;
-            lastAutoData.time = FormUtils.getCurrentTime();
+            else
+            {
+                if (autoTempData != null)
+                {
+                    tempLists.RemoveAll((j => j.gameTeam.Equals(gameTeamStr)));
+                }
+                AutoData myData = new AutoData();
+                myData.gameTeam = gameTeamStr;
+                myData.time = FormUtils.getCurrentTime();
+                tempLists.Add(myData);
+            }
 
 
             if (enventInfo.inputType == 0)  //让球

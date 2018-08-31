@@ -14,8 +14,8 @@ namespace CxjText.utils
         public static bool noZhaDang = true;//不用管什么什么队炸弹
 
         public static bool hasJinQiuFun = false;//是否有进球的功能
-        public static int softFun = 2; //0点 1角  2点+角  3电子
-        public static String vString = "V2.90";
+        public static int softFun = 0; //0点 1角  2点+角  3电子
+        public static String vString = "V3.1";
 
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";

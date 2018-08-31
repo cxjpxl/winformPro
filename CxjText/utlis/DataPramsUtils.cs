@@ -952,10 +952,10 @@ namespace CxjText.utlis
         public static String getEData(UserInfo userInfo)
         {
             JObject headJObject = new JObject();
-            String dataUrl = userInfo.dataUrl + "/sports/hg/getData.do";
+            String dataUrl = userInfo.dataUrl + "/sports1/hg/getData.do";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/sports/hg/goPage.do?dataType=RB_FT_MN";
+            headJObject["Referer"] = userInfo.dataUrl + "/sports1/hg/goPage.do?dataType=RB_FT_MN";
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             String dataP = "pageNo=1&gameType=FT_RB_MN&sortType=1";
             String rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);

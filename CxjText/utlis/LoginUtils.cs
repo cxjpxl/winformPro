@@ -536,6 +536,136 @@ namespace CxjText.utlis
            
         }
         /**************************U系统登录处理******************************/
+
+        public static bool loginU1(UserInfo userInfo,int position) {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            userInfo.cookie = new System.Net.CookieContainer();
+            String codePathName = position + userInfo.tag + ".jpg";
+            String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "username=" + userInfo.user + "&userpassword=" + userInfo.pwd + "&code=" + codeStrBuf.ToString();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/login";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl + "/home";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+
+            if (rltStr == null)
+            {
+                return false;
+            }
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                return false;
+            }
+
+            //获取uid
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if (list == null || list.Count == 0)
+            {
+                return false;
+            }
+            String uid = null;
+            for (int i = 0; i < list.Count; i++)
+            {
+                Cookie c = list[i];
+                if (c.Name.Equals("Cookie_LoginId"))
+                {
+                    uid = c.Value;
+                }
+            }
+            if (String.IsNullOrEmpty(uid))
+            {
+                return false;
+            }
+
+            userInfo.uid = uid; //获取到uid
+            return true;
+        }
+
+
+
+        public static bool loginU2(UserInfo userInfo, int position)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            userInfo.cookie = new System.Net.CookieContainer();
+            String codePathName = position + userInfo.tag + ".jpg";
+            String codeUrl = userInfo.loginUrl + "/Common/ValidateCode?id=" + FormUtils.getCurrentTime();
+            //下载图片
+            //登录请求
+
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+            //获取登录的系统参数 
+            String paramsStr = "LoginName="+ userInfo.user + "&LoginPass="+ userInfo.pwd + "&Code="+ codeStrBuf.ToString();
+            //获取登录的链接地址
+            String loginUrlStr = userInfo.loginUrl + "/Common/Login";
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            //headJObject["Referer"] = userInfo.dataUrl + "/home";
+            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+            if (rltStr == null)
+            {
+                return false;
+            }
+            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
+            if (rltNum < 0)
+            {
+                return false;
+            }
+
+            //获取uid
+            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if (list == null || list.Count == 0)
+            {
+                return false;
+            }
+            String uid = null;
+            for (int i = 0; i < list.Count; i++)
+            {
+                Cookie c = list[i];
+                if (c.Name.Equals("Cookie_LoginId"))
+                {
+                    uid = c.Value;
+                }
+            }
+            if (String.IsNullOrEmpty(uid))
+            {
+                return false;
+            }
+
+            userInfo.uid = uid; //获取到uid
+            return true;
+        }
+
+
         public static void loginU(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -543,6 +673,16 @@ namespace CxjText.utlis
             int status = userInfo.status;
             if (status == -1 || status == 1) return;
 
+            if (!loginU1(userInfo, position)) {
+                if (!loginU2(userInfo, position)) {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() =>
+                    {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                }
+            }
 
             if (status == 2){ //状态是登录状态  要退出登录
                 userInfo.loginFailTime = 0;
@@ -566,99 +706,7 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
             
-            JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            String codePathName = position + userInfo.tag + ".jpg";
-            String codeUrl = userInfo.loginUrl + "/ValidateCode?id=" + FormUtils.getCurrentTime();
-            //下载图片
-            //登录请求
-            if (userInfo.cookie == null)
-            {
-                userInfo.cookie = new System.Net.CookieContainer();
-            }
-            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
-            if (codeNum < 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-            if (String.IsNullOrEmpty(codeStrBuf))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
-            //获取登录的系统参数 
-            String paramsStr = "username=" + userInfo.user + "&userpassword=" + userInfo.pwd + "&code=" + codeStrBuf.ToString();
-            //获取登录的链接地址
-            String loginUrlStr = userInfo.loginUrl + "/login";
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl+ "/home";
-            String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
-          
-            if (rltStr == null)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            int rltNum = FormUtils.explandsLoginData(userInfo, rltStr);
-            if (rltNum < 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            
-            //获取uid
-            List<Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
-            if(list== null ||list.Count == 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            String uid = null;
-            for (int i = 0; i < list.Count; i++) {
-                Cookie c = list[i];
-                if (c.Name.Equals("Cookie_LoginId")) {
-                    uid = c.Value;
-                }
-            }
-            if (String.IsNullOrEmpty(uid)) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() =>
-                {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
-            userInfo.uid = uid; //获取到uid
+           
             int moneyStatus = MoneyUtils.GetUMoney(userInfo);
             if (moneyStatus == 1)
             {
