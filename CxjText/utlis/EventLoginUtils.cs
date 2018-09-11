@@ -21,7 +21,7 @@ namespace CxjText.utlis
 
             if (status == 2)
             {
-                return -1;
+                return 1;
             }
 
             int preStatus = status;

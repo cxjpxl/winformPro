@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // textBox1
@@ -38,6 +40,12 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(639, 270);
             this.textBox1.TabIndex = 0;
+            // 
+            // updateTimer
+            // 
+            this.updateTimer.Enabled = true;
+            this.updateTimer.Interval = 10000;
+            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
             // EventMainForm
             // 
@@ -57,5 +65,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Timer updateTimer;
     }
 }
