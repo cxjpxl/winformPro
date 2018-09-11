@@ -14,7 +14,7 @@ namespace CxjText.utils
         public static bool noZhaDang = true;//不用管什么什么队炸弹
 
         public static bool hasJinQiuFun = false;//是否有进球的功能
-        public static int softFun = 0; //0点 1角  2点+角  3电子
+        public static int softFun = 4; //0点 1角  2点+角  3电子 4.事件
         public static String vString = "V3.1";
 
         public static long softTime = -1; //软件使用时间记录
@@ -53,5 +53,6 @@ namespace CxjText.utils
         /************************电子用户处理*********************************/
         public static int DianZiPramsNum = 5; //参数个数
         public static ArrayList dzUserList = null;//电子用户登陆信息记录 
+       /***********事件用户****************************/
     }
 }

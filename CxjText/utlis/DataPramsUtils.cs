@@ -58,11 +58,15 @@ namespace CxjText.utlis
             String getDataUrl = "";
             getDataUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
             if (userInfo.userExp.Equals("1")) {
-                getDataUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
+                getDataUrl = userInfo.dataUrl + "/app/member/show/json/ft_1_0.php?leaguename=&CurrPage=0&_=" + FormUtils.getCurrentTime();
             }
+         
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
 
-            String rlt = HttpUtils.httpGet(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+            String rlt = HttpUtils.HttpGetHeader(getDataUrl, "", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
             if (String.IsNullOrEmpty(rlt)) return null;
+            rlt = rlt.Trim();
             rlt = FormUtils.expandGetDataRlt(userInfo, rlt);
             if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
             JObject jObject = JObject.Parse(rlt);
@@ -83,9 +87,9 @@ namespace CxjText.utlis
                 pageUrl = userInfo.dataUrl + "/show/ft_gunqiu_data.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
                 if (userInfo.userExp.Equals("1"))
                 {
-                    pageUrl = userInfo.dataUrl + "/app/member/show/Json/ft_1_0.php?sort=shuaxin-Match_CoverDate&leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
+                    pageUrl = userInfo.dataUrl + "/app/member/show/json/ft_1_0.php?leaguename=&CurrPage=" + i + "&_=" + FormUtils.getCurrentTime();
                 }
-                String pageRlt = HttpUtils.httpGet(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null);
+                String pageRlt = HttpUtils.HttpGetHeader(pageUrl, "", userInfo.status == 2 ? userInfo.cookie : null,headJObject);
                 if (String.IsNullOrEmpty(pageRlt)) continue;
                 pageRlt = FormUtils.expandGetDataRlt(userInfo, pageRlt);
                 if (String.IsNullOrEmpty(pageRlt) || !FormUtils.IsJsonObject(pageRlt)) continue;

@@ -1148,6 +1148,52 @@ namespace CxjText.utlis
             }
             return false;
         }
+
+        public static bool canInputDaXiao(String data, JArray jArray) {
+
+            if (Config.isPingBang) {
+                if (daXiaoIsEmpty(data)) {
+                    return false;
+                }
+                return true;
+            }
+
+            if (daXiaoIsEmpty(data) || jArray == null || jArray.Count <2) { //空数据直接返回
+                return false;
+            }
+
+            try
+            {
+                data = data.Replace("大", "").Replace("o", "").Replace("O", "").Trim();
+                data = data.Replace("小", "").Replace("U", "").Replace("u", "").Trim();
+                int hScore = int.Parse((String)jArray[0]);
+                int gScore = int.Parse((String)jArray[1]);
+                String[] daxiaoData = data.Split(' ');
+                if (daxiaoData.Length != 2) return false;
+                String panKou = daxiaoData[0];
+                if (panKou.Contains("/"))
+                {
+                    String[] tempData = panKou.Split('/');
+                    float panKouScore = float.Parse(tempData[0]);
+                    if (panKouScore - (hScore + gScore) < 1)
+                    {
+                        return true;
+                    }
+                }
+                else {
+                    float panKouScore = float.Parse(panKou);
+                    if (panKouScore - (hScore + gScore) <= 1.01) {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e) {
+
+                return false;
+            }
+
+            return false;
+        }
     }
 
 }

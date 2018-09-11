@@ -1026,11 +1026,19 @@ namespace CxjText
                 {
                     return 2;
                 }
-                else if (z_4_rd.Checked) // 3/4
+                else if (z_4_rd.Checked) // 1/4
                 {
-                    return 4;
+                    return 3;
                 }
-                else
+                else if (r_5_1.Checked) // 1/5
+                {
+                    return 5;
+                }
+                else if (r_6_1.Checked) // 1/6
+                {
+                    return 6;
+                }
+            else
                 {
                     return 0;
                 }
@@ -1129,6 +1137,8 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
+          //  changeData();
+
         }
         
       
@@ -1146,6 +1156,7 @@ namespace CxjText
         private void dianQiu_check_CheckedChanged(object sender, EventArgs e)
         {
             Config.dianQiuGouXuan = dianQiu_check.Checked;
+            
         }
 
      
@@ -1157,7 +1168,7 @@ namespace CxjText
         private void changeData() {
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
-                if (user == null || user.status != 2 || !user.tag.Equals("D")) {
+                if (!user.tag.Equals("D") && user.status!=2) {
                     continue;
                 }
                 Thread t = new Thread(new ParameterizedThreadStart(this.changeUserInfoD));
@@ -1170,7 +1181,7 @@ namespace CxjText
         private void changeUserInfoD(object obj) {
             int position = (int)obj;
             UserInfo user =(UserInfo) Config.userList[position];
-            if (user == null || user.status != 2 || !user.tag.Equals("D"))
+            if ( !user.tag.Equals("D"))
             {
                 return ;
             }

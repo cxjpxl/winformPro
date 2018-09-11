@@ -121,8 +121,10 @@
     <Compile Include="bean\Eid.cs" />
     <Compile Include="bean\EnventInfo.cs" />
     <Compile Include="bean\EnventShowInfo.cs" />
+    <Compile Include="bean\EnventUser.cs" />
     <Compile Include="bean\InputInfo.cs" />
     <Compile Include="bean\NameTy.cs" />
+    <Compile Include="bean\RefershData.cs" />
     <Compile Include="bean\UserInfo.cs" />
     <Compile Include="DianZiFrom.cs">
       <SubType>Form</SubType>
@@ -158,6 +160,8 @@
     <Compile Include="utlis\DzLoginUtils.cs" />
     <Compile Include="utlis\DzMoneyUtils.cs" />
     <Compile Include="utlis\DzOrderUtils.cs" />
+    <Compile Include="utlis\EnvetFileUtils.cs" />
+    <Compile Include="utlis\EventLoginUtils.cs" />
     <Compile Include="utlis\FileUtils.cs" />
     <Compile Include="utlis\FormUtils.cs" />
     <Compile Include="utlis\LoginUtils.cs" />
@@ -187,6 +191,12 @@
     </Compile>
     <Compile Include="views\DzLoginFrom.Designer.cs">
       <DependentUpon>DzLoginFrom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="views\EventMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\EventMainForm.Designer.cs">
+      <DependentUpon>EventMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="views\LeftForm.cs">
       <SubType>Form</SubType>
@@ -244,6 +254,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\DzLoginFrom.resx">
       <DependentUpon>DzLoginFrom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\EventMainForm.resx">
+      <DependentUpon>EventMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\LeftForm.resx">
       <DependentUpon>LeftForm.cs</DependentUpon>

@@ -584,7 +584,7 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_BzM = (String)jObjectB["Match_BzM"];
-                        c03 = Match_BzM.Trim().Equals("0.00") ? "" : Match_BzM;
+                        c03 = !FormUtils.isDaYu0(Match_BzM) ? "" : Match_BzM;
                         break;
                     }
                 case "I":
@@ -712,12 +712,14 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_ShowType = (String)jObjectB["Match_ShowType"];
-                        String Match_Ho = (String)jObjectB["Match_Ho"];
+                        String Match_Ho = (String)jObjectB["Match_Ho"] ;
                         String rgg1 = "";
                         if (Match_ShowType.Equals("H") && !Match_Ho.Equals("0"))
                         {
                             rgg1 = (String)jObjectB["Match_RGG"];
                         }
+                        Match_Ho = Match_Ho.Replace(" ", "");
+                        rgg1 = rgg1.Replace(" ", "");
                         c04 = rgg1 + " " + Match_Ho;
                         if (c04.Trim().Equals("0"))
                         {
@@ -971,7 +973,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
-                            c05 = (String)jObjectB["Match_DxGG"] + " " + Match_DxDpl;
+                            c05 = ((String)jObjectB["Match_DxGG"]).Replace(" ","") + " " + Match_DxDpl.Replace(" ","");
                         }
                         break;
                     }
@@ -1157,7 +1159,9 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         c06 = (String)jObjectB["Match_Bmdy"];
-                        if (String.IsNullOrEmpty(c06) || c06.Equals("0.00")) c06 = "";
+                        if (!FormUtils.isDaYu0(c06)) {
+                            c06 = "";
+                        }
                         break;
                     }
                 case "I":
@@ -1288,6 +1292,9 @@ namespace CxjText.utlis
                         String Match_BHo = (String)jObjectB["Match_BHo"];
                         if (!String.IsNullOrEmpty(Match_Hr_ShowType) && !String.IsNullOrEmpty(Match_BHo))
                         {
+                            Match_Hr_ShowType = Match_Hr_ShowType.Replace(" ", "");
+                            Match_BHo = Match_BHo.Replace(" ", "");
+
                             String Match_BRpk = "";
                             if (Match_Hr_ShowType.Equals("H") && !Match_BHo.Equals("0"))
                             {
@@ -1570,6 +1577,9 @@ namespace CxjText.utlis
                         if (Match_Bdpl == null) Match_Bdpl = "";
                         String Match_Bdxpk = (String)jObjectB["Match_Bdxpk"];
                         if (Match_Bdxpk == null) Match_Bdxpk = "";
+
+                        Match_Bdpl = Match_Bdpl.Replace(" ", "");
+                        Match_Bdxpk = Match_Bdxpk.Replace(" ", "");
                         c08 = Match_Bdxpk + " " + Match_Bdpl;
                         if (String.IsNullOrEmpty(Match_Bdpl) || Match_Bdpl.Trim().Equals("0"))
                         {
@@ -1767,7 +1777,7 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         String Match_BzG = (String)jObjectB["Match_BzG"];
-                        c13 = Match_BzG.Trim().Equals("0.00") ? "" : Match_BzG;
+                        c13 = !FormUtils.isDaYu0(Match_BzG) ? "" : Match_BzG;
                         break;
                     }
                 case "I":
@@ -1901,8 +1911,9 @@ namespace CxjText.utlis
                         String rgg2 = "";
                         if (Match_ShowType.Equals("C") && !Match_Ao.Equals("0"))
                         {
-                            rgg2 = (String)jObjectB["Match_RGG"];
+                            rgg2 = ((String)jObjectB["Match_RGG"]).Replace(" ","");
                         }
+                        Match_Ao = Match_Ao.Replace(" ", "");
                         c14 = rgg2 + " " + Match_Ao;
                         if (c14.Trim().Equals("0"))
                         {
@@ -2171,7 +2182,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
-                            c15 = (String)jObjectB["Match_DxGG1"] + " " + (String)jObjectB["Match_DxXpl"];
+                            c15 = ((String)jObjectB["Match_DxGG1"]).Replace(" ","") + " " + ((String)jObjectB["Match_DxXpl"]).Replace(" ","");
                         }
                         break;
                     }
@@ -2359,7 +2370,9 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         c16 = (String)jObjectB["Match_Bgdy"];
-                        if (String.IsNullOrEmpty(c16) || c16.Equals("0.00")) c16 = "";
+                        if (!FormUtils.isDaYu0(c16)) {
+                            c16 = "";
+                        }
                         break;
                     }
                 case "I":
@@ -2497,7 +2510,7 @@ namespace CxjText.utlis
                             {
                                 Match_BRpk = (String)jObjectB["Match_BRpk"];
                             }
-                            c17 = Match_BRpk + " " + Match_BAo;
+                            c17 = Match_BRpk.Replace(" ","") + " " + Match_BAo.Replace(" ","");
 
                             if (c17.Trim().Equals("0"))
                             {
@@ -2776,6 +2789,8 @@ namespace CxjText.utlis
                         if (Match_Bdxpk2 == null) Match_Bdxpk2 = "";
                         String Match_Bxpl = (String)jObjectB["Match_Bxpl"];
                         if (Match_Bxpl == null) Match_Bxpl = "";
+                        Match_Bdxpk2 = Match_Bdxpk2.Replace(" ", "");
+                        Match_Bxpl = Match_Bxpl.Replace(" ", "");
                         c18 = Match_Bdxpk2 + " " + Match_Bxpl;
                         if (String.IsNullOrEmpty(Match_Bxpl) || Match_Bxpl.Trim().Equals("0"))
                         {
@@ -2974,10 +2989,7 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         c23 = (String)jObjectB["Match_BzH"];
-                        if (String.IsNullOrEmpty(c23) || c23.Trim().Equals("0.00"))
-                        {
-                            c23 = "";
-                        }
+                        if (!FormUtils.isDaYu0(c23)) c23 = "";
                         break;
                     }
                 case "I":
@@ -3109,7 +3121,7 @@ namespace CxjText.utlis
                     {
                         JObject jObjectB = (JObject)obj;
                         c26 = (String)jObjectB["Match_Bhdy"];
-                        if (String.IsNullOrEmpty(c26) || c26.Equals("0.00")) c26 = "";
+                        if (!FormUtils.isDaYu0(c26)) c26 = "";
                         break;
                     }
                 case "I":

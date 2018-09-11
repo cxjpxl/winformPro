@@ -60,6 +60,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.r_5_1 = new System.Windows.Forms.RadioButton();
+            this.r_6_1 = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -320,13 +322,15 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.r_6_1);
+            this.groupBox2.Controls.Add(this.r_5_1);
             this.groupBox2.Controls.Add(this.z_4_rd);
             this.groupBox2.Controls.Add(this.z_3_rd);
             this.groupBox2.Controls.Add(this.z_2_rd);
             this.groupBox2.Controls.Add(this.z_moren_rd);
             this.groupBox2.Location = new System.Drawing.Point(6, 101);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(171, 43);
+            this.groupBox2.Size = new System.Drawing.Size(282, 43);
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "点球+进球金额";
@@ -339,7 +343,7 @@
             this.z_4_rd.Size = new System.Drawing.Size(41, 16);
             this.z_4_rd.TabIndex = 0;
             this.z_4_rd.TabStop = true;
-            this.z_4_rd.Text = "3/4";
+            this.z_4_rd.Text = "1/4";
             this.z_4_rd.UseVisualStyleBackColor = true;
             // 
             // z_3_rd
@@ -411,6 +415,28 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
+            // r_5_1
+            // 
+            this.r_5_1.AutoSize = true;
+            this.r_5_1.Location = new System.Drawing.Point(173, 19);
+            this.r_5_1.Name = "r_5_1";
+            this.r_5_1.Size = new System.Drawing.Size(41, 16);
+            this.r_5_1.TabIndex = 30;
+            this.r_5_1.TabStop = true;
+            this.r_5_1.Text = "1/5";
+            this.r_5_1.UseVisualStyleBackColor = true;
+            // 
+            // r_6_1
+            // 
+            this.r_6_1.AutoSize = true;
+            this.r_6_1.Location = new System.Drawing.Point(220, 19);
+            this.r_6_1.Name = "r_6_1";
+            this.r_6_1.Size = new System.Drawing.Size(41, 16);
+            this.r_6_1.TabIndex = 31;
+            this.r_6_1.TabStop = true;
+            this.r_6_1.Text = "1/6";
+            this.r_6_1.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -474,5 +500,7 @@
         private System.Windows.Forms.CheckBox jiaoQiuTime;
         private System.Windows.Forms.CheckBox dianQiu_check;
         private System.Windows.Forms.RadioButton z_4_rd;
+        private System.Windows.Forms.RadioButton r_6_1;
+        private System.Windows.Forms.RadioButton r_5_1;
     }
 }

@@ -51,6 +51,24 @@ namespace CxjText.utlis
                 if (moneyRlt == null) {
                     return 0;
                 }
+                moneyRlt = moneyRlt.Trim();
+                if (moneyRlt.Contains("|")) {
+                    String[] moneyStrs = moneyRlt.Split('|');
+                    String my = "";
+                    if (moneyStrs.Length >= 3) {
+                        my = moneyStrs[1].Trim();
+                        try
+                        {
+                            float.Parse(my);
+                            user.money = my;
+                            return 1;
+                        }
+                        catch (Exception e) {
+
+                        }
+                    }
+                }
+
 
                 if (!moneyRlt.Contains("user_money")) {
                     if (moneyRlt.Contains("重新登录")) {
@@ -456,7 +474,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-         //   Console.WriteLine(moneyRlt);
+            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;

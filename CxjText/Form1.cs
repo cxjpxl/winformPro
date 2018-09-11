@@ -1,8 +1,10 @@
 ﻿using CxjText.utils;
 using CxjText.utlis;
+using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -25,20 +27,23 @@ namespace CxjText
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+
+
             dataInit();
             speakInit();
             userEdit.Focus();
             uuid = FileUtils.getOnlyFlag() + "-" + MyIdUtlis.Value();
             readTxt();
-            if (Config.softUserStr.Equals("admin")) {
+            if (Config.softUserStr.Equals("admin"))
+            {
                 deleteTxt();//这样做的话方便自己打包  把use删除掉
                 userEdit.Text = Config.softUserStr;
                 codeUserEdit.Text = "cxj81886404";
                 codePwdEdit.Text = "cxj13580127662";
             }
+           
         }
-
+        
 
         private void deleteTxt() {
             String name = "user.json";
@@ -225,12 +230,16 @@ namespace CxjText
                 {
                     DianZiFrom dianZiFrom = new DianZiFrom();
                     dianZiFrom.Show();
+                    this.Hide();  
+                }else if (Config.softFun == 4)  //事件获取处理
+                {
+                    EventMainForm eventMainForm = new EventMainForm();
+                    eventMainForm.Show();
                     this.Hide();
                 }
                 else {
                     MessageBox.Show("功能暂未开放");
                 }
-                
             }));
         }
 
@@ -238,9 +247,12 @@ namespace CxjText
         //登录系统按键
         private void loginSysBtn_Click(object sender, EventArgs e)
         {
+
+
             String codeUserStr = codeUserEdit.Text.ToString().Trim();
             String codePwdStr = codePwdEdit.Text.ToString().Trim();
             String userStr = userEdit.Text.ToString().Trim();
+
             if (String.IsNullOrEmpty(userStr) || String.IsNullOrEmpty(userStr))
             {
                 MessageBox.Show("用户不能为空!");
@@ -262,5 +274,7 @@ namespace CxjText
             Thread t = new Thread(new ParameterizedThreadStart(goLogin));
             t.Start(jobject);
         }
+
+
     }
 }

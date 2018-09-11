@@ -369,8 +369,16 @@ namespace CxjText.views
                             if (inputMoney < 10) inputMoney = 10;
                             if (moneyAll < 10) continue;
                         }
-                        else if (selectNum == 4) {
-                            inputMoney = (int)(moneyAll*3/4);
+                        else if (selectNum == 5)//1/5
+                        {
+                            inputMoney = (int)(moneyAll / 5);
+                            inputMoney = ((int)(inputMoney / 10)) * 10;
+                            if (inputMoney < 10) inputMoney = 10;
+                            if (moneyAll < 10) continue;
+                        }
+                        else if (selectNum == 6)//1/6
+                        {
+                            inputMoney = (int)(moneyAll / 6);
                             inputMoney = ((int)(inputMoney / 10)) * 10;
                             if (inputMoney < 10) inputMoney = 10;
                             if (moneyAll < 10) continue;
@@ -765,6 +773,7 @@ namespace CxjText.views
 
             object obj = null; //要下注的对象
 
+            JArray currayScore = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
          
 
 
@@ -777,17 +786,8 @@ namespace CxjText.views
                     { //半场的情况下
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                            }
-
-                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                            if (StringComPleteUtils.canInputDaXiao(data,currayScore))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = true;
@@ -800,17 +800,8 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                            }
-
-                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            String data  = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                            if (StringComPleteUtils.canInputDaXiao(data, currayScore))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = true;
@@ -826,17 +817,8 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                            }
-
-                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                            if (StringComPleteUtils.canInputDaXiao(data, currayScore))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = true;
@@ -849,17 +831,8 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                            }
-
-                            if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                            String data  = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                            if (StringComPleteUtils.canInputDaXiao(data, currayScore))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = true;
@@ -875,17 +848,8 @@ namespace CxjText.views
 
                     for (int i = 0; i < searchArray.Count; i++)
                     {
-                        String data = "";
-                        if (isH)
-                        {
-                            data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                        }
-                        else
-                        {
-                            data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                        }
-
-                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                        String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                        if (StringComPleteUtils.canInputDaXiao(data, currayScore))
                         {
                             obj = searchArray[i];
                             selectDaXiao = true;
@@ -899,17 +863,8 @@ namespace CxjText.views
                     if (!isBanChang) return;
                     for (int i = 0; i < searchArray.Count; i++)
                     {
-                        String data = "";
-                        if (isH)
-                        {
-                            data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                        }
-                        else
-                        {
-                            data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                        }
-
-                        if (!StringComPleteUtils.daXiaoIsEmpty(data))
+                        String  data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                        if (StringComPleteUtils.canInputDaXiao(data, currayScore))
                         {
                             obj = searchArray[i];
                             selectDaXiao = true;
@@ -1388,16 +1343,7 @@ namespace CxjText.views
                     { //半场的情况下
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                            }
-
+                            String  data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
                             if (!StringComPleteUtils.daXiaoIsEmpty(data))
                             {
                                 obj = searchArray[i];
@@ -1410,16 +1356,7 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                            }
-
+                            String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
                             if (!StringComPleteUtils.daXiaoIsEmpty(data))
                             {
                                 obj = searchArray[i];
@@ -1435,16 +1372,7 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                            }
-
+                            String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
                             if (!StringComPleteUtils.daXiaoIsEmpty(data))
                             {
                                 obj = searchArray[i];
@@ -1457,16 +1385,7 @@ namespace CxjText.views
                     {
                         for (int i = 0; i < searchArray.Count; i++)
                         {
-                            String data = "";
-                            if (isH)
-                            {
-                                data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                            }
-                            else
-                            {
-                                data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                            }
-
+                            String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
                             if (!StringComPleteUtils.daXiaoIsEmpty(data))
                             {
                                 obj = searchArray[i];
@@ -1482,16 +1401,7 @@ namespace CxjText.views
 
                     for (int i = 0; i < searchArray.Count; i++)
                     {
-                        String data = "";
-                        if (isH)
-                        {
-                            data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                        }
-                        else
-                        {
-                            data = DataUtils.get_c15_data(searchArray[i], userInfo.tag);//客队全场大小
-                        }
-
+                        String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
                         if (!StringComPleteUtils.daXiaoIsEmpty(data))
                         {
                             obj = searchArray[i];
@@ -1505,16 +1415,7 @@ namespace CxjText.views
                     if (!isBanChang) return;
                     for (int i = 0; i < searchArray.Count; i++)
                     {
-                        String data = "";
-                        if (isH)
-                        {
-                            data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                        }
-                        else
-                        {
-                            data = DataUtils.get_c18_data(searchArray[i], userInfo.tag); //客队半场大小
-                        }
-
+                        String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
                         if (!StringComPleteUtils.daXiaoIsEmpty(data))
                         {
                             obj = searchArray[i];

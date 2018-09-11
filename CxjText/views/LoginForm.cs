@@ -4,6 +4,7 @@ using CxjText.utils;
 using CxjText.utlis;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -12,8 +13,7 @@ namespace CxjText.views
 {
     public partial class LoginForm : Form
     {
-
-        private ArrayList upDateList = new ArrayList();
+        private List<RefershData> refershDataList = new List<RefershData>();
         private Color seclectColor = Color.Yellow;
         private Color nomalColor = Color.White;
         private LoginFormInterface loginFormInterface = null;
@@ -242,7 +242,9 @@ namespace CxjText.views
 
         //添加到消息队列里面
         public void AddToListToUpDate(int position) {
-            upDateList.Add(position);
+            RefershData refershData = new RefershData();
+            refershData.positon = position;
+            refershDataList.Add(refershData);
             upDateRow();
         }
 
@@ -250,12 +252,13 @@ namespace CxjText.views
         //更新表格信息
         private void upDateRow()
         {
-            if (isUpdate || upDateList == null || upDateList.Count == 0 ) return;
-            if (upDateList[0] == null) {
+            if (isUpdate || refershDataList == null || refershDataList.Count == 0 ) return;
+            if (refershDataList[0] == null) {
                 return;
             } 
             isUpdate = true;
-            int index = (int)upDateList[0];
+            RefershData refershData = refershDataList[0];
+            int index = refershData.positon;
             try {
                 UserInfo userInfo = (UserInfo)Config.userList[index];
                 if (userInfo != null)
@@ -317,10 +320,12 @@ namespace CxjText.views
                 Console.WriteLine(e.ToString());
             }
             isUpdate = false;
-            if (upDateList!=null && upDateList.Count >= 1) {
-                upDateList.RemoveAt(0);
+            if (refershDataList != null && refershDataList.Count >= 1)
+            {
+                refershDataList.RemoveAll(positionData => positionData.positon == index);
                 upDateRow(); //自己消耗自己的资源  防止线程阻塞
             }
+
         }
 
         //获取当前选中的项   主要用于获取数据
