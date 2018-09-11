@@ -86,13 +86,13 @@ namespace CxjText.utlis
             String m8DataUrl = rlt.Substring(0, startComIndex) + ".com";
             Console.WriteLine(m8DataUrl);
             userInfo.jObject["m8DataUrl"] = m8DataUrl; //第一个有用的信息
-            rlt = HttpUtils.HttpGetHeader(m8DataUrl, "", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("M8")) {
+            rlt = HttpUtils.HttpGetHeader(rlt, "", userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("Welcome")) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 return -1;
             }
-            String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=" + FormUtils.getCurrentTime();
+            String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
             headJObject = new JObject();
             headJObject["Host"] = getM8BaseUrl(m8DataUrl);
             String getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", userInfo.cookie, headJObject);

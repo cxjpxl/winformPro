@@ -81,7 +81,7 @@ namespace CxjText.views
         private void getOneMath(EnventUser enventUser) {
             String m8DataUrl = (String)enventUser.jObject["m8DataUrl"];
             if (String.IsNullOrEmpty(m8DataUrl)) return;
-            String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=" + FormUtils.getCurrentTime();
+            String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
             JObject headJObject = new JObject();
             headJObject["Host"] = EventLoginUtils.getM8BaseUrl(m8DataUrl);
             HttpUtils.HttpGetHeader(gunDataUrl, "", enventUser.cookie, headJObject);
@@ -91,11 +91,14 @@ namespace CxjText.views
         private void getGameArray(EnventUser enventUser) {
             try
             {
+               
                 String m8DataUrl = (String)enventUser.jObject["m8DataUrl"];
                 if (String.IsNullOrEmpty(m8DataUrl)) return;
-                String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=" + FormUtils.getCurrentTime();
+
+                String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
                 JObject headJObject = new JObject();
                 headJObject["Host"] = EventLoginUtils.getM8BaseUrl(m8DataUrl);
+                headJObject["Referer"] = m8DataUrl+"/_bet/panel.aspx";
                 String getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", enventUser.cookie, headJObject);
                 if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("Odds2GenRun"))
                 {
@@ -108,7 +111,9 @@ namespace CxjText.views
                 String gunQiuUrl = getGunRlt.Substring(0, startIndex);
                 gunQiuUrl = m8DataUrl + "/_View/" + gunQiuUrl + "&t=" + FormUtils.getCurrentTime();
                 headJObject["Origin"] = m8DataUrl;
+                headJObject["Referer"] = m8DataUrl + "/_View/Odds2.aspx?ot=r";
                 getGunRlt = HttpUtils.HttpPostHeader(gunQiuUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", enventUser.cookie, headJObject);
+          
                 if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("table"))
                 {
                     showMessAge("获取滚球结果失败!----" + enventUser.dataUrl);
