@@ -194,11 +194,16 @@ namespace CxjText.views
                     if (oneUser != null) continue; //有占用资源的情况
                     oneUser = list.Find(j => (String.IsNullOrEmpty(j.matchId) && j.status == 2));
                     if (oneUser == null) continue; //是否有空闲的网登录成功的网能获取比赛
+
+                    //是否中场休息  中场休息不要浪费资源去采集!
+
                     oneUser.matchId = mid; //把这个网预订下来 
                     oneUser.jObject["game"] = oneMatchJObjcet; //第二个有用的信息
                     //准备启动线程去采集
                     Thread t = new Thread(new ParameterizedThreadStart(readMatchEnventData));
                     t.Start(i);
+
+                    Thread.Sleep(50);//适当的休息
                 }
 
                 return true;
