@@ -189,7 +189,7 @@ namespace CxjText.views
                         continue;
                     }
                     String mid = (String)oneMatchJObjcet["mid"];
-                    if (mid.Equals("0")||String.IsNullOrEmpty(mid)) continue;
+                    if (String.IsNullOrEmpty(mid) ||mid.Equals("0")) continue;
                     EnventUser oneUser = list.Find(j => (j.matchId.Equals(mid) && j.status == 2));
                     if (oneUser != null) continue; //有占用资源的情况
                     oneUser = list.Find(j => (String.IsNullOrEmpty(j.matchId) && j.status == 2));
