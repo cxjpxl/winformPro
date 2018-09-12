@@ -4,6 +4,7 @@ using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -20,11 +21,12 @@ namespace CxjText.views
         private bool isError = false;
         private bool isLive = true;
 
-
+        private JObject fitJObject = new JObject();
        
 
         private void EventMainForm_Load(object sender, EventArgs e)
         {
+            fitInit();
             httpUtils = new HttpUtils();
             list = EnvetFileUtils.ReadUserJObject(@"C:\Duser.txt");
             this.updateTimer.Start(); //启动定时任务器
@@ -38,6 +40,23 @@ namespace CxjText.views
             //登录全部D网
             Thread t = new Thread(new ParameterizedThreadStart(allWangInit));
             t.Start(null);
+        }
+
+
+        private void fitInit() {
+            fitJObject["9926"] = "可能主队炸弹";
+            fitJObject["9927"] = "可能客队炸弹";
+            fitJObject["2055"] = "客队点球";//"炸弹类型，客队可能点球";
+            fitJObject["1031"] = "主队点球";//"炸弹类型，主队可能点球";
+            fitJObject["9966"] = "点球失误";
+            fitJObject["9965"] = "点球失误";
+            fitJObject["144"] = "可能点球";
+            fitJObject["2086"] = "可能客队点球";
+            fitJObject["146"] = "点球取消";
+            fitJObject["1062"] = "可能主队点球";
+            fitJObject["142"] = "点球取消";
+            fitJObject["1025"] = "角球1";
+            fitJObject["2049"] = "角球1";
         }
 
         private void allWangInit(object obj) {
@@ -111,7 +130,6 @@ namespace CxjText.views
         {
             oneUser.matchId = "";
             oneUser.jObject["game"] = null;
-            showMessAge(oneUser.dataUrl + ",资源被释放!");
         }
 
 
@@ -121,14 +139,141 @@ namespace CxjText.views
             int position = (int)obj;
             EnventUser oneUser = list[position];
             String mid = oneUser.matchId;
+            String m8DataUrl = (String)oneUser.jObject["m8DataUrl"];
             JObject matchJObject = (JObject)oneUser.jObject["game"];
-            if (String.IsNullOrEmpty(mid) || matchJObject == null) {
+            if (String.IsNullOrEmpty(m8DataUrl)||String.IsNullOrEmpty(mid) || matchJObject == null) {
+                showMessAge(oneUser.dataUrl + ",地址不存在资源被释放!");
                 releaseUser(oneUser); //释放掉比赛资源
                 return;
             }
 
-            //等blue解析代码上就可以开干!
-            releaseUser(oneUser); //释放掉比赛资源
+            showMessAge(oneUser.dataUrl+",准备采集,"+matchJObject["mid"]);
+            String liveCastUrl = m8DataUrl + "/_View/LiveCast.aspx?Id="+ matchJObject["mid"] + "&SocOddsId="+ matchJObject["SocOddsId"] + "&isShowLiveCast=1";
+            JObject headJObject = new JObject();
+            headJObject["Host"] = EventLoginUtils.getM8BaseUrl(m8DataUrl);
+            String liveCastRlt = HttpUtils.HttpGetHeader(liveCastUrl,"",oneUser.cookie,headJObject);
+            if (String.IsNullOrEmpty(liveCastRlt) || !liveCastRlt.Contains("realtime.inplay.club")) {
+                showMessAge(oneUser.dataUrl + ",直播参数获取不到资源被释放");
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+
+            String[] strs = liveCastRlt.Split('\n');
+            if (strs.Length <= 0) {
+                showMessAge(oneUser.dataUrl + ",直播参数获取不到资源被释放");
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+
+            String mustParms = "";
+            for (int i = 0; i < strs.Length; i++) {
+                String str = strs[i];
+                if (String.IsNullOrEmpty(str)) continue;
+                if (!str.Contains("realtime.inplay.club")) continue;
+                int startIndex = str.IndexOf("src=\"");
+                str = str.Substring(startIndex+5,str.Length-(startIndex + 5));
+                startIndex = str.IndexOf("\"");
+                mustParms = str.Substring(0, startIndex);
+                break;
+            }
+
+            if (String.IsNullOrEmpty(mustParms)) {
+                showMessAge(oneUser.dataUrl + ",直播参数获取不到资源被释放");
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+            int paramStartIndex = mustParms.IndexOf("?");
+            mustParms = mustParms.Substring(paramStartIndex+1, mustParms.Length - (paramStartIndex+1));
+            mustParms = mustParms.Replace("key","k").Replace("c=LV","com=LV").Replace("&l=CN","").Replace("#"+mid,"").Trim();
+            showMessAge(oneUser.dataUrl + ","+ mustParms);
+            /********************开始采集*************************************/
+            long time = FormUtils.getCurrentTime();
+            long time1 = FormUtils.getCurrentTime();
+            int ct = 1;
+            String shijianUrl = "https://realtime.inplay.club/livecenter/rb.ashx";
+            String zuiXinUrl = shijianUrl + "?matchId=" + mid + "&conf=1&DR=0&ct="+ct+"&"+mustParms+"&_=" + time;
+            headJObject = new JObject();
+            headJObject["Host"] = "realtime.inplay.club";
+            headJObject[":authority"] = "realtime.inplay.club";
+            headJObject["accept"] = "application/json, text/javascript, */*; q=0.01";
+        //    CookieContainer cookie = new CookieContainer();
+            String rlt = HttpUtils.HttpGetHeader(zuiXinUrl,"", oneUser.cookie, headJObject);
+        //    Console.WriteLine(rlt);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("LastEventID")) {
+                showMessAge(oneUser.dataUrl + ",获取最新事件失败");
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+            showMessAge(oneUser.dataUrl + ",获取最新事件成功!");
+
+            JArray zuiXinJArray = JArray.Parse(rlt);
+            JObject dataJObject = (JObject)zuiXinJArray[0];
+            if (dataJObject == null) {
+                showMessAge(oneUser.dataUrl + ",最新事件结构变化!");
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+
+            int startEventId =(int) dataJObject["LastEventID"];
+            int endEventId = startEventId + 20;
+
+            while (true) {
+                Thread.Sleep(1200);
+                time++;
+                ct++;
+                long currentTime = FormUtils.getCurrentTime();
+                if (currentTime - time1 >= 90 * 60 * 1000) {
+                    showMessAge(oneUser.dataUrl + ",采集事件到！释放资源");
+                    releaseUser(oneUser); //释放掉比赛资源
+                    return;
+                }
+
+                String newUrl = shijianUrl + "?matchId=" + mid
+                    + "&startEventId="+startEventId+"&endEventId="+endEventId
+                    +"&DR=0&ct=" + ct + "&" + mustParms + "&_=" + time;
+
+                rlt = HttpUtils.HttpGetHeader(newUrl, "", oneUser.cookie, headJObject);
+              //  Console.WriteLine(rlt);
+                if (String.IsNullOrEmpty(rlt))
+                {
+                    showMessAge(oneUser.dataUrl + "空事件");
+                    continue;
+                }
+                if (!FormUtils.IsJsonObject(rlt)) {
+                    showMessAge(oneUser.dataUrl + ",采集事件不是json，释放资源!");
+                    releaseUser(oneUser); //释放掉比赛资源
+                    return;
+                }
+
+                JObject dJObject = JObject.Parse(rlt);
+                zuiXinJArray =(JArray)dJObject["feed"];
+                if (zuiXinJArray == null || zuiXinJArray.Count == 0 || zuiXinJArray.Count > 1) {
+                    showMessAge(oneUser.dataUrl + ",采集事件可能改革！释放资源");
+                    releaseUser(oneUser); //释放掉比赛资源
+                    return;
+                }
+                dataJObject = (JObject)zuiXinJArray[0];
+                //Console.WriteLine(dataJObject.ToString());
+               
+                int cid = (int)dataJObject["CID"];
+                int eid = (int)dataJObject["EID"];
+                showMessAge(oneUser.dataUrl + "有事件，cid="+cid+",eid="+eid);
+
+                if (fitJObject[cid + ""] != null) {
+                    sendData(2, dataJObject.ToString()); //发送到99
+                    showMessAge(oneUser.dataUrl + ","+fitJObject[""+cid]);
+                }
+
+                if (cid == 20 || cid == 1) {
+                    showMessAge(oneUser.dataUrl + ",中场或者全场!释放资源!");
+                    releaseUser(oneUser); //释放掉比赛资源
+                    return;
+                }
+                //过滤后 发送到99服务器
+                startEventId = eid;
+                endEventId = startEventId + 20;
+
+            }
         }
 
       
@@ -166,6 +311,10 @@ namespace CxjText.views
                 }
                 showMessAge("解析比赛数据");
                 JArray jArray = EventLoginUtils.getGameData(getGunRlt);
+
+
+               
+
                 if (jArray == null)
                 {
                     showMessAge("获取比赛数据失败!");
@@ -190,10 +339,13 @@ namespace CxjText.views
                     }
                     String mid = (String)oneMatchJObjcet["mid"];
                     if (String.IsNullOrEmpty(mid) ||mid.Equals("0")) continue;
+                    //这个比赛是否有网在获取
                     EnventUser oneUser = list.Find(j => (j.matchId.Equals(mid) && j.status == 2));
-                    if (oneUser != null) continue; //有占用资源的情况
+                    if (oneUser != null) continue;
+
+                    //是否有空闲的网登录成功的网能获取比赛
                     oneUser = list.Find(j => (String.IsNullOrEmpty(j.matchId) && j.status == 2));
-                    if (oneUser == null) continue; //是否有空闲的网登录成功的网能获取比赛
+                    if (oneUser == null) continue; 
 
                     //是否中场休息  中场休息不要浪费资源去采集!
 
