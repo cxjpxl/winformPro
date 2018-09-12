@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace CxjText.utlis
 {
@@ -115,42 +116,107 @@ namespace CxjText.utlis
              //解析html 字符串或者本地html文件
             HtmlDocument htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(rlt);
-            HtmlNodeCollection liansaiNodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='GridRunItem']");////img[@title='Live Cast']
-            HtmlNodeCollection bisaiNodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='GridAltRunItem']");
-            int currBisaiIndex = 0;
-            for (int i = 0; i < liansaiNodes.Count; i++)
-            {//遍历所有的联赛  //{leagueName ， nameH ， nameG ， mid ， gameTime ，   +  SocOddsId}
-                HtmlNode liansaiNode = liansaiNodes[i];
-                String leagueName = liansaiNode.InnerText;//联赛名称
+            HtmlNode headerNode = htmlDoc.DocumentNode.SelectSingleNode("//tr[@class='GridHeaderRun']");//找到头部
+            if (headerNode == null)
+            {
+                return jArray;
+            }
+            HtmlNode wrapNode = headerNode.ParentNode;//找到容器节点
+            if (wrapNode == null)
+            {
+                return jArray;
+            }
+            HtmlNodeCollection childsNodes = wrapNode.ChildNodes;//找到所有的子节点  （与联赛、比赛节点同级的所有子节点）
 
-                HtmlNode nextLiansaiNode = liansaiNodes[i];
-                String nextLiansaiNodeXPath = (nextLiansaiNode!=null)?nextLiansaiNode.XPath:null;
-                int j = currBisaiIndex;
-                for (; j < bisaiNodes.Count; j++){
-                    HtmlNode bisaiNode = bisaiNodes[j];
-                    String bisaiNodeXPath = bisaiNode.XPath;
-                    if(nextLiansaiNodeXPath!=null&&bisaiNodeXPath.CompareTo(nextLiansaiNodeXPath)>=0){
-                        break;
-                    }
-                    String bisaiNodeOuterHtml = bisaiNode.OuterHtml;
-                    //判断是否有直播比赛
-                    if(String.IsNullOrEmpty(bisaiNodeOuterHtml)|| !bisaiNodeOuterHtml.Contains("Live Cast")){
+            String leagueName = "";
+            for (int i = 1; i < childsNodes.Count; i++)
+            {//遍历所有的子节点 -- 包括 联赛 比赛 等节点 联赛与比赛 同级
+                HtmlNode childNode = childsNodes[i];
+                try
+                {
+                    String childNodeOuterHtml = childNode.OuterHtml;
+                    if (String.IsNullOrEmpty(childNodeOuterHtml))
+                    {
                         continue;
                     }
-                    //取出有直播比赛的信息
+                    if (childNodeOuterHtml.Contains("GridRunItem"))//eventRun
+                    {//判断节点是否为联赛节点
+                        HtmlDocument ntmpDoc = new HtmlDocument();
+                        ntmpDoc.LoadHtml(childNodeOuterHtml);
+                        HtmlNodeCollection tmepNodes = ntmpDoc.DocumentNode.SelectNodes("//td[@class='eventRun']");
+                        if (tmepNodes!=null && tmepNodes.Count > 0)
+                        {//拥有 "//td[@class='eventRun']" 才是联赛
+                            HtmlNode leagueNameNode = ntmpDoc.DocumentNode.SelectSingleNode("//td/span");//找到直播的标志
+                            if (leagueNameNode != null)
+                            {
+                                leagueName = leagueNameNode.InnerText;//联赛名称
+                            }
+                            continue;
+                        }
+                    }
+                    //判断节点是否为比赛节点
+                    if (!childNodeOuterHtml.Contains("Live Cast") || childNodeOuterHtml.Contains("半場") || childNodeOuterHtml.Contains("半场"))
+                    {//非比赛节点 或者 非直播中的比赛节点 则调到下一个节点解析  或者半场的也跳过        
+                        continue;
+                    }
+                    HtmlDocument tmpDoc = new HtmlDocument();
+                    tmpDoc.LoadHtml(childNodeOuterHtml);
+                    HtmlNode liveNode = tmpDoc.DocumentNode.SelectSingleNode("//img[@title='Live Cast']");//找到直播的标志
+                    if (liveNode==null)
+                    {
+                        continue;
+                    }
+                    String tempStr = liveNode.GetAttributeValue("onclick", "");
+                    if (String.IsNullOrEmpty(tempStr))
+                    {
+                        continue;
+                    }
+                    Regex re = new Regex("(?<=\').*?(?=\')", RegexOptions.None);
+                    MatchCollection mc = re.Matches(tempStr);
+                    String url = (String)mc[mc.Count - 1].Value;
+                    //查找id 与 SocOddsId
+                    int sIndex = url.IndexOf("Id=") + "Id=".Length;
+                    int eIdnex = url.IndexOf("&");
+                    String mid = url.Substring(sIndex, eIdnex - sIndex);
+
+                    String tempstr = url.Substring(eIdnex + 1);
+                    sIndex = tempstr.IndexOf("SocOddsId=") + "SocOddsId=".Length;
+                    eIdnex = tempstr.IndexOf("&");
+                    String SocOddsId = tempstr.Substring(sIndex, eIdnex - sIndex);
+
+                    //找到球队信息节点
+                    HtmlNode qiuduiWrapNode = liveNode.ParentNode.PreviousSibling;//球队信息包裹的节点
+                    String qiuduiWrapNodeOuterHtml = qiuduiWrapNode.OuterHtml;
+                    if (String.IsNullOrEmpty(qiuduiWrapNodeOuterHtml))
+                    {
+                        continue;
+                    }
+                    tmpDoc.LoadHtml(qiuduiWrapNodeOuterHtml);
+                    HtmlNodeCollection qiuduiNodes = tmpDoc.DocumentNode.SelectNodes("//span");//找到球队名
+                    if (qiuduiNodes == null || qiuduiNodes.Count<2)
+                    {
+                        continue;
+                    }
+                    String nameH = qiuduiNodes[0].InnerText;
+                    String nameG = qiuduiNodes[1].InnerText;
+
                     JObject jObject = new JObject();
-
-
-                    jObject.Add("leagueName", leagueName);
-                    jObject.Add("nameH", "");
-                    jObject.Add("nameG", "");
-                    jObject.Add("mid", "");
+                    jObject.Add("leagueName", leagueName.Replace("&nbsp;", ""));
+                    jObject.Add("nameH", nameH.Replace("&nbsp;", ""));
+                    jObject.Add("nameG", nameG.Replace("&nbsp;", ""));
+                    jObject.Add("mid", mid);
                     jObject.Add("gameTime", "");
-                    jObject.Add("SocOddsId", "");
+                    jObject.Add("SocOddsId", SocOddsId);
+                    jObject.Add("url", url);
                     jArray.Add(jObject);
                 }
-                currBisaiIndex = j;
+                catch (Exception e)
+                {
+                    Console.WriteLine("解析直播球赛出错:"+e.Message);
+                }
+                
             }
+            //Console.WriteLine(jArray);
             return jArray;
         }
     }
