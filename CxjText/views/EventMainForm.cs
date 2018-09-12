@@ -20,8 +20,12 @@ namespace CxjText.views
         private bool isError = false;
         private bool isLive = true;
 
+
+       
+
         private void EventMainForm_Load(object sender, EventArgs e)
         {
+            httpUtils = new HttpUtils();
             list = EnvetFileUtils.ReadUserJObject(@"C:\Duser.txt");
             this.updateTimer.Start(); //启动定时任务器
             if (list == null || list.Count == 0)
@@ -31,7 +35,6 @@ namespace CxjText.views
                 System.Environment.Exit(0);
                 return;
             }
-            httpUtils = new HttpUtils();
             //登录全部D网
             Thread t = new Thread(new ParameterizedThreadStart(allWangInit));
             t.Start(null);
@@ -42,7 +45,7 @@ namespace CxjText.views
             readGame();
         }
 
-       
+
 
         private void upDateCookie(object obj) {
             loginAll();//没有登录的5分钟会重新登录一次
@@ -51,18 +54,20 @@ namespace CxjText.views
             {
                 this.updateTimer.Start();
             }));
-          
+
         }
 
+        //更新Cookie
         private void upDateAllCookie() {
             for (int i = 0; i < list.Count; i++) {
                 EnventUser user = list[i];
-                if (user.status == 2) {
+                if (user != null && user.status == 2) {
                     getOneMath(user);
                 }
             }
         }
 
+        //登录处理
         private void loginAll() {
             for (int i = 0; i < list.Count; i++) {
                 EnventUser user = list[i];
@@ -78,6 +83,20 @@ namespace CxjText.views
             }
         }
 
+        //发送到99服务器的接口
+        private void sendData(int type, String message) {
+            String matchUrl = Config.netUrl + "/cxj/sendData";
+            JObject matchJObject = new JObject();
+            matchJObject["type"] = type;
+            matchJObject["message"] = message;
+            String rlt = HttpUtils.HttpPost(matchUrl, matchJObject.ToString(), "application/json;charset=UTF-8", null);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("200")) {
+                showMessAge(type == 3 ? "列表发送失败" : "事件发送失败");
+                return;
+            }
+            showMessAge(type == 3 ? "列表发送成功" : "事件发送成功");
+        }
+
         private void getOneMath(EnventUser enventUser) {
             String m8DataUrl = (String)enventUser.jObject["m8DataUrl"];
             if (String.IsNullOrEmpty(m8DataUrl)) return;
@@ -87,23 +106,49 @@ namespace CxjText.views
             HttpUtils.HttpGetHeader(gunDataUrl, "", enventUser.cookie, headJObject);
         }
 
+        //释放比赛的资源
+        private void releaseUser(EnventUser oneUser)
+        {
+            oneUser.matchId = "";
+            oneUser.jObject["game"] = null;
+            showMessAge(oneUser.dataUrl + ",资源被释放!");
+        }
+
+
+        //事件采集
+        private void readMatchEnventData(object obj)
+        {
+            int position = (int)obj;
+            EnventUser oneUser = list[position];
+            String mid = oneUser.matchId;
+            JObject matchJObject = (JObject)oneUser.jObject["game"];
+            if (String.IsNullOrEmpty(mid) || matchJObject == null) {
+                releaseUser(oneUser); //释放掉比赛资源
+                return;
+            }
+
+            //等blue解析代码上就可以开干!
+            releaseUser(oneUser); //释放掉比赛资源
+        }
+
+      
         //获取比赛当前的列表
-        private void getGameArray(EnventUser enventUser) {
+        private bool getGameArray(EnventUser enventUser)
+        {
             try
             {
-               
                 String m8DataUrl = (String)enventUser.jObject["m8DataUrl"];
-                if (String.IsNullOrEmpty(m8DataUrl)) return;
+                if (String.IsNullOrEmpty(m8DataUrl)) return false;
 
                 String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
                 JObject headJObject = new JObject();
                 headJObject["Host"] = EventLoginUtils.getM8BaseUrl(m8DataUrl);
-                headJObject["Referer"] = m8DataUrl+"/_bet/panel.aspx";
+                headJObject["Referer"] = m8DataUrl + "/_bet/panel.aspx";
                 String getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", enventUser.cookie, headJObject);
                 if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("Odds2GenRun"))
                 {
                     showMessAge("获取滚球接口失败!----" + enventUser.dataUrl);
-                    return;
+                    return false;
                 }
                 int startIndex = getGunRlt.IndexOf("Odds2GenRun");
                 getGunRlt = getGunRlt.Substring(startIndex, getGunRlt.Length - startIndex);
@@ -113,43 +158,76 @@ namespace CxjText.views
                 headJObject["Origin"] = m8DataUrl;
                 headJObject["Referer"] = m8DataUrl + "/_View/Odds2.aspx?ot=r";
                 getGunRlt = HttpUtils.HttpPostHeader(gunQiuUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", enventUser.cookie, headJObject);
-          
+
                 if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("table"))
                 {
                     showMessAge("获取滚球结果失败!----" + enventUser.dataUrl);
-                    return;
+                    return false;
                 }
                 showMessAge("解析比赛数据");
                 JArray jArray = EventLoginUtils.getGameData(getGunRlt);
-                if (jArray == null || jArray.Count == 0)
+                if (jArray == null)
                 {
+                    showMessAge("获取比赛数据失败!");
+                    return false;
+                }
+
+                if (jArray.Count == 0) {
                     showMessAge("当前没有比赛!");
-                    return;
+                    return true;
                 }
 
                 showMessAge("发送到99的比赛列表!");
+                sendData(3, jArray.ToString());
                 showMessAge("准备对比赛进行分发");
-            }
-            catch (Exception e) {
+
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject oneMatchJObjcet = (JObject)jArray[i];
+                    if (oneMatchJObjcet == null || oneMatchJObjcet["mid"] == null)
+                    {
+                        continue;
+                    }
+                    String mid = (String)oneMatchJObjcet["mid"];
+                    if (mid.Equals("0")) continue;
+                    EnventUser oneUser = list.Find(j => (j.matchId.Equals(mid) && j.status == 2));
+                    if (oneUser != null) continue; //有占用资源的情况
+                    oneUser = list.Find(j => (String.IsNullOrEmpty(j.matchId) && j.status == 2));
+                    if (oneUser == null) continue; //是否有空闲的网登录成功的网能获取比赛
+                    oneUser.matchId = mid; //把这个网预订下来 
+                    oneUser.jObject["game"] = oneMatchJObjcet; //第二个有用的信息
+                    //准备启动线程去采集
+                    Thread t = new Thread(new ParameterizedThreadStart(readMatchEnventData));
+                    t.Start(i);
+                }
+
+                return true;
 
             }
+            catch (Exception e)
+            {
+
+            }
+            return false;
         }
+
 
         //做第一次登录后做的处理  很重要   这个是在线程里面
         private void readGame() {
             while (isLive) {
-                EnventUser enventUser = list.Find(i => i.status == 2);
-                if (enventUser == null)
-                {
-                    showMessAge("没有登录成功的网!");
-                    Thread.Sleep(1000*120); //2分钟获取一次比赛
-                    continue;
+                if (list != null) {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        EnventUser enventUser = list[i];
+                        if (enventUser == null || enventUser.status != 2) {
+                            continue;
+                        }
+                        showMessAge("读取一场比赛");
+                        bool success = getGameArray(enventUser);
+                        if (success) break;
+                    }
                 }
-                showMessAge("读取一场比赛");
-                //blue要做的事情
-                getGameArray(enventUser);
-
-                Thread.Sleep(1000 * 60);//1分钟获取一次比赛列表
+                Thread.Sleep(1000 * 90);//90s获取一次比赛列表
             }
         }
 
