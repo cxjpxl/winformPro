@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace CxjText.utlis
 {
@@ -111,6 +112,45 @@ namespace CxjText.utlis
         //blue要解析的处理
         public static JArray getGameData(String rlt) {
             JArray jArray = new JArray();
+             //解析html 字符串或者本地html文件
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(rlt);
+            HtmlNodeCollection liansaiNodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='GridRunItem']");////img[@title='Live Cast']
+            HtmlNodeCollection bisaiNodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='GridAltRunItem']");
+            int currBisaiIndex = 0;
+            for (int i = 0; i < liansaiNodes.Count; i++)
+            {//遍历所有的联赛  //{leagueName ， nameH ， nameG ， mid ， gameTime ，   +  SocOddsId}
+                HtmlNode liansaiNode = liansaiNodes[i];
+                String leagueName = liansaiNode.InnerText;//联赛名称
+
+                HtmlNode nextLiansaiNode = liansaiNodes[i];
+                String nextLiansaiNodeXPath = (nextLiansaiNode!=null)?nextLiansaiNode.XPath:null;
+                int j = currBisaiIndex;
+                for (; j < bisaiNodes.Count; j++){
+                    HtmlNode bisaiNode = bisaiNodes[j];
+                    String bisaiNodeXPath = bisaiNode.XPath;
+                    if(nextLiansaiNodeXPath!=null&&bisaiNodeXPath.CompareTo(nextLiansaiNodeXPath)>=0){
+                        break;
+                    }
+                    String bisaiNodeOuterHtml = bisaiNode.OuterHtml;
+                    //判断是否有直播比赛
+                    if(String.IsNullOrEmpty(bisaiNodeOuterHtml)|| !bisaiNodeOuterHtml.Contains("Live Cast")){
+                        continue;
+                    }
+                    //取出有直播比赛的信息
+                    JObject jObject = new JObject();
+
+
+                    jObject.Add("leagueName", leagueName);
+                    jObject.Add("nameH", "");
+                    jObject.Add("nameG", "");
+                    jObject.Add("mid", "");
+                    jObject.Add("gameTime", "");
+                    jObject.Add("SocOddsId", "");
+                    jArray.Add(jObject);
+                }
+                currBisaiIndex = j;
+            }
             return jArray;
         }
     }
