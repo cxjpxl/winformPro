@@ -2,11 +2,7 @@
 using CxjText.utils;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 
@@ -17,92 +13,123 @@ namespace CxjText.utlis
         /**************************D系统登录的处理****************************/
         public static int loginD(int position, EnventUser userInfo)
         {
-            if (userInfo == null) return -1;
-            int status = userInfo.status;
-            if (status == -1 || status == 1) return -1;
-
-            if (status == 2)
+            try
             {
+                if (userInfo == null) return -1;
+                int status = userInfo.status;
+                if (status == -1 || status == 1) return -1;
+
+                if (status == 2)
+                {
+                    return 1;
+                }
+
+                int preStatus = status;
+                userInfo.status = 1;
+                userInfo.cookie = new CookieContainer();
+                JObject headJObject = new JObject();
+                headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+                headJObject["Origin"] = userInfo.dataUrl;
+
+                headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
+                //现在要登录处理
+                String loginUrl = userInfo.dataUrl + "/v/user/login";
+                String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
+                String rltStr = null;
+                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
+                {
+                    loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=";
+                    rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+                }
+                if (rltStr == null || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
+                {
+                    String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
+                    String codePathName = position + userInfo.tag + ".jpg";
+                    int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+                    if (codeNum < 0)
+                    {
+                        userInfo.loginFailTime++;
+                        userInfo.status = 3;
+                        return -1;
+                    }
+                    String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+                    if (codeStrBuf == null || codeStrBuf.Trim().Length== 0)
+                    {
+                        userInfo.loginFailTime++;
+                        userInfo.status = 3;
+                        return -1;
+                    }
+                    loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString();
+                    rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+                }
+                if (rltStr == null || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    return -1;
+                }
+
+                JObject jObject = JObject.Parse(rltStr);
+                String token = (String)jObject["token"];
+                String uid = (String)jObject["uid"];
+                userInfo.uid = uid;
+
+                String getM8Url = userInfo.dataUrl + "/api/live/play?liveCode=m8&gameType=null&isMobile=false";
+                String rlt = HttpUtils.HttpGetHeader(getM8Url, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rlt) || !rlt.Contains("mywinday.com"))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    return -1;
+                }
+                int startComIndex = rlt.IndexOf(".com");
+                if (startComIndex <= 0) {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    Console.WriteLine("获取动态认证地址失败!");
+                    return -1;
+                }
+
+                String m8DataUrl = rlt.Substring(0, startComIndex) + ".com";
+                if (!m8DataUrl.Contains("http")) {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    Console.WriteLine("获取动态认证获取有问题");
+                    return -1;
+                }
+
+                userInfo.matchObj = new JObject();
+                userInfo.matchObj["m8DataUrl"] = m8DataUrl; //第一个有用的信息
+                rlt = HttpUtils.HttpGetHeader(rlt, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(rlt) || !rlt.Contains("Welcome"))
+                {
+                    if (rlt != null) {
+                        Console.WriteLine("注意，认证返回可能不一样!");
+                    }
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    return -1;
+                }
+                String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
+                headJObject = new JObject();
+                headJObject["Host"] = getM8BaseUrl(m8DataUrl);
+                String getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", userInfo.cookie, headJObject);
+                userInfo.matchId = "";
+                userInfo.status = 2;
+                userInfo.exp = token;
+                userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 return 1;
             }
-
-            int preStatus = status;
-            userInfo.status = 1; 
-            userInfo.cookie = new CookieContainer();
-            JObject headJObject = new JObject();
-            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
-            headJObject["Origin"] = userInfo.dataUrl;
-
-            headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
-            //现在要登录处理
-            String loginUrl = userInfo.dataUrl + "/v/user/login";
-            String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
-            String rltStr = null;
-            rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
-            {
-                loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=";
-                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            }
-            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
-            {
-                String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
-                String codePathName = position + userInfo.tag + ".jpg";
-                int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
-                if (codeNum < 0)
-                {
-                    userInfo.loginFailTime++;
-                    userInfo.status = 3;
-                    return -1;
-                }
-                String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-                if (String.IsNullOrEmpty(codeStrBuf))
-                {
-                    userInfo.loginFailTime++;
-                    userInfo.status = 3;
-                    return -1;
-                }
-                loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString();
-                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            }
-            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
-            {
+            catch (Exception e) {
+                Console.WriteLine("登录错误");
+                Console.WriteLine(e.ToString());
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 return -1;
             }
 
-            JObject jObject = JObject.Parse(rltStr);
-            String token = (String)jObject["token"];
-            String uid = (String)jObject["uid"];
-            userInfo.uid = uid;
-
-            String getM8Url = userInfo.dataUrl+"/api/live/play?liveCode=m8&gameType=null&isMobile=false";
-            String rlt = HttpUtils.HttpGetHeader(getM8Url,"",userInfo.cookie,headJObject);
-            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("mywinday.com")) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                return -1;
-            }
-            int startComIndex = rlt.IndexOf(".com");
-            String m8DataUrl = rlt.Substring(0, startComIndex) + ".com";
-            Console.WriteLine(m8DataUrl);
-            userInfo.jObject["m8DataUrl"] = m8DataUrl; //第一个有用的信息
-            rlt = HttpUtils.HttpGetHeader(rlt, "", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("Welcome")) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                return -1;
-            }
-            String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
-            headJObject = new JObject();
-            headJObject["Host"] = getM8BaseUrl(m8DataUrl);
-            String getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", userInfo.cookie, headJObject);
-
-            userInfo.status = 2;
-            userInfo.exp = token;
-            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
-            return 1;
+            
         }
 
 
@@ -217,6 +244,63 @@ namespace CxjText.utlis
                 
             }
             //Console.WriteLine(jArray);
+            return jArray;
+        }
+
+
+        public static int[]  getDataByJArray(int len) {
+
+            if (len <= 0) {
+                return null;
+            }
+
+            int[] a = new int[len];
+            int[] b = new int[len];
+
+            for (int i = 0; i < len; i++) a[i] = i;
+
+            Random rnd = new Random();
+            int r, aLen;
+            int[] tmp = new int[0];
+
+            for (int i = 0; i < len; i++)
+            {
+                aLen = a.Length;
+                r = rnd.Next(0, aLen);
+                b[i] = a[r];
+                Array.Resize(ref tmp, aLen - 1);
+
+                for (int j = 0, k = 0; j < aLen; j++)
+                {
+                    if (j != r) tmp[k++] = a[j];
+                }
+
+                a = tmp;
+            }
+
+            return b;
+        }
+
+        public static JArray changeArray(JArray jArray , int len) {
+
+            try
+            {
+                int[] positionS = getDataByJArray(len);
+
+                if (positionS != null && positionS.Length == jArray.Count)
+                {
+                    JArray matchJArray = new JArray();
+                    for (int i = 0; i < positionS.Length; i++)
+                    {
+                        matchJArray.Add(jArray[positionS[i]]);
+                    }
+                    jArray = matchJArray;
+                }
+            }
+            catch (Exception e) {
+
+            }
+            
             return jArray;
         }
     }

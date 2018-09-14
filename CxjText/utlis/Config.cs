@@ -1,20 +1,26 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using CxjText.bean;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CxjText.utils
 {
     public class Config
     {
+        public static String softUserStr = "";
+        public static int myFun = 1; //0是点球  1是事件
+        /***********事件用户****************************/
+        public static List<EnventUser> list = new List<EnventUser>();
+        public static int eFun = 0; //事件的fun  0 1 2   上中下
+
         /*************************版本信息保存***************************************/
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static String softUserStr = "admin";
-        public static bool noZhaDang = true;//不用管什么什么队炸弹
-
         public static bool hasJinQiuFun = false;//是否有进球的功能
-        public static int softFun = 4; //0点 1角  2点+角  3电子 4.事件
+        public static int softFun = 0; //0点 1角  2点+角  3电子 
+
         public static String vString = "V3.1";
 
         public static long softTime = -1; //软件使用时间记录
@@ -22,8 +28,8 @@ namespace CxjText.utils
 
         public static String webSocketUrl = "ws://47.88.168.99:8600/";
         public static String netUrl = "http://47.88.168.99:8500";
-       //  public static String webSocketUrl = "ws://192.168.31.59:8600/";
-       //  public static String netUrl = "http://192.168.31.59:8500"; 
+        // public static String webSocketUrl = "ws://192.168.124.109:8600/";
+       //  public static String netUrl = "http://192.168.124.109:8500"; 
 
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
@@ -53,6 +59,6 @@ namespace CxjText.utils
         /************************电子用户处理*********************************/
         public static int DianZiPramsNum = 5; //参数个数
         public static ArrayList dzUserList = null;//电子用户登陆信息记录 
-       /***********事件用户****************************/
+        
     }
 }

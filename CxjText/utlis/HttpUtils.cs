@@ -48,8 +48,8 @@ namespace CxjText.utils
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "GET";
-            request.Timeout = 15 * 1000;
-            request.ReadWriteTimeout = 15 * 1000;
+            request.Timeout = 5 * 1000;
+            request.ReadWriteTimeout =5 * 1000;
             request.UserAgent = Config.userAgent;
 
           //  if (headJObject != null && headJObject["myExp"] != null) {
@@ -137,8 +137,8 @@ namespace CxjText.utils
             if (Url == null) return null;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "POST";
-            request.Timeout = 10 * 1000;
-            request.ReadWriteTimeout = 10 * 1000;
+            request.Timeout = 5 * 1000;
+            request.ReadWriteTimeout = 5 * 1000;
             request.UserAgent = Config.userAgent;
 
 
@@ -234,8 +234,8 @@ namespace CxjText.utils
         public static string HttpPost(string Url,String paramsStr,String contentType, CookieContainer cookie) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "POST";
-            request.Timeout = 10 * 1000;
-            request.ReadWriteTimeout = 10 * 1000;
+            request.Timeout = 5 * 1000;
+            request.ReadWriteTimeout = 5 * 1000;
             request.UserAgent = Config.userAgent;
             if (String.IsNullOrEmpty(contentType))
             {
@@ -308,8 +308,8 @@ namespace CxjText.utils
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
 
             request.Method = "GET";
-            request.Timeout = 10 * 1000;
-            request.ReadWriteTimeout = 10 * 1000;
+            request.Timeout = 5 * 1000;
+            request.ReadWriteTimeout = 5 * 1000;
             request.UserAgent = Config.userAgent;
             if (String.IsNullOrEmpty(contentType))
             {

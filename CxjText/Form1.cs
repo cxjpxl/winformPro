@@ -4,7 +4,6 @@ using CxjText.views;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -41,9 +40,19 @@ namespace CxjText
                 codeUserEdit.Text = "cxj81886404";
                 codePwdEdit.Text = "cxj13580127662";
             }
-           
+
+            /*
+              if (Config.softFun == 4)  //事件获取处理
+                {
+                    EventMainForm eventMainForm = new EventMainForm();
+                    eventMainForm.Show();
+                    this.Hide();
+                }
+             
+             */
+
         }
-        
+
 
         private void deleteTxt() {
             String name = "user.json";
@@ -101,9 +110,17 @@ namespace CxjText
         //数据初始化
         private void dataInit()
         {
-            userText.Text = userText.Text.ToString().Trim() + "(" + Config.vString + ")";
+         
             Config.codeMoneyStr = "";
             utlis.YDMWrapper.YDM_SetAppInfo(Config.codeAppId,Config.codeSerect);
+
+            if (Config.myFun == 1)
+            {
+                userText.Text = "事件" + "(" + Config.vString + ")";
+            }
+            else {
+                userText.Text = userText.Text.ToString().Trim() + "(" + Config.vString + ")";
+            }
         }
 
 
@@ -231,15 +248,115 @@ namespace CxjText
                     DianZiFrom dianZiFrom = new DianZiFrom();
                     dianZiFrom.Show();
                     this.Hide();  
-                }else if (Config.softFun == 4)  //事件获取处理
-                {
-                    EventMainForm eventMainForm = new EventMainForm();
-                    eventMainForm.Show();
-                    this.Hide();
                 }
                 else {
                     MessageBox.Show("功能暂未开放");
                 }
+            }));
+        }
+
+
+        //去事件登录验证
+        private void goELogin(object obj)
+        {
+            JObject jObject = (JObject)obj;
+            String codeUserStr = (String)jObject["codeUserStr"];
+            String codePwdStr = (String)jObject["codePwdStr"];
+            String userString = (String)jObject["user"];
+
+            //登录验证软件是否过期
+            if (!Config.softUserStr.Equals("admin"))
+            {
+                JObject loginObj = new JObject();
+                loginObj.Add("userName", userString);
+                loginObj.Add("comId", uuid);
+                loginObj.Add("version", Config.vString);
+                String loginStr = HttpUtils.HttpPost(Config.netUrl + "/cxj/e_login", loginObj.ToString(), "application/json", null);
+                Console.WriteLine(loginStr);
+                if (String.IsNullOrEmpty(loginStr) || !FormUtils.IsJsonObject(loginStr))
+                {
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        MessageBox.Show("登录失败，请检网络！");
+                    }));
+                    return;
+                }
+                loginObj = JObject.Parse(loginStr);
+                int no = (int)loginObj["no"];
+                if (no != 200)
+                {
+                    String msg = (String)loginObj["msg"];
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        MessageBox.Show(msg);
+                    }));
+                    return;
+                }
+
+                Config.softTime = (long)loginObj["time"];
+                Config.eFun = (int)(loginObj["fun"] == null ? "0" : loginObj["fun"]);
+            }
+            //登录云打码账号
+            int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
+            if (uid < 0)
+            {
+                Invoke(new Action(() =>
+                {
+                    loginSysBtn.Enabled = true;
+                    loginSysBtn.Text = "登录";
+                    MessageBox.Show("登录云打码账号失败！");
+                }));
+                return;
+            }
+            //获取云代码账号金额
+            int codeMoney = YDMWrapper.YDM_GetBalance(codeUserStr, codePwdStr);
+            if (codeMoney <= 0)
+            {
+                Invoke(new Action(() =>
+                {
+                    loginSysBtn.Enabled = true;
+                    loginSysBtn.Text = "登录";
+                    if (codeMoney == -1007)
+                    {
+                        MessageBox.Show("云打码账户余额不足,请充值！");
+                    }
+                    else
+                    {
+                        MessageBox.Show("登录云打码账号失败！");
+                    }
+
+                }));
+                return;
+            }
+
+            if (codeMoney < 10)
+            {
+                Invoke(new Action(() =>
+                {
+                    loginSysBtn.Enabled = true;
+                    loginSysBtn.Text = "登录";
+                    MessageBox.Show("云打码余额快不足,请充值使用！");
+                }));
+                return;
+            }
+
+            Config.codeMoneyStr = codeMoney + "";
+
+
+            //登录成功
+            Invoke(new Action(() =>
+            {
+                Config.codeUserStr = codeUserStr;
+                Config.codePwdStr = codePwdStr;
+                Config.softUserStr = userString;
+                writeTxt();
+                EventMainForm eventMainForm = new EventMainForm();
+                eventMainForm.Show();
+                this.Hide();
             }));
         }
 
@@ -271,8 +388,18 @@ namespace CxjText
             jobject.Add("codeUserStr", codeUserStr);
             jobject.Add("codePwdStr", codePwdStr);
             jobject.Add("user", userStr);
-            Thread t = new Thread(new ParameterizedThreadStart(goLogin));
-            t.Start(jobject);
+
+            if (Config.myFun == 0)
+            {
+                Thread t = new Thread(new ParameterizedThreadStart(goLogin));
+                t.Start(jobject);
+            }
+            else if (Config.myFun == 1) {
+                Thread t = new Thread(new ParameterizedThreadStart(goELogin));
+                t.Start(jobject);
+            }
+
+            
         }
 
 

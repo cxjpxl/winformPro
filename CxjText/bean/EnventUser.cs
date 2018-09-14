@@ -23,7 +23,7 @@ namespace CxjText.bean
         //状态为2的时候  里面的值有效
         //m8DataUrl    m8网址的基础网址  动态的每个网不一样
         //game  比赛信息
-        public JObject jObject = new JObject();
+        public JObject matchObj= new JObject();
 
         public int loginIndex = 0; //登录的标志 可能有用可能无  再看
     }
