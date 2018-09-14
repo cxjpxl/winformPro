@@ -5,6 +5,8 @@ using System;
 using System.Net;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Windows.Forms;
 
 namespace CxjText.utlis
 {
@@ -140,8 +142,8 @@ namespace CxjText.utlis
         //blue要解析的处理
         public static JArray getGameData(String rlt) {
             JArray jArray = new JArray();
-             //解析html 字符串或者本地html文件
-            HtmlDocument htmlDoc = new HtmlDocument();
+            //解析html 字符串或者本地html文件
+            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
             htmlDoc.LoadHtml(rlt);
             HtmlNode headerNode = htmlDoc.DocumentNode.SelectSingleNode("//tr[@class='GridHeaderRun']");//找到头部
             if (headerNode == null)
@@ -168,7 +170,7 @@ namespace CxjText.utlis
                     }
                     if (childNodeOuterHtml.Contains("GridRunItem"))//eventRun
                     {//判断节点是否为联赛节点
-                        HtmlDocument ntmpDoc = new HtmlDocument();
+                        HtmlAgilityPack.HtmlDocument ntmpDoc = new HtmlAgilityPack.HtmlDocument();
                         ntmpDoc.LoadHtml(childNodeOuterHtml);
                         HtmlNodeCollection tmepNodes = ntmpDoc.DocumentNode.SelectNodes("//td[@class='eventRun']");
                         if (tmepNodes!=null && tmepNodes.Count > 0)
@@ -186,7 +188,7 @@ namespace CxjText.utlis
                     {//非比赛节点 或者 非直播中的比赛节点 则调到下一个节点解析  或者半场的也跳过        
                         continue;
                     }
-                    HtmlDocument tmpDoc = new HtmlDocument();
+                    HtmlAgilityPack.HtmlDocument tmpDoc = new HtmlAgilityPack.HtmlDocument();
                     tmpDoc.LoadHtml(childNodeOuterHtml);
                     HtmlNode liveNode = tmpDoc.DocumentNode.SelectSingleNode("//img[@title='Live Cast']");//找到直播的标志
                     if (liveNode==null)
@@ -227,6 +229,38 @@ namespace CxjText.utlis
                     String nameH = qiuduiNodes[0].InnerText;
                     String nameG = qiuduiNodes[1].InnerText;
 
+                    try
+                    {
+                        int temp = int.Parse(mid);
+                    }
+                    catch (Exception ex)
+                    {
+                        var strDateInfo = "事件mid解析错误：" + DateTime.Now + "\r\n";
+
+                        var str = string.Format(strDateInfo + "异常类型：{0}\r\n异常消息：{1}\r\n异常信息：{2}\r\n事件文本：{3}\r\n",
+                                                   ex.GetType().Name, ex.Message, ex.StackTrace, rlt);
+
+                        WriteLog(str);
+                        MessageBox.Show("mid解析发生错误，请查看程序日志！", "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    try
+                    {
+                        int temp = int.Parse(SocOddsId);
+                    }
+                    catch (Exception ex)
+                    {
+                        var strDateInfo = "事件SocOddsId解析错误：" + DateTime.Now + "\r\n";
+
+                        var str = string.Format(strDateInfo + "异常类型：{0}\r\n异常消息：{1}\r\n异常信息：{2}\r\n事件文本：{3}\r\n",
+                                                   ex.GetType().Name, ex.Message, ex.StackTrace, rlt);
+
+                        WriteLog(str);
+                        MessageBox.Show("SocOddsId解析发生错误，请查看程序日志！", "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+
+
                     JObject jObject = new JObject();
                     jObject.Add("leagueName", leagueName.Replace("&nbsp;", ""));
                     jObject.Add("nameH", nameH.Replace("&nbsp;", ""));
@@ -245,6 +279,25 @@ namespace CxjText.utlis
             }
             //Console.WriteLine(jArray);
             return jArray;
+        }
+
+        /// <summary>
+        /// 写文件
+        /// </summary>
+        /// <param name="str"></param>
+        static void WriteLog(string str)
+        {
+            if (!Directory.Exists("ErrLog"))
+            {
+                Directory.CreateDirectory("ErrLog");
+            }
+
+            using (var sw = new StreamWriter(@"ErrLog\EventParseErrLog.txt", true))
+            {
+                sw.WriteLine(str);
+                sw.WriteLine("---------------------------------------------------------");
+                sw.Close();
+            }
         }
 
 
