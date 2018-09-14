@@ -35,10 +35,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(22, 27);
+            this.textBox1.Location = new System.Drawing.Point(15, 27);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(639, 270);
+            this.textBox1.Size = new System.Drawing.Size(386, 338);
             this.textBox1.TabIndex = 0;
             // 
             // updateTimer
@@ -51,7 +51,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(715, 327);
+            this.ClientSize = new System.Drawing.Size(413, 377);
             this.Controls.Add(this.textBox1);
             this.Name = "EventMainForm";
             this.Text = "EventMainForm";

@@ -254,7 +254,7 @@ namespace CxjText
             OrderUtils.autoLists.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 140 * 60 * 1000));
 
             if (listEid != null && listEid.Count > 0) {
-                listEid.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 120 * 60 * 1000));
+                listEid.RemoveAll(j => (FormUtils.getCurrentTime() - j.time > 200 * 60 * 1000));
             }
             
 
