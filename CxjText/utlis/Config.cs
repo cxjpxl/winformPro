@@ -8,8 +8,8 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static String softUserStr = "";
-        public static int myFun = 1; //0是点球  1是事件
+        public static String softUserStr = "admin";
+        public static int myFun =2; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
         public static List<EnventUser> list = new List<EnventUser>();
         public static int eFun = 0; //事件的fun  0 1 2   上中下
@@ -18,7 +18,7 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
-        public static bool hasJinQiuFun = false;//是否有进球的功能
+        public static bool hasJinQiuFun = true;//是否有进球的功能
         public static int softFun = 0; //0点 1角  2点+角  3电子 
 
         public static String vString = "V3.1";

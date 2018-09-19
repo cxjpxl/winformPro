@@ -4,6 +4,7 @@ using CxjText.utlis;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -126,6 +127,7 @@ namespace CxjText.views
         }
 
         private void getOneMath(EnventUser enventUser) {
+            if (enventUser.status != 2) return;
             String m8DataUrl = (String)enventUser.matchObj["m8DataUrl"];
             if (String.IsNullOrEmpty(m8DataUrl)) return;
             String gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
@@ -211,6 +213,19 @@ namespace CxjText.views
                 releaseUser(position, true); //释放掉比赛资源
                 return;
             }
+
+
+            headJObject["Host"] = "realtime.inplay.club";
+            headJObject[":authority"] = "realtime.inplay.club";
+            String firstRlt = HttpUtils.HttpGetHeader(mustParms,"",oneUser.cookie,headJObject);
+
+            if(String.IsNullOrEmpty(firstRlt) || !firstRlt.Contains("www.google-analytics.com"))
+            {
+                showMessAge(oneUser.dataUrl + ",总部接口不能访问,资源被释放");
+                releaseUser(position, false); //释放掉比赛资源
+                return;
+            }
+
             int paramStartIndex = mustParms.IndexOf("?");
             mustParms = mustParms.Substring(paramStartIndex+1, mustParms.Length - (paramStartIndex+1));
             mustParms = mustParms.Replace("key","k").Replace("c=LV","com=LV").Replace("&l=CN","").Replace("#"+mid,"").Trim();
@@ -220,7 +235,7 @@ namespace CxjText.views
             long time1 = FormUtils.getCurrentTime();
             int ct = 1;
             String shijianUrl = "https://realtime.inplay.club/livecenter/rb.ashx";
-            String zuiXinUrl = shijianUrl + "?matchId=" + mid + "&conf=1&DR=0&ct="+ct+"&"+mustParms+"&_=" + time;
+            String zuiXinUrl = shijianUrl + "?matchId=" + mid + "&conf=1&DR=0&__static=true&ct=" + ct+"&"+mustParms+"&_=" + time;
             headJObject = new JObject();
             headJObject["Host"] = "realtime.inplay.club";
             headJObject[":authority"] = "realtime.inplay.club";
@@ -259,7 +274,10 @@ namespace CxjText.views
 
                 String newUrl = shijianUrl + "?matchId=" + mid
                     + "&startEventId="+startEventId+"&endEventId="+endEventId
-                    +"&DR=0&ct=" + ct + "&" + mustParms + "&_=" + time;
+                    + "&DR=0&__static=true&ct=" + ct + "&" + mustParms + "&_=" + time;
+
+
+               // Console.WriteLine(newUrl);
 
                 rlt = HttpUtils.HttpGetHeader(newUrl, "", oneUser.cookie, headJObject);
                 //  Console.WriteLine(rlt);
@@ -308,7 +326,7 @@ namespace CxjText.views
                 showMessAge(oneUser.dataUrl + "有事件，cid="+cid+",eid="+eid+",mid="+ matchJObject["mid"]);
 
                 if (fitJObject[cid + ""] != null) {
-                    sendData(2, dataJObject.ToString()); //发送到99
+                    sendData(4, dataJObject.ToString()); //发送到99
                     showMessAge(oneUser.dataUrl + ","+fitJObject[""+cid]);
                 }
 
@@ -374,6 +392,11 @@ namespace CxjText.views
                     return true;
                 }
 
+
+                showMessAge("发送到99的比赛列表!");
+                sendData(3, jArray.ToString());
+                showMessAge("准备对比赛进行分发");
+
                 if (Config.eFun == 0 || Config.eFun == 1)//只取前面打乱
                 {
                     //打乱排序
@@ -381,6 +404,7 @@ namespace CxjText.views
                     if (count < jArray.Count)
                     {
                         jArray = EventLoginUtils.changeArray(jArray, jArray.Count);
+                       // Console.WriteLine("打乱后+"+jArray.ToString());
                     }
                 }else if (Config.eFun == 2) { //取最后
                     int count = Config.list.Count;
@@ -399,9 +423,6 @@ namespace CxjText.views
                 }
                
 
-                showMessAge("发送到99的比赛列表!");
-                sendData(3, jArray.ToString());
-                showMessAge("准备对比赛进行分发");
 
                 for (int matchIndex = 0; matchIndex < jArray.Count; matchIndex++)
                 {
@@ -432,9 +453,9 @@ namespace CxjText.views
                     oneUser.matchObj["game"] = oneMatchJObjcet; //第二个有用的信息
                     Console.WriteLine(oneUser.dataUrl+","+oneUser.matchObj.ToString());
                     //准备启动线程去采集
+                    Thread.Sleep(1000);
                     Thread t = new Thread(new ParameterizedThreadStart(readMatchEnventData));
                     t.Start(positionIndex);
-
                 }
 
                 return true;
@@ -495,7 +516,7 @@ namespace CxjText.views
                         if (success) break;
                     }
                 }
-                Thread.Sleep(1000 * 40);//90s获取一次比赛列表
+                Thread.Sleep(1000 * 60);//90s获取一次比赛列表
             }
         }
 

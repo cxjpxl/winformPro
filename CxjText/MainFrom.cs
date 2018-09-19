@@ -540,7 +540,7 @@ namespace CxjText
                     if (userInfo == null) return;
 
                   
-                    if ((userInfo.tag.Equals("J") || userInfo.tag.Equals("C")) && Config.hasJinQiuFun)
+                    if ((userInfo.tag.Equals("J") || userInfo.tag.Equals("C") || userInfo.tag.Equals("D")|| userInfo.tag.Equals("G")) && Config.hasJinQiuFun)
                     {
                         //C和J有进球功能
                     }
@@ -1137,7 +1137,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-          //  changeData();
+           // changeData();
 
         }
         
@@ -1189,6 +1189,9 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
+            /* String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国建设银行")
+                 + "&subAddress="+ WebUtility.UrlEncode("广东惠州惠东支行")
+                 + "&cardNo=6222281128458882";*/
             String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);

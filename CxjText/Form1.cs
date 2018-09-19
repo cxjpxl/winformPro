@@ -41,16 +41,23 @@ namespace CxjText
                 codePwdEdit.Text = "cxj13580127662";
             }
 
-            /*
-              if (Config.softFun == 4)  //事件获取处理
-                {
-                    EventMainForm eventMainForm = new EventMainForm();
-                    eventMainForm.Show();
-                    this.Hide();
-                }
-             
-             */
 
+            Thread t = new Thread(new ParameterizedThreadStart(goHfForm));
+            t.Start(null);
+        }
+
+
+        private void goHfForm(object obj)
+        {
+            if (Config.myFun == 2)  //鸿发试玩
+            {
+                Invoke(new Action(() =>
+                {
+                    HfForm hfForm = new HfForm();
+                    hfForm.Show();
+                    this.Hide();
+                }));
+            }
         }
 
 
