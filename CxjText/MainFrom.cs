@@ -1137,7 +1137,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-           // changeData();
+           //changeData();
 
         }
         
@@ -1189,10 +1189,10 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
-            /* String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国建设银行")
-                 + "&subAddress="+ WebUtility.UrlEncode("广东惠州惠东支行")
-                 + "&cardNo=6222281128458882";*/
-            String p = "userMemo=";
+             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
+                 + "&subAddress="+ WebUtility.UrlEncode("广东深圳支行")
+                 + "&cardNo=60058375000032495";
+          //  String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);

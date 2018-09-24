@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace CxjText.views
         private HttpUtils httpUtils = null;
         private List<HfBean> listMid = new List<HfBean>();
         private JObject fitJObject = new JObject();
+
+        private EnventUser userD = new EnventUser();
 
         private void fitInit()
         {
@@ -90,9 +93,10 @@ namespace CxjText.views
 
 
         //事件采集
+        int kongNum = 0;
         private void readMatchEnventData(object obj)
         {
-            int kongNum = 0;
+            int loginIndex = user.loginIndex;
             String  mid = (String)obj;
             String m8DataUrl = (String)user.matchObj["m8DataUrl"];
             HfBean hfBean = listMid.Find(j => j.mid.Equals(mid));
@@ -113,16 +117,30 @@ namespace CxjText.views
             String liveCastRlt = HttpUtils.HttpGetHeader(liveCastUrl, "", user.cookie, headJObject);
             if (String.IsNullOrEmpty(liveCastRlt) || !liveCastRlt.Contains("realtime.inplay.club"))
             {
+                kongNum++;
                 showMessAge("直播参数获取不到资源被释放,"+mid);
-                listMid.Remove(hfBean);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
+                listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
 
             String[] strs = liveCastRlt.Split('\n');
             if (strs.Length <= 0)
             {
+                kongNum++;
                 showMessAge("直播参数获取不到资源被释放," + mid);
-                listMid.Remove(hfBean);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
+                listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
 
@@ -141,23 +159,37 @@ namespace CxjText.views
 
             if (String.IsNullOrEmpty(mustParms))
             {
+                kongNum++;
                 showMessAge("直播参数获取不到资源被释放," + mid);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
                 listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
 
-            showMessAge("注意看log");
-            Console.WriteLine("mustParms:" + mustParms);
-            return;
+            // showMessAge("注意看log");
+            //  Console.WriteLine("mustParms:" + mustParms);
+            //  return;
 
-
+            CookieContainer cookie = new CookieContainer();
             headJObject["Host"] = "realtime.inplay.club";
             headJObject[":authority"] = "realtime.inplay.club";
-            String firstRlt = HttpUtils.HttpGetHeader(mustParms, "", user.cookie, headJObject);
+            String firstRlt = HttpUtils.HttpGetHeader(mustParms, "", cookie, headJObject);
 
             if (String.IsNullOrEmpty(firstRlt) || !firstRlt.Contains("www.google-analytics.com"))
             {
+                kongNum++;
                 showMessAge("总部接口不能访问,资源被释放," + mid);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
                 listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
@@ -178,11 +210,18 @@ namespace CxjText.views
             headJObject[":authority"] = "realtime.inplay.club";
             headJObject["accept"] = "application/json, text/javascript, */*; q=0.01";
             //    CookieContainer cookie = new CookieContainer();
-            String rlt = HttpUtils.HttpGetHeader(zuiXinUrl, "", user.cookie, headJObject);
+            String rlt = HttpUtils.HttpGetHeader(zuiXinUrl, "", cookie, headJObject);
             //    Console.WriteLine(rlt);
             if (String.IsNullOrEmpty(rlt) || !rlt.Contains("LastEventID"))
             {
+                kongNum++;
                 showMessAge("获取最新事件失败!,释放资源," + mid);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
                 listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
@@ -192,7 +231,14 @@ namespace CxjText.views
             JObject dataJObject = (JObject)zuiXinJArray[0];
             if (dataJObject == null)
             {
+                kongNum++;
                 showMessAge("最新事件结构变化!,释放资源," + mid);
+                if (kongNum >= 50)
+                {
+                    showMessAge("可能被封," + mid);
+                    user.status = 3;
+                    kongNum = 0;
+                }
                 listMid.Remove(hfBean); //释放掉比赛资源
                 return;
             }
@@ -202,6 +248,11 @@ namespace CxjText.views
 
             while (true)
             {
+                if (loginIndex != user.loginIndex || user.status!=2) {
+                    showMessAge("可能重新登录," + mid);
+                    listMid.Remove(hfBean); //释放掉比赛资源
+                    break;
+                }
                 Thread.Sleep(1700);
                 time++;
                 ct++;
@@ -220,11 +271,12 @@ namespace CxjText.views
 
                 // Console.WriteLine(newUrl);
 
-                rlt = HttpUtils.HttpGetHeader(newUrl, "", user.cookie, headJObject);
+                rlt = HttpUtils.HttpGetHeader(newUrl, "", cookie, headJObject);
                 //  Console.WriteLine(rlt);
 
                 if (rlt == null)
                 {
+                    kongNum++;
                     showMessAge("事件获取失败!," + mid);
                     listMid.Remove(hfBean); //释放掉比赛资源
                     break;
@@ -234,10 +286,12 @@ namespace CxjText.views
                 {
                     kongNum++;
 
-                    if (kongNum == 50)
+                    if (kongNum >= 50)
                     {
                         showMessAge("可能被封," + mid);
+                        user.status = 3;
                         listMid.Remove(hfBean); //释放掉比赛资源
+                        kongNum = 0;
                         break;
                     }
 
@@ -310,8 +364,8 @@ namespace CxjText.views
                 int startIndex = getGunRlt.IndexOf("Odds2GenRun");
                 getGunRlt = getGunRlt.Substring(startIndex, getGunRlt.Length - startIndex);
                 startIndex = getGunRlt.IndexOf("'");
-                String gunQiuUrl = getGunRlt.Substring(0, startIndex);
-                gunQiuUrl = m8DataUrl + "/_View/" + gunQiuUrl + "&t=" + FormUtils.getCurrentTime();
+                String gunQiuUrl1 = getGunRlt.Substring(0, startIndex);
+                String gunQiuUrl = m8DataUrl + "/_View/" + gunQiuUrl1 + "&t=" + FormUtils.getCurrentTime();
                 Console.WriteLine(gunQiuUrl);
                 headJObject["Origin"] = m8DataUrl;
                 headJObject["Referer"] = m8DataUrl + "/_View/Odds2.aspx?ot=r";
@@ -323,7 +377,53 @@ namespace CxjText.views
                     return false;
                 }
                 showMessAge("解析比赛数据");
-                JArray jArray = EventLoginUtils.getHfGameData(getGunRlt);
+
+
+                if (userD == null || userD.status != 2) {
+                    userD = new EnventUser();
+                    userD.status = 0;
+                    userD.user = "cnm888888";
+                    userD.pwd = "cnm666666";
+                    userD.dataUrl = "https://www.8473a.com";
+                    userD.tag = "D";
+                    EventLoginUtils.loginD(0, userD);
+                    if (userD.status != 2) return true;
+                }
+                m8DataUrl = (String)userD.matchObj["m8DataUrl"];
+                if (String.IsNullOrEmpty(m8DataUrl)) return false;
+                gunDataUrl = m8DataUrl + "/_view/Odds2.aspx?ot=r";
+                headJObject = new JObject();
+                headJObject["Host"] = EventLoginUtils.getM8BaseUrl(m8DataUrl);
+                getGunRlt = HttpUtils.HttpGetHeader(gunDataUrl, "", userD.cookie, headJObject);
+                if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("Odds2GenRun"))
+                {
+                    userD.status = 3;
+                    showMessAge("获取滚球接口失败");
+                    return true;
+                }
+                startIndex = getGunRlt.IndexOf("Odds2GenRun");
+                getGunRlt = getGunRlt.Substring(startIndex, getGunRlt.Length - startIndex);
+                startIndex = getGunRlt.IndexOf("'");
+                gunQiuUrl1 = getGunRlt.Substring(0, startIndex);
+                gunQiuUrl = m8DataUrl + "/_View/" + gunQiuUrl1 + "&t=" + FormUtils.getCurrentTime();
+                Console.WriteLine(gunQiuUrl);
+                headJObject["Origin"] = m8DataUrl;
+                headJObject["Referer"] = m8DataUrl + "/_View/Odds2.aspx?ot=r";
+                getGunRlt = HttpUtils.HttpPostHeader(gunQiuUrl, "", "application/x-www-form-urlencoded; charset=UTF-8", userD.cookie, headJObject);
+
+                if (String.IsNullOrEmpty(getGunRlt) || !getGunRlt.Contains("table"))
+                {
+                    userD.status = 3;
+                    showMessAge("获取滚球结果失败或者当前没有比赛");
+                    return true;
+                }
+                showMessAge("解析比赛数据");
+
+
+
+
+                JArray jArray = EventLoginUtils.getGameData(getGunRlt);
+                //   JArray jArray = EventLoginUtils.getHfGameData(getGunRlt);
 
 
                 Console.WriteLine(jArray.ToString());
@@ -346,6 +446,7 @@ namespace CxjText.views
                 showMessAge("准备对比赛进行分发");
 
 
+                jArray = EventLoginUtils.changeArray(jArray, jArray.Count);
 
                 for (int matchIndex = 0; matchIndex < jArray.Count; matchIndex++)
                 {
@@ -365,16 +466,15 @@ namespace CxjText.views
                     }
                     if (String.IsNullOrEmpty(mid) || mid.Equals("0")) continue;
                     HfBean hfBean = listMid.Find(j => j.mid.Equals(mid));
-                    if (hfBean == null) {
+                    if (hfBean == null && listMid.Count <50) {
                         hfBean = new HfBean();
                         hfBean.matchJobject = new JObject();
                         hfBean.mid = mid;
                         hfBean.matchJobject = oneMatchJObjcet;
                         listMid.Add(hfBean); //添加记录
-
-                        Thread.Sleep(1000);
                         Thread t = new Thread(new ParameterizedThreadStart(readMatchEnventData));
                         t.Start(mid);
+                        Thread.Sleep(5000);
                     }
                 }
 
@@ -433,8 +533,20 @@ namespace CxjText.views
                     textBox1.Text = "";
                     return;
                 }
+
+                String str1 = textBox1.Text.ToString();
+                String[] strs = str1.Split('\n');
+                if (strs.Length > 50)
+                {
+                    textBox1.Text = str + "\n";
+                    return;
+                }
+
                 textBox1.AppendText(str + "\n");
                 textBox1.ScrollToCaret();
+
+               
+
             }));
         }
 

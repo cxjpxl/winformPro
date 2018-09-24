@@ -214,6 +214,7 @@ namespace CxjText.utlis
                 }
                 userInfo.matchId = "";
                 userInfo.status = 2;
+                userInfo.loginIndex++;
                 userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
                 return 1;
             }
