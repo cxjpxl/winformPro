@@ -154,12 +154,44 @@ namespace CxjText.utlis
                 userInfo.cookie = new CookieContainer();
                 JObject headJObject = new JObject();
                 headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+
+
+                //获取验证码
+
+                String varcode = "-1";
+
+                if (!userInfo.user.Equals("-1")) {
+                    String codeUrl = userInfo.dataUrl + "/php/vcode.php?s=" + FormUtils.getCurrentTime();
+                    
+                    headJObject = new JObject();
+                    String codePathName = 0 + userInfo.tag + ".jpg";
+                    int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+                    if (codeNum < 0)
+                    {
+                        userInfo.loginFailTime++;
+                        userInfo.status = 3;
+                        return -1;
+                    }
+
+                    varcode = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+                    Console.WriteLine(varcode);
+                    if (String.IsNullOrEmpty(varcode))
+                    {
+                        userInfo.loginFailTime++;
+                        userInfo.status = 3;
+                        return -1;
+                    }
+                    varcode = varcode.Trim();
+                }
+
+
+
                 headJObject["Origin"] = userInfo.dataUrl;
 
                 headJObject["Referer"] = userInfo.dataUrl;
                 //现在要登录处理
                 String loginUrl = userInfo.dataUrl + "/php/action.php?action=login";
-                String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"varcode=-1";
+                String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&varcode="+ varcode;
                 String rltStr = null;
                 rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
                 if (rltStr != null) {
@@ -172,11 +204,17 @@ namespace CxjText.utlis
                     return -1;
                 }
 
+
+                String cookUrl = userInfo.dataUrl + "/php/action.php?action=getnotice";
+                String myRlt = HttpUtils.HttpPostHeader(cookUrl, "note_type=2", "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+
+
                 JObject jObject = JObject.Parse(rltStr);
                 jObject = (JObject)jObject["data"];
                 userInfo.matchObj["user"] = jObject; //第一个有用的信息
                 String getM8Url = userInfo.dataUrl + "/php/login.php?action=h8&username=" + jObject["username"] + "&oid=" + jObject["oid"] + "&lottoType=PC&r=0." + FormUtils.getCurrentTime();
                 String rlt = HttpUtils.HttpGetHeader(getM8Url, "", userInfo.cookie, headJObject);
+                Console.WriteLine(rlt);
                 if (String.IsNullOrEmpty(rlt) || !rlt.Contains("msports8.com"))
                 {
                     userInfo.loginFailTime++;

@@ -59,8 +59,10 @@ namespace CxjText.views
         }
 
         private void userInit() {
-            user.user = "-1";  //试玩用户
-            user.pwd = "-1";   //试玩密码
+            //  user.user = "-1";  //试玩用户
+            //   user.pwd = "-1";   //试玩密码
+            user.user = "cnm888888";
+            user.pwd = "cnm666666";
             user.dataUrl = "http://www.11hf11.com";
             user.tag = "hf";
             user.status = 0;
