@@ -316,13 +316,13 @@ namespace CxjText.utlis
                         }
                     }
                     //判断节点是否为比赛节点
-                    if (!childNodeOuterHtml.Contains("Live Cast") || childNodeOuterHtml.Contains("半場") || childNodeOuterHtml.Contains("半场"))
+                    if (!childNodeOuterHtml.Contains("LiveCast.aspx") || childNodeOuterHtml.Contains("半場") || childNodeOuterHtml.Contains("半场"))
                     {//非比赛节点 或者 非直播中的比赛节点 则调到下一个节点解析  或者半场的也跳过        
                         continue;
                     }
                     HtmlAgilityPack.HtmlDocument tmpDoc = new HtmlAgilityPack.HtmlDocument();
                     tmpDoc.LoadHtml(childNodeOuterHtml);
-                    HtmlNode liveNode = tmpDoc.DocumentNode.SelectSingleNode("//img[@title='Live Cast']");//找到直播的标志
+                    HtmlNode liveNode = tmpDoc.DocumentNode.SelectSingleNode("//img[@title='比赛动态']");//找到直播的标志
                     if (liveNode==null)
                     {
                         continue;
@@ -409,7 +409,7 @@ namespace CxjText.utlis
                 }
                 
             }
-            //Console.WriteLine(jArray);
+            Console.WriteLine(jArray);
             return jArray;
         }
 
