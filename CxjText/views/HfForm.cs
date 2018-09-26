@@ -59,10 +59,10 @@ namespace CxjText.views
         }
 
         private void userInit() {
-            //  user.user = "-1";  //试玩用户
-            //   user.pwd = "-1";   //试玩密码
-            user.user = "cnm888888";
-            user.pwd = "cnm666666";
+              user.user = "-1";  //试玩用户
+               user.pwd = "-1";   //试玩密码
+          //  user.user = "cnm888888";
+          //  user.pwd = "cnm666666";
             user.dataUrl = "http://www.11hf11.com";
             user.tag = "hf";
             user.status = 0;
@@ -438,7 +438,13 @@ namespace CxjText.views
 
                 if (jArray.Count == 0)
                 {
-                    showMessAge("当前没有比赛!");
+                    if (EventLoginUtils.loginD(0, userD) == -1)
+                    {
+                        userD.status = 3;
+                    }
+                    else {
+                        showMessAge("当前没有比赛!");
+                    }
                     return true;
                 }
 
