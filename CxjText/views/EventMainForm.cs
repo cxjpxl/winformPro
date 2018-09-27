@@ -214,6 +214,7 @@ namespace CxjText.views
                 return;
             }
 
+            Console.WriteLine(mustParms);
 
             headJObject["Host"] = "realtime.inplay.club";
             headJObject[":authority"] = "realtime.inplay.club";

@@ -174,7 +174,7 @@ namespace CxjText.utlis
                     }
 
                     varcode = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-                    Console.WriteLine(varcode);
+                   
                     if (String.IsNullOrEmpty(varcode))
                     {
                         userInfo.loginFailTime++;
@@ -194,6 +194,7 @@ namespace CxjText.utlis
                 String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&varcode="+ varcode;
                 String rltStr = null;
                 rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
+                Console.WriteLine(rltStr);
                 if (rltStr != null) {
                     rltStr = rltStr.Trim();
                 }

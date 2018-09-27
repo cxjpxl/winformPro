@@ -59,10 +59,10 @@ namespace CxjText.views
         }
 
         private void userInit() {
-            //  user.user = "-1";  //试玩用户
-            //   user.pwd = "-1";   //试玩密码
-            user.user = "cnm888888";
-            user.pwd = "cnm666666";
+              user.user = "-1";  //试玩用户
+               user.pwd = "-1";   //试玩密码
+            //user.user = "cnm888888";
+           // user.pwd = "cnm666666";
             user.dataUrl = "http://www.11hf11.com";
             user.tag = "hf";
             user.status = 0;
@@ -332,7 +332,7 @@ namespace CxjText.views
                     showMessAge("" + fitJObject["" + cid]);
                 }
 
-                if (cid == 20 || cid == 1)
+                if (cid == 20 || cid == 1 || cid == 9950)
                 {
                     showMessAge("中场或者全场!释放资源!," + mid);
                     listMid.Remove(hfBean); //释放掉比赛资源
@@ -423,7 +423,7 @@ namespace CxjText.views
 
 
 
-
+                Console.WriteLine(getGunRlt);
                 JArray jArray = EventLoginUtils.getGameData(getGunRlt);
                 //   JArray jArray = EventLoginUtils.getHfGameData(getGunRlt);
 
