@@ -1540,6 +1540,33 @@ namespace CxjText.views
                 }
             }
             if (obj == null) return;
+
+
+            //判断是5s前保存的队伍
+            String gameTeamStr = nameH + "-" + nameG;
+            if (tempLists == null)
+            {
+                tempLists = new List<AutoData>();
+            }
+
+            AutoData autoTempData = tempLists.Find(j => j.gameTeam.Equals(gameTeamStr));
+            if (autoTempData != null && FormUtils.getCurrentTime() - autoTempData.time < 10000)
+            {
+                return;
+            }
+            else
+            {
+                if (autoTempData != null)
+                {
+                    tempLists.RemoveAll((j => j.gameTeam.Equals(gameTeamStr)));
+                }
+                AutoData myData = new AutoData();
+                myData.gameTeam = gameTeamStr;
+                myData.time = FormUtils.getCurrentTime();
+                tempLists.Add(myData);
+            }
+
+
             JObject jObject = new JObject();
             jObject["mid"] = DataUtils.getMid(obj,userInfo.tag);
             if (isBanChang)

@@ -8,7 +8,7 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static String softUserStr = "admin";
+        public static String softUserStr = "";
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
         public static List<EnventUser> list = new List<EnventUser>();
