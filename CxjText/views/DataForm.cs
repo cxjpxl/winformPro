@@ -341,7 +341,6 @@ namespace CxjText.views
             if (String.IsNullOrEmpty(rltStr) || this.inface == null) return;
             if (autoJObject != null) { //判断是否是自动下注
                 dataJObject["gameMid"] = autoJObject["mid"]; //mid记录
-                dataJObject["isDriect"] = autoJObject["isDriect"];
                 if (autoJObject["isJiaoQiu"] != null) {
                     dataJObject["isJiaoQiu"] = autoJObject["isJiaoQiu"];
                 }

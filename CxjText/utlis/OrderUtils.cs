@@ -1672,7 +1672,7 @@ namespace CxjText.utlis
                     if (rltForm != null)
                     {
                         String str = "配置订单失败";
-                        if (configRlt.Equals("true")) {
+                        if (configRlt!=null &&configRlt.Equals("true")) {
                             str = "盘口已关闭，请重新刷新";
                         }
                         rltForm.RefershLineData(inputTag, str);

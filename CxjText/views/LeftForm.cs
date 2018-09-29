@@ -342,12 +342,11 @@ namespace CxjText.views
                 if (user.status != 2 ||  String.IsNullOrEmpty(user.money)) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
-                if (dataJObject["gameMid"] != null&&mainFrom.isAuto() && dataJObject["isDriect"]!=null) {
+                if (dataJObject["gameMid"] != null&&mainFrom.isAuto() ) {
                     try
                     {
-                        bool isDriect = (bool) dataJObject["isDriect"];
                         float moneyAll = float.Parse(user.money.Trim());
-                        int selectNum = mainFrom.GetAmountSelected(isDriect);
+                        int selectNum = mainFrom.GetAmountSelected();
                         if (selectNum == 1) //1/2
                         {
                             inputMoney = (int)(moneyAll / 2);
@@ -721,7 +720,7 @@ namespace CxjText.views
 
                 if (Config.softFun == 2 )
                 {  //点球用户处理
-                    if (!Config.dianQiuGouXuan)
+                    if (!Config.dianQiuGouXuan && enventInfo.scoreArray == null)
                     {
                         return;
                     }
@@ -1181,7 +1180,6 @@ namespace CxjText.views
             String gameMid = DataUtils.getMid(obj,userInfo.tag);
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
-            jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
             Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +
@@ -1441,7 +1439,6 @@ namespace CxjText.views
             String gameMid = DataUtils.getMid(obj, userInfo.tag);
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
-            jObject["isDriect"] = enventInfo.isDriect;  //直接下注类型
             jObject["isJiaoQiu"] = true;
             Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +

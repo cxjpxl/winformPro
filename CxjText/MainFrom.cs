@@ -507,7 +507,7 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-           // Console.WriteLine(message);
+            Console.WriteLine(message);
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
                 return;
@@ -616,7 +616,6 @@ namespace CxjText
                     jinQiuEnventInfo.T = gameTime + "";
                     jinQiuEnventInfo.inputType = this.GetCurrUserSelected();
                     jinQiuEnventInfo.bangchangType = GetBanChangSelected();
-                    jinQiuEnventInfo.isDriect = false;
                     JArray scoreArray = new JArray(); 
                     scoreArray.Add(zhuScore);//第0个
                     scoreArray.Add(geScore);//第1个
@@ -697,11 +696,7 @@ namespace CxjText
                     if (userInfo == null) return;
 
                     String league = (String)jObject["game"]["leagueName"]; //联赛
-                    if (league != null) {
-                        if (league.Contains("泰国") && league.Contains("甲")) return;
-                    }
                     int state = 1;//主客队进球标志 未处理
-
                     bool isCancel = false;
                     bool isConfirme = false;
                     String dataInfo = (String)jObject["data"]["Info"];
@@ -795,7 +790,6 @@ namespace CxjText
                     jiaoQiuEnventInfo.T = gameTime + "";
                     jiaoQiuEnventInfo.inputType = 1;//直接是大小球
                     jiaoQiuEnventInfo.bangchangType = GetBanChangSelected();
-                    jiaoQiuEnventInfo.isDriect = false;//炸弹类型处理
                     jiaoQiuEnventInfo.scoreArray = null; 
                     //角球下注处理
                     if (!isCancel && !isConfirme) {
@@ -961,7 +955,6 @@ namespace CxjText
                         enventInfo.cid = "1031";//主队点球
                     }
                     this.Invoke(new Action(() => {
-                        enventInfo.isDriect = true;  //直接下注类型
                         leftForm.setComplete(enventInfo);
                     }));
                     return;
@@ -1015,7 +1008,7 @@ namespace CxjText
             return 0;
         }
         //获取下單金額选择  默认（全額）返回0  1/2返回1   1/3返回2  1/4返回3  3/4 返回4
-        public int GetAmountSelected(bool isDriect)
+        public int GetAmountSelected()
         {
             
                 if (z_2_rd.Checked)

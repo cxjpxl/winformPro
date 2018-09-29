@@ -438,7 +438,13 @@ namespace CxjText.views
 
                 if (jArray.Count == 0)
                 {
-                    showMessAge("当前没有比赛!");
+                    if (EventLoginUtils.loginD(0, userD) == -1)
+                    {
+                        userD.status = 3;
+                    }
+                    else {
+                        showMessAge("当前没有比赛!");
+                    }
                     return true;
                 }
 
