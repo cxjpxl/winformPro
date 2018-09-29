@@ -50,5 +50,25 @@ namespace CxjText.utlis
             }
             return searchArray;
         }
+
+
+        public static JArray getDaTuiGames(JArray dataJArray,
+         UserInfo userInfo, String nameH, String nameG)
+        {
+            JArray searchArray = new JArray();
+            for (int i = 0; i < dataJArray.Count; i++)
+            {
+                String nameH1 = DataUtils.get_c02_data(dataJArray[i], userInfo.tag);
+                String nameG1 = DataUtils.get_c12_data(dataJArray[i], userInfo.tag);
+                  
+               if (nameH1.Equals(nameH) && nameG1.Equals(nameG))
+               {
+                     searchArray.Add(dataJArray[i]);
+               }
+                
+            }
+            return searchArray;
+        }
+
     }
 }

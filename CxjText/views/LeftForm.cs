@@ -320,10 +320,37 @@ namespace CxjText.views
 
 
 
+        private void datuiLaile(Object obj) {
+            JObject datui = (JObject)obj;
+            String daTuiGameH = (String)datui["daTuiGameH"];
+            String daTuiGameG = (String)datui["daTuiGameG"];
+            datui["cmd"] = 666;
+            String matchUrl = Config.netUrl + "/cxj/sendData";
+            JObject matchJObject = new JObject();
+            matchJObject["type"] = 5;
+            matchJObject["message"] = datui.ToString(); ;
+            String rlt = HttpUtils.HttpPost(matchUrl, matchJObject.ToString(), "application/json;charset=UTF-8", null);
+        }
+
 
         //数据点击处理
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
+
+
+            JObject datui = null;
+            if (dataJObject["daTui"] != null) {
+                //  daTuiGameH  daTuiGameG
+                datui = (JObject)dataJObject["daTui"];
+                if (Config.hasDaTui)
+                {
+                    Thread datuiThread = new Thread(new ParameterizedThreadStart(datuiLaile));
+                    datuiThread.Start(datui);
+                }
+            }
+
+           
+
 
             String gameName = (String)dataJObject["gameName"]; //获取赛事
             String gameTeam = (String)dataJObject["gameTeam"]; //球队名称
@@ -342,7 +369,7 @@ namespace CxjText.views
                 if (user.status != 2 ||  String.IsNullOrEmpty(user.money)) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
-                if (dataJObject["gameMid"] != null&&mainFrom.isAuto() ) {
+                if (dataJObject["gameMid"] != null) {
                     try
                     {
                         float moneyAll = float.Parse(user.money.Trim());
@@ -713,11 +740,6 @@ namespace CxjText.views
                 }
                    
 
-                bool autoCheck = mainFrom.isAuto(); //是否自动下注
-                if (!autoCheck) return;
-
-               
-
                 if (Config.softFun == 2 )
                 {  //点球用户处理
                     if (!Config.dianQiuGouXuan && enventInfo.scoreArray == null)
@@ -774,6 +796,7 @@ namespace CxjText.views
 
             JArray currayScore = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
          
+
 
 
             /**********************处理自动下注开始*****************************/
@@ -1299,8 +1322,6 @@ namespace CxjText.views
             //先将数据搜索出来
             if (mainFrom != null)
             {
-                bool autoCheck = mainFrom.isAuto(); //是否自动下注
-                if (!autoCheck) return;
                 if (Config.softFun == 2 && !Config.jiaoQiuEnble) {
                     return;
                 }
@@ -1474,7 +1495,65 @@ namespace CxjText.views
             }
         }
 
+        //大腿下单
+        public void DaTuiOrder(JObject datui) {
+            if (this.cIndex < 0) return;
+            if (this.nameShowGridView == null) return;
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            // daTuiGameH daTuiGameG
+            String nameH = (String) datui["daTuiGameH"];
+            String nameG =(String) datui["daTuiGameG"];
+            JArray searchArray = AutoUtils.getDaTuiGames(this.dataJArray, userInfo, nameH, nameG);
+            if (searchArray == null || searchArray.Count == 0) {
+                return;
+            }
+            if (nameH.Contains("角球")) {
+                return;
+            }
+            object obj = null;
+            bool isBanChang = true;
+            JArray currayScore = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
+            if (isBanChang)
+            { //半场的情况下
+                for (int i = 0; i < searchArray.Count; i++)
+                {
+                    String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                    if (StringComPleteUtils.canInputDaXiao(data, currayScore))
+                    {
+                        obj = searchArray[i];
+                        isBanChang = true;
+                        break;
+                    }
+                }
+            }
+            if (obj == null || !isBanChang)
+            {
+                for (int i = 0; i < searchArray.Count; i++)
+                {
+                    String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                    if (StringComPleteUtils.canInputDaXiao(data, currayScore))
+                    {
+                        obj = searchArray[i];
+                        isBanChang = false;
+                        break;
+                    }
+                }
+            }
+            if (obj == null) return;
+            JObject jObject = new JObject();
+            jObject["mid"] = DataUtils.getMid(obj,userInfo.tag);
+            if (isBanChang)
+            {
+                dataForm.OnOrderClick(obj, 0, 8, jObject);
+                return;
+            }
+            else
+            {
+                dataForm.OnOrderClick(obj, 0, 5, jObject);
+                return;
+            }
 
+        }
 
         public String getSaiName(String hStr, String gStr, bool isH, int ballType) {
             int index = this.cIndex;

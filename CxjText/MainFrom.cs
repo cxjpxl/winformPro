@@ -45,9 +45,6 @@ namespace CxjText
 
                 dianQiu_check.Visible = false;
                 dianQiu_check.Enabled = false;
-
-                
-
             }
             else if (Config.softFun == 1)
             { //角  直接下角球  不用角球显示器
@@ -81,6 +78,19 @@ namespace CxjText
                 Config.jiaoQiuEnble = jiaoqiu_checkBox.Checked;
 
             }
+
+
+            //大腿模糊算法
+            if (Config.canPutDaTui)
+            {
+                datuiCheckBox.Visible = true;
+                Config.daTuiEnble = datuiCheckBox.Checked;
+            }
+            else {
+                datuiCheckBox.Visible = false;
+                datuiCheckBox.Enabled = false;
+            }
+
 
         }
 
@@ -518,6 +528,23 @@ namespace CxjText
             JObject jObject = JObject.Parse(message);
             if (jObject == null) return;
 
+
+
+            //大腿事件处理  cmd 666
+            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 666)
+            {
+              
+                if (!Config.daTuiEnble || !Config.canPutDaTui) {
+                    return;
+                }
+                this.Invoke(new Action(() => {
+                    leftForm.DaTuiOrder(jObject);
+                }));
+                    return;
+            }
+
+
+
             //87分钟事件的处理
             //{"cmd":2,"league":"冰岛女子甲组联赛","state":0,"score1":"1","score2":"1","tm1":"斯洛图尔(女)","tm2":"富佐尼(女)","gametime":"67"}
             // 联赛名字，{1:主队进球,0:客队进球},主队比分,客队比分,主队名字,客队名字,比赛进行的时间
@@ -621,7 +648,10 @@ namespace CxjText
                     scoreArray.Add(geScore);//第1个
                     jinQiuEnventInfo.scoreArray = scoreArray; //进球比分赋值处理
                     speakStr("有进球要下注");
-                    leftForm.setComplete(jinQiuEnventInfo);
+                    if (isAuto())
+                    {
+                        leftForm.setComplete(jinQiuEnventInfo);
+                    }
                     Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
                     t.Start(jinQiuShowInfo);
                 }));
@@ -793,7 +823,9 @@ namespace CxjText
                     jiaoQiuEnventInfo.scoreArray = null; 
                     //角球下注处理
                     if (!isCancel && !isConfirme) {
-                        leftForm.setJiaoQiuComplete(jiaoQiuEnventInfo);
+                        if (isAuto()) {
+                            leftForm.setJiaoQiuComplete(jiaoQiuEnventInfo);
+                        }
                     }
                     Thread t = new Thread(new ParameterizedThreadStart(this.ShowEventInfo));
                     t.Start(jiaoQiuShowInfo);
@@ -928,14 +960,18 @@ namespace CxjText
                 {
                     //客队可以下注 
                     this.Invoke(new Action(() => {
-                        leftForm.setComplete(enventInfo);
+                        if (isAuto()) {
+                            leftForm.setComplete(enventInfo);
+                        }
                     }));
                 }
                 else if (cid.Equals("1031"))//主队点球
                 {
                     //主队可以下注
                     this.Invoke(new Action(() => {
-                        leftForm.setComplete(enventInfo);
+                        if (isAuto()) {
+                            leftForm.setComplete(enventInfo);
+                        }
                     }));
                 }
             }
@@ -955,7 +991,10 @@ namespace CxjText
                         enventInfo.cid = "1031";//主队点球
                     }
                     this.Invoke(new Action(() => {
-                        leftForm.setComplete(enventInfo);
+                        if (isAuto())
+                        {
+                            leftForm.setComplete(enventInfo);
+                        }
                     }));
                     return;
                 }
@@ -1151,10 +1190,13 @@ namespace CxjText
             Config.dianQiuGouXuan = dianQiu_check.Checked;
             
         }
+        private void datuiCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.daTuiEnble = datuiCheckBox.Checked;
+        }
 
-     
 
-     
+
 
 
         //改变
@@ -1191,5 +1233,6 @@ namespace CxjText
             MoneyUtils.GetDMoney(user);
         }
 
+        
     }
 }

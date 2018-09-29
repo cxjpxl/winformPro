@@ -173,6 +173,7 @@ namespace CxjText
                     return;
                 }
                 loginObj = JObject.Parse(loginStr);
+                Console.WriteLine(loginObj.ToString());
                 int no = (int)loginObj["no"];
                 if (no != 200)
                 {
@@ -193,6 +194,9 @@ namespace CxjText
                 }
                  Config.softFun = (int)(loginObj["fun"] == null ? "0" : loginObj["fun"]);
                  Config.hasJinQiuFun = (bool)loginObj["hasJinQiuFun"];//是否有进球功能
+
+                Config.hasDaTui = (bool)loginObj["hasDaTui"];//是否有大腿功能
+                Config.canPutDaTui = (bool)loginObj["canPutDaTui"];//是否有抱大腿功能
             }
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);

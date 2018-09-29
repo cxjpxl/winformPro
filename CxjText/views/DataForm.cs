@@ -251,6 +251,7 @@ namespace CxjText.views
             if (userInfo == null) return;
             //公共部分的处理
             JObject dataJObject = new JObject();
+            JObject daTuiJObject = new JObject();
             String rltStr = "";
             switch (userInfo.tag)
             {
@@ -258,6 +259,7 @@ namespace CxjText.views
                     JObject jObjectA = (JObject)obj;
                     if (jObjectA == null) return;
                     rltStr = DataClickUtlis.DataSysAClick(dataJObject, jObjectA, numRow, clickNum, "A");
+                
                     break;
                 case "B":
                     JObject jObjectB = (JObject)obj;
@@ -339,16 +341,25 @@ namespace CxjText.views
 
             }
             if (String.IsNullOrEmpty(rltStr) || this.inface == null) return;
-            if (autoJObject != null) { //判断是否是自动下注
+            if (autoJObject != null)
+            { //判断是否是自动下注
                 dataJObject["gameMid"] = autoJObject["mid"]; //mid记录
-                if (autoJObject["isJiaoQiu"] != null) {
+                if (autoJObject["isJiaoQiu"] != null)
+                {
                     dataJObject["isJiaoQiu"] = autoJObject["isJiaoQiu"];
                 }
+            }
+            else { //手动下注
+                daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
+                daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+                dataJObject["daTui"] = daTuiJObject;
             }
 
             String saiKuang = DataUtils.get_c01_data(obj, userInfo.tag); 
             saiKuang = saiKuang.Replace("\n", "|");
             dataJObject["saiKuang"] = saiKuang;
+
+     
 
             this.inface.OnClickLisenter(rltStr, dataJObject, userInfo);
         }

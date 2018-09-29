@@ -47,12 +47,15 @@
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.datuiCheckBox = new System.Windows.Forms.CheckBox();
             this.dianQiu_check = new System.Windows.Forms.CheckBox();
             this.fitBox = new System.Windows.Forms.CheckBox();
             this.pingbanCheckBox = new System.Windows.Forms.CheckBox();
             this.jiaoqiu_checkBox = new System.Windows.Forms.CheckBox();
             this.jiaoQiuTime = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.r_6_1 = new System.Windows.Forms.RadioButton();
+            this.r_5_1 = new System.Windows.Forms.RadioButton();
             this.z_4_rd = new System.Windows.Forms.RadioButton();
             this.z_3_rd = new System.Windows.Forms.RadioButton();
             this.z_2_rd = new System.Windows.Forms.RadioButton();
@@ -60,8 +63,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.r_5_1 = new System.Windows.Forms.RadioButton();
-            this.r_6_1 = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -167,11 +168,11 @@
             // autoCheck
             // 
             this.autoCheck.AutoSize = true;
-            this.autoCheck.Location = new System.Drawing.Point(6, 21);
+            this.autoCheck.Location = new System.Drawing.Point(12, 169);
             this.autoCheck.Name = "autoCheck";
-            this.autoCheck.Size = new System.Drawing.Size(48, 16);
+            this.autoCheck.Size = new System.Drawing.Size(72, 16);
             this.autoCheck.TabIndex = 14;
-            this.autoCheck.Text = "启动";
+            this.autoCheck.Text = "自动启动";
             this.autoCheck.UseVisualStyleBackColor = true;
             // 
             // rbRangQiu
@@ -241,6 +242,7 @@
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.datuiCheckBox);
             this.fitterBox.Controls.Add(this.dianQiu_check);
             this.fitterBox.Controls.Add(this.fitBox);
             this.fitterBox.Controls.Add(this.pingbanCheckBox);
@@ -256,6 +258,17 @@
             this.fitterBox.TabIndex = 22;
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
+            // 
+            // datuiCheckBox
+            // 
+            this.datuiCheckBox.AutoSize = true;
+            this.datuiCheckBox.Location = new System.Drawing.Point(99, 169);
+            this.datuiCheckBox.Name = "datuiCheckBox";
+            this.datuiCheckBox.Size = new System.Drawing.Size(72, 16);
+            this.datuiCheckBox.TabIndex = 30;
+            this.datuiCheckBox.Text = "模糊自动";
+            this.datuiCheckBox.UseVisualStyleBackColor = true;
+            this.datuiCheckBox.CheckedChanged += new System.EventHandler(this.datuiCheckBox_CheckedChanged);
             // 
             // dianQiu_check
             // 
@@ -334,6 +347,28 @@
             this.groupBox2.TabIndex = 26;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "点球+进球金额";
+            // 
+            // r_6_1
+            // 
+            this.r_6_1.AutoSize = true;
+            this.r_6_1.Location = new System.Drawing.Point(220, 19);
+            this.r_6_1.Name = "r_6_1";
+            this.r_6_1.Size = new System.Drawing.Size(41, 16);
+            this.r_6_1.TabIndex = 31;
+            this.r_6_1.TabStop = true;
+            this.r_6_1.Text = "1/6";
+            this.r_6_1.UseVisualStyleBackColor = true;
+            // 
+            // r_5_1
+            // 
+            this.r_5_1.AutoSize = true;
+            this.r_5_1.Location = new System.Drawing.Point(173, 19);
+            this.r_5_1.Name = "r_5_1";
+            this.r_5_1.Size = new System.Drawing.Size(41, 16);
+            this.r_5_1.TabIndex = 30;
+            this.r_5_1.TabStop = true;
+            this.r_5_1.Text = "1/5";
+            this.r_5_1.UseVisualStyleBackColor = true;
             // 
             // z_4_rd
             // 
@@ -415,28 +450,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
-            // r_5_1
-            // 
-            this.r_5_1.AutoSize = true;
-            this.r_5_1.Location = new System.Drawing.Point(173, 19);
-            this.r_5_1.Name = "r_5_1";
-            this.r_5_1.Size = new System.Drawing.Size(41, 16);
-            this.r_5_1.TabIndex = 30;
-            this.r_5_1.TabStop = true;
-            this.r_5_1.Text = "1/5";
-            this.r_5_1.UseVisualStyleBackColor = true;
-            // 
-            // r_6_1
-            // 
-            this.r_6_1.AutoSize = true;
-            this.r_6_1.Location = new System.Drawing.Point(220, 19);
-            this.r_6_1.Name = "r_6_1";
-            this.r_6_1.Size = new System.Drawing.Size(41, 16);
-            this.r_6_1.TabIndex = 31;
-            this.r_6_1.TabStop = true;
-            this.r_6_1.Text = "1/6";
-            this.r_6_1.UseVisualStyleBackColor = true;
-            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -502,5 +515,6 @@
         private System.Windows.Forms.RadioButton z_4_rd;
         private System.Windows.Forms.RadioButton r_6_1;
         private System.Windows.Forms.RadioButton r_5_1;
+        private System.Windows.Forms.CheckBox datuiCheckBox;
     }
 }
