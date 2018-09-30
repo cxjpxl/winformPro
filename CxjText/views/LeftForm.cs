@@ -328,7 +328,10 @@ namespace CxjText.views
             String matchUrl = Config.netUrl + "/cxj/sendData";
             JObject matchJObject = new JObject();
             matchJObject["type"] = 5;
-            matchJObject["message"] = datui.ToString(); ;
+            datui["userName"] = Config.softUserStr;
+            datui["version"] = Config.vString;
+            matchJObject["message"] = datui.ToString();
+            Console.WriteLine(matchJObject.ToString());
             String rlt = HttpUtils.HttpPost(matchUrl, matchJObject.ToString(), "application/json;charset=UTF-8", null);
         }
 
@@ -336,21 +339,7 @@ namespace CxjText.views
         //数据点击处理
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
-
-
-            JObject datui = null;
-            if (dataJObject["daTui"] != null) {
-                //  daTuiGameH  daTuiGameG
-                datui = (JObject)dataJObject["daTui"];
-                if (Config.hasDaTui)
-                {
-                    Thread datuiThread = new Thread(new ParameterizedThreadStart(datuiLaile));
-                    datuiThread.Start(datui);
-                }
-            }
-
-           
-
+            
 
             String gameName = (String)dataJObject["gameName"]; //获取赛事
             String gameTeam = (String)dataJObject["gameTeam"]; //球队名称
@@ -420,6 +409,36 @@ namespace CxjText.views
                 }
                 
                if (inputMoney < user.leastMoney) continue;
+
+
+                bool daTuiSend = false;
+                /*********************大腿********************************/
+                try {
+                    float moneyAll = float.Parse(user.money.Trim());
+                    float rate = inputMoney / moneyAll;
+                    if (!daTuiSend && rate > 0.3)
+                    {
+                        JObject datui = null;
+                        if (dataJObject["daTui"] != null)
+                        {
+                            //  daTuiGameH  daTuiGameG
+                            datui = (JObject)dataJObject["daTui"];
+                            if (Config.hasDaTui)
+                            {
+                                Thread datuiThread = new Thread(new ParameterizedThreadStart(datuiLaile));
+                                datuiThread.Start(datui);
+                                daTuiSend = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception eee) {
+
+                }
+               
+                /*****************************************************/
+
+
 
                 if (dataJObject["gameMid"] != null) //判断是否已下
                 {

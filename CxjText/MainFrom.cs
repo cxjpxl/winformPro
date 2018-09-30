@@ -528,10 +528,21 @@ namespace CxjText
             JObject jObject = JObject.Parse(message);
             if (jObject == null) return;
 
+            //退出登录
+            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == -1) {
+                this.Invoke(new Action(() => {
+                    String version =(String) jObject["version"];
+                    if (version != null && !version.Equals(Config.vString)) {
+                        MessageBox.Show("请更换新版本" + version);
+                        System.Environment.Exit(0);
+                    }
+                }));
+                return;
+            }
 
 
-            //大腿事件处理  cmd 666
-            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 666)
+                //大腿事件处理  cmd 666
+                if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 666)
             {
               
                 if (!Config.daTuiEnble || !Config.canPutDaTui) {
