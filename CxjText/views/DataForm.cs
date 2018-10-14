@@ -350,9 +350,29 @@ namespace CxjText.views
                 }
             }
             else { //手动下注
-                daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
-                daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
-                dataJObject["daTui"] = daTuiJObject;
+                if (clickNum == 4 || clickNum == 7) //让球
+                {
+                    daTuiJObject["isDaXiao"] = false;
+                    if (numRow == 0)
+                    {
+                        daTuiJObject["isH"] = true;
+                    }
+                    else {
+                        daTuiJObject["isH"] = false;
+                    }
+                    daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
+                    daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+                    dataJObject["daTui"] = daTuiJObject;
+                    
+                }
+                else if (clickNum == 5 || clickNum == 8) //大小
+                {
+                    daTuiJObject["isDaXiao"] = true;
+                    daTuiJObject["isH"] = true;
+                    daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
+                    daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+                    dataJObject["daTui"] = daTuiJObject;
+                }
             }
 
             String saiKuang = DataUtils.get_c01_data(obj, userInfo.tag); 

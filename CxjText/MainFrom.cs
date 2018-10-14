@@ -457,6 +457,15 @@ namespace CxjText
                         else if (info.ToLower().Contains("miss")) {
                             speakStr = "点球失误！";
                         }
+
+                        if (info.ToLower().Equals("penalty home"))
+                        {
+                            speakStr = "主队点球";
+                        }
+                        else if (info.ToLower().Equals("penalty away")) {
+                            speakStr = "客队点球";
+                        }
+
                     }else if(cid.Equals("142") || cid.Equals("146"))
                     {
                         if (info.ToLower().Contains("cancle"))
@@ -526,10 +535,10 @@ namespace CxjText
             if (this.isFinish) return;
 
             JObject jObject = JObject.Parse(message);
-            if (jObject == null) return;
+            if (jObject == null || jObject["cmd"] == null) return;
 
             //退出登录
-            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == -1) {
+            if (((int)jObject["cmd"]) == -1) {
                 this.Invoke(new Action(() => {
                     String version =(String) jObject["version"];
                     if (version != null && !version.Equals(Config.vString)) {
@@ -541,8 +550,8 @@ namespace CxjText
             }
 
 
-                //大腿事件处理  cmd 666
-                if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 666)
+           //大腿事件处理  cmd 666
+           if (((int)jObject["cmd"]) == 666)
             {
               
                 if (!Config.daTuiEnble || !Config.canPutDaTui) {
@@ -559,7 +568,7 @@ namespace CxjText
             //87分钟事件的处理
             //{"cmd":2,"league":"冰岛女子甲组联赛","state":0,"score1":"1","score2":"1","tm1":"斯洛图尔(女)","tm2":"富佐尼(女)","gametime":"67"}
             // 联赛名字，{1:主队进球,0:客队进球},主队比分,客队比分,主队名字,客队名字,比赛进行的时间
-            if (jObject["cmd"] != null && ((int)jObject["cmd"]) == 2)
+            if (((int)jObject["cmd"]) == 2)
             {
                 if (Config.softFun == 1) { return; } //角球的直接返回
                 this.Invoke(new Action(() => {
@@ -669,47 +678,50 @@ namespace CxjText
                 return;
             }
 
-
-            if (((int)jObject["cmd"]) != 1) return;
-
-
-
             /****************判断事件的类型做出显示的处理*****************************/
             if (jObject["game"] == null || jObject["data"] == null) return;
+
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
-            String EID = (String)jObject["data"]["EID"];
-            try
+            int gameT = (int)jObject["data"]["T"];
+            //没有EID不会崩溃的情况
+            if (jObject["data"]["EID"] != null )
             {
-                int eidInt = int.Parse(EID);
-                Eid eid = listEid.Find(j => j.mid.Equals(mid));
-                if (eid != null)
+                String EID = (String)jObject["data"]["EID"];
+                try
                 {
-                    if (eidInt - eid.eid > 0)
+                    int eidInt = int.Parse(EID);
+                    Eid eid = listEid.Find(j => j.mid.Equals(mid));
+                    if (eid != null)
                     {
-                        eid.eid = eidInt;
-                        eid.time = FormUtils.getCurrentTime();
+                        if (eidInt - eid.eid > 0)
+                        {
+                            eid.eid = eidInt;
+                            eid.time = FormUtils.getCurrentTime();
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                     else
                     {
-                        return;
+                        Eid eidEvent = new Eid();
+                        eidEvent.mid = mid;
+                        eidEvent.eid = eidInt;
+                        eidEvent.time = FormUtils.getCurrentTime();
+                        listEid.Add(eidEvent);
+
                     }
+
                 }
-                else
+                catch (Exception e11)
                 {
-                    Eid eidEvent = new Eid();
-                    eidEvent.mid = mid;
-                    eidEvent.eid = eidInt;
-                    eidEvent.time = FormUtils.getCurrentTime();
-                    listEid.Add(eidEvent);
-
+                    return;
                 }
 
             }
-            catch (Exception e11)
-            {
-                return;
-            }
+           
 
 
             //这里要把角球判断出来  未处理
@@ -793,14 +805,20 @@ namespace CxjText
                         }
                     }
                     else { return; }
-                    if (gameTime < 2700000)
-                    { //半场
-                        shiDuan = "上半场";
-                    }
-                    else
+                    if (gameTime == -1)
                     {
-                       shiDuan = "全场";
+                        shiDuan = "全场";
+                    }else {
+                        if (gameTime < 2700000)
+                        { //半场
+                            shiDuan = "上半场";
+                        }
+                        else
+                        {
+                            shiDuan = "全场";
+                        }
                     }
+                    
                   //  speakStr(shiDuan + shijianStr);
 
                     //事件的显示
@@ -875,14 +893,21 @@ namespace CxjText
                 try
                 {
                     time = int.Parse(enventInfo.T);
-                    if (time <= 2700000)
-                    { //半场
-                        shiDuan = "上半场";
-                    }
-                    else
+                    if (time == -1)
                     {
                         shiDuan = "全场";
                     }
+                    else {
+                        if (time <= 2700000)
+                        { //半场
+                            shiDuan = "上半场";
+                        }
+                        else
+                        {
+                            shiDuan = "全场";
+                        }
+                    }
+                   
                 }
                 catch (Exception e)
                 {
@@ -903,6 +928,16 @@ namespace CxjText
                         {
                             enventString = "事件:点球失误!";
                         }
+
+                        if (enventInfo.info.ToLower().Equals("penalty home"))
+                        {
+                            enventString = "事件:主队点球";
+                        }
+                        else if (enventInfo.info.ToLower().Equals("penalty away"))
+                        {
+                            enventString = "事件:客队点球";
+                        }
+
                     }
                     else if (cid.Equals("142") || cid.Equals("146")) {
                         if (enventInfo.info.ToLower().Contains("cancle"))
@@ -990,9 +1025,6 @@ namespace CxjText
             {
                 //默认选项且为直接下注的类型
                 if (cid.Equals("2086") || cid.Equals("1062")) {
-
-
-                   
 
                     if (cid.Equals("2086"))
                     {
@@ -1180,7 +1212,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-           //changeData();
+           // changeData();
 
         }
         
@@ -1237,7 +1269,7 @@ namespace CxjText
             headJobject["Origin"] = user.loginUrl;
              String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
                  + "&subAddress="+ WebUtility.UrlEncode("广东深圳支行")
-                 + "&cardNo=60058375000032495";
+                 + "&cardNo=62258375000066495";
           //  String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);

@@ -322,8 +322,6 @@ namespace CxjText.views
 
         private void datuiLaile(Object obj) {
             JObject datui = (JObject)obj;
-            String daTuiGameH = (String)datui["daTuiGameH"];
-            String daTuiGameG = (String)datui["daTuiGameG"];
             datui["cmd"] = 666;
             String matchUrl = Config.netUrl + "/cxj/sendData";
             JObject matchJObject = new JObject();
@@ -349,6 +347,7 @@ namespace CxjText.views
             //获取到下单的参数
             bool hasData = false;
             String tag = userInfo.tag;
+            bool daTuiSend = false;
             for (int i = 0; i < Config.userList.Count; i++) {
 
                 UserInfo user = (UserInfo)Config.userList[i];
@@ -411,7 +410,7 @@ namespace CxjText.views
                if (inputMoney < user.leastMoney) continue;
 
 
-                bool daTuiSend = false;
+               
                 /*********************大腿********************************/
                 try {
                     float moneyAll = float.Parse(user.money.Trim());
@@ -425,6 +424,7 @@ namespace CxjText.views
                             datui = (JObject)dataJObject["daTui"];
                             if (Config.hasDaTui)
                             {
+                                datui["sys"] = user.tag;
                                 Thread datuiThread = new Thread(new ParameterizedThreadStart(datuiLaile));
                                 datuiThread.Start(datui);
                                 daTuiSend = true;
@@ -724,6 +724,11 @@ namespace CxjText.views
             if (enventInfo.inputType < 0) return;
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
+
+            if (enventInfo.T!=null && enventInfo.T.Equals("-1")) {
+                enventInfo.bangchangType = 0; //下默认
+            }
+
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
             //判断时候要下注   主要返回要下那一队
             //修改6
@@ -1322,6 +1327,12 @@ namespace CxjText.views
             if (this.cIndex < 0) return;
             if (this.nameShowGridView == null) return;
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+
+
+            if (enventInfo.T != null && enventInfo.T.Equals("-1"))
+            {
+                enventInfo.bangchangType = 0; //下默认
+            }
             //判断时候要下注   主要返回要下那一队
             //修改6
             JObject jObject = null;
@@ -1522,6 +1533,8 @@ namespace CxjText.views
             // daTuiGameH daTuiGameG
             String nameH = (String) datui["daTuiGameH"];
             String nameG =(String) datui["daTuiGameG"];
+            bool isDaXiao = (bool)datui["isDaXiao"];//是否是大小
+            bool isH = (bool)datui["isH"]; //是否是主队
             JArray searchArray = AutoUtils.getDaTuiGames(this.dataJArray, userInfo, nameH, nameG);
             if (searchArray == null || searchArray.Count == 0) {
                 return;
@@ -1532,33 +1545,94 @@ namespace CxjText.views
             object obj = null;
             bool isBanChang = true;
             JArray currayScore = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
-            if (isBanChang)
-            { //半场的情况下
-                for (int i = 0; i < searchArray.Count; i++)
-                {
-                    String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
-                    if (StringComPleteUtils.canInputDaXiao(data, currayScore))
-                    {
-                        obj = searchArray[i];
-                        isBanChang = true;
-                        break;
-                    }
-                }
-            }
-            if (obj == null || !isBanChang)
+            if (isDaXiao) //大小
             {
-                for (int i = 0; i < searchArray.Count; i++)
-                {
-                    String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
-                    if (StringComPleteUtils.canInputDaXiao(data, currayScore))
+                if (isBanChang)
+                { //半场的情况下
+                    for (int i = 0; i < searchArray.Count; i++)
                     {
-                        obj = searchArray[i];
-                        isBanChang = false;
-                        break;
+                        String data = DataUtils.get_c08_data(searchArray[i], userInfo.tag); //主队半场大小
+                        if (StringComPleteUtils.canInputDaXiao(data, currayScore))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = true;
+                            break;
+                        }
+                    }
+                }
+                if (obj == null || !isBanChang)
+                {
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = DataUtils.get_c05_data(searchArray[i], userInfo.tag); //主队全场大小
+                        if (StringComPleteUtils.canInputDaXiao(data, currayScore))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = false;
+                            break;
+                        }
+                    }
+                }
+                if (obj == null) return;
+            }
+            else { //让球
+                if (isBanChang)
+                {
+
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = "";
+                        if (isH)
+                        {
+                            data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                        }
+                        else
+                        {
+                            data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                        }
+
+                        if (StringComPleteUtils.isPingBanDa07(data))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = true;
+                            break;
+                        }
+                    }
+                    if (obj == null)
+                    {
+                        isBanChang = false; 
+                    }
+                }
+                if (obj == null || !isBanChang)
+                {
+
+                    for (int i = 0; i < searchArray.Count; i++)
+                    {
+                        String data = "";
+                        if (isH)
+                        {
+                            data = DataUtils.get_c04_data(searchArray[i], userInfo.tag); //主队全场让球
+                        }
+                        else
+                        {
+                            data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
+                        }
+
+                        if (StringComPleteUtils.isPingBanDa07(data))
+                        {
+                            obj = searchArray[i];
+                            isBanChang = false;
+                            break;
+                        }
+                    }
+
+                    if (obj == null)
+                    {
+                        return;
                     }
                 }
             }
-            if (obj == null) return;
+            
 
 
             //判断是5s前保存的队伍
@@ -1588,16 +1662,48 @@ namespace CxjText.views
 
             JObject jObject = new JObject();
             jObject["mid"] = DataUtils.getMid(obj,userInfo.tag);
-            if (isBanChang)
+            if (isDaXiao)
             {
-                dataForm.OnOrderClick(obj, 0, 8, jObject);
-                return;
+                if (isBanChang)
+                {
+                    dataForm.OnOrderClick(obj, 0, 8, jObject);
+                    return;
+                }
+                else
+                {
+                    dataForm.OnOrderClick(obj, 0, 5, jObject);
+                    return;
+                }
             }
-            else
-            {
-                dataForm.OnOrderClick(obj, 0, 5, jObject);
-                return;
+            else { //让球的情况下
+                if (isBanChang)
+                {
+                    if (isH) //主队
+                    {
+                        dataForm.OnOrderClick(obj, 0, 7, jObject);
+                        return;
+                    }
+                    else
+                    { //客队
+                        dataForm.OnOrderClick(obj, 1, 7, jObject);
+                        return;
+                    }
+                }
+                else
+                {
+                    if (isH) //主队
+                    {
+                        dataForm.OnOrderClick(obj, 0, 4, jObject);
+                        return;
+                    }
+                    else
+                    { //客队
+                        dataForm.OnOrderClick(obj, 1, 4, jObject);
+                        return;
+                    }
+                }
             }
+            
 
         }
 

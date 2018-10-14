@@ -73,7 +73,14 @@ namespace CxjText.views
         {
             EnventShowInfo enventShowInfo = (EnventShowInfo)obj;
             //  处理事件
-            enventShowInfo.gameTimeStr = FormUtils.GetTimeFormMs(enventShowInfo.gameTime);//显示比赛时间时分秒
+            if (enventShowInfo.gameTime == -1)
+            {
+                enventShowInfo.gameTimeStr = "默认";
+            }
+            else {
+                enventShowInfo.gameTimeStr = FormUtils.GetTimeFormMs(enventShowInfo.gameTime);//显示比赛时间时分秒
+            }
+           
             if (enventShowInfo.text.Contains("主队"))
             {
                 enventShowInfo.gameH = enventShowInfo.gameH + "_0";

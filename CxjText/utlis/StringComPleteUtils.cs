@@ -291,12 +291,19 @@ namespace CxjText.utlis
                     try
                     {
                         int time = int.Parse(gameT);
-                        if (time <= 2700000)
-                        { //半场
+                        if (time == -1)
+                        {
                             isBanChang = true;
                         }
                         else {
-                            isBanChang = false;
+                            if (time <= 2700000)
+                            { //半场
+                                isBanChang = true;
+                            }
+                            else
+                            {
+                                isBanChang = false;
+                            }
                         }
                     }
                     catch (Exception e) {
@@ -337,14 +344,21 @@ namespace CxjText.utlis
                     try
                     {
                         int time = int.Parse(gameT);
-                        if (time <= 2700000)
-                        { //半场
+                        if (time == -1)
+                        {
                             isBanChang = true;
                         }
-                        else
-                        {
-                            isBanChang = false;
+                        else {
+                            if (time <= 2700000)
+                            { //半场
+                                isBanChang = true;
+                            }
+                            else
+                            {
+                                isBanChang = false;
+                            }
                         }
+                        
                     }
                     catch (Exception e)
                     {
@@ -524,14 +538,21 @@ namespace CxjText.utlis
                 try
                 {
                     int time = int.Parse(enventInfo.T);
-                    if (time <= 2700000)
-                    { 
+                    if (time == -1)
+                    {
                         isBanChang = true;
                     }
-                    else
-                    {
-                        isBanChang = false;
+                    else {
+                        if (time <= 2700000)
+                        {
+                            isBanChang = true;
+                        }
+                        else
+                        {
+                            isBanChang = false;
+                        }
                     }
+                   
                 }
                 catch (Exception e)
                 {
