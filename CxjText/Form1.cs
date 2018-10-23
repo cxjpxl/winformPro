@@ -51,8 +51,11 @@ namespace CxjText
         {
             if (Config.myFun == 2)  //鸿发试玩
             {
+
+
                 Invoke(new Action(() =>
                 {
+                   
                     HfForm hfForm = new HfForm();
                     hfForm.Show();
                     this.Hide();
@@ -144,6 +147,9 @@ namespace CxjText
             Config.speakJObject["146"] = "点球取消";
             Config.speakJObject["1062"] = "可能主队点球";
             Config.speakJObject["142"] = "点球取消";
+
+            //点球了
+            Config.speakJObject["888"] = "点球了";//只下大小的类型
         }
 
 

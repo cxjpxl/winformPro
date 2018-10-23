@@ -474,7 +474,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-          //  Console.WriteLine(moneyRlt);
+            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;

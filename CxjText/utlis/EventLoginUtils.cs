@@ -632,5 +632,191 @@ namespace CxjText.utlis
             
             return jArray;
         }
+
+
+        /**********************M系统登录处理**************/
+
+        public static void getMToken(EnventUser userInfo)
+        {
+            //获取请求必要的cook
+            String cusHomeUrl = userInfo.dataUrl + "/Custom/Home";
+            if (userInfo.cookie == null)
+            {
+                userInfo.cookie = new CookieContainer();
+            }
+            JObject headJObject = new JObject();
+            headJObject["Host"] =  FileUtils.changeBaseUrl( userInfo.dataUrl);
+            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                return;
+            }
+
+
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken"))
+                {
+                    continue;
+                }
+
+                int startIndex = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (userInfo.matchObj == null)
+            {
+                userInfo.matchObj = new JObject();
+            }
+            userInfo.matchObj["__RequestVerificationToken"] = value;
+
+        }
+        public static void getMOrderToken(EnventUser userInfo)
+        {
+            //获取请求必要的cook
+            String cusHomeUrl = userInfo.dataUrl + "/Custom/Sports";
+            JObject headJObject = new JObject();
+            headJObject["Host"] =FileUtils.changeBaseUrl(userInfo.dataUrl);
+            String homeRlt = HttpUtils.HttpGetHeader(cusHomeUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null || !homeRlt.Contains("__RequestVerificationToken"))
+            {
+                return;
+            }
+
+
+            String value = null;
+            String[] strs = homeRlt.Split('\n');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+                if (!str.Contains("__RequestVerificationToken"))
+                {
+                    continue;
+                }
+
+                int startIndex = str.IndexOf("value=\"");
+                str = str.Substring(startIndex + 7, str.Length - (startIndex + 7));
+                startIndex = str.IndexOf("\"");
+                value = str.Substring(0, startIndex);
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (userInfo.matchObj == null)
+            {
+                userInfo.matchObj = new JObject();
+            }
+            userInfo.matchObj["oredrToken"] = value;
+
+        }
+        public static int  loginM(int position, EnventUser userInfo)
+        {
+            int status = userInfo.status;
+            if (status == -1 || status == 1) return -1;
+
+
+            if (status == 2) //状态是登录状态  要退出登录
+            {
+                return 1;
+            }
+
+           
+            userInfo.status = 1; //请求中 要刷新UI
+            userInfo.cookie = new CookieContainer();
+            //先访问主页   拿到对应的cook
+            JObject headJObject = new JObject();
+            headJObject["Host"] =FileUtils.changeBaseUrl(userInfo.dataUrl);
+            String homeRlt = HttpUtils.HttpGetHeader(userInfo.dataUrl, "", userInfo.cookie, headJObject);
+            if (homeRlt == null)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+
+            //获取请求必要的cook
+            getMToken(userInfo);
+            //获取验证码
+            String time = FormUtils.getCurrentTime() + "";
+            String codeUrl = userInfo.dataUrl + "/Account/ValidateCode/" + time.Substring(time.Length - 5, 4);
+            headJObject = new JObject();
+            headJObject["Host"] =FileUtils.changeBaseUrl(userInfo.dataUrl);
+            String codePathName = position + userInfo.tag + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            Console.WriteLine("codeNum:" + codeNum);
+            if (codeNum < 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+
+            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            Console.WriteLine("codeStrBuf:" + codeStrBuf);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+
+            headJObject = new JObject();
+            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            headJObject["Referer"] = userInfo.dataUrl + "/Custom/Home";
+            //获取 __RequestVerificationToken
+            String value = userInfo.matchObj != null ? (String)userInfo.matchObj["__RequestVerificationToken"] : null;
+            Console.WriteLine("value:"+ value);
+            if (String.IsNullOrEmpty(value))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+            String loginUrl = userInfo.dataUrl + "/Account/Login";
+            String loginP = "username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&rmNum=" + codeStrBuf.ToString() + "&__RequestVerificationToken=" + value;
+            String loginRlt = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(loginRlt);
+            if (String.IsNullOrEmpty(loginRlt) || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("error"))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+            JObject loginJObject = JObject.Parse(loginRlt);
+            if (((int)loginJObject["error"]) != 0)
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                return -1;
+            }
+
+            //获取金额
+
+            userInfo.loginFailTime = 0;
+            userInfo.status = 2; //成功
+            userInfo.loginTime = FormUtils.getCurrentTime(); //更新时间
+            return 1;
+
+        }
+
+
+        public static JArray getMOrder(String rlt) {
+            return null;
+        }
     }
 }

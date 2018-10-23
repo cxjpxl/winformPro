@@ -268,14 +268,22 @@ namespace CxjText.utlis
                 decimal hRate = SpeedyCompute(enventInfo.nameH, pHstr);
                 decimal gRate = SpeedyCompute(enventInfo.nameG, pGStr);
 
-           
+                if (enventInfo.nameH.Trim().Equals(zhuName.Trim())) {
+                    hRate = 1;
+                }
+
+                if (enventInfo.nameG.Trim().Equals(geName.Trim()))
+                {
+                    gRate = 1;
+                }
+
                 //正着比较
                 if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                   
                     JObject jObject = new JObject();
                         bool isH = true;
-                    if (cid.Equals("1031"))//主队
+                    if (cid.Equals("1031")|| cid.Equals("888"))//主队
                     {
                         isH = true;
                     }
@@ -294,8 +302,7 @@ namespace CxjText.utlis
                         if (time == -1)
                         {
                             isBanChang = true;
-                        }
-                        else {
+                        }else {
                             if (time <= 2700000)
                             { //半场
                                 isBanChang = true;
@@ -323,14 +330,24 @@ namespace CxjText.utlis
                 gRate = SpeedyCompute(enventInfo.nameG, pHstr);
 
 
-                
+                if (enventInfo.nameH.Trim().Equals(geName.Trim()))
+                {
+                    hRate = 1;
+                }
+
+                if (enventInfo.nameG.Trim().Equals(zhuName.Trim()))
+                {
+                    gRate = 1;
+                }
+
+
                 //反着比较
                 if ( hRate > (decimal)0.6 && gRate > (decimal)0.6)
                 {
                   
                     JObject jObject = new JObject();
                         bool isH = true;
-                        if (cid.Equals("1031"))//主队变成这边数据的客队
+                        if (cid.Equals("1031")|| cid.Equals("888"))//主队变成这边数据的客队
                         {
                             isH = false;
                         }else if (cid.Equals("2055"))

@@ -415,7 +415,7 @@ namespace CxjText.views
                 try {
                     float moneyAll = float.Parse(user.money.Trim());
                     float rate = inputMoney / moneyAll;
-                    if (!daTuiSend && rate > 0.3)
+                    if (!daTuiSend && (rate > 0.25|| inputMoney >= 400))
                     {
                         JObject datui = null;
                         if (dataJObject["daTui"] != null)
@@ -440,7 +440,7 @@ namespace CxjText.views
 
 
 
-                if (dataJObject["gameMid"] != null) //判断是否已下
+                if (!Config.canAutoTwo &&dataJObject["gameMid"] != null) //判断是否已下
                 {
                     String baseUrl = user.baseUrl;
                     if (dataJObject["isJiaoQiu"] == null || (bool)(dataJObject["isJiaoQiu"]) == false)

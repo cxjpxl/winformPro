@@ -678,6 +678,9 @@ namespace CxjText
                 return;
             }
 
+
+
+            //cmd 1 的情况
             /****************判断事件的类型做出显示的处理*****************************/
             if (jObject["game"] == null || jObject["data"] == null) return;
 
@@ -992,7 +995,7 @@ namespace CxjText
 
 
             //有改革要更改
-            if (cid.Equals("2055") || cid.Equals("1031"))
+            if (cid.Equals("2055") || cid.Equals("1031") || cid.Equals("888"))
             {
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
@@ -1005,8 +1008,10 @@ namespace CxjText
                 if (cid.Equals("2055")) //客队点球
                 {
                     //客队可以下注 
-                    this.Invoke(new Action(() => {
-                        if (isAuto()) {
+                    this.Invoke(new Action(() =>
+                    {
+                        if (isAuto())
+                        {
                             leftForm.setComplete(enventInfo);
                         }
                     }));
@@ -1014,8 +1019,20 @@ namespace CxjText
                 else if (cid.Equals("1031"))//主队点球
                 {
                     //主队可以下注
-                    this.Invoke(new Action(() => {
-                        if (isAuto()) {
+                    this.Invoke(new Action(() =>
+                    {
+                        if (isAuto())
+                        {
+                            leftForm.setComplete(enventInfo);
+                        }
+                    }));
+                }else if (cid.Equals("888")) { //只下大小球
+                    this.Invoke(new Action(() =>
+                    {
+                        if (isAuto())
+                        {
+                            enventInfo.inputType = 1; //只下大小
+                            enventInfo.bangchangType = 0; //只下默认
                             leftForm.setComplete(enventInfo);
                         }
                     }));
@@ -1057,6 +1074,7 @@ namespace CxjText
                 return 1;
             }
         }
+
         //获取搜索的内容
         public void setTextBox1Text(String str)
         {
@@ -1212,7 +1230,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-           // changeData();
+            //changeData();
 
         }
         
@@ -1267,10 +1285,10 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
-             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
+            /* String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
                  + "&subAddress="+ WebUtility.UrlEncode("广东深圳支行")
-                 + "&cardNo=62258375000066495";
-          //  String p = "userMemo=";
+                 + "&cardNo=62258375000066495";*/
+            String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);
