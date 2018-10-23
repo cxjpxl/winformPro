@@ -867,12 +867,12 @@ namespace CxjText.utlis
                     cid = 888;
                     Info = "dianqiu";
                 }
-                else if (gameNodeStr.Contains("客让"))
+                else if (gameNodeStr.Contains("主让"))
                 {
                     cid = 2055;
                     Info = "Penalty Away";
                 }
-                else if (gameNodeStr.Contains("主让"))
+                else if (gameNodeStr.Contains("客让"))
                 {
                     cid = 1031;
                     Info = "Penalty Home";
@@ -881,12 +881,9 @@ namespace CxjText.utlis
                 {
                     continue;
                 }
-
-
                 //获取联赛
                 String leagueName ="";
                 //if (String.IsNullOrEmpty(leagueName)) continue;
-
                 //获取主客对以及mid 
                 //Regex re = new Regex("(<br[Ss]*?>).*?(br[Ss]*?)", RegexOptions.None);
                 //MatchCollection mc = re.Matches(gameNodeStr);
@@ -897,7 +894,14 @@ namespace CxjText.utlis
                 gameVs = gameVs.Substring(0, eIndex);
                 gameVs = gameVs.Trim();
                 eIndex = gameVs.LastIndexOf("(");
-                if(eIndex!=-1) gameVs = gameVs.Substring(0, eIndex);
+                if(eIndex!=-1)
+                {
+                    String temp = gameVs.Substring(eIndex);
+                    if (temp.Contains(":"))
+                    {
+                        gameVs = gameVs.Substring(0, eIndex);
+                    }
+                }
                 String mid = gameVs;
                 eIndex = gameVs.IndexOf("VS.");
                 String nameH = gameVs.Substring(0, eIndex);
