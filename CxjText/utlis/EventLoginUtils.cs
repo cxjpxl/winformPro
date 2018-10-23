@@ -835,6 +835,7 @@ namespace CxjText.utlis
             String tbodyNodeOuterHtml = tbodyNodes[0].OuterHtml;
             htmlDoc.LoadHtml(tbodyNodeOuterHtml);
             HtmlNodeCollection ordersNodes = htmlDoc.DocumentNode.SelectNodes("//tr");//找到订单列表容器
+            if (ordersNodes == null) return jArray;
 
             for (int i = 0; i < ordersNodes.Count; i++)
             {
