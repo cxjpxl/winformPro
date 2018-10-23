@@ -9,6 +9,7 @@ using System.IO;
 using CxjText.utils;
 using System.Collections.Generic;
 using System.Net;
+using System.Globalization;
 
 //格式化工具类
 namespace CxjText.utlis
@@ -159,6 +160,29 @@ namespace CxjText.utlis
         public static long getCurrentTime() {
             return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
         }
+
+        //将标准时间转化为当前时间搓
+        public static long getTime(String timeStr)
+        {
+            IFormatProvider culture = new CultureInfo("zh-CN", true);
+            DateTime dt = DateTime.ParseExact(timeStr, "yyyy-MM-dd HH:mm:ss", culture);
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            TimeSpan toNow = dt.Subtract(dtStart);
+            long timeStamp = toNow.Ticks;
+            timeStamp = long.Parse(timeStamp.ToString().Substring(0, timeStamp.ToString().Length - 4));
+            return timeStamp;
+        }
+
+        //将时间搓转化为标准时间
+        public static String ConvertLongToDateTime(long d)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            long lTime = long.Parse(d + "0000");
+            TimeSpan toNow = new TimeSpan(lTime);
+            DateTime dtResult = dtStart.Add(toNow);
+            return dtResult.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
 
         //多系统处理   判断时候能更新数据
         public static bool canUpdateData(String tag, long userTime, long currentTime) {
