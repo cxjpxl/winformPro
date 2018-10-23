@@ -816,7 +816,115 @@ namespace CxjText.utlis
 
 
         public static JArray getMOrder(String rlt) {
-            return null;
+            JArray jArray = new JArray();
+            //解析html 字符串或者本地html文件
+            HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument();
+            htmlDoc.LoadHtml(rlt);
+            HtmlNode cntNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='content']");//找到订单内容区
+            if (cntNode == null)
+            {
+                return jArray;
+            }
+            String cntNodeOuterHtml = cntNode.OuterHtml;
+            htmlDoc.LoadHtml(cntNodeOuterHtml);
+            HtmlNodeCollection tbodyNodes = htmlDoc.DocumentNode.SelectNodes("//table/tbody");//找到订单列表容器
+            if (tbodyNodes == null || tbodyNodes.Count <= 0)
+            {
+                return jArray;
+            }
+            String tbodyNodeOuterHtml = tbodyNodes[0].OuterHtml;
+            htmlDoc.LoadHtml(tbodyNodeOuterHtml);
+            HtmlNodeCollection ordersNodes = htmlDoc.DocumentNode.SelectNodes("//tr");//找到订单列表容器
+
+            for (int i = 0; i < ordersNodes.Count; i++)
+            {
+
+                HtmlNode orderNode = ordersNodes[i];
+                if (orderNode == null) continue;
+                String orderNodeOuterHtml = orderNode.OuterHtml;
+                if (String.IsNullOrEmpty(orderNodeOuterHtml)) continue;
+                HtmlAgilityPack.HtmlDocument bhtmlDoc = new HtmlAgilityPack.HtmlDocument();
+                bhtmlDoc.LoadHtml(orderNodeOuterHtml);
+                HtmlNodeCollection tdNodes = bhtmlDoc.DocumentNode.SelectNodes("//td");//找到订单列表容器
+                //获取下单时间
+                String matchTime = tdNodes[0].InnerText;
+                if (String.IsNullOrEmpty(matchTime)) continue;
+                String gunqiuStr = tdNodes[1].InnerText;
+                if (String.IsNullOrEmpty(gunqiuStr)) continue;
+                // 获取 gunqiuFlag
+                Boolean gunqiuFlag = gunqiuStr.IndexOf("足球滚球") != -1;
+                //获取 EID 
+                 int EID = (int)(FormUtils.getTime(matchTime) / 1000);
+                
+                String gameNodeStr = tdNodes[2].InnerHtml;
+                if (String.IsNullOrEmpty(gameNodeStr) || !gameNodeStr.Contains("VS.")) continue;
+                // 判断大小
+                int cid = 888;
+                String Info = "dianqiu";
+                if (gameNodeStr.Contains("大小"))
+                {
+                    cid = 888;
+                    Info = "dianqiu";
+                }
+                else if (gameNodeStr.Contains("客让"))
+                {
+                    cid = 2055;
+                    Info = "Penalty Away";
+                }
+                else if (gameNodeStr.Contains("主让"))
+                {
+                    cid = 1031;
+                    Info = "Penalty Home";
+                }
+                else
+                {
+                    continue;
+                }
+
+
+                //获取联赛
+                String leagueName ="";
+                //if (String.IsNullOrEmpty(leagueName)) continue;
+
+                //获取主客对以及mid 
+                //Regex re = new Regex("(<br[Ss]*?>).*?(br[Ss]*?)", RegexOptions.None);
+                //MatchCollection mc = re.Matches(gameNodeStr);
+                String str = "<br>";
+                int sIndex = gameNodeStr.IndexOf(str);
+                String gameVs = gameNodeStr.Substring(sIndex+str.Length);
+                int eIndex = gameVs.IndexOf(str);
+                gameVs = gameVs.Substring(0, eIndex);
+                gameVs = gameVs.Trim();
+                eIndex = gameVs.LastIndexOf("(");
+                if(eIndex!=-1) gameVs = gameVs.Substring(0, eIndex);
+                String mid = gameVs;
+                eIndex = gameVs.IndexOf("VS.");
+                String nameH = gameVs.Substring(0, eIndex);
+                String nameG = gameVs.Substring(eIndex+3);
+
+                JObject jObject = new JObject();
+                JObject gameObj = new JObject();
+                gameObj.Add("nameH", nameH);
+                gameObj.Add("nameG", nameG);
+                gameObj.Add("leagueName", leagueName);
+                gameObj.Add("mid", mid);
+                jObject.Add("game", gameObj);
+
+                JObject dataObj = new JObject();
+                dataObj.Add("MID", mid);
+                dataObj.Add("CID", cid);
+                dataObj.Add("EID", EID);
+                dataObj.Add("Info", Info);
+                dataObj.Add("T", -1);
+                jObject.Add("data", dataObj);
+
+                jObject.Add("matchTime", matchTime);
+                jObject.Add("gunqiuFlag", gunqiuFlag);
+                jArray.Add(jObject);
+            }
+
+            Console.WriteLine(jArray);
+            return jArray;
         }
     }
 }
