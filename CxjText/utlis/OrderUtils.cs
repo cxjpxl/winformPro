@@ -3056,7 +3056,7 @@ namespace CxjText.utlis
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
-                        rltForm.RefershLineData(inputTag, "最高" + minMoney);
+                        rltForm.RefershLineData(inputTag, "最高" + maxMoney);
                     }
                 }));
                 return;
