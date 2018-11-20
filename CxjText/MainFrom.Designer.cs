@@ -63,6 +63,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.auto_login_btn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -242,6 +243,7 @@
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.auto_login_btn);
             this.fitterBox.Controls.Add(this.datuiCheckBox);
             this.fitterBox.Controls.Add(this.dianQiu_check);
             this.fitterBox.Controls.Add(this.fitBox);
@@ -450,6 +452,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
+            // auto_login_btn
+            // 
+            this.auto_login_btn.Location = new System.Drawing.Point(192, 162);
+            this.auto_login_btn.Name = "auto_login_btn";
+            this.auto_login_btn.Size = new System.Drawing.Size(75, 23);
+            this.auto_login_btn.TabIndex = 0;
+            this.auto_login_btn.Text = "一键登录";
+            this.auto_login_btn.UseVisualStyleBackColor = true;
+            this.auto_login_btn.Click += new System.EventHandler(this.auto_login_btn_Click);
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -516,5 +528,6 @@
         private System.Windows.Forms.RadioButton r_6_1;
         private System.Windows.Forms.RadioButton r_5_1;
         private System.Windows.Forms.CheckBox datuiCheckBox;
+        private System.Windows.Forms.Button auto_login_btn;
     }
 }

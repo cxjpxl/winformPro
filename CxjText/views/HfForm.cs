@@ -30,9 +30,12 @@ namespace CxjText.views
         }
 
         private void userInit() {
-            user.user = "ipkdang";
+             user.user = "ipkdang";
             user.pwd = "aa123456";
-            user.dataUrl = "https://www.4955z.com";
+              user.dataUrl = "https://www.4955z.com";
+           // user.user = "lm88799";
+          //  user.pwd = "lm6789";
+          //    user.dataUrl = "https://www.7045h.com";
             user.status = 0;
             user.tag = "M";
         }
@@ -94,6 +97,7 @@ namespace CxjText.views
                 JObject gameJObject = (JObject)jarray[0];
                 String matchTime = (String)gameJObject["matchTime"];
                 time1 = FormUtils.getTime(matchTime) ; //数据存在的时候 
+                Console.WriteLine("-------->:"+time1);
                 showMessAge("第一次有订单数据!");
             }
             else {
@@ -102,11 +106,12 @@ namespace CxjText.views
             }
 
             while (true) {
-                Thread.Sleep(200);
+                Thread.Sleep(1000);
                 curTime = FormUtils.getCurrentTime();
-                startTime = FormUtils.ConvertLongToDateTime(time1 + 1000);
-                endTime = FormUtils.ConvertLongToDateTime(curTime + (24 * 60 * 60 * 1000));
-                 orderUrl = user.dataUrl + "/UserOrder/Sports?begintime=" + WebUtility.UrlEncode(startTime)
+                startTime = FormUtils.ConvertLongToDateTime(time1 + 1500);
+                endTime = FormUtils.ConvertLongToDateTime(curTime + (  30 * 60 * 1000));
+                showMessAge(startTime+"  ---   "+ endTime);
+                orderUrl = user.dataUrl + "/UserOrder/Sports?begintime=" + WebUtility.UrlEncode(startTime)
                     + "&endtime=" + WebUtility.UrlEncode(endTime) + "&order_number=&type=0&query=%E6%9F%A5%E8%AF%A2";
                 rlt = HttpUtils.HttpGetHeader(orderUrl, "", user.cookie, headJObject);
                 if (String.IsNullOrEmpty(rlt) || !rlt.Contains("体育下注记录"))
@@ -119,8 +124,10 @@ namespace CxjText.views
                     return ;
                 }
                 jarray = EventLoginUtils.getMOrder(rlt);
+                
                 if (jarray != null && jarray.Count > 0)
                 {
+                    Console.WriteLine(jarray);
                     //记得先转化把最新的订单找出来 将时间赋值
                     //在这个里面进行处理  发送大于当前时间搓的数据
                     JObject gameJObject = (JObject)jarray[0];
@@ -129,13 +136,18 @@ namespace CxjText.views
                     for (int i = 0; i < jarray.Count; i++) {
                         JObject gameJObject1 = (JObject)jarray[i];
                         String matchTime1 = (String)gameJObject1["matchTime"];
-                        int EID = (int)gameJObject1["data"]["EID"];
-                        if (EID == -1) continue;
                         long mTime  = FormUtils.getTime(matchTime1);
-                        if (mTime >= time1) {
+                        String nameH = (String)gameJObject1["game"]["nameH"];
+                        if (nameH.Contains("角球")) {
+                            continue;
+                        }
+                        bool gunqiuFlag = (bool)gameJObject1["gunqiuFlag"]; //是否是滚球的标志
+                        if (mTime >= time1 && gunqiuFlag) {
                             //准备发送
+                            showMessAge("准备发送!");
+                            showMessAge(gameJObject1.ToString());
                             Thread t = new Thread(new ParameterizedThreadStart(sendData));
-                            t.Start(gameJObject1.ToString());
+                             t.Start(gameJObject1.ToString());
                         }
                     }
                     time1 = FormUtils.getTime(matchTime); //数据不存在的时候

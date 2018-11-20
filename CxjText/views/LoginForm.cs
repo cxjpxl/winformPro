@@ -227,6 +227,12 @@ namespace CxjText.views
                     case "M":
                         LoginUtils.loginM(this, position);
                         break;
+                    case "N":
+                        LoginUtils.loginN(this, position);
+                        break;
+                    case "BB1":
+                        LoginUtils.loginBB1(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -237,6 +243,18 @@ namespace CxjText.views
                 userInfo.cookie = null;
                 userInfo.uid = "";
                 AddToListToUpDate(position);
+            }
+        }
+
+
+        public void allGoLogin() {
+            for (int i = 0; i < Config.userList.Count; i++) {
+                UserInfo user = (UserInfo)Config.userList[i];
+                if (user == null) continue;
+                if (user.status == 2) continue;
+                if (user.status == 1) continue;
+                Thread t = new Thread(new ParameterizedThreadStart(this.GoLogin));
+                t.Start(i);
             }
         }
 
@@ -322,8 +340,14 @@ namespace CxjText.views
             isUpdate = false;
             if (refershDataList != null && refershDataList.Count >= 1)
             {
-                refershDataList.RemoveAll(positionData => positionData.positon == index);
-                upDateRow(); //自己消耗自己的资源  防止线程阻塞
+                try {
+                    refershDataList.RemoveAll(positionData => positionData.positon == index);
+                    upDateRow(); //自己消耗自己的资源  防止线程阻塞
+                }catch (Exception e)
+                {
+                   
+                }
+
             }
 
         }
@@ -601,6 +625,28 @@ namespace CxjText.views
                             return;
                         }
                         moneyStatus = MoneyUtils.GetMMoney(userInfo);
+                        break;
+                    case "N":
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 30)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetNMoney(userInfo);
+                        break;
+                    case "BB1":
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 30)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetBB1Money(userInfo);
                         break;
                     default:
                         break;

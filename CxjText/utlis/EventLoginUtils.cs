@@ -862,7 +862,7 @@ namespace CxjText.utlis
                 // 判断大小
                 int cid = 888;
                 String Info = "dianqiu";
-                if (gameNodeStr.Contains("大小"))
+              /*  if (gameNodeStr.Contains("大小"))
                 {
                     cid = 888;
                     Info = "dianqiu";
@@ -880,7 +880,7 @@ namespace CxjText.utlis
                 else
                 {
                     continue;
-                }
+                }*/
                 //获取联赛
                 String leagueName ="";
                 //if (String.IsNullOrEmpty(leagueName)) continue;
@@ -928,7 +928,7 @@ namespace CxjText.utlis
                 jArray.Add(jObject);
             }
 
-            Console.WriteLine(jArray);
+         //   Console.WriteLine(jArray);
             return jArray;
         }
     }

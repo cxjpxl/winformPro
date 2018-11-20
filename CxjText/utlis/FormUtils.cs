@@ -105,7 +105,7 @@ namespace CxjText.utlis
                     return -1;
                 }
 
-                if (dataStr.Trim().Equals("4"))
+                if (dataStr.Trim().Equals("4") || dataStr.Contains("登录成功"))
                 {
                     return 1;
                 }
@@ -282,6 +282,18 @@ namespace CxjText.utlis
                     break;
                 case "M":
                     if (currentTime - userTime >= 10 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "N":
+                    if (currentTime - userTime >= 15 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "BB1":
+                    if (currentTime - userTime >= 10* 1000)
                     {
                         isUpdate = true;
                     }

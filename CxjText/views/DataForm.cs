@@ -186,6 +186,18 @@ namespace CxjText.views
                         rltObj = DataUtils.updateUI(jObject, "M");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
+                    else if (userInfo.tag.Equals("N"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "N");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("BB1"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "BB1");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
                     else
                     {
                         mid = "";
@@ -336,6 +348,16 @@ namespace CxjText.views
                     if (jObjectM == null) return;
                     rltStr = DataClickUtlis.DataSysMClick(dataJObject, jObjectM, numRow, clickNum, "M");
                     break;
+                case "N":
+                    JObject jObjectN = (JObject)obj;
+                    if (jObjectN == null) return;
+                    rltStr = DataClickUtlis.DataSysNClick(dataJObject, jObjectN, numRow, clickNum, "N");
+                    break;
+                case "BB1":
+                    JObject jObjectBB1 = (JObject)obj;
+                    if (jObjectBB1 == null) return;
+                    rltStr = DataClickUtlis.DataSysBB1Click(dataJObject, jObjectBB1, numRow, clickNum, "BB1");
+                    break;
                 default:
                     break;
 
@@ -363,15 +385,31 @@ namespace CxjText.views
                     daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
                     daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
                     dataJObject["daTui"] = daTuiJObject;
-                    
+
                 }
                 else if (clickNum == 5 || clickNum == 8) //大小
                 {
-                    daTuiJObject["isDaXiao"] = true;
-                    daTuiJObject["isH"] = true;
-                    daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
-                    daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
-                    dataJObject["daTui"] = daTuiJObject;
+                    if (numRow == 0) {
+                        daTuiJObject["isDaXiao"] = true;
+                        daTuiJObject["isH"] = true;
+                        daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
+                        daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+                        dataJObject["daTui"] = daTuiJObject;
+                    }
+                } else if (clickNum == 3 || clickNum == 6) { //独赢当大小下
+                    if (numRow == 0 || numRow == 1) {
+                        daTuiJObject["isDaXiao"] = true;
+                        if (numRow == 0)
+                        {
+                            daTuiJObject["isH"] = true;
+                        }else
+                        {
+                            daTuiJObject["isH"] = false;
+                        }
+                        daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
+                        daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+                        dataJObject["daTui"] = daTuiJObject;
+                    }
                 }
             }
 

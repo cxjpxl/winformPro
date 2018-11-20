@@ -95,6 +95,7 @@ namespace CxjText.utlis
                         obj = jObjectA;
                         break;
                     case "B":
+                    case "N":
                         JObject jObjectB = (JObject)jArray[i];
                         lianSai = (String)jObjectB["Match_Name"];
                         hStr = (String)jObjectB["Match_Master"];
@@ -199,6 +200,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectM["visitteam"];
                         mid = DataUtils.getMid(jObjectM, tag);
                         obj = jObjectM;
+                        break;
+                    case "BB1":
+                        JObject jObjectBB1 = (JObject)jArray[i];
+                        lianSai = (String)jObjectBB1["league"];
+                        hStr = (String)jObjectBB1["gameInfo"]["tid_h"];
+                        gStr = (String)jObjectBB1["gameInfo"]["tid_a"];
+                        mid = DataUtils.getMid(jObjectBB1, tag);
+                        obj = jObjectBB1;
                         break;
                     default:
                         return null;
@@ -418,6 +427,7 @@ namespace CxjText.utlis
                         obj = jObjectA;
                         break;
                     case "B":
+                    case "N":
                         JObject jObjectB = (JObject)jArray[i];
                         lianSai = (String)jObjectB["Match_Name"];
                         hStr = (String)jObjectB["Match_Master"];
@@ -522,6 +532,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectM["visitteam"];
                         mid = DataUtils.getMid(jObjectM, tag);
                         obj = jObjectM;
+                        break;
+                    case "BB1":
+                        JObject jObjectBB1 = (JObject)jArray[i];
+                        lianSai = (String)jObjectBB1["league"];
+                        hStr = (String)jObjectBB1["gameInfo"]["tid_h"];
+                        gStr = (String)jObjectBB1["gameInfo"]["tid_a"];
+                        mid = DataUtils.getMid(jObjectBB1, tag);
+                        obj = jObjectBB1;
                         break;
                     default:
                         return null;
@@ -720,6 +738,14 @@ namespace CxjText.utlis
                         mid = DataUtils.getMid(jObjectM, tag);
                         obj = jObjectM;
                         break;
+                    case "BB1":
+                        JObject jObjectBB1 = (JObject)jArray[i];
+                        lianSai = (String)jObjectBB1["league"];
+                        hStr = (String)jObjectBB1["gameInfo"]["tid_h"];
+                        gStr = (String)jObjectBB1["gameInfo"]["tid_a"];
+                        mid = DataUtils.getMid(jObjectBB1, tag);
+                        obj = jObjectBB1;
+                        break;
                     default:
                         return null;
                 }
@@ -877,6 +903,14 @@ namespace CxjText.utlis
                         gStr = (String)jObjectM["visitteam"];
                         mid = DataUtils.getMid(jObjectM, tag);
                         obj = jObjectM;
+                        break;
+                    case "BB1":
+                        JObject jObjectBB1 = (JObject)jArray[i];
+                        lianSai = (String)jObjectBB1["league"];
+                        hStr = (String)jObjectBB1["gameInfo"]["tid_h"];
+                        gStr = (String)jObjectBB1["gameInfo"]["tid_a"];
+                        mid = DataUtils.getMid(jObjectBB1, tag);
+                        obj = jObjectBB1;
                         break;
                     default:
                         return null;

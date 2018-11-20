@@ -956,13 +956,11 @@ namespace CxjText.utlis
         public static String getEData(UserInfo userInfo)
         {
             JObject headJObject = new JObject();
-            String dataUrl = userInfo.dataUrl + "/sports1/hg/getData.do";
+            String dataUrl = userInfo.dataUrl + "/sports/hg/getData.do?pageNo=1&gameType=FT_RB_MN&sortType=1";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/sports1/hg/goPage.do?dataType=RB_FT_MN";
             headJObject["X-Requested-With"] = "XMLHttpRequest";
-            String dataP = "pageNo=1&gameType=FT_RB_MN&sortType=1";
-            String rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {
                 return null;
@@ -999,12 +997,9 @@ namespace CxjText.utlis
                 }
                 jArray.Add(itemJObject);
             }
-
-
-
             for (int pageNo = 2; pageNo <= pageCount; pageNo++) {
-                dataP = "pageNo=" + pageNo + "&gameType=FT_RB_MN&sortType=1";
-                rltStr = HttpUtils.HttpPostHeader(dataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                dataUrl =  userInfo.dataUrl + "/sports/hg/getData.do?pageNo="+ pageNo + "&gameType=FT_RB_MN&sortType=1";
+                rltStr = HttpUtils.HttpGetHeader(dataUrl,"", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
                     continue;
@@ -1555,13 +1550,31 @@ namespace CxjText.utlis
         public static String getOData(UserInfo userInfo)
         {
             //page是由1开始
+
+            if (userInfo.status != 2) return null;
+
+            bool hasHgSport = true;
+            if (userInfo.expJObject != null && ((String)userInfo.expJObject["sys"]).Equals("O2"))
+            {
+                hasHgSport = false;
+            }
+
+
+
             String getDataUrl = userInfo.dataUrl + "/HGSports/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
             String dataP = "leagueName=&pageIndex=1";
+
+            if (!hasHgSport) {
+                getDataUrl = userInfo.dataUrl + "/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
+            }
+
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
             String rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) return null;
+            if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) {
+                return null;
+            }
             JObject jObject = JObject.Parse(rlt);
             if (jObject == null) return null;
             if (jObject["list"] == null) {
@@ -1583,6 +1596,9 @@ namespace CxjText.utlis
             for (int i = 2; i <= p_page; i++)
             {
                 getDataUrl = userInfo.dataUrl + "/HGSports/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
+                if (hasHgSport) {
+                    getDataUrl = userInfo.dataUrl + "/index.php?c=SportsMatch&a=FTGunQiu&t=" + FormUtils.getCurrentTime();
+                }
                 dataP = "leagueName=&pageIndex=" + i;
                 rlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) continue;
@@ -1596,8 +1612,8 @@ namespace CxjText.utlis
                     jArry.Add(pageJArry[j]);
                 }
             }
-            //{list:[]}
 
+           
             return jObject.ToString();
         }
 
@@ -2258,5 +2274,303 @@ namespace CxjText.utlis
             jObect["db"] = jArray;
            return jObect.ToString(); ;
         }
+
+        /***********************获取N系统的数据****************************/
+        public static String getNData(UserInfo userInfo)
+        {
+            JObject jObect = new JObject();
+            JArray jArray = new JArray();
+            jObect["db"] = jArray;
+
+            String dataUrl = userInfo.dataUrl + "/sports/json/ft_gq.php?leaguename=&CurrPage=0&callback=&_="+FormUtils.getCurrentTime();
+            
+            JObject headJObject = new JObject();
+            String dataRlt = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
+         
+            if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db"))
+            {
+                return jObect.ToString();
+            }
+
+
+            if (dataRlt.Contains("重新登录") && userInfo.status == 2) {
+                userInfo.status = 3;
+                return jObect.ToString();
+            }
+
+            dataRlt = dataRlt.Replace("({","{").Replace("})", "}");
+            if (!FormUtils.IsJsonObject(dataRlt)) {
+                return jObect.ToString();
+            }
+
+            JObject dataJObject = JObject.Parse(dataRlt);
+            int allPage = 1;
+            //获取总页数
+            if (((int)dataJObject["fy"]["p_page"]) >= ((int)dataJObject["fy"]["page"]))
+            {
+                allPage = ((int)dataJObject["fy"]["p_page"]);
+            }
+            else
+            {
+                allPage = ((int)dataJObject["fy"]["page"]);
+            }
+
+            JArray db = (JArray)dataJObject["db"];
+
+            if (db.Count == 0)
+            {
+                return jObect.ToString();
+            }
+
+            for (int i = 0; i < db.Count; i++)
+            {
+                jArray.Add(db[i]);
+            }
+
+            for (int i = 1; i < allPage; i++)
+            {
+                dataUrl = userInfo.dataUrl + "/sports/json/ft_gq.php?leaguename=&CurrPage="+i+"&callback=&_=" + FormUtils.getCurrentTime();
+                dataRlt = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db"))
+                {
+                    continue;
+                }
+
+                dataRlt = dataRlt.Replace("({", "{").Replace("})", "}");
+
+                dataJObject = JObject.Parse(dataRlt);
+                db = (JArray)dataJObject["db"];
+                if (db.Count == 0) continue;
+                for (int j = 0; j < db.Count; j++)
+                {
+                    jArray.Add(db[j]);
+                }
+            }
+
+            jObect["db"] = jArray;
+            return jObect.ToString(); ;
+        }
+
+
+        /***********************获取BB1系统的数据****************************/
+
+        public static JObject productGame() {
+            JObject jObject = new JObject();
+            jObject["zhuDuying"] = "";
+            jObject["keDuying"] = "";
+            jObject["heDuying"] = "";
+
+            jObject["zhuRangPk"] = "";
+            jObject["zhuRangPv"] = "";
+            jObject["keRangPk"] = "";
+            jObject["keRangPv"] = "";
+
+            jObject["zhuDaXaioPk"] = "";
+            jObject["zhuDaXaioPv"] = "";
+            jObject["keDaXaioPk"] = "";
+            jObject["keDaXaioPv"] = "";
+
+            jObject["b_zhuDuying"] = "";
+            jObject["b_keDuying"] = "";
+            jObject["b_heDuying"] = "";
+
+            jObject["b_zhuRangPk"] = "";
+            jObject["b_zhuRangPv"] = "";
+            jObject["b_keRangPk"] = "";
+            jObject["b_keRangPv"] = "";
+
+            jObject["b_zhuDaXaioPk"] = "";
+            jObject["b_zhuDaXaioPv"] = "";
+            jObject["b_keDaXaioPk"] = "";
+            jObject["b_keDaXaioPv"] = "";
+
+            return jObject;
+        }
+
+        public static bool canAdd(JObject pankouJObject) {
+
+            String zhuRangPv =(String) pankouJObject["zhuRangPv"];
+            String zhuDaXaioPv = (String)pankouJObject["zhuDaXaioPv"];
+            String b_zhuRangPv = (String)pankouJObject["b_zhuRangPv"];
+            String b_zhuDaXaioPv = (String)pankouJObject["b_zhuDaXaioPv"];
+            String zhuDuying = (String)pankouJObject["zhuDuying"];
+            String b_zhuDuying = (String)pankouJObject["b_zhuDuying"];
+            if (String.IsNullOrEmpty(zhuRangPv) &&
+                String.IsNullOrEmpty(zhuDaXaioPv) &&
+                String.IsNullOrEmpty(b_zhuRangPv) &&
+                String.IsNullOrEmpty(b_zhuDaXaioPv) &&
+                String.IsNullOrEmpty(zhuDuying) &&
+                String.IsNullOrEmpty(b_zhuDuying)
+                ) {
+                return false;
+            }
+            return true;
+        }
+
+        //jArray 总列表  leagueId联赛Id  leagueName联赛名称  
+        //gameInfoJObject 比赛信息
+        //panKouJObject 盘口信息
+        public static void addBB1Game(JArray jArray,
+            String leagueId,String leagueName,
+            JObject gameInfoJObject, JObject panKouJObject,String gameId)
+        {
+            //一场比赛里面有两个和盘口
+            JObject pankou1JObject = productGame();
+            JObject pankou2JObject = productGame();
+            pankou1JObject["leagueId"] = leagueId;
+            pankou2JObject["leagueId"] = leagueId;
+
+            pankou1JObject["league"] = leagueName;
+            pankou2JObject["league"] = leagueName;
+
+            pankou1JObject["gameInfo"] = gameInfoJObject;
+            pankou2JObject["gameInfo"] = gameInfoJObject;
+
+            pankou1JObject["gameId"] = gameId;
+            pankou2JObject["gameId"] = gameId;
+
+            //制造唯一性
+            pankou1JObject["mid"] = gameId +"1";   
+            pankou2JObject["mid"] = gameId +"2";
+
+            pankou1JObject["pk1"] = true;  //是否是盘口1  是
+            pankou2JObject["pk1"] = false;
+
+            //先解析盘口的全场的数据
+            if (panKouJObject["RB"] != null) {
+                JArray RB = (JArray)panKouJObject["RB"];
+                pankou1JObject["zhuDuying"] = RB[16];
+                pankou1JObject["keDuying"] = RB[17];
+                pankou1JObject["heDuying"] = RB[18];
+
+                pankou1JObject["zhuRangPk"] = RB[0];
+                pankou1JObject["zhuRangPv"] = RB[2];
+                pankou1JObject["keRangPk"] = RB[1];
+                pankou1JObject["keRangPv"] = RB[3];
+
+                pankou1JObject["zhuDaXaioPk"] = RB[8];
+                pankou1JObject["zhuDaXaioPv"] = RB[10];
+                pankou1JObject["keDaXaioPk"] = RB[8];
+                pankou1JObject["keDaXaioPv"] = RB[11];
+
+                /////////////////////////////////////////////////////////
+
+                pankou2JObject["zhuDuying"] = "";
+                pankou2JObject["keDuying"] = "";
+                pankou2JObject["heDuying"] = "";
+
+                pankou2JObject["zhuRangPk"] = RB[4];
+                pankou2JObject["zhuRangPv"] = RB[6];
+                pankou2JObject["keRangPk"] = RB[5];
+                pankou2JObject["keRangPv"] = RB[7];
+
+                pankou2JObject["zhuDaXaioPk"] = RB[12];
+                pankou2JObject["zhuDaXaioPv"] = RB[14];
+                pankou2JObject["keDaXaioPk"] = RB[12];
+                pankou2JObject["keDaXaioPv"] = RB[15];
+            }
+
+
+            //解析盘口的半场的数据
+            if (panKouJObject["RV"] != null)
+            {
+                JArray RV = (JArray)panKouJObject["RV"];
+                pankou1JObject["b_zhuDuying"] = RV[16];
+                pankou1JObject["b_keDuying"] = RV[17];
+                pankou1JObject["b_heDuying"] = RV[18];
+
+                pankou1JObject["b_zhuRangPk"] = RV[0];
+                pankou1JObject["b_zhuRangPv"] = RV[2];
+                pankou1JObject["b_keRangPk"] = RV[1];
+                pankou1JObject["b_keRangPv"] = RV[3];
+
+                pankou1JObject["b_zhuDaXaioPk"] = RV[8];
+                pankou1JObject["b_zhuDaXaioPv"] = RV[10];
+                pankou1JObject["b_keDaXaioPk"] = RV[8];
+                pankou1JObject["b_keDaXaioPv"] = RV[11];
+
+                /////////////////////////////////////////////////////////
+
+                pankou2JObject["b_zhuDuying"] = "";
+                pankou2JObject["b_keDuying"] = "";
+                pankou2JObject["b_heDuying"] = "";
+
+                pankou2JObject["b_zhuRangPk"] = RV[4];
+                pankou2JObject["b_zhuRangPv"] = RV[6];
+                pankou2JObject["b_keRangPk"] = RV[5];
+                pankou2JObject["b_keRangPv"] = RV[7];
+
+                pankou2JObject["b_zhuDaXaioPk"] = RV[12];
+                pankou2JObject["b_zhuDaXaioPv"] = RV[14];
+                pankou2JObject["b_keDaXaioPk"] = RV[12];
+                pankou2JObject["b_keDaXaioPv"] = RV[15];
+            }
+
+           
+            jArray.Add(pankou1JObject); //为了封盘的时候能看到数据
+
+            if (canAdd(pankou2JObject))
+            {
+                jArray.Add(pankou2JObject);
+            }
+        }
+
+        public static String getBB1Data(UserInfo userInfo)
+        {
+            JObject jObect = new JObject();
+            JArray jArray = new JArray();
+            jObect["list"] = jArray;
+
+            String dataUrl = userInfo.dataUrl + "/sport/rest/odds/getOddsListLive.json?odds_type=0&cb=N&gid_list=%5B%5D&modify_ts=0&_="+FormUtils.getCurrentTime();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            String dataRlt = HttpUtils.HttpGetHeader(dataUrl,"",userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("data") || !FormUtils.IsJsonObject(dataRlt)) {
+                return jObect.ToString();
+            }
+
+            JObject dataJObject = JObject.Parse(dataRlt);
+            dataJObject = (JObject)dataJObject["data"];
+
+            if (dataJObject["game"] == null || dataJObject["insert"] == null || dataJObject["league"] == null) {
+                return jObect.ToString();
+            }
+
+            //先解析联赛数据  league
+            JObject leagueJObject =(JObject) dataJObject["league"];
+            //联赛下面的比赛的盘口数据
+            JObject insertJObject = (JObject)dataJObject["insert"];
+            //比赛的详情
+            JObject gameJObject = (JObject)dataJObject["game"];
+
+            IEnumerable<JProperty> properties = leagueJObject.Properties();
+            //开始遍历联赛的列表
+            foreach (JProperty item in properties)
+            {
+                String leagueId = item.Name; //联赛ID
+                String leagueName = (String)item.Value; // 联赛名字
+                //这个联赛下面的盘口的数据
+                JObject gamesPanKouJObject = (JObject)insertJObject[leagueId];
+                IEnumerable<JProperty> panKouP = gamesPanKouJObject.Properties();
+                foreach (JProperty panKouItem in panKouP)
+                {
+                    String gameId = panKouItem.Name;//盘口的id
+                    //这场比赛的盘口数据 panKouJObject
+                    JObject panKouJObject =(JObject) panKouItem.Value;
+                    //先过滤掉不是足球滚球的数据 
+                    JObject gameInfoJObject = (JObject)gameJObject[gameId+""];
+                    // 这场比赛的信息数据 gameInfoJObject
+                    if (gameInfoJObject == null) continue;
+                    String typeStr =(String) gameInfoJObject["game_type"];
+                    if (!typeStr.Equals("FT")) continue;
+                    //添加比赛到列表中
+                    addBB1Game(jArray,leagueId,leagueName,
+                        gameInfoJObject,panKouJObject, gameId);
+                }
+
+            }
+            return jObect.ToString(); ;
+        }
+
     }
 }

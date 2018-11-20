@@ -562,16 +562,19 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             String moneyUrl = user.dataUrl + "/HGSports/index.php?c=Member&a=GetAmount";
+            if (user.expJObject != null && ((String)user.expJObject["sys"]).Equals("O2")) {
+                moneyUrl = user.dataUrl + "/index.php?c=Member&a=GetAmount";
+            }
             String moneyP = "t=" + FormUtils.getCurrentTime();
             String bMoneyRlt = HttpUtils.HttpPostHeader(moneyUrl, moneyP, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             if (String.IsNullOrEmpty(bMoneyRlt) || !FormUtils.IsJsonObject(bMoneyRlt)) return 0;
             if (!bMoneyRlt.Contains("user_bal") ) return 0;
+         
             JObject jObject = JObject.Parse(bMoneyRlt);
             if (jObject["user_bal"] == null) return 0;
             user.money = (String)jObject["user_bal"];
             return 1;
         }
-
         //获取J系统的money
         public static int GetJMoney(UserInfo user) {
 
@@ -600,8 +603,6 @@ namespace CxjText.utlis
             user.money = money;
             return 1;
         }
-
-
         //获取L money
         public static int GetLMoney(UserInfo user)
         {
@@ -631,7 +632,6 @@ namespace CxjText.utlis
 
             return 1;
         }
-
         //获取M money
         public static int GetMMoney(UserInfo user)
         {
@@ -663,6 +663,64 @@ namespace CxjText.utlis
                 return 0;
             }
 
+            return 1;
+        }
+        //获取N money
+        public static int GetNMoney(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/leftdao.php?callback=&_="+FormUtils.getCurrentTime();
+            JObject headJObject = new JObject();
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt)) {
+                return -1;
+            }
+            moneyRlt = moneyRlt.Replace("(","").Replace(");","").Trim();
+            if (!FormUtils.IsJsonObject(moneyRlt)) {
+                return -1;
+            }
+
+            JObject moneyObj = JObject.Parse(moneyRlt);
+            if (moneyObj == null || moneyObj["u_money"] == null) {
+                return -1;
+            }
+            user.money = ((String)moneyObj["u_money"]);
+            return 1;
+        }
+        //获取BB1 money
+        public static int GetBB1Money(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/infe/rest/balance/BB.json?_"+FormUtils.getCurrentTime();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Referer"] = user.dataUrl + "/sport/?game_type=FT";
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "application/json", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt))
+            {
+                return -1;
+            }
+            moneyRlt = moneyRlt.Trim();
+            if (!FormUtils.IsJsonObject(moneyRlt))
+            {
+                return -1;
+            }
+
+            JObject moneyObj = JObject.Parse(moneyRlt);
+            if (moneyObj == null || moneyObj["data"] == null)
+            {
+                return -1;
+            }
+            try
+            {
+                float money = ((float)moneyObj["data"]);
+                user.money = money + "";
+            }
+            catch (Exception e) {
+                return -1;
+            }
+          
             return 1;
         }
     }

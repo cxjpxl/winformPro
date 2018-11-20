@@ -511,6 +511,12 @@ namespace CxjText.views
                     case "M":
                         orderParmas = rltStr;
                         break;
+                    case "N":
+                        orderParmas = rltStr;
+                        break;
+                    case "BB1":
+                        orderParmas = rltStr;
+                        break;
                     default:
                         continue;
                 }
@@ -588,6 +594,8 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                     jObject["betJObject"] = dataJObject["betJObject"];
+                    UserInfo userInfo1 = (UserInfo)Config.userList[this.cIndex];
+                    jObject["baseUrl"] = userInfo1.baseUrl;
                 }
                 else if (user.tag.Equals("H"))
                 {
@@ -613,6 +621,15 @@ namespace CxjText.views
                 else if (user.tag.Equals("M"))
                 {
                     jObject["money"] = inputMoney;
+                }
+                else if(user.tag.Equals("N"))
+                { 
+                    jObject["money"] = inputMoney;
+                }
+                else if(user.tag.Equals("BB1"))
+                {
+                    jObject["money"] = inputMoney;
+                    jObject["gid"] = dataJObject["gid"]; ;
                 }
                 //开线程并发去下注
                 if (!Config.canOrder) continue;
@@ -697,6 +714,12 @@ namespace CxjText.views
                     case "M":
                         OrderUtils.OrderM(jobject, this, loginForm, rltForm);
                         break;
+                    case "N":
+                        OrderUtils.OrderN(jobject, this, loginForm, rltForm);
+                        break;
+                    case "BB1":
+                        OrderUtils.OrderBB1(jobject, this, loginForm, rltForm);
+                        break;
                     default:
                         return;
                 }
@@ -729,6 +752,10 @@ namespace CxjText.views
                 enventInfo.bangchangType = 0; //下默认
             }
 
+            if (String.IsNullOrEmpty(enventInfo.nameH)) {
+                return;
+            }
+
             UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
             //判断时候要下注   主要返回要下那一队
             //修改6
@@ -748,6 +775,10 @@ namespace CxjText.views
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
             String lianSai = (String)jObject["lianSai"];
+            if (lianSai.Contains("保加利亚"))
+            {
+                return;
+            }
             //先将数据搜索出来
             if (mainFrom != null)
             {

@@ -25,6 +25,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -94,6 +95,12 @@ namespace CxjText.utlis
                         c00 = (String)jObjectM["league"];
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c00 = (String)jObjectBB1["league"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -110,6 +117,7 @@ namespace CxjText.utlis
                     time = (String)jObjectA["a19"] + "\n" + (String)jObjectA["a16"] + " - " + (String)jObjectA["a17"];
                     break;
                 case "B":
+                case "N":
                 case "O":
                     JObject jObjectB = (JObject)obj;
                     time = (String)jObjectB["Match_Time"];
@@ -233,6 +241,11 @@ namespace CxjText.utlis
                     time = (String)jObjectM["bowlingtime"];
                     time = time + "\n" + jObjectM["score_h_now"] + "-" + jObjectM["score_v_now"];
                     break;
+                case "BB1":
+                    JObject jObjectBB1 = (JObject)obj;
+                    time = (String)jObjectBB1["gameInfo"]["game_start_time"];
+                    time = time + "\n" + jObjectBB1["gameInfo"]["score_h"] + "-" + jObjectBB1["gameInfo"]["score_a"];
+                    break;
                 default:
                     break;
             }
@@ -250,6 +263,7 @@ namespace CxjText.utlis
                     gBifen = (String)jObjectA["a17"];
                     break;
                 case "B":
+                case "N":
                 case "O":
                     JObject jObjectB = (JObject)obj;
                     try
@@ -384,6 +398,11 @@ namespace CxjText.utlis
                     hBifen = (String)jObjectM["score_h_now"];
                     gBifen = (String)jObjectM["score_v_now"];
                     break;
+                case "BB1":
+                    JObject jObjectBB1 = (JObject)obj;
+                    hBifen = (String)jObjectBB1["gameInfo"]["score_h"];
+                    gBifen = (String)jObjectBB1["gameInfo"]["score_a"];
+                    break;
                 default:
                     break;
             }
@@ -428,6 +447,7 @@ namespace CxjText.utlis
                     c02 = (String)jObjectA["a2"];
                     break;
                 case "B":
+                case "N":
                 case "O":
                     JObject jObjectB = (JObject)obj;
                     c02 = (String)jObjectB["Match_Master"];
@@ -475,6 +495,10 @@ namespace CxjText.utlis
                     JObject jObjectM = (JObject)obj;
                     c02 = (String)jObjectM["hostteam"];
                     break;
+                case "BB1":
+                    JObject jObjectBB1 = (JObject)obj;
+                    c02 = (String)jObjectBB1["gameInfo"]["tid_h"];
+                    break;
                 default:
                     break;
             }
@@ -493,6 +517,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -556,6 +581,10 @@ namespace CxjText.utlis
                         c12 = (String)jObjectM["visitteam"];
                         break;
                     }
+                case "BB1":
+                    JObject jObjectBB1 = (JObject)obj;
+                    c12 = (String)jObjectBB1["gameInfo"]["tid_a"];
+                    break;
                 default:
                     break;
             }
@@ -580,6 +609,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -689,7 +719,13 @@ namespace CxjText.utlis
                             c03 = data;
                         }
                         break;
-                    } 
+                    }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c03 = (String)jObjectBB1["zhuDuying"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -708,6 +744,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -945,6 +982,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c04 = ((String)jObjectBB1["zhuRangPk"]+ " "+(String)jObjectBB1["zhuRangPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -963,6 +1006,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -1137,6 +1181,12 @@ namespace CxjText.utlis
                         c05 = "大" + pk + " " + pv;
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c05 = ((String)jObjectBB1["zhuDaXaioPk"] + " " + (String)jObjectBB1["zhuDaXaioPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1155,6 +1205,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -1267,6 +1318,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c06 = (String)jObjectBB1["b_zhuDuying"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1285,6 +1342,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -1552,6 +1610,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                    case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c07 = ((String)jObjectBB1["b_zhuRangPk"]+ " "+(String)jObjectBB1["b_zhuRangPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1570,6 +1634,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -1753,6 +1818,12 @@ namespace CxjText.utlis
                         c08 = "大" + pk + " " + pv;
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c08 = ((String)jObjectBB1["b_zhuDaXaioPk"] + " " + (String)jObjectBB1["b_zhuDaXaioPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1773,6 +1844,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -1885,6 +1957,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c13 = (String)jObjectBB1["keDuying"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -1903,6 +1981,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -2154,6 +2233,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c14 = ((String)jObjectBB1["keRangPk"] + " " + (String)jObjectBB1["keRangPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2172,6 +2257,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -2182,7 +2268,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
-                            c15 = ((String)jObjectB["Match_DxGG1"]).Replace(" ","") + " " + ((String)jObjectB["Match_DxXpl"]).Replace(" ","");
+                            c15 = ((String)jObjectB["Match_DxGG"]).Replace(" ","") + " " + ((String)jObjectB["Match_DxXpl"]).Replace(" ","");
                         }
                         break;
                     }
@@ -2348,6 +2434,12 @@ namespace CxjText.utlis
                         c15 = "小" + pk + " " + pv;
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c15 = ((String)jObjectBB1["keDaXaioPk"] + " " + (String)jObjectBB1["keDaXaioPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2366,6 +2458,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -2480,6 +2573,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c16 = (String)jObjectBB1["b_keDuying"];
+                        break;
+                    }
                 default:
                         break;
                 }
@@ -2498,6 +2597,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -2763,7 +2863,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
-
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c17 = ((String)jObjectBB1["b_keRangPk"] + " " + (String)jObjectBB1["b_keRangPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2782,6 +2887,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -2966,6 +3072,12 @@ namespace CxjText.utlis
                         c18 = "小" + pk + " " + pv;
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c18 = ((String)jObjectBB1["b_keDaXaioPk"] + " " + (String)jObjectBB1["b_keDaXaioPv"]).Trim();
+                        break;
+                    }
                 default:
                     break;
             }
@@ -2985,6 +3097,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -3099,6 +3212,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c23 = (String)jObjectBB1["heDuying"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -3117,6 +3236,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "B":
+                case "N":
                 case "O":
                     {
                         JObject jObjectB = (JObject)obj;
@@ -3229,6 +3349,12 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        c26 = (String)jObjectBB1["b_heDuying"];
+                        break;
+                    }
                 default:
                     break;
             }
@@ -3327,6 +3453,7 @@ namespace CxjText.utlis
                     }
                 case "B":
                 case "O":
+                case "N":
                     {
                         JObject jObjectB = (JObject)obj;
                          mid = (String)jObjectB["Match_ID"];
@@ -3398,6 +3525,12 @@ namespace CxjText.utlis
                     {
                         JObject jObjectM = (JObject)obj;
                         mid = (String)jObjectM["matchid"];
+                        break;
+                    }
+                case "BB1":
+                    {
+                        JObject jObjectBB1 = (JObject)obj;
+                        mid = (String)jObjectBB1["mid"];
                         break;
                     }
                 default:

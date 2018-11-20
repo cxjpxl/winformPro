@@ -784,6 +784,7 @@ namespace CxjText.utlis
             itemObject["gid"] = gid;
             itemObject["scoreH"] = (String)jObject["scoreH"];
             itemObject["scoreC"] = (String)jObject["scoreC"];
+            itemObject["mid"] = (String)jObject["matchId"];
             if (numRow == 0)
             {
 
@@ -917,7 +918,8 @@ namespace CxjText.utlis
 
             jArray.Add(itemObject);
             betJObject["items"] = jArray;
-            rltStr = "data=" + WebUtility.UrlEncode(betJObject.ToString());  //获取订单的参数
+          //  rltStr = "data=" + WebUtility.UrlEncode(betJObject.ToString());  //获取订单的参数
+            rltStr = betJObject.ToString();
             dataJObject["betJObject"] = betJObject; //订单数据
             return rltStr;
         }
@@ -2093,7 +2095,7 @@ namespace CxjText.utlis
                         inputType = inputType + "-大小";
                         bateStr = DataUtils.get_c15_data(jObject, tag);
                         rltStr = "Match_DxXpl";
-                        pk = (String)jObject["Match_DxGG1"];
+                        pk = (String)jObject["Match_DxGG"];
                         break;
                     case 6:
                         inputType = inputType + "-半场独赢";
@@ -2923,6 +2925,405 @@ namespace CxjText.utlis
             dataJObject["bateStr"] = bateStr; //赔率
             dataJObject["inputType"] = inputType; //下注类型
 
+            return rltStr;
+        }
+
+
+        //N系统点击处理
+        public static String DataSysNClick(JObject dataJObject,
+             object obj, int numRow, int clickNum, String tag
+            )
+        {
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+            String mid = (String)jObject["Match_ID"]; //赛事ID的获取
+            String gid = (String)jObject["myid"]; //参数之一
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        rltStr = "gid="+gid+"&tytype=zqgq&xzlx=ds&xztype=A&odd_f_type=H";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        
+                        rltStr = "gid="+gid+"&tytype=zqgq&xzlx=ds&xztype=B&odd_f_type=H";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        rltStr = "gid="+gid+"&tytype=zqgq&xzlx=ds&xztype=C&odd_f_type=H";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        rltStr = "gid="+gid+"&tytype=zqgq&xzlx=ds&xztype=E&odd_f_type=H";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=F&odd_f_type=H";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=G&odd_f_type=H";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=A&odd_f_type=C";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=B&odd_f_type=C";
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=C&odd_f_type=C";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=E&odd_f_type=C";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=F&odd_f_type=C";
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=G&odd_f_type=C";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=A&odd_f_type=N";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        rltStr = "gid=" + gid + "&tytype=zqgq&xzlx=ds&xztype=E&odd_f_type=N";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+            //下单前要请求的参数不能为空（B要先请求一个接口）
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["Match_Name"]; //获取赛事
+            gameTeam = (String)jObject["Match_Master"] + "-" + (String)jObject["Match_Guest"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
+            return rltStr;
+        }
+
+
+
+        //BB1系统点击处理
+        public static String DataSysBB1Click(JObject dataJObject,
+             object obj, int numRow, int clickNum, String tag
+            )
+        {
+            JObject jObject = (JObject)obj;
+            if (jObject == null) return null;
+            String rltStr = "";
+            String bateStr = "";
+            String inputType = "";
+            String gameName = "";
+            String gameTeam = "";
+            if (jObject == null) return null;
+            String game_id = (String)jObject["gameId"];
+            String game_type = "FT";
+            String play_type = "";
+            String order_type = "";
+            String real_type = "";
+            bool isPK1 = (bool)jObject["pk1"];
+            if (numRow == 0)
+            {
+                inputType = "主队";
+                switch (clickNum)
+                {
+                    case 3://03
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c03_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        real_type = "MH";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c04_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        if (isPK1)
+                        {
+                            real_type = "RH";
+                        }
+                        else {
+                            real_type = "R2H";
+                        }
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        if (isPK1)
+                        {
+                            real_type = "OUH";
+                        }
+                        else
+                        {
+                            real_type = "OU2H";
+                        }
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c06_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        real_type = "MH";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c07_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        if (isPK1)
+                        {
+                            real_type = "RH";
+                        }
+                        else
+                        {
+                            real_type = "R2H";
+                        }
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c08_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        if (isPK1)
+                        {
+                            real_type = "OUH";
+                        }
+                        else
+                        {
+                            real_type = "OU2H";
+                        }
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 1)
+            {
+
+                inputType = "客队";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c13_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        real_type = "MC";
+                        break;
+                    case 4:
+                        inputType = inputType + "-让球";
+                        bateStr = DataUtils.get_c14_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        if (isPK1)
+                        {
+                            real_type = "RC";
+                        }
+                        else
+                        {
+                            real_type = "R2C";
+                        }
+                        break;
+                    case 5:
+                        inputType = inputType + "-大小";
+                        bateStr = DataUtils.get_c15_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        if (isPK1)
+                        {
+                            real_type = "OUC";
+                        }
+                        else
+                        {
+                            real_type = "OU2C";
+                        }
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c16_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        real_type = "MC";
+                        break;
+                    case 7:
+                        inputType = inputType + "-半场让球";
+                        bateStr = DataUtils.get_c17_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        if (isPK1)
+                        {
+                            real_type = "RC";
+                        }
+                        else
+                        {
+                            real_type = "R2C";
+                        }
+                        break;
+                    case 8:
+                        inputType = inputType + "-半场大小";
+                        bateStr = DataUtils.get_c18_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        if (isPK1)
+                        {
+                            real_type = "OUC";
+                        }
+                        else
+                        {
+                            real_type = "OU2C";
+                        }
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else if (numRow == 2)
+            {
+                inputType = "和局";
+                switch (clickNum)
+                {
+                    case 3:
+                        inputType = inputType + "-独赢";
+                        bateStr = DataUtils.get_c23_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RB";
+                        order_type = "RB";
+                        real_type = "MN";
+                        break;
+                    case 6:
+                        inputType = inputType + "-半场独赢";
+                        bateStr = DataUtils.get_c26_data(jObject, tag);
+                        rltStr = "";
+                        play_type = "RV";
+                        order_type = "RV";
+                        real_type = "MN";
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            if (String.IsNullOrEmpty(play_type)
+                || String.IsNullOrEmpty(order_type) 
+                || String.IsNullOrEmpty(real_type)) {
+                return null;
+            }
+
+
+            rltStr = "odds_type=0" +
+                    "&" + WebUtility.UrlEncode("order[" + game_id + "][game_id]") + "=" + game_id +
+                    "&" + WebUtility.UrlEncode("order[" + game_id + "][game_type]") + "=" + game_type +
+                    "&" + WebUtility.UrlEncode("order[" + game_id + "][play_type]") + "=" + play_type +
+                    "&" + WebUtility.UrlEncode("order[" + game_id + "][order_type]") + "=" + order_type +
+                    "&" + WebUtility.UrlEncode("order[" + game_id + "][real_type]") + "=" + real_type;
+            
+
+            //下单前要请求的参数不能为空（B要先请求一个接口）
+            if (String.IsNullOrEmpty(rltStr))
+            {
+                return null;
+            }
+            if (String.IsNullOrEmpty(bateStr.Trim()))
+            {
+                return null;
+            }
+            gameName = (String)jObject["league"]; //获取赛事
+            gameTeam = (String)jObject["gameInfo"]["tid_h"] 
+                + "-" + (String)jObject["gameInfo"]["tid_a"]; //球队名称
+
+            //统一显示的
+            dataJObject["gameName"] = gameName; //获取赛事
+            dataJObject["gameTeam"] = gameTeam; //球队名称
+            dataJObject["gid"] = game_id; //比赛ID
+            dataJObject["bateStr"] = bateStr; //赔率
+            dataJObject["inputType"] = inputType; //下注类型
             return rltStr;
         }
 

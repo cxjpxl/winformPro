@@ -108,6 +108,7 @@ namespace CxjText.utils
             catch (Exception e)
             {
        
+
                 if (response != null)
                 {
                     response.Close();
@@ -130,6 +131,99 @@ namespace CxjText.utils
 
         }
 
+
+        //请求包含头部
+        public static string HttpGetHeader503(string Url, String contentType, CookieContainer cookie, JObject headJObject)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
+            request.Method = "GET";
+            request.Timeout = 5 * 1000;
+            request.ReadWriteTimeout = 5 * 1000;
+            request.UserAgent = Config.userAgent;
+
+            //  if (headJObject != null && headJObject["myExp"] != null) {
+            // request.AllowAutoRedirect = false;
+            //    }
+
+            if (headJObject != null)
+            {
+                IEnumerable<JProperty> properties = headJObject.Properties();
+                foreach (JProperty item in properties)
+                {
+                    if (!item.Name.Equals("myExp"))
+                    {
+                        SetHeaderValue(request.Headers, item.Name, (String)item.Value);
+                    }
+                }
+            }
+
+
+            if (String.IsNullOrEmpty(contentType))
+            {
+                //request.ContentType = "application/json;charset=UTF-8";
+            }
+            else
+            {
+                request.ContentType = contentType;
+            }
+
+            if (cookie != null)
+            {
+                request.CookieContainer = cookie; //cookie信息由CookieContainer自行维护
+            }
+
+            HttpWebResponse response = null;
+            StreamReader Reader = null;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                Stream s;
+                s = response.GetResponseStream();
+                string strValue = "";
+                Reader = new StreamReader(s, Encoding.UTF8);
+                strValue = Reader.ReadToEnd();
+                if (headJObject != null && headJObject["myExp"] != null)
+                {
+                    headJObject["myExp"] = (String)response.ResponseUri.ToString();
+                }
+                Reader.Close();
+                response.Close();
+                response = null;
+                Reader = null;
+                request = null;
+                return strValue;
+            }
+            catch (WebException ex)
+            {
+                var sr = new StreamReader(ex.Response.GetResponseStream());
+                if (sr != null) {
+                    return sr.ReadToEnd();
+                }
+
+                if (response != null)
+                {
+                    response.Close();
+                    response = null;
+                }
+
+                if (Reader != null)
+                {
+                    Reader.Close();
+                    Reader = null;
+                }
+
+                if (request != null)
+                {
+                    request.Abort();
+                    request = null;
+                }
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("in HttpGett:" + Url);
+                return null;
+            }
+
+        }
 
         //请求包含头部
         public static string HttpPostHeader(string Url, String paramsStr, String contentType, CookieContainer cookie, JObject headJObject)

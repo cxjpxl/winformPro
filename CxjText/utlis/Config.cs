@@ -8,9 +8,9 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static String softUserStr = "";
-        public static bool canAutoTwo = true;//自动重复下
-        public static int myFun =2; //0是点球  1是事件  2鸿发试玩
+        public static String softUserStr = "admin";
+        public static bool canAutoTwo = false;//自动重复下
+        public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
         public static List<EnventUser> list = new List<EnventUser>();
         public static int eFun = 2; //事件的fun  0 1 2   上中下
@@ -24,8 +24,8 @@ namespace CxjText.utils
         public static bool daTuiEnble = false; //大腿模糊算法是否启动
 
         public static bool hasJinQiuFun = true;//是否有进球的功能
-        public static int softFun = 2; //0点 1角  2点+角  3电子 
-        public static String vString = "V3.88";
+        public static int softFun = 0; //0点 1角  2点+角  3电子 
+        public static String vString = "V3.9";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";
         public static String webSocketUrl = "ws://47.88.168.99:8600/";
@@ -36,7 +36,7 @@ namespace CxjText.utils
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
-        public static String userAgent ="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
+        public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";

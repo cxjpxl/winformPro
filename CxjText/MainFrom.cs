@@ -362,6 +362,12 @@ namespace CxjText
                     case "M":
                         dataRtlStr = DataPramsUtils.getMData(userInfo);
                         break;
+                    case "N":
+                        dataRtlStr = DataPramsUtils.getNData(userInfo);
+                        break;
+                    case "BB1":
+                        dataRtlStr = DataPramsUtils.getBB1Data(userInfo);
+                        break;
                     default:
                         break;
                 }
@@ -678,11 +684,11 @@ namespace CxjText
                 return;
             }
 
+            if (((int)jObject["cmd"]) != 1 && ((int)jObject["cmd"]) != 100) return;
 
-
-            //cmd 1 的情况
-            /****************判断事件的类型做出显示的处理*****************************/
-            if (jObject["game"] == null || jObject["data"] == null) return;
+                //cmd 1 的情况 和 100 的情况  都是点球  
+           /****************判断事件的类型做出显示的处理*****************************/
+           if (jObject["game"] == null || jObject["data"] == null) return;
 
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
@@ -752,6 +758,11 @@ namespace CxjText
                     if (userInfo == null) return;
 
                     String league = (String)jObject["game"]["leagueName"]; //联赛
+                    if (!String.IsNullOrEmpty(league)) {
+                        if (league.Contains("瑞典") || league.Contains("印度")) {
+                            return;
+                        }
+                    }
                     int state = 1;//主客队进球标志 未处理
                     bool isCancel = false;
                     bool isConfirme = false;
@@ -1230,7 +1241,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-            //changeData();
+           // changeData();
 
         }
         
@@ -1285,15 +1296,21 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
-            /* String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
-                 + "&subAddress="+ WebUtility.UrlEncode("广东深圳支行")
-                 + "&cardNo=62258375000066495";*/
-            String p = "userMemo=";
+             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国农业银行")
+                 + "&subAddress="+ WebUtility.UrlEncode("广东惠州支行")
+                 + "&cardNo=67858375000077498";
+            //String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);
         }
 
-        
+        //一键登录
+        private void auto_login_btn_Click(object sender, EventArgs e)
+        {
+            if (loginForm != null) {
+                loginForm.allGoLogin();
+            }
+        }
     }
 }
