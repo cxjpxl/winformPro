@@ -138,8 +138,8 @@ namespace CxjText
             Config.speakJObject = new JObject();
             Config.speakJObject["9926"] = "可能主队炸弹";
             Config.speakJObject["9927"] = "可能客队炸弹";
-            Config.speakJObject["2055"] = "客队点球";//"炸弹类型，客队可能点球";
-            Config.speakJObject["1031"] = "主队点球";//"炸弹类型，主队可能点球";
+            Config.speakJObject["2055"] = "客队可能点球";//"炸弹类型，客队可能点球";
+            Config.speakJObject["1031"] = "主队可能点球";//"炸弹类型，主队可能点球";
             Config.speakJObject["9966"] = "点球失误";
             Config.speakJObject["9965"] = "点球失误";
             Config.speakJObject["144"] = "可能点球";
@@ -203,6 +203,7 @@ namespace CxjText
 
                 Config.hasDaTui = (bool)loginObj["hasDaTui"];//是否有大腿功能
                 Config.canPutDaTui = (bool)loginObj["canPutDaTui"];//是否有抱大腿功能
+                Config.has40Enbale = (bool)loginObj["has40Enbale"]; //是否有40分钟后的角球的功能
             }
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);

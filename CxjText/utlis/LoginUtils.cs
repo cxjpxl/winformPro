@@ -2884,6 +2884,7 @@ namespace CxjText.utlis
             //要先获取SR的内容
             String authUlr = userInfo.dataUrl + "/infe/verify/mkcode?_="+ FormUtils.getCurrentTime();
             String authRlt = HttpUtils.HttpGetHeader(authUlr, "",userInfo.cookie,headJObject);
+         
             if (String.IsNullOrEmpty(authRlt) || !authRlt.Contains(";")) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -2927,6 +2928,7 @@ namespace CxjText.utlis
             }
 
             String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -2938,12 +2940,15 @@ namespace CxjText.utlis
             }
 
             //获取登录的系统参数 
-            headJObject["origin"] = userInfo.dataUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["Referer"] = userInfo.dataUrl+ "/entrance/page/soya";
+            headJObject["Upgrade-Insecure-Requests"] = "1";
             String paramsStr = "uid2=guest&SS="+authStrs[0]+"&SR="+authStrs[1]+"&TS="+authStrs[2]+"&username="+userInfo.user+"&passwd="+userInfo.pwd+"&rmNum="+codeStrBuf.ToString();
             //获取登录的链接地址
             String loginUrlStr = userInfo.loginUrl + "/infe/login/login";
 
             String rltStr = HttpUtils.HttpPost(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie);
+           
             if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid"))
             {
                 userInfo.loginFailTime++;
@@ -2975,7 +2980,7 @@ namespace CxjText.utlis
                     uid = str.Substring(0,startIndex).Trim();
                 }
             }
-
+          
             if (String.IsNullOrEmpty(uid)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;

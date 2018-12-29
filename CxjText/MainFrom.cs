@@ -91,7 +91,13 @@ namespace CxjText
                 datuiCheckBox.Enabled = false;
             }
 
-
+            //40-42的角球
+            if (Config.has40Enbale)
+            {
+                sishiHou.Visible = true;
+            }else {
+                sishiHou.Visible = false;
+            }
         }
 
 
@@ -244,12 +250,26 @@ namespace CxjText
 
         //定时器回调   1s一次
         private int num = 0;
+        private int jiaoQiuNum = 0;
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             
             num++;
-            if (num % 15 == 0)
+            jiaoQiuNum++;
+
+            if (jiaoQiuNum % 8 == 0) {
+                this.Invoke(new Action(() => {
+                    if (Config.has40Enbale && sishiHou.Checked) {
+                        leftForm.input40_41JiaoQiu();
+                    }
+                }));
+                jiaoQiuNum = 0;
+            }
+
+            if (num % 30 == 0)
             {
+                
+
                 if (webSocketUtils != null)
                 {
                     JObject jObject = new JObject();
@@ -684,12 +704,12 @@ namespace CxjText
                 return;
             }
 
-            if (((int)jObject["cmd"]) != 1 && ((int)jObject["cmd"]) != 100) return;
+            if (((int)jObject["cmd"]) != 1 && ((int)jObject["cmd"]) != 100 && ((int)jObject["cmd"]) != 101) return;
 
                 //cmd 1 的情况 和 100 的情况  都是点球  
            /****************判断事件的类型做出显示的处理*****************************/
            if (jObject["game"] == null || jObject["data"] == null) return;
-
+           
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
             int gameT = (int)jObject["data"]["T"];
@@ -883,8 +903,14 @@ namespace CxjText
                 
             }
 
+
+            int dianQiuEnvent = 0;
+            if (((int)jObject["cmd"]) == 101)
+            {
+                dianQiuEnvent = 1; //M8的事件
+            }
             //点球下注处理
-         //   Console.WriteLine(jObject.ToString());
+            //   Console.WriteLine(jObject.ToString());
             EnventInfo enventInfo = new EnventInfo();
             enventInfo.inputType = this.GetCurrUserSelected();
             enventInfo.cid = cid;
@@ -989,6 +1015,8 @@ namespace CxjText
                     enventString.Replace("事件:", ""),
                     (String)jObject["game"]["leagueName"],0);
 
+                enventShowInfo.dianQiuEnvent = dianQiuEnvent;
+
                 //界面显示
                 showViewText(enventShowInfo);
 
@@ -1006,7 +1034,7 @@ namespace CxjText
 
 
             //有改革要更改
-            if (cid.Equals("2055") || cid.Equals("1031") || cid.Equals("888"))
+            if (cid.Equals("2055") || cid.Equals("1031") || cid.Equals("888") || cid.Equals("144"))
             {
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
@@ -1014,15 +1042,18 @@ namespace CxjText
                 {
                     return;
                 }
-                speakStr("点球,物物物");
 
                 if (cid.Equals("2055")) //客队点球
                 {
                     //客队可以下注 
                     this.Invoke(new Action(() =>
                     {
-                        if (isAuto())
+                        if (isAuto() 
+                        && 
+                        ((M8checkBox.Checked&&dianQiuEnvent==1)
+                        || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
+                            Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
                             leftForm.setComplete(enventInfo);
                         }
                     }));
@@ -1032,16 +1063,40 @@ namespace CxjText
                     //主队可以下注
                     this.Invoke(new Action(() =>
                     {
-                        if (isAuto())
+                        if (isAuto()
+                        &&
+                        ((M8checkBox.Checked && dianQiuEnvent == 1)
+                        || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
+                            Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
                             leftForm.setComplete(enventInfo);
                         }
                     }));
-                }else if (cid.Equals("888")) { //只下大小球
+                }
+                else if (cid.Equals("888")|| cid.Equals("144")) { //只下大小球
+
+                    if (cid.Equals("144")) {
+                        this.Invoke(new Action(() =>
+                        {
+                            if (isAuto()&&keNengCheck.Checked)
+                            {
+                                enventInfo.cid = "888";
+                                enventInfo.inputType = 1; //只下大小
+                                enventInfo.bangchangType = 0; //只下默认
+                                leftForm.setComplete(enventInfo);
+                            }
+                        }));
+                        return;
+                    }
+
                     this.Invoke(new Action(() =>
                     {
-                        if (isAuto())
+                        if (isAuto()
+                        &&
+                        ((M8checkBox.Checked && dianQiuEnvent == 1)
+                        || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
+                            
                             enventInfo.inputType = 1; //只下大小
                             enventInfo.bangchangType = 0; //只下默认
                             leftForm.setComplete(enventInfo);
@@ -1062,7 +1117,10 @@ namespace CxjText
                         enventInfo.cid = "1031";//主队点球
                     }
                     this.Invoke(new Action(() => {
-                        if (isAuto())
+                        if (isAuto()
+                        &&
+                        ((M8checkBox.Checked && dianQiuEnvent == 1)
+                        || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
                             leftForm.setComplete(enventInfo);
                         }
@@ -1241,7 +1299,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-           // changeData();
+            //changeData();
 
         }
         
@@ -1296,9 +1354,9 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
-             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国农业银行")
+             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
                  + "&subAddress="+ WebUtility.UrlEncode("广东惠州支行")
-                 + "&cardNo=67858375000077498";
+                 + "&cardNo=6230520120026768889";
             //String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
@@ -1311,6 +1369,11 @@ namespace CxjText
             if (loginForm != null) {
                 loginForm.allGoLogin();
             }
+        }
+
+        private void sishiHou_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.has40Enbale = sishiHou.Checked;
         }
     }
 }

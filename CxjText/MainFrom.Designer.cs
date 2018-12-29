@@ -47,6 +47,10 @@
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.M8checkBox = new System.Windows.Forms.CheckBox();
+            this.NYCheckBox = new System.Windows.Forms.CheckBox();
+            this.sishiHou = new System.Windows.Forms.CheckBox();
+            this.auto_login_btn = new System.Windows.Forms.Button();
             this.datuiCheckBox = new System.Windows.Forms.CheckBox();
             this.dianQiu_check = new System.Windows.Forms.CheckBox();
             this.fitBox = new System.Windows.Forms.CheckBox();
@@ -63,7 +67,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.auto_login_btn = new System.Windows.Forms.Button();
+            this.keNengCheck = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -169,11 +173,11 @@
             // autoCheck
             // 
             this.autoCheck.AutoSize = true;
-            this.autoCheck.Location = new System.Drawing.Point(12, 169);
+            this.autoCheck.Location = new System.Drawing.Point(12, 148);
             this.autoCheck.Name = "autoCheck";
-            this.autoCheck.Size = new System.Drawing.Size(72, 16);
+            this.autoCheck.Size = new System.Drawing.Size(48, 16);
             this.autoCheck.TabIndex = 14;
-            this.autoCheck.Text = "自动启动";
+            this.autoCheck.Text = "自动";
             this.autoCheck.UseVisualStyleBackColor = true;
             // 
             // rbRangQiu
@@ -202,7 +206,7 @@
             // 
             this.panel1.Controls.Add(this.rbDaxiao);
             this.panel1.Controls.Add(this.rbRangQiu);
-            this.panel1.Location = new System.Drawing.Point(59, 13);
+            this.panel1.Location = new System.Drawing.Point(7, 13);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(109, 27);
             this.panel1.TabIndex = 15;
@@ -243,6 +247,10 @@
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.keNengCheck);
+            this.fitterBox.Controls.Add(this.M8checkBox);
+            this.fitterBox.Controls.Add(this.NYCheckBox);
+            this.fitterBox.Controls.Add(this.sishiHou);
             this.fitterBox.Controls.Add(this.auto_login_btn);
             this.fitterBox.Controls.Add(this.datuiCheckBox);
             this.fitterBox.Controls.Add(this.dianQiu_check);
@@ -261,14 +269,57 @@
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
             // 
+            // M8checkBox
+            // 
+            this.M8checkBox.AutoSize = true;
+            this.M8checkBox.Location = new System.Drawing.Point(52, 178);
+            this.M8checkBox.Name = "M8checkBox";
+            this.M8checkBox.Size = new System.Drawing.Size(36, 16);
+            this.M8checkBox.TabIndex = 33;
+            this.M8checkBox.Text = "M8";
+            this.M8checkBox.UseVisualStyleBackColor = true;
+            // 
+            // NYCheckBox
+            // 
+            this.NYCheckBox.AutoSize = true;
+            this.NYCheckBox.Checked = true;
+            this.NYCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.NYCheckBox.Location = new System.Drawing.Point(10, 178);
+            this.NYCheckBox.Name = "NYCheckBox";
+            this.NYCheckBox.Size = new System.Drawing.Size(36, 16);
+            this.NYCheckBox.TabIndex = 32;
+            this.NYCheckBox.Text = "NY";
+            this.NYCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // sishiHou
+            // 
+            this.sishiHou.AutoSize = true;
+            this.sishiHou.Location = new System.Drawing.Point(111, 148);
+            this.sishiHou.Name = "sishiHou";
+            this.sishiHou.Size = new System.Drawing.Size(48, 16);
+            this.sishiHou.TabIndex = 31;
+            this.sishiHou.Text = "40后";
+            this.sishiHou.UseVisualStyleBackColor = true;
+            this.sishiHou.CheckedChanged += new System.EventHandler(this.sishiHou_CheckedChanged);
+            // 
+            // auto_login_btn
+            // 
+            this.auto_login_btn.Location = new System.Drawing.Point(226, 164);
+            this.auto_login_btn.Name = "auto_login_btn";
+            this.auto_login_btn.Size = new System.Drawing.Size(75, 23);
+            this.auto_login_btn.TabIndex = 0;
+            this.auto_login_btn.Text = "一键登录";
+            this.auto_login_btn.UseVisualStyleBackColor = true;
+            this.auto_login_btn.Click += new System.EventHandler(this.auto_login_btn_Click);
+            // 
             // datuiCheckBox
             // 
             this.datuiCheckBox.AutoSize = true;
-            this.datuiCheckBox.Location = new System.Drawing.Point(99, 169);
+            this.datuiCheckBox.Location = new System.Drawing.Point(58, 149);
             this.datuiCheckBox.Name = "datuiCheckBox";
-            this.datuiCheckBox.Size = new System.Drawing.Size(72, 16);
+            this.datuiCheckBox.Size = new System.Drawing.Size(48, 16);
             this.datuiCheckBox.TabIndex = 30;
-            this.datuiCheckBox.Text = "模糊自动";
+            this.datuiCheckBox.Text = "模糊";
             this.datuiCheckBox.UseVisualStyleBackColor = true;
             this.datuiCheckBox.CheckedChanged += new System.EventHandler(this.datuiCheckBox_CheckedChanged);
             // 
@@ -277,7 +328,7 @@
             this.dianQiu_check.AutoSize = true;
             this.dianQiu_check.Checked = true;
             this.dianQiu_check.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dianQiu_check.Location = new System.Drawing.Point(299, 22);
+            this.dianQiu_check.Location = new System.Drawing.Point(193, 13);
             this.dianQiu_check.Name = "dianQiu_check";
             this.dianQiu_check.Size = new System.Drawing.Size(48, 16);
             this.dianQiu_check.TabIndex = 0;
@@ -314,7 +365,7 @@
             // jiaoqiu_checkBox
             // 
             this.jiaoqiu_checkBox.AutoSize = true;
-            this.jiaoqiu_checkBox.Location = new System.Drawing.Point(252, 21);
+            this.jiaoqiu_checkBox.Location = new System.Drawing.Point(122, 31);
             this.jiaoqiu_checkBox.Name = "jiaoqiu_checkBox";
             this.jiaoqiu_checkBox.Size = new System.Drawing.Size(48, 16);
             this.jiaoqiu_checkBox.TabIndex = 0;
@@ -327,7 +378,7 @@
             this.jiaoQiuTime.AutoSize = true;
             this.jiaoQiuTime.Checked = true;
             this.jiaoQiuTime.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.jiaoQiuTime.Location = new System.Drawing.Point(174, 20);
+            this.jiaoQiuTime.Location = new System.Drawing.Point(121, 13);
             this.jiaoQiuTime.Name = "jiaoQiuTime";
             this.jiaoQiuTime.Size = new System.Drawing.Size(72, 16);
             this.jiaoQiuTime.TabIndex = 29;
@@ -452,15 +503,15 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
-            // auto_login_btn
+            // keNengCheck
             // 
-            this.auto_login_btn.Location = new System.Drawing.Point(192, 162);
-            this.auto_login_btn.Name = "auto_login_btn";
-            this.auto_login_btn.Size = new System.Drawing.Size(75, 23);
-            this.auto_login_btn.TabIndex = 0;
-            this.auto_login_btn.Text = "一键登录";
-            this.auto_login_btn.UseVisualStyleBackColor = true;
-            this.auto_login_btn.Click += new System.EventHandler(this.auto_login_btn_Click);
+            this.keNengCheck.AutoSize = true;
+            this.keNengCheck.Location = new System.Drawing.Point(90, 178);
+            this.keNengCheck.Name = "keNengCheck";
+            this.keNengCheck.Size = new System.Drawing.Size(48, 16);
+            this.keNengCheck.TabIndex = 34;
+            this.keNengCheck.Text = "可能";
+            this.keNengCheck.UseVisualStyleBackColor = true;
             // 
             // MainFrom
             // 
@@ -529,5 +580,9 @@
         private System.Windows.Forms.RadioButton r_5_1;
         private System.Windows.Forms.CheckBox datuiCheckBox;
         private System.Windows.Forms.Button auto_login_btn;
+        private System.Windows.Forms.CheckBox sishiHou;
+        private System.Windows.Forms.CheckBox M8checkBox;
+        private System.Windows.Forms.CheckBox NYCheckBox;
+        private System.Windows.Forms.CheckBox keNengCheck;
     }
 }

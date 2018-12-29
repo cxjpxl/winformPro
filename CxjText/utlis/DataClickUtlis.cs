@@ -2836,8 +2836,6 @@ namespace CxjText.utlis
                     case 8:
                         inputType = inputType + "-半场大小";
                         bateStr = DataUtils.get_c18_data(jObject, tag);
-                        inputType = inputType + "-半场大小";
-                        bateStr = DataUtils.get_c08_data(jObject, tag);
                         rltStr = "point_column=ds_underscoreodd_ht" +
                             "&match_id=" + jObject["matchid"] +
                             "&ball_sort=" + WebUtility.UrlEncode("足球单式") +
@@ -3296,6 +3294,7 @@ namespace CxjText.utlis
                 return null;
             }
 
+          //  Console.WriteLine("game_id"+ game_id);
 
             rltStr = "odds_type=0" +
                     "&" + WebUtility.UrlEncode("order[" + game_id + "][game_id]") + "=" + game_id +

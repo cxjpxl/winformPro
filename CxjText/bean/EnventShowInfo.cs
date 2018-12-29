@@ -25,6 +25,7 @@ namespace CxjText.bean
         public String text { get; set; }//事件要显示的text
         public int gameTeamColor = 0; //0主客黑   1主红客黑   2主黑客红
         public int ballType = 0; //默认是0  0的点球  1是进球
+        public int dianQiuEnvent = 0; //0南园黑色    1是M8红色
 
     }
 }

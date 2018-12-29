@@ -19,19 +19,23 @@ namespace CxjText.utils
         //软件使用人  admin为管理员   不用登录
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
+        public static bool has40Enbale = true; //40分钟的角球
+
         public static bool hasDaTui = false;//有大腿的功能  牛逼的人才是大腿  一般都是不牛逼
         public static bool canPutDaTui = true; //有抱大腿的功能
         public static bool daTuiEnble = false; //大腿模糊算法是否启动
 
         public static bool hasJinQiuFun = true;//是否有进球的功能
         public static int softFun = 0; //0点 1角  2点+角  3电子 
-        public static String vString = "V3.9";
+        public static String vString = "V4.0";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";
         public static String webSocketUrl = "ws://47.88.168.99:8600/";
         public static String netUrl = "http://47.88.168.99:8500";
         // public static String webSocketUrl = "ws://192.168.124.109:8600/";
-       //  public static String netUrl = "http://192.168.124.109:8500"; 
+        //  public static String netUrl = "http://192.168.124.109:8500"; 
+
+        public static int BB1Num = 0;
 
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId

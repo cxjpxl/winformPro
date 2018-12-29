@@ -337,8 +337,8 @@ namespace CxjText.views
         //数据点击处理
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
-            
 
+            Config.BB1Num = -1;
             String gameName = (String)dataJObject["gameName"]; //获取赛事
             String gameTeam = (String)dataJObject["gameTeam"]; //球队名称
             String bateStr = (String)dataJObject["bateStr"];
@@ -1765,5 +1765,50 @@ namespace CxjText.views
             
         }
 
+
+        
+        public void input40_41JiaoQiu() {
+            if (this.cIndex < 0) return;
+            if (this.nameShowGridView == null) return;
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            if (userInfo == null  || this.dataJArray == null || this.dataJArray.Count == 0) return;
+            for (int i = 0; i < this.dataJArray.Count; i++)
+            {
+                object obj = dataJArray[i];
+                String tag = userInfo.tag;
+                String nameH = DataUtils.get_c02_data(obj, tag);
+                String nameG = DataUtils.get_c12_data(obj, tag);
+              
+                if (!nameH.Contains("角球")) continue;
+                if (!DataUtils.inJiaoQiuTime(obj, tag)) continue;
+                if (!DataUtils.isPvDaOk(obj, tag)) continue;
+
+                String gameTeamStr = nameH + "-" + nameG;
+                Console.WriteLine(gameTeamStr);
+               
+                if (tempLists == null)
+                {
+                    tempLists = new List<AutoData>();
+                }
+                AutoData autoTempData = tempLists.Find(j => j.gameTeam.Equals(gameTeamStr));
+                if (autoTempData != null && FormUtils.getCurrentTime() - autoTempData.time < 5000)
+                {
+                    return;
+                }else
+                {
+                    if (autoTempData != null)
+                    {
+                        tempLists.RemoveAll((j => j.gameTeam.Equals(gameTeamStr)));
+                    }
+                    AutoData myData = new AutoData();
+                    myData.gameTeam = gameTeamStr;
+                    myData.time = FormUtils.getCurrentTime();
+                    tempLists.Add(myData);
+                }
+                JObject jObject = new JObject();
+                jObject["mid"] = DataUtils.getMid(obj, userInfo.tag);
+                dataForm.OnOrderClick(obj, 1, 8, jObject);
+            }
+        }
     }
 }

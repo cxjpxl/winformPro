@@ -106,6 +106,106 @@ namespace CxjText.utlis
             }
             return c00;
         }
+
+        //是否可以下角球上半场41分钟
+        public static bool inJiaoQiuTime(object obj, String tag) {
+            String time = "";
+            switch (tag)
+            {
+                case "A":
+                    return false;
+                case "B":
+                case "N":
+                case "O":
+                    return false;
+                case "I":
+                    return false;
+                case "U":
+                    JArray jObjectU = (JArray)obj;
+                    time = (String)jObjectU[1];
+                    if (time == null) return false;
+                    time = time.Replace(" ", "");
+                    if (time.Contains("41")|| time.Contains("40") || time.Contains("39")) return true;
+                    break;
+                case "R":
+                    return false;
+                case "G":
+                    JObject jObjectG = (JObject)obj;
+                    time = (String)jObjectG["Match_Date"];
+                    time = FormUtils.changeHtml(time);
+                    time = time.Replace(" ", "");
+                    if (time.Contains("41") || time.Contains("40") || time.Contains("39")) return true;
+                    break;
+                case "K":
+                case "C":
+                    JObject jObjectC = (JObject)obj;
+                    time = (String)jObjectC["timer"];
+                    time = FormUtils.changeHtml(time);
+                    if (time != null) {
+                        time = time.Trim();
+                        if (time.Contains("41") || time.Contains("40") || time.Contains("39")) return true;
+                    }
+                    return false;
+                case "F":
+                    return false;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    time = ((String)jObjectD["retimeset"]).Replace(" ", "");
+                    time = time.Replace(" ", "");
+                    if (time.Contains("上41")|| time.Contains("上40") || time.Contains("上39")) return true;
+                    break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    time = ((String)jObjectE["retimeset"]).Replace(" ", "");
+                    time = time.Replace(" ", "");
+                    if (time.Contains("1H^41")|| time.Contains("1H^40") || time.Contains("1H^39")) return true;
+                    break;
+                case "H":
+                    return false;
+                case "J":
+                    return false;
+                case "L":
+                    return false;
+                case "M":
+                    JObject jObjectM = (JObject)obj;
+                    time = (String)jObjectM["bowlingtime"];
+                    if (time != null)
+                    {
+                        time = time.Trim();
+                        if (time.Contains("41") || time.Contains("40") || time.Contains("39")) return true;
+                    }
+                    return false;
+                case "BB1":
+                    return false;
+                default:
+                    return false;
+            }
+            return false;
+        }
+        public static bool isPvDaOk(object obj, String tag) {
+            try
+            {
+                String data = get_c18_data(obj, tag);
+                if (String.IsNullOrEmpty(data)) return false;
+                String pk = data.Split(' ')[0];
+                String pv = data.Split(' ')[1];
+                if (pk == null) return false;
+                if (pv == null) return false;
+               float pvFloat = float.Parse(pv);
+                if (pvFloat > 1.01 || pvFloat < 0.7) return false;
+                /*JArray bifenArray = get_bifen_data(obj, tag);
+                if (bifenArray == null || bifenArray.Count != 2) return false;
+                int hFen = (int)bifenArray[0];
+                int gFen = (int)bifenArray[1];
+                String muBiaoPk = (hFen + gFen+0.5) + "";
+                if (!pk.Contains(muBiaoPk)) return false;*/
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+            return false;
+        }
         /****************时间******************/
         public static String get_c01_data(object obj, String tag)
         {
@@ -244,6 +344,9 @@ namespace CxjText.utlis
                 case "BB1":
                     JObject jObjectBB1 = (JObject)obj;
                     time = (String)jObjectBB1["gameInfo"]["game_start_time"];
+                    if (time.Equals("mid")) {
+                        time = "半场";
+                    }
                     time = time + "\n" + jObjectBB1["gameInfo"]["score_h"] + "-" + jObjectBB1["gameInfo"]["score_a"];
                     break;
                 default:
@@ -346,6 +449,7 @@ namespace CxjText.utlis
                     break;
                 case "D":
                     JObject jObjectD = (JObject)obj;
+                  //  Console.WriteLine(jObjectD.ToString());
                     hBifen = (String)jObjectD["score_h"];
                     gBifen = (String)jObjectD["score_c"];
                     break;
@@ -422,14 +526,14 @@ namespace CxjText.utlis
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("比分获取失败:", hBifen,"-",gBifen,"------",tag, "------", obj);
+                    Console.WriteLine("比分获取失败:"+ hBifen+"-"+gBifen+"------"+tag);
                     jArray.Add(-1);
                     jArray.Add(-1);
                 }
             }
             else
             {
-                Console.WriteLine("比分获取失败:", hBifen, "-", gBifen, "------", tag, "------", obj);
+                Console.WriteLine("比分获取失败:" + hBifen + "-" + gBifen + "------" + tag);
                 jArray.Add(-1);
                 jArray.Add(-1);
             }

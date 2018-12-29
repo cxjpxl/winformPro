@@ -2537,7 +2537,15 @@ namespace CxjText.utlis
             }
 
             //先解析联赛数据  league
-            JObject leagueJObject =(JObject) dataJObject["league"];
+            JObject leagueJObject = null;
+            try
+            {
+                leagueJObject = (JObject)dataJObject["league"];
+            }
+            catch (Exception e) {
+                return jObect.ToString();
+            }
+            
             //联赛下面的比赛的盘口数据
             JObject insertJObject = (JObject)dataJObject["insert"];
             //比赛的详情
@@ -2551,6 +2559,8 @@ namespace CxjText.utlis
                 String leagueName = (String)item.Value; // 联赛名字
                 //这个联赛下面的盘口的数据
                 JObject gamesPanKouJObject = (JObject)insertJObject[leagueId];
+                if (gamesPanKouJObject == null) continue;
+              //  Console.WriteLine(gamesPanKouJObject.ToString());
                 IEnumerable<JProperty> panKouP = gamesPanKouJObject.Properties();
                 foreach (JProperty panKouItem in panKouP)
                 {
