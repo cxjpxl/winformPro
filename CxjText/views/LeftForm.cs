@@ -338,7 +338,6 @@ namespace CxjText.views
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
 
-            Config.BB1Num = -1;
             String gameName = (String)dataJObject["gameName"]; //获取赛事
             String gameTeam = (String)dataJObject["gameTeam"]; //球队名称
             String bateStr = (String)dataJObject["bateStr"];

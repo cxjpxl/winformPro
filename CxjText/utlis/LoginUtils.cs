@@ -1194,20 +1194,23 @@ namespace CxjText.utlis
             String checkLoginRlt = HttpUtils.HttpPostHeader(checkLoginUrl,
                 paramsStr, "application/x-www-form-urlencoded;charset=UTF-8",
                 userInfo.cookie, headJObject);
+            if (checkLoginRlt != null) {
+                checkLoginRlt = checkLoginRlt.Trim();
+            }
+
             if (String.IsNullOrEmpty(checkLoginRlt) || !FormUtils.IsJsonObject(checkLoginRlt))
             {
                 return false;
             }
             JObject rltJObject = JObject.Parse(checkLoginRlt);
-
-            if(rltJObject["login_result"] == null) return false;
-
+            if (rltJObject["login_result"] == null) return false;
             if (((String)rltJObject["login_result"]).Equals("10") && (((String)rltJObject["code"]).Equals("102") || ((String)rltJObject["code"]).Equals("101")))
             {
 
             }
             else
             {
+            
                 return false;
             }
             //现在要登录处理
@@ -1216,32 +1219,44 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
                 "application/x-www-form-urlencoded;charset=UTF-8",
                 userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
+            Console.WriteLine(rltStr);
+            if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {
                 return false;
             }
-            rltStr = rltStr.Replace("<script>window.location.href='", "");
-            rltStr = rltStr.Replace("';</script>", "").Trim();
-            if (!rltStr.Contains("oldUrl"))
-            {
-                return false;
-            }
-            headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
-            // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
-            String uidRlt = HttpUtils.HttpGetHeader(rltStr, "", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
-            {
-                return false;
-            }
+            JObject twoJObject = JObject.Parse(rltStr);
+            //if (twoJObject["code"] == null) return false;
+            if (twoJObject["uid"] == null) return false;
+            userInfo.uid = (String)twoJObject["uid"];
 
-            int uidStart = uidRlt.IndexOf("uid=");
-            uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
-            int start = uidRlt.IndexOf("&");
-            uidRlt = uidRlt.Substring(0, start);
-            String uid = uidRlt.Replace("uid=", "");
-            userInfo.uid = uid;
+            /* if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
+             {
+                 return false;
+             }
+
+             rltStr = rltStr.Replace("<script>window.location.href='", "");
+             rltStr = rltStr.Replace("';</script>", "").Trim();
+             if (!rltStr.Contains("oldUrl"))
+             {
+                 return false;
+             }
+             headJObject = new JObject();
+             headJObject["Host"] = userInfo.baseUrl;
+             headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
+             // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
+             String uidRlt = HttpUtils.HttpGetHeader(rltStr, "", userInfo.cookie, headJObject);
+             Console.WriteLine(uidRlt);
+             if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
+             {
+                 return false;
+             }
+
+             int uidStart = uidRlt.IndexOf("uid=");
+             uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
+             int start = uidRlt.IndexOf("&");
+             uidRlt = uidRlt.Substring(0, start);
+             String uid = uidRlt.Replace("uid=", "");
+             userInfo.uid = uid;*/
             return true;
         }
 

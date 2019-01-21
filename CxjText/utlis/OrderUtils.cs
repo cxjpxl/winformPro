@@ -3007,9 +3007,6 @@ namespace CxjText.utlis
             String gid = (String)jobject["gid"];
             UserInfo user = (UserInfo)Config.userList[index];
 
-
-          
-
             String betOrderUrl = user.dataUrl + "/sport/rest/order/orderSelect.json";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
@@ -3030,10 +3027,7 @@ namespace CxjText.utlis
                 return;
             }
             JObject betJObject = JObject.Parse(betRlt);
-          //  Console.WriteLine(betJObject);
-           
             JObject dataJObject = (JObject)betJObject["data"];
-         //   Console.WriteLine(dataJObject.ToString());
             String bet_status = (String)dataJObject[gid]["bet_status"];
             if (!bet_status.Equals("success")) {
                 leftForm.Invoke(new Action(() => {
@@ -3088,22 +3082,8 @@ namespace CxjText.utlis
                  + "&" + WebUtility.UrlEncode("order[" + gid + "][gold]") + "=" + inputMoney
                  + "&" + WebUtility.UrlEncode("order[" + gid + "][better_rate]") + "=" + "Y";
 
-
-            /*  parmsStr = parmsStr
-                 + "&order[" + gid + "][order_auth]" + "=" + dataJObject[gid]["order_auth"]
-                 + "&order[" + gid + "][ioratio]"+ "=" + dataJObject[gid]["ioratio"]
-                 + "&order[" + gid + "][strong]" + "=" + dataJObject[gid]["strong"]
-                 + "&order[" + gid + "][gold]"+ "=" + inputMoney
-                 + "&order[" + gid + "][better_rate]" + "=" + "Y";
-              */
-
-            DataPramsUtils.getBB1Data(user);
-            Config.BB1Num++;
-            if (Config.BB1Num > 0)
-            {
-                Thread.Sleep(Config.BB1Num * 2000);
-            }
-
+            
+          
             String orderUrl = user.dataUrl + "/sport/rest/order/orderBet.json";
              headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
@@ -3111,10 +3091,7 @@ namespace CxjText.utlis
             headJObject["Referer"] = user.dataUrl + "/sport/?game_type=FT";
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
-
-        
-           
-          
+            
             
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
             //Console.WriteLine(orderRlt);
