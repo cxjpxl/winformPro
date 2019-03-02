@@ -8,7 +8,7 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static String softUserStr = "admin";
+        public static String softUserStr = "";
         public static bool canAutoTwo = false;//自动重复下
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
@@ -27,7 +27,7 @@ namespace CxjText.utils
 
         public static bool hasJinQiuFun = true;//是否有进球的功能
         public static int softFun = 0; //0点 1角  2点+角  3电子 
-        public static String vString = "V4.0";
+        public static String vString = "V4.1";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";
         public static String webSocketUrl = "ws://47.88.168.99:8600/";

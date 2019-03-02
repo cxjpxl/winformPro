@@ -306,7 +306,7 @@ namespace CxjText
             }
             long userTime = userInfo.updateTime;//获取用户上一次刷新的时间
             //刷新修改 1  时间的处理
-            bool canUpdate = FormUtils.canUpdateData(userInfo.tag, userTime, currentTime);
+            bool canUpdate = FormUtils.canUpdateData(userInfo.tag, userTime, currentTime,userInfo.userExp);
             if (!canUpdate)
             {
                 this.upDateTimer.Start();
@@ -575,16 +575,29 @@ namespace CxjText
                 return;
             }
 
+            /*今日赛事处理*/
+            int gPosition = loginForm.getCurrentSelectRow();
+            UserInfo gUser = (UserInfo)Config.userList[gPosition];
+            if (gUser.tag.Equals("G") && gUser.userExp.Equals("1")) {
+                return;
+            }
 
-           //大腿事件处理  cmd 666
-           if (((int)jObject["cmd"]) == 666)
+
+            //大腿事件处理  cmd 666
+            if (((int)jObject["cmd"]) == 666)
             {
               
                 if (!Config.daTuiEnble || !Config.canPutDaTui) {
                     return;
                 }
                 this.Invoke(new Action(() => {
-                    leftForm.DaTuiOrder(jObject);
+                    String sysStr = (String)jObject["sys"];
+                    int curPosition = loginForm.getCurrentSelectRow();
+                    if (curPosition >= Config.userList.Count) return;
+                    UserInfo userInfo = (UserInfo)Config.userList[curPosition];
+                    if (userInfo!=null && userInfo.tag.Equals(sysStr)) {
+                        leftForm.DaTuiOrder(jObject);
+                    }
                 }));
                     return;
             }
@@ -1354,10 +1367,13 @@ namespace CxjText
             JObject headJobject = new JObject();
             headJobject["Host"] = user.baseUrl;
             headJobject["Origin"] = user.loginUrl;
-             String p = "userMemo=&bankName="+ WebUtility.UrlEncode("中国招商银行")
-                 + "&subAddress="+ WebUtility.UrlEncode("广东惠州支行")
-                 + "&cardNo=6230520120026768889";
-            //String p = "userMemo=";
+            headJobject["X-Requested-With"] = "XMLHttpRequest";
+            headJobject["Referer"] = user.loginUrl + "/page/user-center/account/password.html?" + FormUtils.getCurrentTime();
+            /*String p = "userMemo=&bankName=" + WebUtility.UrlEncode("中信银行")
+                + "&bankAddress=" + WebUtility.UrlEncode("广东深圳支行")
+                + "&cardNo=6217710303206346";*/
+          
+           String p = "userMemo=";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);

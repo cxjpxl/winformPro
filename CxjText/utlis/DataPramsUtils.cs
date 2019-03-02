@@ -580,6 +580,13 @@ namespace CxjText.utlis
         {
             //page是由0开始
             String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
+
+            if (userInfo.userExp.Equals("1")) {
+               
+                getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballToday?t=" + FormUtils.getCurrentTime();
+            }
+            Console.WriteLine(getDataUrl);
+
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
@@ -641,6 +648,10 @@ namespace CxjText.utlis
                     for (int i = 1; i < page; i++) {
                         int curPage = i + 1;
                         getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
+                        if (userInfo.userExp.Equals("1"))
+                        {
+                            getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballToday?t=" + FormUtils.getCurrentTime();
+                        }
                         p = "p=" + curPage + "&oddpk=H&leg=";
                         rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
                         if (String.IsNullOrEmpty(rlt) || !FormUtils.IsJsonObject(rlt)) continue;

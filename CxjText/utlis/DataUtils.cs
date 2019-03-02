@@ -285,6 +285,15 @@ namespace CxjText.utlis
                     JObject jObjectG = (JObject)obj;
                     time = (String)jObjectG["Match_Date"];
                     time = FormUtils.changeHtml(time);
+
+                    String userExp =(String) jObjectG["userExp"];
+                    if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                        time = (String)jObjectG["Match_Date"];
+                        time = time.Replace("<br/>","\n").Replace("<br>", "\n");
+                        time = FormUtils.changeHtml(time);
+                        return time;
+                    }
+
                     if (time.IndexOf("45") >= 0)
                     {
                         time = "中场";
@@ -422,6 +431,15 @@ namespace CxjText.utlis
                     JObject jObjectG = (JObject)obj;
                     try
                     {
+                        if (jObjectG["userExp"] != null) {
+                            String userExp =(String) jObjectG["userExp"];
+                            if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                                JArray jArray1 = new JArray();
+                                jArray1.Add(-1);
+                                jArray1.Add(-1);
+                                return jArray1;
+                            }
+                        }
                         String str = (String)jObjectG["Match_NowScore"];
                         String[] strArr = str.Split(':');
                         if (strArr.Length >= 2)

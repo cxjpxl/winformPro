@@ -954,8 +954,12 @@ namespace CxjText.utlis
             else {
                 pk = "0";
             }
-
+           
             String Sport_Type = "FTP";
+            if (user.userExp.Equals("1"))
+            {
+                Sport_Type = "FT";
+            }
             String Odd_PK = (String)betJObject["data"]["oddpk"];
             String bet_money = money + "";
             String uid = user.uid;

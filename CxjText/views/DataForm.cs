@@ -123,6 +123,7 @@ namespace CxjText.views
                     else if (userInfo.tag.Equals("G"))
                     {
                         JObject jObject = (JObject)jArray[i];
+                        jObject["userExp"] = userInfo.userExp;
                         rltObj = DataUtils.updateUI(jObject, "G");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
@@ -301,6 +302,7 @@ namespace CxjText.views
                 case "G":
                     JObject jObjectG = (JObject)obj;
                     if (jObjectG == null) return;
+                    jObjectG["userExp"] = userInfo.userExp;
                     rltStr = DataClickUtlis.DataSysGClick(dataJObject, jObjectG, numRow, clickNum, "G");
                     break;
                 case "H":

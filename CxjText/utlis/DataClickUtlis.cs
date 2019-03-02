@@ -1382,6 +1382,7 @@ namespace CxjText.utlis
             String gameTeam = "";
             if (jObject == null) return null;
 
+            String userExp = (String)jObject["userExp"];
 
             String mid = (String)jObject["Match_ID"]; //赛事ID的获取
             if (numRow == 0)
@@ -1493,6 +1494,11 @@ namespace CxjText.utlis
             {
                 return null;
             }
+
+            if (userExp.Equals("1")) {
+                rltStr = rltStr.Replace("sport_type=FTP", "sport_type=FT");
+            }
+
             if (String.IsNullOrEmpty(bateStr.Trim()))
             {
                 return null;
