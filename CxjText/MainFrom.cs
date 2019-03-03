@@ -30,12 +30,13 @@ namespace CxjText
             InitializeComponent();
             HttpUtils.setMaxContectionNum(100);
             uiInit();
+
         }
 
 
         private void uiInit() {
             //按键权限的控制
-
+            daTuiText.Text = "";
             if (Config.softFun == 0)
             { //点
                 jiaoqiu_checkBox.Enabled = false; //不显示角球
@@ -592,11 +593,35 @@ namespace CxjText
                 }
                 this.Invoke(new Action(() => {
                     String sysStr = (String)jObject["sys"];
+                    String nameH = (String)jObject["daTuiGameH"];
+                    String nameG = (String)jObject["daTuiGameG"];
+                    bool isDaXiao = (bool)jObject["isDaXiao"];//是否是大小
+                    String daTuiStr = "";
+                    daTuiStr = "大腿系统:" + sysStr;
+                    daTuiStr = daTuiStr + "," + nameH + "---" + nameG;
+                    if (isDaXiao)
+                    {
+                        daTuiStr = daTuiStr + ",类型:" + "大小";
+                    }
+                    else {
+                        daTuiStr = daTuiStr + ",类型:" + "让球";
+                    }
+                    daTuiText.Text = daTuiStr + ",时间:"+FormUtils.ConvertLongToDateTime(FormUtils.getCurrentTime());
                     int curPosition = loginForm.getCurrentSelectRow();
                     if (curPosition >= Config.userList.Count) return;
                     UserInfo userInfo = (UserInfo)Config.userList[curPosition];
-                    if (userInfo!=null && userInfo.tag.Equals(sysStr)) {
-                        leftForm.DaTuiOrder(jObject);
+                    if (userInfo!=null) {
+                        if (sysStr.Equals("BB1"))
+                        {
+                            if (userInfo.tag.Equals(sysStr)) {
+                                leftForm.DaTuiOrder(jObject);
+                            }
+                        }else {
+                            if (!userInfo.tag.Equals("BB1")) {
+                                leftForm.DaTuiOrder(jObject);
+                            }
+                        }
+                        
                     }
                 }));
                     return;
@@ -1385,6 +1410,18 @@ namespace CxjText
             if (loginForm != null) {
                 loginForm.allGoLogin();
             }
+
+            /*JObject jObject = new JObject();
+            jObject["isDaXiao"] = false;
+            jObject["isH"] = true;
+            jObject["daTuiGameH"] = "贝卡麦克斯";//主队名字
+            jObject["daTuiGameG"] = "岘港";//客队名字
+            jObject["sys"] = "BB1";
+            jObject["cmd"] = 666;
+            jObject["userName"] = "admin4009";
+            jObject["version"] = Config.vString;
+            OnWebSocketMessAge(jObject.ToString());*/
+
         }
 
         private void sishiHou_CheckedChanged(object sender, EventArgs e)

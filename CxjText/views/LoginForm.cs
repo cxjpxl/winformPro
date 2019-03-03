@@ -394,7 +394,7 @@ namespace CxjText.views
                     continue;
                 }
 
-                if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 10) {  
+                if (user.status == 3 && user.loginTime != -1&&user.loginFailTime <= 20) {  
                     Thread t1 = new Thread(new ParameterizedThreadStart(this.GoLogin));
                     t1.Start(i);
                     continue;
@@ -638,7 +638,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetNMoney(userInfo);
                         break;
                     case "BB1":
-                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 30)
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 15)
                         {
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
@@ -667,7 +667,7 @@ namespace CxjText.views
                 AddToListToUpDate(position);
             }
             else if (moneyStatus == -1) {
-                if (userInfo.loginFailTime > 10)
+                if (userInfo.loginFailTime > 20)
                 {
                     userInfo.status = 0;//下线
                 }

@@ -47,6 +47,7 @@
             this.bangCRadio = new System.Windows.Forms.RadioButton();
             this.quanCRadio = new System.Windows.Forms.RadioButton();
             this.fitterBox = new System.Windows.Forms.GroupBox();
+            this.keNengCheck = new System.Windows.Forms.CheckBox();
             this.M8checkBox = new System.Windows.Forms.CheckBox();
             this.NYCheckBox = new System.Windows.Forms.CheckBox();
             this.sishiHou = new System.Windows.Forms.CheckBox();
@@ -67,7 +68,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.keNengCheck = new System.Windows.Forms.CheckBox();
+            this.daTuiText = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -268,6 +269,16 @@
             this.fitterBox.TabIndex = 22;
             this.fitterBox.TabStop = false;
             this.fitterBox.Text = "自动下注";
+            // 
+            // keNengCheck
+            // 
+            this.keNengCheck.AutoSize = true;
+            this.keNengCheck.Location = new System.Drawing.Point(90, 178);
+            this.keNengCheck.Name = "keNengCheck";
+            this.keNengCheck.Size = new System.Drawing.Size(48, 16);
+            this.keNengCheck.TabIndex = 34;
+            this.keNengCheck.Text = "可能";
+            this.keNengCheck.UseVisualStyleBackColor = true;
             // 
             // M8checkBox
             // 
@@ -503,21 +514,21 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "事件";
             // 
-            // keNengCheck
+            // daTuiText
             // 
-            this.keNengCheck.AutoSize = true;
-            this.keNengCheck.Location = new System.Drawing.Point(90, 178);
-            this.keNengCheck.Name = "keNengCheck";
-            this.keNengCheck.Size = new System.Drawing.Size(48, 16);
-            this.keNengCheck.TabIndex = 34;
-            this.keNengCheck.Text = "可能";
-            this.keNengCheck.UseVisualStyleBackColor = true;
+            this.daTuiText.AutoSize = true;
+            this.daTuiText.Location = new System.Drawing.Point(37, 665);
+            this.daTuiText.Name = "daTuiText";
+            this.daTuiText.Size = new System.Drawing.Size(29, 12);
+            this.daTuiText.TabIndex = 24;
+            this.daTuiText.Text = "大腿";
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1362, 663);
+            this.ClientSize = new System.Drawing.Size(1363, 689);
+            this.Controls.Add(this.daTuiText);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.fitterBox);
             this.Controls.Add(this.codeMoneyText);
@@ -584,5 +595,6 @@
         private System.Windows.Forms.CheckBox M8checkBox;
         private System.Windows.Forms.CheckBox NYCheckBox;
         private System.Windows.Forms.CheckBox keNengCheck;
+        private System.Windows.Forms.Label daTuiText;
     }
 }

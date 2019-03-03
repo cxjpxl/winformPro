@@ -774,26 +774,10 @@ namespace CxjText.views
             String nameH = (String)jObject["nameH"];
             String nameG = (String)jObject["nameG"];
             String lianSai = (String)jObject["lianSai"];
-            if (lianSai.Contains("保加利亚"))
-            {
-                return;
-            }
-            //先将数据搜索出来
+           
             if (mainFrom != null)
             {
-                //进球的自动搜索出来
-                if (enventInfo.scoreArray != null) {
-                    if (isH)
-                    {
-                        mainFrom.setTextBox1Text(nameH);
-                    }
-                    else
-                    {
-                        mainFrom.setTextBox1Text(nameG);
-                    }
-                }
-                   
-
+                
                 if (Config.softFun == 2 )
                 {  //点球用户处理
                     if (!Config.dianQiuGouXuan && enventInfo.scoreArray == null)
@@ -1574,6 +1558,7 @@ namespace CxjText.views
             }
             object obj = null;
             bool isBanChang = true;
+            bool canPingban = Config.isPingBang;
             JArray currayScore = DataUtils.get_bifen_data(searchArray[0], userInfo.tag);
             if (isDaXiao) //大小
             {
@@ -1628,10 +1613,34 @@ namespace CxjText.views
                             break;
                         }
                     }
-                    if (obj == null)
+                    if (obj == null && canPingban)
                     {
-                        isBanChang = false; 
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                            }
+
+                            if (StringComPleteUtils.isDa07(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = true;
+                                break;
+                            }
+                        }
+
                     }
+                }
+                //非半场的时候  这个obj是null
+                if (obj == null)
+                {
+                    isBanChang = false;
                 }
                 if (obj == null || !isBanChang)
                 {
@@ -1656,11 +1665,31 @@ namespace CxjText.views
                         }
                     }
 
-                    if (obj == null)
+                    if (obj == null && canPingban)
                     {
-                        return;
+                        for (int i = 0; i < searchArray.Count; i++)
+                        {
+                            String data = "";
+                            if (isH)
+                            {
+                                data = DataUtils.get_c04_data(searchArray[i], userInfo.tag); //主队全场让球
+                            }
+                            else
+                            {
+                                data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
+                            }
+
+                            if (StringComPleteUtils.isDa07(data))
+                            {
+                                obj = searchArray[i];
+                                isBanChang = false;
+                                break;
+                            }
+                        }
                     }
                 }
+
+
             }
             
 
