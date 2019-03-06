@@ -424,6 +424,8 @@ namespace CxjText.views
             this.inface.OnClickLisenter(rltStr, dataJObject, userInfo);
         }
 
+     
+
 
         //滑动的时候的数据处理
         private void dgvSA_Scroll(object sender, ScrollEventArgs e)

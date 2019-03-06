@@ -3329,6 +3329,9 @@ namespace CxjText.utlis
             dataJObject["gid"] = game_id; //比赛ID
             dataJObject["bateStr"] = bateStr; //赔率
             dataJObject["inputType"] = inputType; //下注类型
+
+            Console.WriteLine(rltStr);
+
             return rltStr;
         }
 

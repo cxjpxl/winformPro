@@ -1447,6 +1447,7 @@ namespace CxjText.utlis
             }
 
             String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+      
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -1463,8 +1464,8 @@ namespace CxjText.utlis
             headJObject["Origin"] = userInfo.loginUrl;
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             String loginStatusStr = HttpUtils.HttpPostHeader(loginStatusUrl,loginStatuP, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-          
-            if (String.IsNullOrEmpty(loginStatusStr)) {
+           
+            if (String.IsNullOrEmpty(loginStatusStr)||!FormUtils.IsJsonObject(loginStatusStr)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
@@ -1472,6 +1473,10 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+            JObject statuObj = JObject.Parse(loginStatusStr);
+            loginStatusStr = (String)statuObj["specialLoginStatus"];
+
             int loginStatus = -1;
             try
             {
@@ -1500,7 +1505,7 @@ namespace CxjText.utlis
             String checkLoginUrl = userInfo.loginUrl + "/member/member";
             String pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=validInfo&rmNum=" + codeStrBuf.ToString();
             String rltStr = HttpUtils.HttpPostHeader(checkLoginUrl,pStr, "application/x-www-form-urlencoded; charset=UTF-8",userInfo.cookie,headJObject);
-         
+            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr)||!FormUtils.IsJsonObject(rltStr)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -1521,6 +1526,7 @@ namespace CxjText.utlis
 
             String loginMenUrl = userInfo.loginUrl + "/jsp/member/loginProtocol.jsp";
             rltStr = HttpUtils.HttpGetHeader(loginMenUrl,"",userInfo.cookie,headJObject);
+            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("游戏协议"))
             {
                 userInfo.loginFailTime++;
@@ -1535,6 +1541,7 @@ namespace CxjText.utlis
             String loginUrl = userInfo.loginUrl + "/member/member";
             pStr = "account=" + userInfo.user + "&password=" + userInfo.pwd + "&type=denglu&rmNum=" + codeStrBuf.ToString();
             rltStr = HttpUtils.HttpPostHeader(loginUrl, pStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
             {
                 userInfo.loginFailTime++;
@@ -1558,6 +1565,7 @@ namespace CxjText.utlis
             //获取数据接口
             String getDataUrl = userInfo.loginUrl + "/member/flex?type=loginapi&key=ty&v="+FormUtils.getCurrentTime();
             String rltString = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltString) || !rltString.Contains("var fo =")) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;

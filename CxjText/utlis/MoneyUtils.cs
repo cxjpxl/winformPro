@@ -446,6 +446,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.loginUrl;
           //  headJObject["Referer"] = user.dataUrl + "/FootBall";
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "", user.cookie, headJObject);
+            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
                 return 0;
             }
@@ -456,8 +457,10 @@ namespace CxjText.utlis
             }
             String moneyStr =(String) jObject["money"];
             user.money = moneyStr;
+            Console.WriteLine(moneyStr);
             return 1;
         }
+        
         //获取D的money   1表示还在登录   0获取获取失败  小于0表示登录失效
         public static int GetDMoney(UserInfo user)
         {

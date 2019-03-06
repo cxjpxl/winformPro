@@ -553,7 +553,7 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-            Console.WriteLine(message);
+          // Console.WriteLine(message);
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
                 return;

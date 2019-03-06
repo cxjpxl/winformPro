@@ -1556,6 +1556,18 @@ namespace CxjText.views
             if (nameH.Contains("角球")) {
                 return;
             }
+
+            if (userInfo.tag.Equals("BB1")) {
+                if (isH || isDaXiao)
+                {
+                    mainFrom.setTextBox1Text(nameH); //搜索出来
+                }
+                else
+                {
+                    mainFrom.setTextBox1Text(nameG);
+                }
+            }
+
             object obj = null;
             bool isBanChang = true;
             bool canPingban = Config.isPingBang;
@@ -1721,6 +1733,9 @@ namespace CxjText.views
 
             JObject jObject = new JObject();
             jObject["mid"] = DataUtils.getMid(obj,userInfo.tag);
+
+           // Console.WriteLine(obj.ToString());
+
             if (isDaXiao)
             {
                 if (isBanChang)

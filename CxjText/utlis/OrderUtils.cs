@@ -1630,13 +1630,16 @@ namespace CxjText.utlis
                     {
                         addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
                     }
+                    //获取钱
                     rltForm.RefershLineData(inputTag, "成功");
                 }
             }));
-            //获取钱
-            int moneyStatus = MoneyUtils.GetFMoney(user);
-            if (moneyStatus == 1)
+
+            try
             {
+                float moneyAll = float.Parse(user.money);
+                float money1 = (moneyAll - money);
+                user.money = money1 + "";
                 leftForm.Invoke(new Action(() =>
                 {
                     if (loginForm != null)
@@ -1645,18 +1648,34 @@ namespace CxjText.utlis
                     }
                 }));
             }
-            else if (moneyStatus == -1)
-            {
-                //交易成功 , 更新UI 并更新钱
-                leftForm.Invoke(new Action(() =>
+            catch (Exception e) {
+                int moneyStatus = MoneyUtils.GetFMoney(user);
+                if (moneyStatus == 1)
                 {
-                    if (rltForm != null)
+                    leftForm.Invoke(new Action(() =>
                     {
-                        user.status = 3; //登录失效
-                        loginForm.AddToListToUpDate(index);
-                    }
-                }));
+                        if (loginForm != null)
+                        {
+                            loginForm.AddToListToUpDate(index);
+                        }
+                    }));
+                }
+                else if (moneyStatus == -1)
+                {
+                    //交易成功 , 更新UI 并更新钱
+                    leftForm.Invoke(new Action(() =>
+                    {
+                        if (rltForm != null)
+                        {
+                            user.status = 3; //登录失效
+                            loginForm.AddToListToUpDate(index);
+                        }
+                    }));
+                }
             }
+           
+
+            
         }
         //D下单
         public static void OrderD(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)

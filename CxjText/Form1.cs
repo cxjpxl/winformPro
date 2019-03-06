@@ -257,6 +257,9 @@ namespace CxjText
                 writeTxt();
                 if (Config.softFun == 0 || Config.softFun == 1 || Config.softFun == 2)
                 {
+                    if (Config.softTime>0 && !Config.softUserStr.Equals("admin")) {
+                        //MessageBox.Show("到期时间:"+FormUtils.ConvertLongToDateTime(Config.softTime));
+                    }
                     MainFrom mainFrom = new MainFrom();
                     mainFrom.Show();
                     this.Hide();
