@@ -233,6 +233,9 @@ namespace CxjText.views
                     case "BB1":
                         LoginUtils.loginBB1(this, position);
                         break;
+                    case "Y":
+                        LoginUtils.loginY(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -547,7 +550,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetFMoney(userInfo);
                         break;
                     case "D":
-                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 40)
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 50)
                         {
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;
@@ -639,6 +642,17 @@ namespace CxjText.views
                         break;
                     case "BB1":
                         if (currentTime - userInfo.loginTime >= 60 * 1000 * 15)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetBB1Money(userInfo);
+                        break;
+                    case "Y":
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 30)
                         {
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;

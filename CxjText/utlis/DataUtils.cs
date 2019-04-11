@@ -59,6 +59,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -137,6 +138,7 @@ namespace CxjText.utlis
                     if (time.Contains("41") || time.Contains("40") || time.Contains("39")) return true;
                     break;
                 case "K":
+                case "Y":
                 case "C":
                     JObject jObjectC = (JObject)obj;
                     time = (String)jObjectC["timer"];
@@ -161,8 +163,20 @@ namespace CxjText.utlis
                     if (time.Contains("1H^41")|| time.Contains("1H^40") || time.Contains("1H^39")) return true;
                     break;
                 case "H":
+                    JObject jObjectH = (JObject)obj;
+                    if (jObjectH == null) return false;
+                    time = (String)jObjectH["time"];
+                    if (String.IsNullOrEmpty(time)) return false;
+                    if (time.Contains("下")) return false;
+                    if (time.Contains("41") || time.Contains("40") || time.Contains("39")) return true;
                     return false;
                 case "J":
+                    JObject jObjectJ = (JObject)obj;
+                    if (jObjectJ == null) return false;
+                    time = (String)jObjectJ["gameTime"];
+                    if (String.IsNullOrEmpty(time)) return false;
+                    time = time.Trim();
+                    if (time.Contains("41:") || time.Contains("40:") || time.Contains("39:") || time.Contains("42:")) return true;
                     return false;
                 case "L":
                     return false;
@@ -301,6 +315,7 @@ namespace CxjText.utlis
                     time = time + "\n" + (String)jObjectG["Match_NowScore"];
                     break;
                 case "K":
+                case "Y":
                 case "C":
                     JObject jObjectK = (JObject)obj;
                     time = (String)jObjectK["timer"];
@@ -455,6 +470,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "K":
+                case "Y":
                 case "C":
                     JObject jObjectK = (JObject)obj;
                     hBifen = (String)jObjectK["score_h"];
@@ -593,6 +609,7 @@ namespace CxjText.utlis
                     c02 = (String)jObjectG["Match_Master"];
                     break;
                 case "K":
+                case "Y":
                 case "C":
                     JObject jObjectK = (JObject)obj;
                     c02 = (String)jObjectK["team_h"];
@@ -673,6 +690,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -773,6 +791,7 @@ namespace CxjText.utlis
 
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -961,6 +980,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -1193,12 +1213,18 @@ namespace CxjText.utlis
                         }
                         break;
                     }
+                case "Y":
                 case "K":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ratio_o = (String)jObjectK["ratio_o"];
                         String ior_OUC = (String)jObjectK["ior_OUC"];
+                        if (tag.Equals("Y")) {
+                             ior_OUC = (String)jObjectK["ior_OUH"];
+                        }
+
+
                         if (String.IsNullOrEmpty(ratio_o) || String.IsNullOrEmpty(ior_OUC))
                         {
                             c05 = "";
@@ -1368,6 +1394,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -1574,6 +1601,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -1830,11 +1858,16 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String hratio_o = (String)jObjectK["hratio_o"];
                         String ior_HOUC = (String)jObjectK["ior_HOUC"];
+                        if (tag.Equals("Y"))
+                        {
+                            ior_HOUC = (String)jObjectK["ior_HOUH"];
+                        }
                         if (String.IsNullOrEmpty(hratio_o) || String.IsNullOrEmpty(ior_HOUC))
                         {
                             c08 = "";
@@ -2005,6 +2038,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -2197,6 +2231,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -2445,11 +2480,16 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String ratio_u = (String)jObjectK["ratio_u"];
                         String ior_HRH = (String)jObjectK["ior_OUH"];
+                        if (tag.Equals("Y"))
+                        {
+                            ior_HRH = (String)jObjectK["ior_OUC"];
+                        }
                         if (String.IsNullOrEmpty(ratio_u) || String.IsNullOrEmpty(ior_HRH))
                         {
                             c15 = "";
@@ -2621,6 +2661,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -2827,6 +2868,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -3083,11 +3125,16 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
                         String hratio_u = (String)jObjectK["hratio_u"];
                         String ior_HOUH = (String)jObjectK["ior_HOUH"];
+                        if (tag.Equals("Y"))
+                        {
+                            ior_HOUH = (String)jObjectK["ior_HOUC"];
+                        }
                         if (String.IsNullOrEmpty(hratio_u) || String.IsNullOrEmpty(ior_HOUH))
                         {
                             c18 = "";
@@ -3261,6 +3308,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -3397,6 +3445,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                 case "C":
                     {
                         JObject jObjectK = (JObject)obj;
@@ -3608,6 +3657,7 @@ namespace CxjText.utlis
                         break;
                     }
                 case "K":
+                case "Y":
                     {
                         JObject jObjectK = (JObject)obj;
                         mid = (String)jObjectK["gid"];

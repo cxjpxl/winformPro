@@ -127,10 +127,10 @@ namespace CxjText.views
                         rltObj = DataUtils.updateUI(jObject, "G");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
-                    else if (userInfo.tag.Equals("K"))
+                    else if (userInfo.tag.Equals("K")|| userInfo.tag.Equals("Y"))
                     {
                         JObject jObject = (JObject)jArray[i];
-                        rltObj = DataUtils.updateUI(jObject, "K");
+                        rltObj = DataUtils.updateUI(jObject, userInfo.tag);
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
                     else if (userInfo.tag.Equals("C"))
@@ -197,6 +197,12 @@ namespace CxjText.views
                     {
                         JObject jObject = (JObject)jArray[i];
                         rltObj = DataUtils.updateUI(jObject, "BB1");
+                        mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
+                    }
+                    else if (userInfo.tag.Equals("Y"))
+                    {
+                        JObject jObject = (JObject)jArray[i];
+                        rltObj = DataUtils.updateUI(jObject, "Y");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
                     else
@@ -321,9 +327,15 @@ namespace CxjText.views
                     rltStr = DataClickUtlis.DataSysJClick(dataJObject, jObjectJ, numRow, clickNum, "J");
                     break;
                 case "K":
+                case "Y":
                     JObject jObjectK = (JObject)obj;
                     if (jObjectK == null) return;
-                    rltStr = DataClickUtlis.DataSysKClick(dataJObject, jObjectK, numRow, clickNum, "K");
+                    if (userInfo.tag.Equals("Y"))
+                    {
+                        rltStr = DataClickUtlis.DataSysKClick(dataJObject, jObjectK, numRow, clickNum, "Y");
+                    }else {
+                        rltStr = DataClickUtlis.DataSysKClick(dataJObject, jObjectK, numRow, clickNum, "K");
+                    }
                     break;
                 case "O":
                     JObject jObjectO = (JObject)obj;

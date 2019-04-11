@@ -138,6 +138,7 @@ namespace CxjText.utlis
                         obj = jObjectG;
                         break;
                     case "K":
+                    case "Y":
                         JObject jObjectK = (JObject)jArray[i];
                         lianSai = (String)jObjectK["league"];
                         hStr = (String)jObjectK["team_h"];
@@ -470,6 +471,7 @@ namespace CxjText.utlis
                         obj = jObjectG;
                         break;
                     case "K":
+                    case "Y":
                         JObject jObjectK = (JObject)jArray[i];
                         lianSai = (String)jObjectK["league"];
                         hStr = (String)jObjectK["team_h"];
@@ -675,6 +677,7 @@ namespace CxjText.utlis
                         obj = jObjectG;
                         break;
                     case "K":
+                    case "Y":
                         JObject jObjectK = (JObject)jArray[i];
                         lianSai = (String)jObjectK["league"];
                         hStr = (String)jObjectK["team_h"];
@@ -841,6 +844,7 @@ namespace CxjText.utlis
                         obj = jObjectG;
                         break;
                     case "K":
+                    case "Y":
                         JObject jObjectK = (JObject)jArray[i];
                         lianSai = (String)jObjectK["league"];
                         hStr = (String)jObjectK["team_h"];

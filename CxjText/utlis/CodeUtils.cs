@@ -69,7 +69,7 @@ namespace CxjText.utlis
         }
 
         //云打码
-        private static String getDaMaCode(string Imagefilename)
+        public static String getDaMaCode(string Imagefilename)
         {
 
             int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);

@@ -1974,12 +1974,12 @@ namespace CxjText.utlis
         public static String getJData(UserInfo userInfo)
         {
             //page是由1开始
-            String getDataUrl = userInfo.dataUrl + "/odds2/d/getodds";
-            String dataP = "sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
+            String getDataUrl = userInfo.dataUrl + "/odds2/d/getodds?sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
+          //  String dataP ="sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            String dataRlt = HttpUtils.HttpPostHeader(getDataUrl, dataP, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
             JObject jObject = new JObject();
             JArray jArray = new JArray();
             jObject["list"] = jArray;
@@ -2594,6 +2594,183 @@ namespace CxjText.utlis
 
             }
             return jObect.ToString(); ;
+        }
+
+
+        /***********************Y系统获取数据*************************/
+        public static String getYData(UserInfo userInfo)
+        {
+            //page是由0开始
+            String uid = "";
+            JObject headJObject = new JObject();
+            CookieContainer cookie = userInfo.cookie;
+            if (userInfo.status == 2)
+            {
+                uid = userInfo.uid;
+            }
+            else
+            {
+                headJObject["Referer"] = userInfo.dataUrl;
+                HttpUtils.HttpGetHeader(userInfo.dataUrl, "", cookie, headJObject);
+                uid = "guest";
+            }
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=4&page_no=0&league_id=&hot_game=";
+            headJObject["Referer"] = getDataUrl;
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "", cookie, headJObject);
+            if (String.IsNullOrEmpty(dataRlt)) return null;
+            if (!dataRlt.Contains("parent.GameHead")) return null;
+            JObject jObject = new JObject();
+            JArray jArray = new JArray();
+            if (!dataRlt.Contains("parent.GameFT"))
+            {
+                jObject.Add("list", jArray);
+                return jObject.ToString();
+            }
+            String[] strs = dataRlt.Split('\n');
+            JArray headJArray = null;
+            int t_page = 1;
+            for (int index = 0; index < strs.Length; index++)
+            {
+                String str = strs[index].Trim();
+                if (String.IsNullOrEmpty(str)) continue;
+
+                //获取总页码数
+                if (str.Contains("parent.t_page="))
+                {
+                    String numStr = str.Replace("parent.t_page=", "").Replace(";", "").Trim();
+                    try
+                    {
+                        t_page = int.Parse(numStr);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+
+                if (!str.Contains("parent.GameFT") && !str.Contains("parent.GameHead"))
+                {
+                    continue;
+                }
+
+                if (str.Contains("parent.GameHead"))
+                { //先解析头部
+                    String[] dataStrs = str.Split(';');
+                    String headStr = dataStrs[0];
+                    headStr = headStr.Replace(")", "]");
+                    headStr = headStr.Replace("parent.GameHead = new Array(", "[");
+                    if (!FormUtils.IsJsonArray(headStr)) return null;
+                    headJArray = JArray.Parse(headStr);
+                    if (headJArray == null) return null;
+
+                    //获取滚球的数据
+                    if (dataStrs.Length > 1 && dataStrs[1].Contains("parent.GameFT") && dataStrs[1].Contains("Running Ball"))
+                    {
+                        String data0Str = dataStrs[1];
+                        data0Str = data0Str.Replace(")", "]");
+                        data0Str = data0Str.Replace("parent.GameFT[0]=new Array(", "[");
+                        if (!FormUtils.IsJsonArray(data0Str)) continue;
+                        JArray data0JArray = JArray.Parse(data0Str);
+                        if (data0JArray == null) continue;
+                        JObject itemObj = new JObject();
+                        for (int i = 0; i < headJArray.Count; i++)
+                        {
+                            itemObj.Add((String)headJArray[i], data0JArray[i]);
+                        }
+                        jArray.Add(itemObj);
+
+                    }
+                    continue;
+                }
+                //获取滚球的数据
+                if (str.Contains("parent.GameFT"))
+                {
+                    int arrayStart = str.IndexOf("Array(");
+                    if (arrayStart < 0) continue;
+                    String dataStr = str.Substring(arrayStart, str.Length - arrayStart);
+                    dataStr = dataStr.Replace("Array(", "[");
+                    dataStr = dataStr.Replace(");", "]");
+                    if (!FormUtils.IsJsonArray(dataStr)) continue;
+                    JArray data0JArray = JArray.Parse(dataStr);
+                    if (data0JArray == null) continue;
+                    JObject itemObj = new JObject();
+                    for (int i = 0; i < headJArray.Count; i++)
+                    {
+                        itemObj.Add((String)headJArray[i], data0JArray[i]);
+                    }
+                    jArray.Add(itemObj);
+                }
+            }
+
+            for (int page = 1; page < t_page; page++)
+            {
+                String pageUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=" + uid + "&rtype=re&langx=zh-cn&mtype=3&page_no=" + page + "&league_id=";
+                headJObject["Referer"] = pageUrl;
+                dataRlt = HttpUtils.HttpGetHeader(pageUrl, "", cookie, headJObject);
+                if (String.IsNullOrEmpty(dataRlt)) continue; ;
+                if (!dataRlt.Contains("parent.GameHead")) continue; ;
+
+                if (!dataRlt.Contains("parent.GameFT"))
+                {
+                    continue;
+                }
+                strs = dataRlt.Split('\n');
+                if (headJArray == null) return null;
+                for (int index = 0; index < strs.Length; index++)
+                {
+                    String str = strs[index].Trim();
+                    if (String.IsNullOrEmpty(str)) continue;
+                    if (!str.Contains("parent.GameFT") && !str.Contains("parent.GameHead"))
+                    {
+                        continue;
+                    }
+
+                    if (str.Contains("parent.GameHead"))
+                    { //先解析头部
+                        String[] dataStrs = str.Split(';');
+                        //获取滚球的数据
+                        if (dataStrs.Length > 1 && dataStrs[1].Contains("parent.GameFT"))
+                        {
+                            String data0Str = dataStrs[1];
+                            data0Str = data0Str.Replace(")", "]");
+                            data0Str = data0Str.Replace("parent.GameFT[0]=new Array(", "[");
+                            if (!FormUtils.IsJsonArray(data0Str)) continue;
+                            JArray data0JArray = JArray.Parse(data0Str);
+                            if (data0JArray == null) continue;
+                            JObject itemObj = new JObject();
+                            for (int i = 0; i < headJArray.Count; i++)
+                            {
+                                itemObj.Add((String)headJArray[i], data0JArray[i]);
+                            }
+                            jArray.Add(itemObj);
+                        }
+                        continue;
+                    }
+                    //获取滚球的数据
+                    if (str.Contains("parent.GameFT") && headJArray != null && str.Contains("Running Ball"))
+                    {
+                        int arrayStart = str.IndexOf("Array(");
+                        if (arrayStart < 0) continue;
+                        String dataStr = str.Substring(arrayStart, str.Length - arrayStart);
+                        dataStr = dataStr.Replace("Array(", "[");
+                        dataStr = dataStr.Replace(");", "]");
+                        if (!FormUtils.IsJsonArray(dataStr)) continue;
+                        JArray data0JArray = JArray.Parse(dataStr);
+                        if (data0JArray == null) continue;
+                        JObject itemObj = new JObject();
+                        for (int i = 0; i < headJArray.Count; i++)
+                        {
+                            itemObj.Add((String)headJArray[i], data0JArray[i]);
+                        }
+                        jArray.Add(itemObj);
+                    }
+                }
+
+            }
+            jObject.Add("list", jArray);
+            return jObject.ToString();
         }
 
     }

@@ -484,6 +484,7 @@ namespace CxjText.views
                         break;
                     case "K":
                     case "C":
+                    case "Y":
                         orderParmas = rltStr + "&uid=" + user.uid;
                         break;
                     case "F":
@@ -573,7 +574,7 @@ namespace CxjText.views
                 {
                     jObject["money"] = inputMoney;
                 }
-                else if (user.tag.Equals("K") || user.tag.Equals("C"))
+                else if (user.tag.Equals("K") || user.tag.Equals("C") || user.tag.Equals("Y"))
                 {
                     jObject["reqUrl"] = dataJObject["reqUrl"];
                     jObject["money"] = inputMoney;
@@ -718,6 +719,9 @@ namespace CxjText.views
                         break;
                     case "BB1":
                         OrderUtils.OrderBB1(jobject, this, loginForm, rltForm);
+                        break;
+                    case "Y":
+                        OrderUtils.OrderY(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

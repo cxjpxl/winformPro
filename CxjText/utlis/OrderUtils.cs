@@ -978,7 +978,7 @@ namespace CxjText.utlis
 
             if (jobject["isJiaoQiu"] != null && (bool)(jobject["isJiaoQiu"]) == true)
             {
-                Thread.Sleep(800); //角球延时下注
+               // Thread.Sleep(800); //角球延时下注
             }
 
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderData, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
@@ -3177,6 +3177,177 @@ namespace CxjText.utlis
                     if (rltForm != null)
                     {
                         user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+        }
+
+        //Y下单
+        public static void OrderY(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+
+
+            String reqUrl = (String)jobject["reqUrl"];//请求连接地址
+            String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["referer"] = user.dataUrl + "/app/member/select.php?uid=" + user.uid + "&langx=zh-cn";
+            String betUrl = user.dataUrl + "/app/member/FT_order/" + reqUrl + "?" + parmsStr;
+            String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("确定交易"))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "构建订单失败");
+                    }
+                }));
+                return;
+            }
+            //解析订单
+            String[] strs = betRlt.Split('\n');
+            String orderPrams = "";
+            String gmin_single = "";
+            String orderUrl1 = "";
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+
+
+                if (str.Contains("<form") && str.Contains("action=\""))
+                {
+                    int startIndex = str.IndexOf("action=\"");
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
+                    startIndex = str.IndexOf("\"");
+                    str = str.Substring(0, startIndex);
+                    orderUrl1 = str.Trim();
+                    continue;
+                }
+
+                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
+                { //找到input字段
+                    //获取name的值
+                    int nameIndex = str.IndexOf("name=\"");
+                    String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
+                    nameIndex = str1.IndexOf('"');
+                    String nameKey = str1.Substring(0, nameIndex);
+                    str1 = str1.Substring(nameIndex, str1.Length - nameIndex);
+                    nameIndex = str1.IndexOf("value=\"");
+                    str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
+                    nameIndex = str1.IndexOf('"');
+                    String valueStr = str1.Substring(0, nameIndex);
+
+                    if (nameKey.Equals("gmin_single"))
+                    {
+                        gmin_single = valueStr;
+                    }
+                    //数据解析出来
+                    orderPrams = orderPrams + nameKey + "=" + valueStr + "&";
+                }
+            }
+
+            if (String.IsNullOrEmpty(orderPrams))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+
+            try
+            {
+                int minMoney = int.Parse(gmin_single);
+                if (minMoney > money)
+                {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            rltForm.RefershLineData(inputTag, "输入金额太小");
+                        }
+                    }));
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+            orderPrams = orderPrams + "gold=" + money + "&autoOdd=Y";
+            if (String.IsNullOrEmpty(orderUrl1))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "动态订单地址失败");
+                    }
+                }));
+                return;
+            }
+
+          
+
+            String orderUrl = user.dataUrl + orderUrl1;
+            headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = betUrl;
+            String rlt = HttpUtils.HttpPostHeader(orderUrl, orderPrams, "application/x-www-form-urlencoded", user.cookie, headJObject);
+            Console.WriteLine(rlt);
+            if (String.IsNullOrEmpty(rlt) || !rlt.Contains("order_ok=ok"))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        if (!String.IsNullOrEmpty(rlt) && rlt.Contains("赛程已关闭"))
+                        {
+                            rltForm.RefershLineData(inputTag, "赛程已关闭");
+                        }
+                        else
+                        {
+                            rltForm.RefershLineData(inputTag, "下单失败");
+                        }
+
+                    }
+                }));
+                return;
+            }
+
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null)
+                    {
+                        addAutoData(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"]);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetYMoney(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
                         loginForm.AddToListToUpDate(index);
                     }
                 }));

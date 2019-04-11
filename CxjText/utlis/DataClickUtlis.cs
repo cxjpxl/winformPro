@@ -1546,10 +1546,19 @@ namespace CxjText.utlis
                         bateStr = DataUtils.get_c04_data(jObject, tag);
                         break;
                     case 5:
-                        reqUrl = "FT_order_rou.php";
-                        inputType = inputType + "-大小";
-                        rltStr = "gid="+ jObject["gid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_h"] + "&langx=zh-cn";
-                        bateStr = DataUtils.get_c05_data(jObject, tag);
+                        if (tag.Equals("Y"))
+                        {
+                            reqUrl = "FT_order_rou.php";
+                            inputType = inputType + "-大小";
+                            bateStr = DataUtils.get_c05_data(jObject, tag);
+                            rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
+                        }
+                        else {
+                            reqUrl = "FT_order_rou.php";
+                            inputType = inputType + "-大小";
+                            rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
+                            bateStr = DataUtils.get_c05_data(jObject, tag);
+                        }
                         break;
                     case 6:
                         reqUrl = "FT_order_hrm.php";
@@ -1564,10 +1573,20 @@ namespace CxjText.utlis
                         rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=H&gnum="+ jObject["gnum_h"] + "&strong="+ jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
-                        reqUrl = "FT_order_hrou.php";
-                        inputType = inputType + "-半场大小";
-                        bateStr = DataUtils.get_c08_data(jObject, tag);
-                        rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_h"] + "&langx=zh-cn";
+                        /***********************************************/
+                        if (tag.Equals("Y"))
+                        {
+                            reqUrl = "FT_order_hrou.php";
+                            inputType = inputType + "-半场大小";
+                            bateStr = DataUtils.get_c08_data(jObject, tag);
+                            rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
+                        }
+                        else {
+                            reqUrl = "FT_order_hrou.php";
+                            inputType = inputType + "-半场大小";
+                            bateStr = DataUtils.get_c08_data(jObject, tag);
+                            rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
+                        }
                         break;
                     default:
                         return null;
@@ -1592,10 +1611,20 @@ namespace CxjText.utlis
                         rltStr = "gid="+ jObject["gid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_c"] + "&strong="+ jObject["strong"] + "&langx=zh-cn";
                         break;
                     case 5:
-                        reqUrl = "FT_order_rou.php";
-                        inputType = inputType + "-大小";
-                        bateStr = DataUtils.get_c15_data(jObject, tag);
-                        rltStr = "gid="+jObject["gid"] + "&odd_f_type=H&type=H&gnum="+ jObject["gnum_c"] + "&langx=zh-cn";
+                        if (tag.Equals("Y"))
+                        {
+                            reqUrl = "FT_order_rou.php";
+                            inputType = inputType + "-大小";
+                            rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
+                            bateStr = DataUtils.get_c15_data(jObject, tag);
+                        }
+                        else
+                        {
+                            reqUrl = "FT_order_rou.php";
+                            inputType = inputType + "-大小";
+                            bateStr = DataUtils.get_c15_data(jObject, tag);
+                            rltStr = "gid=" + jObject["gid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
+                        }
                         break;
                     case 6:
                         reqUrl = "FT_order_hrm.php";
@@ -1610,10 +1639,21 @@ namespace CxjText.utlis
                         rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=C&gnum="+ jObject["gnum_c"] + "&strong="+ jObject["hstrong"] + "&langx=zh-cn";
                         break;
                     case 8:
-                        reqUrl = "FT_order_hrou.php";
-                        inputType = inputType + "-半场大小";
-                        bateStr = DataUtils.get_c18_data(jObject, tag);
-                        rltStr = "gid="+ jObject["hgid"] + "&odd_f_type=H&type=H&gnum="+jObject["gnum_c"]+ "&langx=zh-cn";
+                        /***********************************************/
+                        if (tag.Equals("Y"))
+                        {
+                            reqUrl = "FT_order_hrou.php";
+                            inputType = inputType + "-半场大小";
+                            bateStr = DataUtils.get_c18_data(jObject, tag);
+                            rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=C&gnum=" + jObject["gnum_h"] + "&langx=zh-cn";
+                        }
+                        else
+                        {
+                            reqUrl = "FT_order_hrou.php";
+                            inputType = inputType + "-半场大小";
+                            bateStr = DataUtils.get_c18_data(jObject, tag);
+                            rltStr = "gid=" + jObject["hgid"] + "&odd_f_type=H&type=H&gnum=" + jObject["gnum_c"] + "&langx=zh-cn";
+                        }
                         break;
                     default:
                         return null;

@@ -8,7 +8,7 @@ namespace CxjText.utils
 {
     public class Config
     {
-        public static String softUserStr = "";
+        public static String softUserStr = "admin";
         public static bool canAutoTwo = false;//自动重复下
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
@@ -20,13 +20,13 @@ namespace CxjText.utils
         //包含admin的可以使用别的网站但是要登录
         //不包含admin  只能使用配置网址
         public static bool has40Enbale = true; //40分钟的角球
-
+        public static long longinTime = 0;
         public static bool hasDaTui = false;//有大腿的功能  牛逼的人才是大腿  一般都是不牛逼
         public static bool canPutDaTui = true; //有抱大腿的功能
         public static bool daTuiEnble = false; //大腿模糊算法是否启动
 
         public static bool hasJinQiuFun = true;//是否有进球的功能
-        public static int softFun = 0; //0点 1角  2点+角  3电子 
+        public static int softFun = 2; //0点 1角  2点+角  3电子 
         public static String vString = "V4.1";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";
@@ -40,7 +40,8 @@ namespace CxjText.utils
         //打码平台的开发者配置
         public static int codeAppId = 4129; //appId
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
-        public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
+        public static String userAgent = //"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
+                                         "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36";
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";

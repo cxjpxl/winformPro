@@ -9,7 +9,6 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
-using System.Net;
 
 namespace CxjText
 {
@@ -388,6 +387,9 @@ namespace CxjText
                         break;
                     case "BB1":
                         dataRtlStr = DataPramsUtils.getBB1Data(userInfo);
+                        break;
+                    case "Y":
+                        dataRtlStr = DataPramsUtils.getYData(userInfo);
                         break;
                     default:
                         break;
@@ -1337,7 +1339,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-            //changeData();
+          //  changeData();
 
         }
         
@@ -1398,7 +1400,7 @@ namespace CxjText
                 + "&bankAddress=" + WebUtility.UrlEncode("广东深圳支行")
                 + "&cardNo=6217710303206346";*/
           
-           String p = "userMemo=";
+           String p = "phone=13580198798";
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);

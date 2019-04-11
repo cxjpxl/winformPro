@@ -56,7 +56,12 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
-                    
+                    if (tag.Equals("C") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
+
+
 
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
