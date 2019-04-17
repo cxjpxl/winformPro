@@ -241,7 +241,7 @@ namespace CxjText.views
                 }
             }
             catch (Exception e) {
-          
+                Console.WriteLine(e.ToString());
                 userInfo.status = 3;
                 userInfo.cookie = null;
                 userInfo.uid = "";
@@ -499,20 +499,43 @@ namespace CxjText.views
                             break;
                         }
                     case "G":
-                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
+                        bool isWeb = (Boolean)userInfo.expJObject["web"];
+                        if (isWeb)
                         {
-                           
-                            userInfo.status = 0; //下线
-                            userInfo.cookie = null;
-                            userInfo.uid = "";
-                            GoLogin(position);
-                            return;
+                            if (currentTime - userInfo.loginTime >= 1000 * 60 * 50)
+                            {
+
+                                userInfo.status = 0; //下线
+                                userInfo.cookie = null;
+                                userInfo.uid = "";
+                                GoLogin(position);
+                                return;
+                            }
+                            else
+                            {
+                                moneyStatus = MoneyUtils.GetGMoney(userInfo);
+                                break;
+                            }
                         }
-                        else
-                        {
-                            moneyStatus = MoneyUtils.GetGMoney(userInfo);
-                            break;
+                        else {
+                            if (currentTime - userInfo.loginTime >= 1000 * 60 * 29)
+                            {
+
+                                userInfo.status = 0; //下线
+                                userInfo.cookie = null;
+                                userInfo.uid = "";
+                                GoLogin(position);
+                                return;
+                            }
+                            else
+                            {
+                                moneyStatus = MoneyUtils.GetGMoney(userInfo);
+                                break;
+                            }
+
                         }
+
+                        
                     case "K":
                         if (currentTime - userInfo.loginTime >= 1000 * 60 * 120)
                         {
@@ -538,7 +561,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetCMoney(userInfo);
                         break;
                     case "F":
-                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 40)
+                        if (currentTime - userInfo.loginTime >= 1000 * 60 * 60)
                         {
 
                             userInfo.status = 0; //下线
@@ -550,7 +573,7 @@ namespace CxjText.views
                         moneyStatus = MoneyUtils.GetFMoney(userInfo);
                         break;
                     case "D":
-                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 50)
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 300)
                         {
                             userInfo.status = 0; //下线
                             userInfo.cookie = null;

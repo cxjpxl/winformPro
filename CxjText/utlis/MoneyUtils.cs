@@ -348,7 +348,6 @@ namespace CxjText.utlis
         {
             String uid = user.uid;
             String token = user.exp;
-
             if (String.IsNullOrEmpty(uid) || String.IsNullOrEmpty(token)) {
                 return -1;
             }
@@ -357,6 +356,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/index.php/sports/main?token=" + token + "&uid=" + uid;
             String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "token=" + token + "&uid=" + uid, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt)) {
                 return 0;
             }
@@ -446,7 +446,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.loginUrl;
           //  headJObject["Referer"] = user.dataUrl + "/FootBall";
             String rltStr = HttpUtils.HttpPostHeader(moneyUrl, "", "", user.cookie, headJObject);
-            Console.WriteLine(rltStr);
+           // Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
                 return 0;
             }
@@ -477,7 +477,7 @@ namespace CxjText.utlis
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/views/main.html";
             String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "", user.cookie, headJObject);
-            Console.WriteLine(moneyRlt);
+           // Console.WriteLine(moneyRlt);
             if (String.IsNullOrEmpty(moneyRlt) ||!FormUtils.IsJsonObject(moneyRlt)|| !moneyRlt.Contains("userInfo"))
             {
                 return 0;
