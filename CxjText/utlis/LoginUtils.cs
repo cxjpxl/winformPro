@@ -221,7 +221,7 @@ namespace CxjText.utlis
                     userInfo.uid = uid;
                 }
             }
-            Console.WriteLine(uid);
+           // Console.WriteLine(uid);
             if (String.IsNullOrEmpty(uid))
             {
                 userInfo.loginFailTime++;
@@ -234,7 +234,7 @@ namespace CxjText.utlis
 
             userInfo.uid = uid; //获取到uid
             int moneyStatus = MoneyUtils.GetAMoney(userInfo);
-            Console.WriteLine(moneyStatus);
+         //   Console.WriteLine(moneyStatus);
             if (moneyStatus == 1)
             {
                 userInfo.loginFailTime = 0;
@@ -793,7 +793,7 @@ namespace CxjText.utlis
                 return false;
             }
             String codeStrBuf = CodeUtils.getDaMaCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-            Console.WriteLine(codeStrBuf);
+          //  Console.WriteLine(codeStrBuf);
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 return false;
@@ -808,7 +808,7 @@ namespace CxjText.utlis
             headJObject["RequestVerificationToken"] = token;
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             String rltStr = HttpUtils.HttpPostHeader(loginUrlStr, paramsStr, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
-            Console.WriteLine(rltStr);
+           // Console.WriteLine(rltStr);
             
             if (rltStr == null)
             {
@@ -1113,7 +1113,7 @@ namespace CxjText.utlis
 
                 int currentX = -1;
                 int blackNum = 30;
-                Bitmap huiDuBmp = CodeUtils.changHuidu(bmp);
+                Bitmap huiDuBmp = CodeUtils.erzhihua(bmp);
                 if (bmp != null)
                 {
                     bmp.Dispose();
@@ -1160,26 +1160,26 @@ namespace CxjText.utlis
                 {
                     IAlert alt = driver.SwitchTo().Alert();
                     String alertText = alt.Text;
-                    Console.WriteLine(alertText);
+                  //  Console.WriteLine(alertText);
                     alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                  //  Console.WriteLine(alertText);
+                    alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                  //  Console.WriteLine(alertText);
+                    alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                 //   Console.WriteLine(alertText);
+                    alt.Accept();
                 }
                 catch (Exception e) {
 
@@ -1219,7 +1219,7 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+               // Console.WriteLine(e.ToString());
                 if (driver != null)
                 {
                     driver.Quit();
@@ -1723,8 +1723,6 @@ namespace CxjText.utlis
             String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
                 "application/x-www-form-urlencoded;charset=UTF-8",
                 userInfo.cookie, headJObject);
-            Console.WriteLine("---------");
-            Console.WriteLine(rltStr);
             if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid"))
             {
                 return false;
@@ -1744,8 +1742,6 @@ namespace CxjText.utlis
                 return false;
             }
             userInfo.uid = uid;
-            Console.WriteLine("-----uid------");
-            Console.WriteLine(uid);
             return true;
         }
 
@@ -1798,11 +1794,9 @@ namespace CxjText.utlis
                 headJObject["x-requested-with"] = "XMLHttpRequest";
                 String offUrl = userInfo.loginUrl + "/crmSetting/onOff";
                 String offRlt = HttpUtils.HttpGetHeader(offUrl,"",userInfo.cookie,headJObject);
-                //Console.WriteLine(offRlt);
 
                 String getUidUrl = userInfo.loginUrl + "/crmSetting/getRedirectUrl";
                 String rltStr = HttpUtils.HttpGetHeader(getUidUrl,"",userInfo.cookie,headJObject);
-                //Console.WriteLine(rltStr);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr)) {
                     userInfo.loginFailTime++;
                     userInfo.status = 3;
@@ -1846,13 +1840,9 @@ namespace CxjText.utlis
                 }
 
                 String autoLoginCUrl = reason + "&referrer_url=" + (FileUtils.changeBaseUrl(userInfo.loginUrl).Replace("www.",""));
-                Console.WriteLine(autoLoginCUrl);
                 headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl) ;
                 headJObject["x-requested-with"] = "XMLHttpRequest";
                 String loginCRlt = HttpUtils.HttpGetHeader(autoLoginCUrl,"",userInfo.cookie,headJObject);
-                // Console.WriteLine(headJObject.ToString());
-                // Console.WriteLine(loginCRlt);
-                // return;
                 if (String.IsNullOrEmpty(loginCRlt) || !loginCRlt.Contains(uid)) {
                     userInfo.loginFailTime++;
                     userInfo.status = 3;
@@ -1970,7 +1960,6 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
                 if (driver != null)
                 {
                     driver.Quit();
@@ -2147,7 +2136,6 @@ namespace CxjText.utlis
                     driver.FindElement(By.Id("submit")).Click();
                 }
                 catch (Exception e) {
-                    Console.WriteLine(e.ToString());
                     driver.Quit();
                     return false;
                 }
@@ -2401,7 +2389,6 @@ namespace CxjText.utlis
                     {
                         loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=" + codeStrBuf.ToString();
                     }
-                    Console.WriteLine(loginP);
                     rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
                 }
             }
@@ -2435,7 +2422,6 @@ namespace CxjText.utlis
             int moneyStatus = MoneyUtils.GetDMoney(userInfo);
             if (moneyStatus != 1)
             {
-                Console.WriteLine("获取金钱失败!");
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
                 loginForm.Invoke(new Action(() => {
@@ -2600,7 +2586,6 @@ namespace CxjText.utlis
             String loginUrl = userInfo.dataUrl + "/cn";
             String loginP = "username="+userInfo.user+"&password="+userInfo.pwd+"&Submit=";
             String loginStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded",userInfo.cookie,headJObject);
-            Console.WriteLine(loginStr);
             if (String.IsNullOrEmpty(loginStr) || !loginStr.Contains(userInfo.user)) {
                 
                 userInfo.loginFailTime++;
@@ -2750,7 +2735,6 @@ namespace CxjText.utlis
                 }
             }
 
-            Console.WriteLine("----登录成功----");
 
             //获取资金
             int moneyStatus = MoneyUtils.GetOMoney(userInfo);
@@ -3087,7 +3071,6 @@ namespace CxjText.utlis
             }
 
             //访问token的数据
-            Console.WriteLine("tokenUrl:"+tokenUrl);
             int startIndex1 = tokenUrl.IndexOf("?");
             String myDataUrl = tokenUrl.Substring(0, startIndex1).Replace("/sport","").Trim();
             String qetBaseUrl = myDataUrl.Replace("http://", "").Replace("https://", "");
@@ -3119,7 +3102,6 @@ namespace CxjText.utlis
 
             startIndex1 = tsDataUrl.IndexOf(".com");
             tsDataUrl = tsDataUrl.Substring(0, startIndex1+4);
-            Console.WriteLine(tsDataUrl);
             userInfo.dataUrl = tsDataUrl;
 
             //获取资金
@@ -3719,11 +3701,6 @@ namespace CxjText.utlis
                     hasLoad = true;
                     Thread.Sleep(10000);
                     driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
-                    //最顶层的悬浮框的去掉
-                    String js = "$('#LsjmyModal').remove();";
-                    jsExecutor.ExecuteScript(js);
-                    js = "$('.TplFloatSet').hide();";
-                    jsExecutor.ExecuteScript(js);
                 }
                 catch (Exception e)
                 {
@@ -3734,29 +3711,75 @@ namespace CxjText.utlis
                     }
                 }
 
+                IWebDriver mainDriver = null;
+
+                try
+                {
+                    mainDriver = driver.SwitchTo().Frame(driver.FindElement(By.Name("mem_index")));
+                }
+                catch (Exception e) {
+                    driver.Quit();
+                    return false;
+                }
+
+                if (mainDriver == null) {
+                    driver.Quit();
+                    return false;
+                }
+
+                try
+                {
+                    mainDriver.FindElement(By.ClassName("layui-layer-close2")).Click();
+                    mainDriver = null;
+                }
+                catch (Exception e) {
+
+                }
+
+                try
+                {
+                    var lists =  driver.FindElements(By.ClassName("close"));
+                    for (int i = 0; i < lists.Count; i++) {
+                        IWebElement e1 = lists[i];
+                        e1.Click();
+                    }
+                }
+                catch (Exception e)
+                {
+                    
+                }
                 driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
                 try
                 {
                     driver.FindElement(By.Id("username")).SendKeys(userInfo.user);
-                    driver.FindElement(By.Id("password")).SendKeys(userInfo.pwd);
-                    driver.FindElement(By.Id("sliderBlock_reg")).Click();
+                    driver.FindElement(By.Id("txtFacade")).Click();
+                    driver.FindElement(By.Id("passwd")).SendKeys(userInfo.pwd);
+                    var lists = driver.FindElements(By.TagName("input"));
+                    for (int i = 0; i < lists.Count; i++)
+                    {
+                        IWebElement e1 = lists[i];
+                        if (e1.GetAttribute("type") != null && e1.GetAttribute("type").ToLower().Equals("submit")) {
+                            e1.Click();
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
                     driver.Quit();
                     return false;
                 }
-                Thread.Sleep(4000);
-                //获取模板文件的base64数据
-                String jsStr = "return document.getElementsByClassName(\"tncode_canvas_bg\")[0].toDataURL(\"image/png\");";
+                
+
+                Thread.Sleep(5000);
+
+                //获取原图数据
+                String jsStr = "return document.getElementsByClassName(\"geetest_canvas_fullbg geetest_fade geetest_absolute\")[0].toDataURL(\"image/png\");";
                 String base64Str = (String)jsExecutor.ExecuteScript(jsStr);
                 if (String.IsNullOrEmpty(base64Str) || !base64Str.Contains("data:image/png;base64,"))
                 {
                     driver.Quit();
                     return false;
                 }
-
-
                 base64Str = base64Str.Replace("data:image/png;base64,", "");
                 //将base64的数据转化为bmp
                 byte[] imgArray = Convert.FromBase64String(base64Str);
@@ -3770,92 +3793,105 @@ namespace CxjText.utlis
                     driver.Quit();
                     return false;
                 }
-                /*
-                Bitmap bmp11 = new Bitmap(bmp);
-                bmp11.Save(AppDomain.CurrentDomain.BaseDirectory + "" + position + userInfo.tag + "11.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);//注意保存路径
-                bmp11 = CodeUtils.changHuidu(bmp11);
-                bmp11.Save(AppDomain.CurrentDomain.BaseDirectory + "" + position + userInfo.tag + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);//注意保存路径
-                */
 
-                int currentX = -1;
-                int blackNum = 30;
-                Bitmap huiDuBmp = CodeUtils.changHuidu(bmp);
-                if (bmp != null)
+                bmp = CodeUtils.toHuiDu(bmp);
+               // bmp.Save(AppDomain.CurrentDomain.BaseDirectory + "" + position + userInfo.tag + "11.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);//注意保存路径
+                jsStr = "return document.getElementsByClassName(\"geetest_canvas_bg geetest_absolute\")[0].toDataURL(\"image/png\");";
+                base64Str = (String)jsExecutor.ExecuteScript(jsStr);
+                if (String.IsNullOrEmpty(base64Str) || !base64Str.Contains("data:image/png;base64,"))
                 {
                     bmp.Dispose();
                     bmp = null;
-                }
-                currentX = CodeUtils.changHuidu2(huiDuBmp, blackNum);
-                if (currentX == -1)
-                {
-                    currentX = CodeUtils.changHuidu2(huiDuBmp, blackNum - 5);
-                    if (currentX == -1)
-                    {
-                        currentX = CodeUtils.changHuidu2(huiDuBmp, blackNum - 10);
-                    }
-                }
-                if (huiDuBmp != null)
-                {
-                    huiDuBmp.Dispose();
-                    huiDuBmp = null;
-                }
-                // Console.WriteLine("x:" + currentX);
-                if (currentX == -1)
-                {
                     driver.Quit();
                     return false;
                 }
+                base64Str = base64Str.Replace("data:image/png;base64,", "");
+                //将base64的数据转化为bmp
+                imgArray = Convert.FromBase64String(base64Str);
+                Bitmap mubiaoBmp = null;
+                using (MemoryStream ms2 = new MemoryStream(imgArray))
+                {
+                    mubiaoBmp = new Bitmap(ms2);
+                }
+                if (mubiaoBmp == null)
+                {
+                    bmp.Dispose();
+                    bmp = null;
+                    driver.Quit();
+                    return false;
+                }
+                mubiaoBmp = CodeUtils.toHuiDu(mubiaoBmp);
+              //  mubiaoBmp.Save(AppDomain.CurrentDomain.BaseDirectory + "" + position + userInfo.tag + "1.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);//注意保存路径
                 //把小图引出来
-                var slideBlock = driver.FindElement(By.ClassName("slide_block"));
+                int currentX = CodeUtils.getXArray(bmp,mubiaoBmp) - 5;
+
+                bmp.Dispose();bmp = null;
+                mubiaoBmp.Dispose();mubiaoBmp = null;
+
+                var slideBlock = driver.FindElement(By.ClassName("geetest_slider_button"));
                 Actions actions = new Actions(driver);
                 actions.ClickAndHold(slideBlock);
-                int currentMove = currentX;
-                int lenNum = 10;
-                int moveLen = currentMove / lenNum;
                 int allMoveLen = 0;
-                for (int i = 0; i < lenNum; i++)
-                {
-                    allMoveLen = (i + 1) * moveLen;
-                    actions.MoveByOffset(moveLen, 0).Build().Perform();
-                    Random r = new Random();
-                    int num = r.Next(100, 200);
-                    Thread.Sleep(num);
+                Random r = new Random();
+
+                JArray jArray = CodeUtils.getTrack(currentX);
+                for (int i = 0; i < jArray.Count; i++) {
+                    JObject jObject = (JObject)jArray[i];
+                    int move = (int)jObject["move"];
+                    allMoveLen = allMoveLen + move;
+                    int time = (int)jObject["time"];
+                    Thread.Sleep(time);
+                    actions.MoveByOffset(move, 0).Build().Perform();
                 }
-                allMoveLen = currentMove - allMoveLen;
-                actions.MoveByOffset(allMoveLen, 0).Build().Perform();
+                Thread.Sleep(200);
+                if ((currentX - allMoveLen) != 0) {
+                    actions.MoveByOffset(currentX - allMoveLen, 0).Build().Perform();
+                }
+                Thread.Sleep(1000);
                 actions.Release(slideBlock).Build().Perform();
                 Thread.Sleep(8000);
                 try
                 {
                     IAlert alt = driver.SwitchTo().Alert();
                     String alertText = alt.Text;
-                    Console.WriteLine(alertText);
                     alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                    alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                    alt.Accept();
 
                     Thread.Sleep(200);
                     alt = driver.SwitchTo().Alert();
                     alertText = alt.Text;
-                    Console.WriteLine(alertText);
-                    alt.Dismiss();
+                    alt.Accept();
                 }
                 catch (Exception e)
                 {
 
                 }
 
+                String uid = "";
 
+                try
+                {
+                    Thread.Sleep(3000);
+                    uid  = driver.FindElement(By.Name("uid")).GetAttribute("value");
+                    driver.FindElement(By.ClassName("btn_001")).Click();
+                }
+                catch (Exception e) {
+                    driver.Quit();
+                    return false;
+                }
+
+
+                Thread.Sleep(5000);
+                
                 ICookieJar listCookie = driver.Manage().Cookies;
                 if (listCookie == null || listCookie.AllCookies.Count == 0)
                 {
@@ -3864,36 +3900,19 @@ namespace CxjText.utlis
                 }
                 /**********************判断登录成功后的cookie的处理*****************************/
                 userInfo.cookie = new CookieContainer();
-                String uid = "";
                 for (int i = 0; i < listCookie.AllCookies.Count; i++)
                 {
                     System.Net.Cookie cookie = new System.Net.Cookie(
                         listCookie.AllCookies[i].Name, listCookie.AllCookies[i].Value
                         , listCookie.AllCookies[i].Path, listCookie.AllCookies[i].Domain);
-                    if (listCookie.AllCookies[i].Name.Equals("uid"))
-                    {
-                        uid = listCookie.AllCookies[i].Value;
-                    }
                     userInfo.cookie.Add(cookie);
                 }
-                if (String.IsNullOrEmpty(uid))
-                {
-
-                    driver.Quit();
-                    return false;
-                }
                 userInfo.uid = uid;
-                if (userInfo.expJObject == null)
-                {
-                    userInfo.expJObject = new JObject();
-                }
-                userInfo.expJObject["web"] = true;
                 driver.Quit();
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
                 if (driver != null)
                 {
                     driver.Quit();
@@ -3930,95 +3949,118 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            
-            //判断是否使用滑动验证码的处理
-           /* if (!loginY1(position, userInfo)) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }*/
 
 
+            //class="yzm"
             userInfo.cookie = new System.Net.CookieContainer();
-            String codeUrl = userInfo.loginUrl + "/app/member/yzm.php?0." + FormUtils.getCurrentTime();
-            //验证码的请求
             JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
-            String codePathName = position + userInfo.tag + ".jpg";
-            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
-            if (codeNum < 0)
-            {
+            headJObject["referer"] = userInfo.loginUrl;
+           // headJObject["accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            String rlt  = HttpUtils.HttpGetHeader(userInfo.loginUrl, "", userInfo.cookie, new JObject());
+            String mainRlt = HttpUtils.HttpGetHeader(userInfo.loginUrl+ "/cl/index.php?module=System&method=first", "",userInfo.cookie,new JObject());
+            //Console.WriteLine(mainRlt);
+            if (String.IsNullOrEmpty(mainRlt)  || String.IsNullOrEmpty(rlt)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-            if (String.IsNullOrEmpty(codeStrBuf))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-
-            headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["referer"] = userInfo.dataUrl+"/cl/index.php?module=System&method=first";
-            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
-            //获取登录的系统参数 
-            String paramsStr = "langx=zh-cn&gtype=FIRST&username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&vlcodes=" + codeStrBuf.ToString();
-
-            String loginRlt = HttpUtils.HttpPostHeader(loginUrl, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
-            Console.WriteLine(loginRlt);
-            if (String.IsNullOrEmpty(loginRlt) || !loginRlt.Contains("top.uid")) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            String uid = "";
-            String[] strs = loginRlt.Trim().Split('\n');
-            if (strs.Length == 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            for (int i = 0; i < strs.Length; i++)
-            {
-                String str = strs[i].Trim();
-                if (str.Contains("top.uid="))
+                loginForm.Invoke(new Action(() =>
                 {
-                    uid = str.Replace("top.uid=", "").Replace(" ", "").Replace("'", "").Replace(";", "").Trim();
-                    break;
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            if (!mainRlt.Contains("return inputCheck"))
+            {
+                //判断是否使用滑动验证码的处理
+                if (!loginY1(position, userInfo))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() =>
+                    {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
                 }
             }
+            else {
 
-            if (String.IsNullOrEmpty(uid)) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+                String codeUrl = userInfo.loginUrl + "/app/member/yzm.php?0." + FormUtils.getCurrentTime();
+                //验证码的请求
+                String codePathName = position + userInfo.tag + ".jpg";
+                int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+                if (codeNum < 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+                if (String.IsNullOrEmpty(codeStrBuf))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+
+                headJObject["Host"] = userInfo.baseUrl;
+                headJObject["Origin"] = userInfo.dataUrl;
+                headJObject["referer"] = userInfo.dataUrl + "/cl/index.php?module=System&method=first";
+                String loginUrl = userInfo.dataUrl + "/app/member/login.php";
+                //获取登录的系统参数 
+                String paramsStr = "langx=zh-cn&gtype=FIRST&username=" + userInfo.user + "&passwd=" + userInfo.pwd + "&vlcodes=" + codeStrBuf.ToString();
+
+                String loginRlt = HttpUtils.HttpPostHeader(loginUrl, paramsStr, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+              //  Console.WriteLine(loginRlt);
+                if (String.IsNullOrEmpty(loginRlt) || !loginRlt.Contains("top.uid"))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                String uid = "";
+                String[] strs = loginRlt.Trim().Split('\n');
+                if (strs.Length == 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                for (int i = 0; i < strs.Length; i++)
+                {
+                    String str = strs[i].Trim();
+                    if (str.Contains("top.uid="))
+                    {
+                        uid = str.Replace("top.uid=", "").Replace(" ", "").Replace("'", "").Replace(";", "").Trim();
+                        break;
+                    }
+                }
+
+                if (String.IsNullOrEmpty(uid))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+
+                //获取uid
+                userInfo.uid = uid;
+              //  Console.WriteLine(uid);
             }
-
-            //获取uid
-            userInfo.uid = uid;
-            Console.WriteLine(uid);
 
             //获取money 
             int moneyStatus = MoneyUtils.GetYMoney(userInfo);

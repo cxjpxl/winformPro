@@ -171,7 +171,7 @@ namespace CxjText.utlis
 
 
 
-        public static Bitmap changHuidu(Bitmap srcBitmap) {
+        public static Bitmap erzhihua(Bitmap srcBitmap) {
             int Height = srcBitmap.Height;
             int Width = srcBitmap.Width;
             Bitmap bitmap = new Bitmap(Width, Height);
@@ -180,7 +180,7 @@ namespace CxjText.utlis
             for (int y = 0; y < Height; y++)
                 {
                     pixel = srcBitmap.GetPixel(x, y);
-                    int r, g, b, Result = 0 ,max , min;
+                    int r, g, b ,max , min;
                     r = pixel.R;
                     g = pixel.G;
                     b = pixel.B;
@@ -198,36 +198,13 @@ namespace CxjText.utlis
                     else {
                         bitmap.SetPixel(x, y, Color.FromArgb(255, 255, 255));
                     }
-                    
-
-                /*
-                    //实例程序以加权平均值法产生黑白图像  
-                    int iType = 0;
-                      switch (iType)
-                      {
-                          case 0://平均值法  
-                              Result = ((r + g + b) / 3);
-                              break;
-                          case 1://最大值法  
-                              Result = r > g ? r : g;
-                              Result = Result > b ? Result : b;
-                              break;
-                          case 2://加权平均值法  
-                              Result = ((int)(0.7 * r) + (int)(0.2 * g) + (int)(0.1 * b));
-                              break;
-                      }
-                      bitmap.SetPixel(x, y, Color.FromArgb(Result, Result, Result));
-                      pixel = srcBitmap.GetPixel(x, y);
-                      int value = 255 - pixel.B;
-                      Color newColor = value > 240 ? Color.FromArgb(0, 0, 0) : Color.FromArgb(255,255, 255);
-                      bitmap.SetPixel(x, y, newColor);*/
                 }
             return bitmap;
         }
 
         public static int changHuidu2(Bitmap srcBitmap,int num)
         {
-            Bitmap bitmap = changHuidu(srcBitmap);
+            Bitmap bitmap = erzhihua(srcBitmap);
             int Height = bitmap.Height;
             int Width = bitmap.Width;
             int blackNum = 0;
@@ -257,5 +234,119 @@ namespace CxjText.utlis
             }
             return  -1;
         }
+
+
+
+        public static Bitmap toHuiDu(Bitmap srcBitmap)
+        {
+            int Height = srcBitmap.Height;
+            int Width = srcBitmap.Width;
+            Bitmap bitmap = new Bitmap(Width, Height);
+            Color pixel;
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                {
+                    pixel = srcBitmap.GetPixel(x, y);
+                    int r, g, b, Result = 0;
+                    r = pixel.R;
+                    g = pixel.G;
+                    b = pixel.B;
+                        //实例程序以加权平均值法产生黑白图像  
+                        int iType = 2;
+                          switch (iType)
+                          {
+                              case 0://平均值法  
+                                  Result = ((r + g + b) / 3);
+                                  break;
+                              case 1://最大值法  
+                                  Result = r > g ? r : g;
+                                  Result = Result > b ? Result : b;
+                                  break;
+                              case 2://加权平均值法  
+                                  Result = ((int)(0.7 * r) + (int)(0.2 * g) + (int)(0.1 * b));
+                                  break;
+                          }
+                          bitmap.SetPixel(x, y, Color.FromArgb(Result, Result, Result));
+                }
+            return bitmap;
+        }
+
+
+
+        public static int getXArray(Bitmap bmp1, Bitmap bmp2) {
+
+            if (bmp1.Width != bmp2.Width || bmp2.Height != bmp1.Height) {
+                return -1;
+            }
+
+            int width = bmp1.Width;
+            int height = bmp1.Height;
+            int currentX = 1000;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    Color c1 = bmp1.GetPixel(x, y);
+                    Color c2 = bmp2.GetPixel(x,y);
+
+                    if (c1.B != c2.B && Math.Abs((c1.B - c2.B)) > 80 ) {
+                        if (x < currentX) {
+                            currentX = x;
+                        }
+                        break;
+                    }
+
+                }
+            }
+
+
+            if (currentX == 1000) {
+                return -1;
+            }
+            return currentX;
+        }
+
+        //获取加速轨迹
+        public static JArray getTrack(int distance) {
+            JArray jArray = new JArray();
+
+            JObject jObject = new JObject();
+            jObject.Add("move", distance * 3 / 10);
+            jObject.Add("time", 200);
+            jArray.Add(jObject);
+
+            JObject jObject1 = new JObject();
+            jObject1.Add("move", distance * 4 / 10);
+            jObject1.Add("time", 100);
+            jArray.Add(jObject1);
+
+            JObject jObject2 = new JObject();
+            jObject2.Add("move", distance * 2 / 10);
+            jObject2.Add("time", 80);
+            jArray.Add(jObject2);
+
+
+            JObject jObject3 = new JObject();
+            jObject3.Add("move", distance * 2 / 10);
+            jObject3.Add("time", 80);
+            jArray.Add(jObject3);
+
+            JObject jObject4 = new JObject();
+            jObject4.Add("move", distance * -0.5 / 10);
+            jObject4.Add("time", 300);
+            jArray.Add(jObject4);
+
+            JObject jObject5 = new JObject();
+            jObject5.Add("move", distance * -0.5 / 10);
+            jObject5.Add("time", 200);
+            jArray.Add(jObject5);
+            
+
+            JObject jObject6 = new JObject();
+            jObject6.Add("move", distance * -0.5 / 10);
+            jObject6.Add("time", 100);
+            jArray.Add(jObject6);
+
+            return jArray;
+        }
+
     }
 }
