@@ -186,7 +186,7 @@ namespace CxjText.utlis
 
         //多系统处理   判断时候能更新数据
         public static bool canUpdateData(String tag, long userTime, long currentTime,String userExp) {
-
+            //今日1
             bool isUpdate = false;
             switch (tag)
             {
@@ -221,7 +221,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "G":
-                    if (userExp.Equals("1"))
+                    if (userExp.Equals("1") || userExp.Equals("2"))
                     {
                         if (currentTime - userTime >= 30 * 1000)
                         {
@@ -255,15 +255,34 @@ namespace CxjText.utlis
                     }
                     break;
                 case "D":
-                    if (currentTime - userTime >= 10 * 1000)
+                    if (userExp.Equals("1"))
                     {
-                        isUpdate = true;
+                        if (currentTime - userTime >= 30 * 1000)
+                        {
+                            isUpdate = true;
+                        }
+                    }
+                    else {
+                        if (currentTime - userTime >= 10 * 1000)
+                        {
+                            isUpdate = true;
+                        }
                     }
                     break;
                 case "E":
-                    if (currentTime - userTime >= 5 * 1000)
+                    if (userExp.Equals("1"))
                     {
-                        isUpdate = true;
+                        if (currentTime - userTime >= 30 * 1000)
+                        {
+                            isUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        if (currentTime - userTime >= 10 * 1000)
+                        {
+                            isUpdate = true;
+                        }
                     }
                     break;
                 case "H":
@@ -291,9 +310,19 @@ namespace CxjText.utlis
                     }
                     break;
                 case "M":
-                    if (currentTime - userTime >= 10 * 1000)
+                    if (userExp.Equals("1"))
                     {
-                        isUpdate = true;
+                        if (currentTime - userTime >= 25 * 1000)
+                        {
+                            isUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        if (currentTime - userTime >= 10 * 1000)
+                        {
+                            isUpdate = true;
+                        }
                     }
                     break;
                 case "N":

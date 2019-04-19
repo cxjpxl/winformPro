@@ -1894,7 +1894,9 @@ namespace CxjText.utlis
             /***************selenium动态登录处理*******************/
             ChromeOptionsEx optionsEx = new ChromeOptionsEx();
             IWebDriver driver = new ChromeDriver(optionsEx);
+           
             IJavaScriptExecutor jsExecutor = driver as IJavaScriptExecutor;
+           
             //元素查找隐性等待时间的设置
             driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(20)); //元素启动的
             try
@@ -3688,6 +3690,8 @@ namespace CxjText.utlis
         {
             /***************selenium动态登录处理*******************/
             ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+
+            optionsEx.AddArgument("--start-maximized");
             IWebDriver driver = new ChromeDriver(optionsEx);
             IJavaScriptExecutor jsExecutor = driver as IJavaScriptExecutor;
             //元素查找隐性等待时间的设置
@@ -3716,16 +3720,18 @@ namespace CxjText.utlis
                 try
                 {
                     mainDriver = driver.SwitchTo().Frame(driver.FindElement(By.Name("mem_index")));
+                    if (mainDriver == null)
+                    {
+                        driver.Quit();
+                        return false;
+                    }
                 }
                 catch (Exception e) {
                     driver.Quit();
                     return false;
                 }
 
-                if (mainDriver == null) {
-                    driver.Quit();
-                    return false;
-                }
+               
 
                 try
                 {
@@ -3738,7 +3744,7 @@ namespace CxjText.utlis
 
                 try
                 {
-                    var lists =  driver.FindElements(By.ClassName("close"));
+                    var lists = driver.FindElements(By.ClassName("close"));
                     for (int i = 0; i < lists.Count; i++) {
                         IWebElement e1 = lists[i];
                         e1.Click();
@@ -3878,19 +3884,37 @@ namespace CxjText.utlis
 
                 String uid = "";
 
+                bool hasClick = false;
                 try
                 {
-                    Thread.Sleep(3000);
+                    Thread.Sleep(5000);
                     uid  = driver.FindElement(By.Name("uid")).GetAttribute("value");
-                    driver.FindElement(By.ClassName("btn_001")).Click();
+                    var listEs = driver.FindElements(By.ClassName("btn_001"));
+                    if (listEs == null || listEs.Count == 0) {
+                        driver.Quit();
+                        return false;
+                    }
+                    for (int i = 0; i < listEs.Count; i++) {
+                        var e1 = listEs[i];
+                        if (e1!=null&&e1.GetAttribute("value").Equals("我同意")) {
+                            e1.Click();
+                            hasClick = true;
+                            break;
+                        }
+                    }
                 }
                 catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                    driver.Quit();
+                    return false;
+                }
+                if (!hasClick) {
                     driver.Quit();
                     return false;
                 }
 
-
                 Thread.Sleep(5000);
+
                 
                 ICookieJar listCookie = driver.Manage().Cookies;
                 if (listCookie == null || listCookie.AllCookies.Count == 0)
@@ -3913,6 +3937,7 @@ namespace CxjText.utlis
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 if (driver != null)
                 {
                     driver.Quit();

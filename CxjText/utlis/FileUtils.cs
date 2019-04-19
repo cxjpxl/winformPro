@@ -51,6 +51,7 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
+                    //今日1
                     if (tag.Equals("G") && strs.Length > 4 && strs[4] != null)
                     {
                         userExp = strs[4] + "";
@@ -61,7 +62,20 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
+                    if (tag.Equals("D") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
 
+                    if (tag.Equals("E") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
+
+                    if (tag.Equals("M") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
 
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);

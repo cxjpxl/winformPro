@@ -626,6 +626,7 @@ namespace CxjText.utlis
             String gameTeam = "";
             String gid = DataUtils.getMid(obj, tag);
             String betType = "";
+            String userExp = (String)jObject["userExp"];
             if (numRow == 0)
             {
 
@@ -748,6 +749,12 @@ namespace CxjText.utlis
             {
                 return null;
             }
+
+            if (userExp.Equals("1") )
+            {
+                rltStr = rltStr.Replace("sportType=ft_rb_re", "sport_type=ft_ft_r");
+            }
+
             gameName = (String)jObject["league"]; //获取赛事
             gameTeam = (String)jObject["team_h"] + "-" + (String)jObject["team_c"]; //球队名称
 
@@ -766,7 +773,7 @@ namespace CxjText.utlis
             int numRow, int clickNum, String tag
             )
         {
-
+            //今日1
             JObject jObject = (JObject)obj;
             if (jObject == null) return null;
             String rltStr = "";
@@ -779,6 +786,9 @@ namespace CxjText.utlis
             JObject betJObject = new JObject();
             betJObject["plate"] = "H";
             betJObject["gameType"] = "FT_RB_MN";
+            if (((String)(jObject["userExp"])).Equals("1")) {
+                betJObject["gameType"] = "FT_TD_MN";
+            }
             JArray jArray = new JArray();
             JObject itemObject = new JObject();
             itemObject["gid"] = gid;
@@ -853,7 +863,7 @@ namespace CxjText.utlis
                         itemObject["project"] = jObject["CON_OUC"];//盘口
                         break;
                     case 6:
-                        rltStr = "sportType=ft_rb_re&betType=ior_HMC&gid=" + gid;
+                        inputType = inputType + "-半场独赢";
                         itemObject["type"] = "ior_HMC";//类型
                         bateStr = DataUtils.get_c16_data(jObject, tag);
                         break;
@@ -1495,7 +1505,7 @@ namespace CxjText.utlis
                 return null;
             }
 
-            if (userExp.Equals("1")) {
+            if (userExp.Equals("1") || userExp.Equals("2")) {
                 rltStr = rltStr.Replace("sport_type=FTP", "sport_type=FT");
             }
 
@@ -2968,6 +2978,11 @@ namespace CxjText.utlis
             dataJObject["gameTeam"] = gameTeam; //球队名称
             dataJObject["bateStr"] = bateStr; //赔率
             dataJObject["inputType"] = inputType; //下注类型
+
+            String userExp  = (String)jObject["userExp"] ;
+            if (userExp.Equals("1")) {
+                rltStr = rltStr.Replace("match_type=2", "match_type=1");
+            }
 
             return rltStr;
         }

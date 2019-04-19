@@ -224,6 +224,7 @@ namespace CxjText.utlis
         public static String get_c01_data(object obj, String tag)
         {
             String time = "";
+            String userExp = "";
             switch (tag)
             {
                 case "A":
@@ -300,8 +301,8 @@ namespace CxjText.utlis
                     time = (String)jObjectG["Match_Date"];
                     time = FormUtils.changeHtml(time);
 
-                    String userExp =(String) jObjectG["userExp"];
-                    if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                    userExp =(String) jObjectG["userExp"];
+                    if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")|| userExp.Equals("2"))) {
                         time = (String)jObjectG["Match_Date"];
                         time = time.Replace("<br/>","\n").Replace("<br>", "\n");
                         time = FormUtils.changeHtml(time);
@@ -332,6 +333,19 @@ namespace CxjText.utlis
                     break;
                 case "D":
                     JObject jObjectD = (JObject)obj;
+
+                    userExp = (String)jObjectD["userExp"];
+                    if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                    {
+                        time = (String)jObjectD["datetime"];
+                        time = time.Trim();
+                        time = time.Substring(0,time.Length - 3);
+                        time = time.Substring(5);
+                        time = time.Replace(" ", "\n");
+                        return time;
+                    }
+
+
                     time = ((String)jObjectD["retimeset"]).Replace(" ", "");
                     if (time.Contains("半场"))
                     {
@@ -340,7 +354,19 @@ namespace CxjText.utlis
                     time = time + "\n" + (String)jObjectD["score_h"] + "-" + (String)jObjectD["score_c"];
                     break;
                 case "E":
+                    //今日1
                     JObject jObjectE = (JObject)obj;
+                    userExp = (String)jObjectE["userExp"];
+                    if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                    {
+                         long  timeL = (long)jObjectE["openTime"];
+                        time =  FormUtils.ConvertLongToDateTime(timeL);
+                        time = time.Trim();
+                        time = time.Substring(0, time.Length - 3);
+                        time = time.Substring(5);
+                        time = time.Replace(" ", "\n");
+                        return time;
+                    }
                     time = ((String)jObjectE["retimeset"]).Replace(" ", "");
                     if (time.Contains("半场"))
                     {
@@ -362,6 +388,17 @@ namespace CxjText.utlis
                     break;
                 case "M":
                     JObject jObjectM = (JObject)obj;
+
+                    userExp = (String)jObjectM["userExp"];
+                    if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                    {
+                        String timeLStr = (String)jObjectM["begintime"];
+                        time = timeLStr.Trim();
+                        time = time.Substring(0, time.Length - 3);
+                        time = time.Replace(" ", "\n");
+                        return time;
+                    }
+
                     time = (String)jObjectM["bowlingtime"];
                     time = time + "\n" + jObjectM["score_h_now"] + "-" + jObjectM["score_v_now"];
                     break;
@@ -448,7 +485,7 @@ namespace CxjText.utlis
                     {
                         if (jObjectG["userExp"] != null) {
                             String userExp =(String) jObjectG["userExp"];
-                            if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                            if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1") || userExp.Equals("2"))) {
                                 JArray jArray1 = new JArray();
                                 jArray1.Add(-1);
                                 jArray1.Add(-1);
@@ -483,12 +520,39 @@ namespace CxjText.utlis
                     break;
                 case "D":
                     JObject jObjectD = (JObject)obj;
-                  //  Console.WriteLine(jObjectD.ToString());
+
+                    if (jObjectD["userExp"] != null)
+                    {
+                        String userExp = (String)jObjectD["userExp"];
+                        if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                        {
+                            JArray jArray1 = new JArray();
+                            jArray1.Add(-1);
+                            jArray1.Add(-1);
+                            return jArray1;
+                        }
+                    }
+
+
+                    //  Console.WriteLine(jObjectD.ToString());
                     hBifen = (String)jObjectD["score_h"];
                     gBifen = (String)jObjectD["score_c"];
                     break;
                 case "E":
                     JObject jObjectE = (JObject)obj;
+                    //今日1
+                    if (jObjectE["userExp"] != null)
+                    {
+                        String userExp = (String)jObjectE["userExp"];
+                        if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                        {
+                            JArray jArray1 = new JArray();
+                            jArray1.Add(-1);
+                            jArray1.Add(-1);
+                            return jArray1;
+                        }
+                    }
+
                     hBifen = (String)jObjectE["scoreH"];
                     gBifen = (String)jObjectE["scoreC"];
                     break;
@@ -533,6 +597,18 @@ namespace CxjText.utlis
                     break;
                 case "M":
                     JObject jObjectM = (JObject)obj;
+                    //今日1
+                    if (jObjectM["userExp"] != null)
+                    {
+                        String userExp = (String)jObjectM["userExp"];
+                        if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                        {
+                            JArray jArray1 = new JArray();
+                            jArray1.Add(-1);
+                            jArray1.Add(-1);
+                            return jArray1;
+                        }
+                    }
                     hBifen = (String)jObjectM["score_h_now"];
                     gBifen = (String)jObjectM["score_v_now"];
                     break;
@@ -1032,6 +1108,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ior_RH = ior_RH.Replace(" ", "");
                             bool strong = (bool)jObjectD["strong"];
                             if (strong)
                             {
@@ -1260,6 +1337,8 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ratio_o = ratio_o.Replace(" ", "");
+                            ior_OUH = ior_OUH.Replace(" ", "");
                             c05 = ratio_o+ " "+ ior_OUH;
                         }
                         break;
@@ -1657,6 +1736,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ior_HRH = ior_HRH.Replace(" ", "");
                             bool strong = (bool)jObjectD["strong"];
                             if (strong)
                             {
@@ -1904,6 +1984,8 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            hratio_o = hratio_o.Replace(" ", "");
+                            ior_HOUH = ior_HOUH.Replace(" ", "");
                             c08 = hratio_o + " "+ ior_HOUH;
                         }
                         break;
@@ -2289,6 +2371,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ior_RC = ior_RC.Replace(" ", "");
                             if (!strong)
                             {
                                 c14 = ratio.Replace(" ", "") + " " + ior_RC;
@@ -2526,6 +2609,8 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ratio_u = ratio_u.Replace(" ", "");
+                            ior_OUC = ior_OUC.Replace(" ", "");
                             c15 = ratio_u+" "+ ior_OUC;
                         }
                         break;
@@ -2925,6 +3010,7 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ior_HRC = ior_HRC.Replace(" ", "");
                             bool strong = (bool)jObjectD["strong"];
                             if (!strong)
                             {
@@ -3162,6 +3248,7 @@ namespace CxjText.utlis
                     }
                 case "D":
                     {
+
                         JObject jObjectD = (JObject)obj;
                         String ior_HOUC = (String)jObjectD["ior_HOUC"];
                         String hratio_u = (String)jObjectD["hratio_u"];
@@ -3171,6 +3258,8 @@ namespace CxjText.utlis
                         }
                         else
                         {
+                            ior_HOUC = ior_HOUC.Replace(" ", "");
+                            hratio_u = hratio_u.Replace(" ", "");
                             c18 = hratio_u + " " + ior_HOUC;
                         }
                         break;

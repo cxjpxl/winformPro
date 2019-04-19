@@ -148,12 +148,15 @@ namespace CxjText.views
                     else if (userInfo.tag.Equals("D"))
                     {
                         JObject jObject = (JObject)jArray[i];
+                        jObject["userExp"] = userInfo.userExp;
                         rltObj = DataUtils.updateUI(jObject, "D");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
                     else if (userInfo.tag.Equals("E"))  //修改1
                     {
                         JObject jObject = (JObject)jArray[i];
+                        //今日1
+                        jObject["userExp"] = userInfo.userExp;
                         rltObj = DataUtils.updateUI(jObject, "E");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
@@ -184,6 +187,7 @@ namespace CxjText.views
                     else if (userInfo.tag.Equals("M"))
                     {
                         JObject jObject = (JObject)jArray[i];
+                        jObject["userExp"] = userInfo.userExp;
                         rltObj = DataUtils.updateUI(jObject, "M");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
@@ -293,11 +297,14 @@ namespace CxjText.views
                 case "D":
                     JObject jObjectD = (JObject)obj;
                     if (jObjectD == null) return;
+                    //今日1
+                    jObjectD["userExp"] = userInfo.userExp;
                     rltStr = DataClickUtlis.DataSysDClick(dataJObject, jObjectD, numRow, clickNum, "D");
                     break;
                 case "E":
                     JObject jObjectE = (JObject)obj;
                     if (jObjectE == null) return;
+                    jObjectE["userExp"] = userInfo.userExp;
                     rltStr = DataClickUtlis.DataSysEClick(dataJObject, jObjectE, numRow, clickNum, "E");
                     break;
                 case "F":
@@ -360,6 +367,7 @@ namespace CxjText.views
                 case "M":
                     JObject jObjectM = (JObject)obj;
                     if (jObjectM == null) return;
+                    jObjectM["userExp"] = userInfo.userExp;
                     rltStr = DataClickUtlis.DataSysMClick(dataJObject, jObjectM, numRow, clickNum, "M");
                     break;
                 case "N":

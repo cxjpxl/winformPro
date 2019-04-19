@@ -581,11 +581,14 @@ namespace CxjText.utlis
             //page是由0开始
             String getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballPlaying?t=" + FormUtils.getCurrentTime();
 
-            if (userInfo.userExp.Equals("1")) {
-               
+            if (userInfo.userExp.Equals("1"))
+            {
+
                 getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballToday?t=" + FormUtils.getCurrentTime();
             }
-            Console.WriteLine(getDataUrl);
+            else if(userInfo.userExp.Equals("2")){
+                getDataUrl = userInfo.dataUrl+ "/index.php/sports/Match/FootballMorning?t="+ FormUtils.getCurrentTime();
+            }
 
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
@@ -651,6 +654,10 @@ namespace CxjText.utlis
                         if (userInfo.userExp.Equals("1"))
                         {
                             getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballToday?t=" + FormUtils.getCurrentTime();
+                        }
+                        else if (userInfo.userExp.Equals("2"))
+                        {
+                            getDataUrl = userInfo.dataUrl + "/index.php/sports/Match/FootballMorning?t=" + FormUtils.getCurrentTime();
                         }
                         p = "p=" + curPage + "&oddpk=H&leg=";
                         rlt = HttpUtils.HttpPostHeader(getDataUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.status == 2 ? userInfo.cookie : null, headJObject);
@@ -925,6 +932,9 @@ namespace CxjText.utlis
         {
             JObject headJObject = new JObject();
             String dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=1&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+            if (userInfo.userExp.Equals("1")) {
+                dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_ft_r&page=1&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+            }
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             String rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
@@ -947,6 +957,10 @@ namespace CxjText.utlis
             for (int i = 2; i <= page; i++)
             {
                 dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_rb_re&page=" + i + "&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+                if (userInfo.userExp.Equals("1"))
+                {
+                    dataUrl = userInfo.dataUrl + "/api/sports/match?type=ft_ft_r&page=" + i + "&legName=&selection=-1&_=" + FormUtils.getCurrentTime();
+                }
                 rltStr = HttpUtils.HttpGetHeader(dataUrl, "", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
@@ -970,8 +984,13 @@ namespace CxjText.utlis
         /***********************E系统获取数据*******************************/
         public static String getEData(UserInfo userInfo)
         {
+            //今日1
             JObject headJObject = new JObject();
             String dataUrl = userInfo.dataUrl + "/sports/hg/getData.do?pageNo=1&gameType=FT_RB_MN&sortType=1";
+
+            if (userInfo.userExp.Equals("1")) {
+                dataUrl = userInfo.dataUrl + "/sports/hg/getData.do?pageNo=1&gameType=FT_TD_MN&sortType=1";
+            }
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["X-Requested-With"] = "XMLHttpRequest";
@@ -1014,6 +1033,10 @@ namespace CxjText.utlis
             }
             for (int pageNo = 2; pageNo <= pageCount; pageNo++) {
                 dataUrl =  userInfo.dataUrl + "/sports/hg/getData.do?pageNo="+ pageNo + "&gameType=FT_RB_MN&sortType=1";
+                if (userInfo.userExp.Equals("1"))
+                {
+                    dataUrl = userInfo.dataUrl + "/sports/hg/getData.do?pageNo=" + pageNo + "&gameType=FT_TD_MN&sortType=1";
+                }
                 rltStr = HttpUtils.HttpGetHeader(dataUrl,"", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr))
                 {
@@ -2242,7 +2265,13 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/Sports/toForwardUrl?ty1=rb&ty2=ft&ty3=ds";
-            String dataP = "page=1&class1=rb&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken="+token;
+            String dataP = "page=1&class1=rb&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken=" + token;
+            if (userInfo.userExp.Equals("1")) {
+                headJObject["Referer"] = userInfo.dataUrl + "/Sports/toForwardUrl?ty1=today&ty2=ft&ty3=ds";
+                dataP = "page=1&class1=today&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken=" + token;
+            }
+
+            
             String dataRlt = HttpUtils.HttpPostHeader(dataString, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db")) {
                 return jObect.ToString();
@@ -2271,7 +2300,11 @@ namespace CxjText.utlis
 
             for (int i = 2; i <= allPage; i++) {
                  dataP = "page="+i+"&class1=rb&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken=" + token;
-                 dataRlt = HttpUtils.HttpPostHeader(dataString, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+                if (userInfo.userExp.Equals("1"))
+                {
+                    dataP = "page="+i+"&class1=today&class2=ft&class3=ds&leaguenames=&__RequestVerificationToken=" + token;
+                }
+                dataRlt = HttpUtils.HttpPostHeader(dataString, dataP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
                 if (String.IsNullOrEmpty(dataRlt) || !dataRlt.Contains("fy") || !dataRlt.Contains("db"))
                 {
                     continue;

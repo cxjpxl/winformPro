@@ -959,7 +959,12 @@ namespace CxjText.utlis
             if (user.userExp.Equals("1"))
             {
                 Sport_Type = "FT";
+            }else if (user.userExp.Equals("2"))
+            {
+                Sport_Type = "FT";
             }
+
+
             String Odd_PK = (String)betJObject["data"]["oddpk"];
             String bet_money = money + "";
             String uid = user.uid;
@@ -1694,27 +1699,34 @@ namespace CxjText.utlis
             headJObject["Host"] = user.baseUrl;
             headJObject["Origin"] = user.dataUrl;
             headJObject["Referer"] = user.dataUrl + "/sports/main.html";
-            String configUrl = user.dataUrl + "/api/sports/validateGrounderConfig?" + parmsStr;
-            String configRlt = HttpUtils.HttpGetHeader(configUrl, "", user.cookie, headJObject);
-            if (String.IsNullOrEmpty(configRlt) || !configRlt.Equals("false"))
-            {
+            if (!user.userExp.Equals("1")) {
+                String configUrl = user.dataUrl + "/api/sports/validateGrounderConfig?" + parmsStr;
+                String configRlt = HttpUtils.HttpGetHeader(configUrl, "", user.cookie, headJObject);
+                if (String.IsNullOrEmpty(configRlt) || !configRlt.Equals("false"))
+                {
 
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        String str = "配置订单失败";
-                        if (configRlt!=null &&configRlt.Equals("true")) {
-                            str = "盘口已关闭，请重新刷新";
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            String str = "配置订单失败";
+                            if (configRlt != null && configRlt.Equals("true"))
+                            {
+                                str = "盘口已关闭，请重新刷新";
+                            }
+                            rltForm.RefershLineData(inputTag, str);
                         }
-                        rltForm.RefershLineData(inputTag, str);
-                    }
-                }));
-                return;
+                    }));
+                    return;
+                }
             }
+            
 
 
             String betUrl = user.dataUrl + "/api/sports/getMatch";
             String betP = "{\"list\":[{\"sportType\":\"ft_rb_re\",\"gid\":" + gid + "}]}";
+            if (user.userExp.Equals("1")) {
+                betP = "{\"list\":[{\"sportType\":\"ft_ft_r\",\"gid\":" + gid + "}]}";
+            }
             String betRlt = HttpUtils.HttpPostHeader(betUrl, betP, "application/json", user.cookie, headJObject);
             if (String.IsNullOrEmpty(betRlt) || !FormUtils.IsJsonObject(betRlt)) {
                 leftForm.Invoke(new Action(() => {
@@ -1743,6 +1755,10 @@ namespace CxjText.utlis
             JArray jArray = new JArray();
             JObject betItems = new JObject();
             betItems["sportType"] = "ft_rb_re";
+            if (user.userExp.Equals("1"))
+            {
+                betItems["sportType"] = "ft_ft_r";
+            }
             String betType = (String)jobject["betType"];
             betItems["betType"] = betType;
             betItems["betInfo"] = "";
@@ -1865,7 +1881,7 @@ namespace CxjText.utlis
         public static void OrderE(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
 
-
+            //今日1
             String parmsStr = (String)jobject["rlt"];
             int index = (int)jobject["position"];
             String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
@@ -2151,7 +2167,6 @@ namespace CxjText.utlis
 
 
         }
-
         //O下单
         public static void OrderO(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {
@@ -2318,7 +2333,6 @@ namespace CxjText.utlis
             }
         }
 
-
         private static String orderJ1(UserInfo user,String dataParams)
         {
             JObject headJObject = new JObject();
@@ -2345,7 +2359,6 @@ namespace CxjText.utlis
             }
             return null;
         }
-
         //J下单
         public static void OrderJ(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
         {

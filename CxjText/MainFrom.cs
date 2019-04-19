@@ -581,10 +581,24 @@ namespace CxjText
             /*今日赛事处理*/
             int gPosition = loginForm.getCurrentSelectRow();
             UserInfo gUser = (UserInfo)Config.userList[gPosition];
-            if (gUser.tag.Equals("G") && gUser.userExp.Equals("1")) {
+            if (gUser.tag.Equals("G") && (gUser.userExp.Equals("1")|| gUser.userExp.Equals("2"))) {
+                return;
+            }
+            //今日1
+            if (gUser.tag.Equals("D") && (gUser.userExp.Equals("1")))
+            {
                 return;
             }
 
+            if (gUser.tag.Equals("E") && (gUser.userExp.Equals("1")))
+            {
+                return;
+            }
+
+            if (gUser.tag.Equals("M") && (gUser.userExp.Equals("1")))
+            {
+                return;
+            }
 
             //大腿事件处理  cmd 666
             if (((int)jObject["cmd"]) == 666)
