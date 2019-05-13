@@ -1077,9 +1077,21 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
         /***********************H系统获取数据*************************/
+
+        public static String getHJinRiData(UserInfo userInfo) {
+            return null;
+        }
+
         public static String getHData(UserInfo userInfo)
         {
             JObject headJObject = new JObject();
+
+            //今日赛事H
+            if (userInfo.userExp.Equals("1")) {
+                return getHJinRiData(userInfo);
+            }
+
+
             String dataUrl = userInfo.dataUrl + "/hg_sports";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             CookieContainer cookie = userInfo.cookie;
