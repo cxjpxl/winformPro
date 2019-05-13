@@ -105,6 +105,7 @@ namespace CxjText.views
                     else if (userInfo.tag.Equals("I"))
                     {
                         JArray jObject = (JArray)jArray[i]; //数据格式
+                        jObject.Add(userInfo.userExp);
                         rltObj = DataUtils.updateUI(jObject, "I");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
@@ -326,6 +327,7 @@ namespace CxjText.views
                 case "I":
                     JArray jArrayI = (JArray)obj;
                     if (jArrayI == null) return;
+                    jArrayI.Add(userInfo.userExp);
                     rltStr = DataClickUtlis.DataSysIClick(dataJObject, jArrayI, numRow, clickNum, "I");
                     break;
                 case "J": //修改

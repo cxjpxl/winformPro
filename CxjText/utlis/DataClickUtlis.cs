@@ -1069,6 +1069,15 @@ namespace CxjText.utlis
                 return null;
             }
 
+            String userExp = (String)(jObject[jObject.Count - 1]);
+         
+            if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                rltStr = rltStr.Replace("day=2", "day=0");
+            }
+
+            Console.WriteLine(rltStr);
+
+
             rltStr = rltStr + "&bs=" + bs;
             if (String.IsNullOrEmpty(bateStr.Trim()))
             {

@@ -683,7 +683,7 @@ namespace CxjText.views
                             GoLogin(position);
                             return;
                         }
-                        moneyStatus = MoneyUtils.GetBB1Money(userInfo);
+                        moneyStatus = MoneyUtils.GetYMoney(userInfo);
                         break;
                     default:
                         break;

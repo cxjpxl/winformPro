@@ -356,6 +356,7 @@ namespace CxjText.views
                 if (user.status != 2 ||  String.IsNullOrEmpty(user.money)) continue;
                 if (mainFrom == null) return;
                 int inputMoney = user.inputMoney;
+             
                 if (dataJObject["gameMid"] != null) {
                     try
                     {
@@ -434,10 +435,14 @@ namespace CxjText.views
                 catch (Exception eee) {
 
                 }
-               
+
                 /*****************************************************/
-
-
+                //今日1
+                if (user.tag.Equals("D") || user.tag.Equals("E") || user.tag.Equals("G")
+                    || user.tag.Equals("M")|| user.tag.Equals("I")) {
+                    user.userExp = userInfo.userExp; //用户信息的替换
+                }
+              
 
                 if (!Config.canAutoTwo &&dataJObject["gameMid"] != null) //判断是否已下
                 {

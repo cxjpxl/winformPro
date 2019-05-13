@@ -338,6 +338,11 @@ namespace CxjText.utlis
             headJObject["X-Requested-With"] = "XMLHttpRequest";
             headJObject["Accept"] = "application/json, text/javascript, */*; q=0.01";
             String orderBetStr = HttpUtils.HttpPostHeader(user.dataUrl + "/app/hsport/sports/order", parmsStr, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+
+            if (orderBetStr != null) {
+                orderBetStr = orderBetStr.Trim();
+            }
+
             if (!FormUtils.IsJsonObject(orderBetStr))
             {
                 leftForm.Invoke(new Action(() => {
@@ -348,13 +353,24 @@ namespace CxjText.utlis
                 }));
                 return;
             }
-            JObject orderBJObect = (JObject)JsonConvert.DeserializeObject(orderBetStr);
-
-            if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null || !((String)orderBJObect["1"]).Equals("滚球足球")) {
+            JObject orderBJObect = JObject.Parse(orderBetStr);
+            if (orderBJObect == null || orderBJObect.Count < 2 || orderBJObect["1"] == null ) {
                 leftForm.Invoke(new Action(() => {
                     if (rltForm != null)
                     {
                         rltForm.RefershLineData(inputTag, "失败");
+                    }
+                }));
+                return;
+            }
+
+
+            String miaoShuStr = (String)orderBJObect["1"];
+            if (user.userExp.Equals("1") && !miaoShuStr.Equals("今日足球")) {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "不是今日赛事!");
                     }
                 }));
                 return;

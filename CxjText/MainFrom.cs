@@ -414,7 +414,7 @@ namespace CxjText
             }
             catch (Exception e)
             {
-                Console.WriteLine("获取数据:"+e.ToString());
+               // Console.WriteLine("获取数据:"+e.ToString());
                 if (this.isFinish) return;
                 //判断当前选中和数据返回是否同一个数据 不是直接返回
                 if (position != loginForm.getCurrentSelectRow())
@@ -513,7 +513,7 @@ namespace CxjText
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+              //  Console.WriteLine(e.ToString());
             }
         }
 
@@ -555,7 +555,7 @@ namespace CxjText
         //收到数据
         public void OnWebSocketMessAge(string message)
         {
-          // Console.WriteLine(message);
+           
             if (String.IsNullOrEmpty(message) || !FormUtils.IsJsonObject(message))
             {
                 return;
@@ -596,6 +596,16 @@ namespace CxjText
             }
 
             if (gUser.tag.Equals("M") && (gUser.userExp.Equals("1")))
+            {
+                return;
+            }
+
+            if (gUser.tag.Equals("I") && (gUser.userExp.Equals("1")))
+            {
+                return;
+            }
+
+            if (gUser.tag.Equals("H") && (gUser.userExp.Equals("1")))
             {
                 return;
             }
@@ -760,9 +770,12 @@ namespace CxjText
 
             if (((int)jObject["cmd"]) != 1 && ((int)jObject["cmd"]) != 100 && ((int)jObject["cmd"]) != 101) return;
 
-                //cmd 1 的情况 和 100 的情况  都是点球  
-           /****************判断事件的类型做出显示的处理*****************************/
-           if (jObject["game"] == null || jObject["data"] == null) return;
+            //cmd 1 的情况 和 100 的情况  都是点球  
+            /****************判断事件的类型做出显示的处理*****************************/
+
+            
+
+            if (jObject["game"] == null || jObject["data"] == null) return;
            
             String cid = (String)jObject["data"]["CID"];
             String mid = (String)jObject["data"]["MID"];
@@ -963,6 +976,7 @@ namespace CxjText
             {
                 dianQiuEnvent = 1; //M8的事件
             }
+            Console.WriteLine(message);
             //点球下注处理
             //   Console.WriteLine(jObject.ToString());
             EnventInfo enventInfo = new EnventInfo();
@@ -1107,7 +1121,7 @@ namespace CxjText
                         ((M8checkBox.Checked&&dianQiuEnvent==1)
                         || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
-                            Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
+                           // Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
                             leftForm.setComplete(enventInfo);
                         }
                     }));
@@ -1122,7 +1136,7 @@ namespace CxjText
                         ((M8checkBox.Checked && dianQiuEnvent == 1)
                         || (NYCheckBox.Checked && dianQiuEnvent == 0)))
                         {
-                            Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
+                           // Console.WriteLine("dianQiuEnvent:" + dianQiuEnvent);
                             leftForm.setComplete(enventInfo);
                         }
                     }));

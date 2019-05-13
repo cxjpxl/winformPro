@@ -77,6 +77,16 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
+                    if (tag.Equals("I") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
+
+                    if (tag.Equals("H") && strs.Length > 4 && strs[4] != null)
+                    {
+                        userExp = strs[4] + "";
+                    }
+
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
                     String loginUrl = dataUrl;//登录的链接地址 

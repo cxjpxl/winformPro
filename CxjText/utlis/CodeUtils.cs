@@ -348,5 +348,51 @@ namespace CxjText.utlis
             return jArray;
         }
 
+
+        //获取加速轨迹
+        public static JArray getTrack1(int distance)
+        {
+            JArray jArray = new JArray();
+
+            JObject jObject = new JObject();
+            jObject.Add("move", distance * 2 / 10);
+            jObject.Add("time", 400);
+            jArray.Add(jObject);
+
+            JObject jObject1 = new JObject();
+            jObject1.Add("move", distance * 2 / 10);
+            jObject1.Add("time", 300);
+            jArray.Add(jObject1);
+
+            JObject jObject2 = new JObject();
+            jObject2.Add("move", distance * 2 / 10);
+            jObject2.Add("time", 200);
+            jArray.Add(jObject2);
+
+
+            JObject jObject3 = new JObject();
+            jObject3.Add("move", distance * 1 / 10);
+            jObject3.Add("time", 100);
+            jArray.Add(jObject3);
+
+            JObject jObject4 = new JObject();
+            jObject4.Add("move", distance * 1 / 10);
+            jObject4.Add("time", 100);
+            jArray.Add(jObject4);
+
+          /*  JObject jObject5 = new JObject();
+            jObject5.Add("move", distance * -0.5 / 10);
+            jObject5.Add("time", 200);
+            jArray.Add(jObject5);
+
+
+            JObject jObject6 = new JObject();
+            jObject6.Add("move", distance * -0.5 / 10);
+            jObject6.Add("time", 100);
+            jArray.Add(jObject6);*/
+
+            return jArray;
+        }
+
     }
 }

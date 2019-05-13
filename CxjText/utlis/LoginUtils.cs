@@ -1746,6 +1746,59 @@ namespace CxjText.utlis
         }
 
 
+        private static bool loginC4(UserInfo userInfo,int position)
+        {
+            JObject headJObject = new JObject();
+            headJObject["Host"] = userInfo.baseUrl;
+            headJObject["Origin"] = userInfo.dataUrl;
+
+
+            String codeUrl = userInfo.dataUrl + "/app/member/include/validatecode/captcha.php";
+            String codePathName = position + userInfo.tag + ".jpg";
+            int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+            if (codeNum < 0)
+            {
+                return false;
+            }
+            String codeStrBuf = CodeUtils.getDaMaCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+            if (String.IsNullOrEmpty(codeStrBuf))
+            {
+                return false;
+            }
+
+
+            //现在要登录处理
+            String loginUrl = userInfo.dataUrl + "/app/member/login.php";
+            //demoplay=&uid=&langx=zh-cn&mac=&ver=&JE=false&username=sfds555&password=fdsuf551&yzm_input=dfff
+            String loginP = "demoplay=&uid=&langx=zh-cn&mac=&ver=&JE=&theme=0&username=" + userInfo.user + "&password=" + userInfo.pwd+ "&yzm_input="+ codeStrBuf;
+            String rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP,
+                "application/x-www-form-urlencoded;charset=UTF-8",
+                userInfo.cookie, headJObject);
+            if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("uid"))
+            {
+                return false;
+            }
+            String[] strs = rltStr.Split('\n');
+            if (strs.Length <= 0) return false;
+            String uid = "";
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String lineStr = strs[i].Trim();
+                if (String.IsNullOrEmpty(lineStr)) continue;
+                if (lineStr.Contains("top.uid"))
+                {
+                    uid = lineStr.Replace("top.uid", "").Replace("=", "").Replace("'", "").Replace(";", "").Trim();
+                    break;
+                }
+            }
+            if (String.IsNullOrEmpty(uid))
+            {
+                return false;
+            }
+            userInfo.uid = uid;
+            return true;
+        }
+
         public static void loginC(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -1856,6 +1909,7 @@ namespace CxjText.utlis
                 loginStatus = loginC1(userInfo);
                 if (!loginStatus) loginStatus = loginC2(userInfo);
                 if (!loginStatus) loginStatus = loginC3(userInfo);
+                if (!loginStatus) loginStatus = loginC4(userInfo,position);
                 if (!loginStatus)
                 {
                     userInfo.loginFailTime++;
@@ -2083,6 +2137,20 @@ namespace CxjText.utlis
 
         public static bool loginD1(int position,UserInfo userInfo) {
 
+            JObject headJbject = new JObject();
+            headJbject["Host"] = userInfo.baseUrl;
+            headJbject["Orgin"] = userInfo.dataUrl;
+            String rlt = HttpUtils.HttpGetHeader(userInfo.dataUrl + "/views/main.html", "", new CookieContainer(), headJbject);
+            if (String.IsNullOrEmpty(rlt)) {
+                return  false;
+            }
+
+            bool isPassword1 = false;
+            if (rlt.Contains("password1")) {
+                isPassword1 = true;
+            }
+
+
             /***************selenium动态登录处理*******************/
             ChromeOptionsEx optionsEx = new ChromeOptionsEx();
             IWebDriver driver = new ChromeDriver(optionsEx);
@@ -2129,18 +2197,44 @@ namespace CxjText.utlis
                 {
                     
                 }
+
+                try
+                {
+                    String js = "$(\".leftFolatWrap\")[0].style.display=\"none\"";
+                    IJavaScriptExecutor jsExecutor = driver as IJavaScriptExecutor;
+                    jsExecutor.ExecuteScript(js);
+
+
+                    js = "$(\".rightFolatWrap\")[0].style.display=\"none\"";
+                    jsExecutor.ExecuteScript(js);
+                }
+                catch (Exception e)
+                {
+                }
                 
                 driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
                 try
                 {
+                    String js = "";
+                    IJavaScriptExecutor jsExecutor =  driver as IJavaScriptExecutor;
+                    if (isPassword1) {
+                        js = "document.documentElement.scrollTop=100";
+                        jsExecutor.ExecuteScript(js);
+                    }
                     driver.FindElement(By.Id("username")).SendKeys(userInfo.user);
                     driver.FindElement(By.Id("password")).SendKeys(userInfo.pwd);
-                    driver.FindElement(By.Id("submit")).Click();
+                    js = "aLeftForm1Sub()";
+                    jsExecutor.ExecuteScript(js);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
+
                     driver.Quit();
                     return false;
                 }
+
+
+
 
                 /********************滑动的处理*******************************/
                 // 获取拼图滑块按钮  
@@ -2162,7 +2256,7 @@ namespace CxjText.utlis
                 if (huadong) {
                     IWebDriver validate = driver.SwitchTo().Frame(driver.FindElement(By.Id("tcaptcha_iframe")));
                     validate.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(20)); //元素启动的
-                    var slideBlock = validate.FindElement(By.Id("tcaptcha_drag_thumb"));//获取到滑块
+                    var slideBlock = validate.FindElement(By.Id("tcaptcha_drag_thumb"));//获取到滑块 
                     var slideBg = validate.FindElement(By.Id("slideBg"));   //把图片下载下来
                     String imgUrl = slideBg.GetAttribute("src");
                     if (String.IsNullOrEmpty(imgUrl))
@@ -2228,20 +2322,27 @@ namespace CxjText.utlis
                     bmp = null;
                     Actions actions = new Actions(driver);
                     actions.ClickAndHold(slideBlock);
+                   // Thread.Sleep(500);
                     int currentMove = currentX - 28;
-                    int lenNum = 10;
-                    int moveLen = currentMove / lenNum;
-                    int allMoveLen = 0;
-                    for (int i = 0; i < lenNum; i++)
+
+
+                    int allMoveLen = 0, length = 10;
+                    Random r = new Random();
+                    for (int i = 0; i < length; i++)
                     {
-                        allMoveLen = (i + 1) * moveLen;
-                        actions.MoveByOffset(moveLen, 0).Build().Perform();
-                        Random r = new Random();
-                        int num = r.Next(100, 200);
-                        Thread.Sleep(num);
+                        int move = currentMove / length;
+                        allMoveLen = allMoveLen + move;
+                        actions.MoveByOffset(move, 0).Build().Perform();
+                        int time = r.Next(100, 300);
+                        Thread.Sleep(time);
                     }
-                    allMoveLen = currentMove - allMoveLen;
-                    actions.MoveByOffset(allMoveLen, 0).Build().Perform();
+
+                    if ((currentMove - allMoveLen) != 0)
+                    {
+                        Thread.Sleep(200);
+                        actions.MoveByOffset(currentMove - allMoveLen, 0).Build().Perform();
+                    }
+                    Thread.Sleep(300);
                     actions.Release(slideBlock).Build().Perform();
                     Thread.Sleep(6000);
                 }

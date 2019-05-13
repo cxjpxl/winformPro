@@ -8,7 +8,7 @@ namespace CxjText.utils
 {
     public class Config
     {
-        //H，I，F
+        //H，F
         public static String softUserStr = "admin";
         public static bool canAutoTwo = false;//自动重复下
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩

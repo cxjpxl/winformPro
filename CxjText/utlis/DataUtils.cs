@@ -244,6 +244,10 @@ namespace CxjText.utlis
                     break;
                 case "I":
                     JArray jObjectI = (JArray)obj;
+                    userExp = (String)jObjectI[jObjectI.Count -1];
+                    if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1")) {
+                        return  (String)jObjectI[4] + "\n" + (String)jObjectI[5] ;
+                    }
                     time = (String)jObjectI[4] + "\n" + (String)jObjectI[5]+"-"+ (String)jObjectI[6]; 
                     break;
                 case "U":
@@ -447,9 +451,19 @@ namespace CxjText.utlis
                     }
                     break;
                 case "I":
-                    JArray jObjectI = (JArray)obj;
-                    hBifen = (String)jObjectI[5];
-                    gBifen = (String)jObjectI[6];
+                    {
+                        JArray jObjectI = (JArray)obj;
+                        String  userExp = (String)jObjectI[jObjectI.Count - 1];
+                        if (!String.IsNullOrEmpty(userExp) && userExp.Equals("1"))
+                        {
+                            JArray jArray1 = new JArray();
+                            jArray1.Add(-1);
+                            jArray1.Add(-1);
+                            return jArray1;
+                        }
+                        hBifen = (String)jObjectI[5];
+                        gBifen = (String)jObjectI[6];
+                    }
                     break;
                 case "U":
                     JArray jObjectU = (JArray)obj;
@@ -998,11 +1012,11 @@ namespace CxjText.utlis
                         {
                             if (data15.Equals("H"))
                             {
-                                c04 = data12 + " " + data13;
+                                c04 = data12.Replace(" ", "") + " " + data13.Replace(" ", "");
                             }
                             else
                             {
-                                c04 = data13;
+                                c04 = data13.Replace(" ", "");
                             }
                         }
                         break;
@@ -1615,11 +1629,11 @@ namespace CxjText.utlis
                         {
                             if (data28.Equals("H"))
                             {
-                                c07 = data25 + " " + data26;
+                                c07 = data25.Replace(" ", "") + " " + data26.Replace(" ", "");
                             }
                             else
                             {
-                                c07 = data26;
+                                c07 = data26.Replace(" ", "");
                             }
                         }
                         break;
@@ -1889,7 +1903,7 @@ namespace CxjText.utlis
                         if (data30 != null)
                             data30 = data30.Replace(" ", "");
                         else data30 = "";
-                         c08 = "大" + data30 + " " + (String)jObjectI[31];
+                         c08 = "大" + data30 + " " + ((String)jObjectI[31]).Replace(" ", "");
                         if (String.IsNullOrEmpty((String)jObjectI[31]) || ((String)jObjectI[31]).Equals("null") || ((String)jObjectI[31]).Equals("0.00"))
                         {
                             c08 = "";
@@ -2255,11 +2269,11 @@ namespace CxjText.utlis
                         {
                             if (data15.Equals("C"))
                             {
-                                c14 = data12 + " " + data14;
+                                c14 = data12.Replace(" ", "") + " " + data14.Replace(" ", "");
                             }
                             else
                             {
-                                c14 = data14;
+                                c14 = data14.Replace(" ", "");
                             }
                         }
                         break;
@@ -2518,7 +2532,7 @@ namespace CxjText.utlis
                         String data17 = (String)jObjectI[17];
                         if (data17 != null) data17 = data17.Replace(" ", "");
                         else data17 = "";
-                        c15 = "小" + data17 + " " + (String)jObjectI[19];
+                        c15 = "小" + data17.Replace(" ", "") + " " + ((String)jObjectI[19]).Replace(" ", "");
                         if (String.IsNullOrEmpty((String)jObjectI[19]) || ((String)jObjectI[19]).Equals("null") || ((String)jObjectI[19]).Equals("0.00"))
                         {
                             c15 = "";
@@ -2885,12 +2899,12 @@ namespace CxjText.utlis
                         {
                             if (data28.Equals("C"))
                             {
-                                c17 = data25 + " " + data27;
+                                c17 = data25.Replace(" ","") + " " + data27.Replace(" ", "");
                             }
                             else
                             {
 
-                                c17 = data27;
+                                c17 = data27.Replace(" ", "");
                             }
                         }
                         break;
@@ -3162,7 +3176,7 @@ namespace CxjText.utlis
                         if (data30 != null)
                             data30 = data30.Replace(" ", "");
                         else data30 = "";
-                        c18 = "小" + data30 + " " + (String)jObjectI[32];
+                        c18 = "小" + data30.Replace(" ", "") + " " + ((String)jObjectI[32]).Replace(" ", "");
                         if (String.IsNullOrEmpty((String)jObjectI[32]) || ((String)jObjectI[32]).Equals("null") || ((String)jObjectI[32]).Equals("0.00"))
                         {
                             c18 = "";

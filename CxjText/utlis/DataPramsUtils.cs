@@ -244,6 +244,9 @@ namespace CxjText.utlis
         public static String getIData(UserInfo userInfo) {
             String getDataUrl = userInfo.dataUrl + "/app/hsport/sports/match";
             String paramsStr = "t=" + FormUtils.getCurrentTime() + "&day=2&class=1&type=1&page=1&num=10000&league=";
+            if (userInfo.userExp.Equals("1")) {
+                paramsStr = "t=" + FormUtils.getCurrentTime() + "&day=0&class=1&type=1&page=1&num=10000&league=";
+            }
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
@@ -1093,9 +1096,12 @@ namespace CxjText.utlis
 
 
             //循环获取分页数据
+
             String getDataUrl = userInfo.dataUrl + "/hg_sports/index/ft/gq";
+            if (userInfo.userExp.Equals("1")) {
+                getDataUrl = userInfo.dataUrl + "/hg_sports/index/ft/ds";
+            }
             headJObject = new JObject();
-            //dataUrl = userInfo.dataUrl + "/hg_sports/index/ft/gq";
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Referer"] = userInfo.dataUrl + "/hg_sports/index/head";
 
@@ -1118,12 +1124,15 @@ namespace CxjText.utlis
                 // 找到当前页面所有联赛  
                 HtmlNodeCollection lianSaiNodes = htmlDoc.DocumentNode.SelectNodes("//td[@class='b_title']");
                 // 找到当前页面所有比赛 
-                HtmlNodeCollection htmlNodes = htmlDoc.DocumentNode.SelectNodes("//tbody//tr[@class='b_cen']");
-                if (htmlNodes == null || htmlNodes.Count <= 0 || lianSaiNodes == null || lianSaiNodes.Count <= 0)
+                if (lianSaiNodes == null || lianSaiNodes.Count <= 0)
                 {
                     break;
                 }
 
+                HtmlNodeCollection htmlNodes = htmlDoc.DocumentNode.SelectNodes("//tbody//tr[@class='b_cen']");
+                if (htmlNodes == null || htmlNodes.Count <= 0){
+                        break;
+                }
                 // 将数据解析成指定格式
                 // 解析出每场赛事
                 String lianSaiName = lianSaiNodes[0].InnerText.ToString().Trim();
