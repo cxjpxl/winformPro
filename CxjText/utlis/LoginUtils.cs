@@ -4269,7 +4269,7 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.loginUrl;
             headJObject["Referer"] = userInfo.loginUrl + "/home/index";
-
+            headJObject["X-Requested-With"] = "XMLHttpRequest";
             String url = userInfo.loginUrl + "/Commpart/GetLoginUser?jsonPost=1&t=" + FormUtils.getCurrentTime();
             String p = "m=ref&ModelJson=%7B%7D";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
@@ -4365,8 +4365,9 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
-            headJObject["Origin"] = userInfo.loginUrl;
-            headJObject["Referer"] = userInfo.loginUrl + "/home/index";
+            headJObject["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+            String rlt = HttpUtils.HttpGetHeader(userInfo.loginUrl, "", userInfo.cookie, headJObject) ;
+
             if (!getLoginUser(userInfo)) {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;

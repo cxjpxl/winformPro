@@ -48,8 +48,8 @@ namespace CxjText.utils
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);//创建一个http请求
             request.Method = "GET";
-            request.Timeout = 5 * 1000;
-            request.ReadWriteTimeout =5 * 1000;
+            request.Timeout = 25 * 1000;
+            request.ReadWriteTimeout =25 * 1000;
             request.UserAgent = Config.userAgent;
 
           //  if (headJObject != null && headJObject["myExp"] != null) {
