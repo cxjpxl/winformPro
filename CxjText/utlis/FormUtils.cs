@@ -296,9 +296,19 @@ namespace CxjText.utlis
                     }
                     break;
                 case "H":
-                    if (currentTime - userTime >= 5 * 1000)
+                    if (userExp.Equals("1"))
                     {
-                        isUpdate = true;
+                        if (currentTime - userTime >= 30 * 1000)
+                        {
+                            isUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        if (currentTime - userTime >= 10 * 1000)
+                        {
+                            isUpdate = true;
+                        }
                     }
                     break;
                 case "O":
@@ -348,6 +358,12 @@ namespace CxjText.utlis
                     }
                     break;
                 case "Y":
+                    if (currentTime - userTime >= 10 * 1000)
+                    {
+                        isUpdate = true;
+                    }
+                    break;
+                case "W":
                     if (currentTime - userTime >= 10 * 1000)
                     {
                         isUpdate = true;

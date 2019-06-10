@@ -572,6 +572,19 @@ namespace CxjText.utlis
                     break;
                 case "H":
                     JObject jObjectH = (JObject)obj;
+
+                    if (jObjectH["userExp"] != null)
+                    {
+                        String userExp = (String)jObjectH["userExp"];
+                        if (!String.IsNullOrEmpty(userExp) && (userExp.Equals("1")))
+                        {
+                            JArray jArray1 = new JArray();
+                            jArray1.Add(-1);
+                            jArray1.Add(-1);
+                            return jArray1;
+                        }
+                    }
+
                     try
                     {
                         String str = (String)jObjectH["time"];
@@ -611,7 +624,6 @@ namespace CxjText.utlis
                     break;
                 case "M":
                     JObject jObjectM = (JObject)obj;
-                    //今日1
                     if (jObjectM["userExp"] != null)
                     {
                         String userExp = (String)jObjectM["userExp"];
@@ -3750,6 +3762,9 @@ namespace CxjText.utlis
                 case "L":
                     {
                         JObject jObjectR = (JObject)obj;
+                        if (jObjectR == null) {
+                            return "1"+FormUtils.getCurrentTime();
+                        }
                          mid = (String)jObjectR["mid"];
                         break;
                     }

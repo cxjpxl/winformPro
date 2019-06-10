@@ -94,6 +94,30 @@ namespace CxjText.utlis
             return codeStrBuf.ToString();
         }
 
+        public static String getDaMaCode6(string Imagefilename)
+        {
+
+            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+            if (codeMoney <= 0)
+            {
+                return null;
+            }
+
+            //获取打码平台的码
+            StringBuilder codeStrBuf = new StringBuilder();
+            int num = YDMWrapper.YDM_EasyDecodeByPath(
+                              Config.codeUserStr, Config.codePwdStr,
+                              Config.codeAppId, Config.codeSerect,
+                              Imagefilename,
+                              1006, 20, codeStrBuf);
+            if (num <= 0)
+            {
+                return null;
+            }
+
+            return codeStrBuf.ToString();
+        }
+
 
         public static void Base64ToImage(string base64,String filePath)
         {

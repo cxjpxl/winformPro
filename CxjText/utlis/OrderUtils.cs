@@ -2123,25 +2123,43 @@ namespace CxjText.utlis
                 "btype=" + parms[3] + "&" +
                 "gold=" + money;
             String orderRlt = HttpUtils.HttpPostHeader(orderUrl, orderP, "application/x-www-form-urlencoded",user.cookie,headJObject);
-           
-            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("待确认")) {
-                leftForm.Invoke(new Action(() => {
-                    if (rltForm != null)
-                    {
-                        String msg = "下单失败";
-
-                        if (orderRlt.Contains("金额超过限额")) {
-                            msg = "失败，检查网站限额";
-                        }
-                        if (orderRlt.Contains("余额不足,下注失败"))
+            if (user.userExp.Equals("1"))
+            {
+                if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("成功提交"))
+                {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
                         {
-                            msg = "余额不足,下注失败";
+                            String msg = "下单失败";
+                            rltForm.RefershLineData(inputTag, msg);
                         }
-                        rltForm.RefershLineData(inputTag, msg);
-                    }
-                }));
-                return;
+                    }));
+                    return;
+                }
             }
+            else {
+                if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("待确认"))
+                {
+                    leftForm.Invoke(new Action(() => {
+                        if (rltForm != null)
+                        {
+                            String msg = "下单失败";
+
+                            if (orderRlt.Contains("金额超过限额"))
+                            {
+                                msg = "失败，检查网站限额";
+                            }
+                            if (orderRlt.Contains("余额不足,下注失败"))
+                            {
+                                msg = "余额不足,下注失败";
+                            }
+                            rltForm.RefershLineData(inputTag, msg);
+                        }
+                    }));
+                    return;
+                }
+            }
+          
 
             leftForm.Invoke(new Action(() => {
                 if (rltForm != null)

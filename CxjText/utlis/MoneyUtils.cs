@@ -765,5 +765,31 @@ namespace CxjText.utlis
             user.money = moneyStr;
             return 1;
         }
+
+
+        //获取W的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetWMoney(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/Commpart/GetLoginUser?jsonPost=1&t=" + FormUtils.getCurrentTime();
+            JObject headJObject = new JObject();
+            headJObject["Host"] = user.baseUrl;
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/usercentre/index";
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "m=ref&ModelJson=%7B%7D", "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt) || !FormUtils.IsJsonObject(moneyRlt)) {
+                return 0;
+            }
+            JObject moneyJObject = JObject.Parse(moneyRlt);
+            if (moneyJObject["IsSucceed"] == null) return 0;
+            bool IsSucceed = (bool)moneyJObject["IsSucceed"];
+            if (!IsSucceed) return -1;
+            JObject dataJObject = (JObject)moneyJObject["Data"];
+            String moneyStr = (String)dataJObject["balance"] + "";
+            String uid = (String)dataJObject["UserID"];
+            user.uid = uid;
+            user.money = moneyStr;
+            return 1;
+        }
     }
 }

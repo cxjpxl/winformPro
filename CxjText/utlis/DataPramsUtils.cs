@@ -1559,8 +1559,8 @@ namespace CxjText.utlis
                     saiShiJObect.Add("g_du_y_click", g_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
                     saiShiJObect.Add("he_du_y_click", he_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
 
-                    saiShiJObect.Add("h_rang", h_rang.Replace("\"", "").Replace("&nbsp;", ""));
-                    saiShiJObect.Add("g_rang", g_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_rang", h_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("g_rang", g_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
                     saiShiJObect.Add("h_rang_click", h_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
                     saiShiJObect.Add("g_rang_click", g_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
 
@@ -1576,8 +1576,8 @@ namespace CxjText.utlis
                     saiShiJObect.Add("bg_du_y_click", bg_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
                     saiShiJObect.Add("bhe_du_y_click", bhe_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
 
-                    saiShiJObect.Add("bh_rang", bh_rang.Replace("\"", "").Replace("&nbsp;", ""));
-                    saiShiJObect.Add("bg_rang", bg_rang.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_rang", bh_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("bg_rang", bg_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
                     saiShiJObect.Add("bh_rang_click", bh_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
                     saiShiJObect.Add("bg_rang_click", bg_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
 
@@ -1672,7 +1672,7 @@ namespace CxjText.utlis
 
             JObject jObject = new JObject();
             jObject.Add("list", jArray);
-            Console.WriteLine("jArray:"+ jArray);
+           // Console.WriteLine("jArray:"+ jArray);
             return jObject.ToString();
             
         }
@@ -3423,5 +3423,17 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
 
+
+        /***************************W系统获取数据********************************/
+        public static String getWData(UserInfo userInfo)
+        {
+            //page是由0开始
+            Console.WriteLine("获取W");
+            String uid = "";  //有登录有uid   没有登录没有uid
+            JObject headJObject = new JObject();
+            CookieContainer cookie = userInfo.cookie;
+            
+            return null;
+        }
     }
 }
