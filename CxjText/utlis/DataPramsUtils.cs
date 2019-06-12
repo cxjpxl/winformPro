@@ -479,7 +479,6 @@ namespace CxjText.utlis
                             end = str1.IndexOf(")");
                             String bhe_du_y_click = str1.Substring(start + 1, end - start - 1);
 
-
                             /***************************半场让球*************************************/
                             HtmlNode bqChangeRqNode = allNodes[17];
                             String bh_rang_key = bqChangeRqNode.ChildNodes[1].ChildNodes[1].InnerText.ToString().Trim();
@@ -1617,11 +1616,11 @@ namespace CxjText.utlis
                             start = str1.LastIndexOf("[");
                             end = str1.LastIndexOf("]");
                             trXPathPrefix = str1.Substring(0, start);// 获取联赛的 XPATH 前缀
-                            Console.WriteLine("trXPathPrefix:" + trXPathPrefix);
+                          //  Console.WriteLine("trXPathPrefix:" + trXPathPrefix);
                             trPathNumStr = str1.Substring(start + 1, end - start - 1);// 获取 tr[num] 中的 num
-                            Console.WriteLine("trPathNumStr:" + trPathNumStr);
+                          //  Console.WriteLine("trPathNumStr:" + trPathNumStr);
                             trPathNum = Int32.Parse(trPathNumStr);//将 tr[num] 中的 num 转变为 int
-                            Console.WriteLine("trPathNum:" + trPathNum);
+                          //  Console.WriteLine("trPathNum:" + trPathNum);
                             if (trPathNum <= 0)// 第0个一定是标题tr
                             {
                                 break;
@@ -3428,7 +3427,7 @@ namespace CxjText.utlis
         public static String getWData(UserInfo userInfo)
         {
             //page是由0开始
-            Console.WriteLine("获取W");
+           // Console.WriteLine("获取W");
             String uid = "";  //有登录有uid   没有登录没有uid
             JArray jArray = new JArray(); // 存储球赛赛事
 
@@ -3967,7 +3966,7 @@ namespace CxjText.utlis
 
             JObject jObject = new JObject();
             jObject.Add("list", jArray);
-            Console.WriteLine("jArray:"+ jArray);
+         //   Console.WriteLine("jArray:"+ jArray);
             return jObject.ToString();
         }
     }

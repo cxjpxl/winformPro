@@ -359,7 +359,6 @@ namespace CxjText.views
             bool daTuiSend = false;
 
             //今日1
-            
             if (userInfo.tag.Equals("D") || userInfo.tag.Equals("E") || userInfo.tag.Equals("G")
                 || userInfo.tag.Equals("M") || userInfo.tag.Equals("I") || userInfo.tag.Equals("H"))
             {
@@ -544,6 +543,7 @@ namespace CxjText.views
                         orderParmas = rltStr;
                         break;
                     case "H":
+                    case "W":
                         orderParmas = rltStr;
                         break;
                     case "O":
@@ -644,7 +644,7 @@ namespace CxjText.views
                     UserInfo userInfo1 = (UserInfo)Config.userList[this.cIndex];
                     jObject["baseUrl"] = userInfo1.baseUrl;
                 }
-                else if (user.tag.Equals("H"))
+                else if (user.tag.Equals("H")|| user.tag.Equals("W"))
                 {
                     jObject["money"] = inputMoney;
                 }
@@ -769,6 +769,9 @@ namespace CxjText.views
                         break;
                     case "Y":
                         OrderUtils.OrderY(jobject, this, loginForm, rltForm);
+                        break;
+                    case "W":
+                        OrderUtils.OrderW(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

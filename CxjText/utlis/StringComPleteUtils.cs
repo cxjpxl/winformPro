@@ -179,6 +179,7 @@ namespace CxjText.utlis
                         obj = jObjectE;
                         break;
                     case "H":
+                    case "W":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];
@@ -512,6 +513,7 @@ namespace CxjText.utlis
                         obj = jObjectE;
                         break;
                     case "H":
+                    case "W":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];
@@ -718,6 +720,7 @@ namespace CxjText.utlis
                         obj = jObjectE;
                         break;
                     case "H":
+                    case "W":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];
@@ -885,6 +888,7 @@ namespace CxjText.utlis
                         obj = jObjectE;
                         break;
                     case "H":
+                    case "W":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];
