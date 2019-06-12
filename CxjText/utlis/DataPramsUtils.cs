@@ -3516,14 +3516,21 @@ namespace CxjText.utlis
                     // 时间
                     String timeNodeXpath = timeBifenNode.XPath + "/table[1]/tr[1]";
                     HtmlNode timeNode = htmlDoc.DocumentNode.SelectSingleNode((string)timeNodeXpath);
-                    String time = timeNode.InnerText.ToString();
-                    time = time.Replace("\r\n", "").Trim();
-                    // 比分
-                    String bifenNodeXpath = timeBifenNode.XPath + "/table[1]/tr[2]";
-                    HtmlNode bifenNode = htmlDoc.DocumentNode.SelectSingleNode((string)bifenNodeXpath);
-                    String bifen = bifenNode.InnerText.ToString();
-                    bifen = bifen.Replace("\r\n", "").Replace(" ", "").Trim();
-                    time = time + "\n" + bifen;
+                    String time = "";
+                    if (timeNode != null)
+                    {
+                        time = timeNode.InnerText.ToString();
+                        time = time.Replace("\r\n", "").Trim();
+                        // 比分
+                        String bifenNodeXpath = timeBifenNode.XPath + "/table[1]/tr[2]";
+                        HtmlNode bifenNode = htmlDoc.DocumentNode.SelectSingleNode((string)bifenNodeXpath);
+                        if (bifenNode != null)
+                        {
+                            String bifen = bifenNode.InnerText.ToString();
+                            bifen = bifen.Replace("\r\n", "").Replace(" ", "").Trim();
+                            time = time + "\n" + bifen;
+                        }
+                    }
                     /************************解析比赛队伍************************************/
                     HtmlNode duiwuNode = hNode.ChildNodes[3];
                     String nameStr = duiwuNode != null ? duiwuNode.InnerHtml.ToString().Trim() : "";
