@@ -3433,7 +3433,6 @@ namespace CxjText.utlis
 
             //循环获取分页数据
             int dataPages = 1;
-            String pg_txt = "";
             for (int page = 1; page <= dataPages; page++)
             {
 
@@ -3956,16 +3955,14 @@ namespace CxjText.utlis
 
 
                 // 数据页码处理
-                HtmlNodeCollection pageNodes = htmlDoc.DocumentNode.SelectNodes("//span[@id='pg_txt']/span[@class='pageBar']/span");
-                if (pageNodes == null || pageNodes.Count <= 2)
+                HtmlNodeCollection pageNodes = htmlDoc.DocumentNode.SelectNodes("//td[@id='page_no']/span[@id='pg_txt']/select/option");
+                if (pageNodes == null || pageNodes.Count <= 1)
                 {
                     break;
                 }
                 else
                 {
-                    var pgTxtNode = pageNodes[0];
-                    pg_txt = pgTxtNode.InnerText.Replace("[", "").Replace("]", "");
-                    dataPages = pageNodes.Count - 2;
+                    dataPages = pageNodes.Count;
                 }
 
             }
