@@ -3420,7 +3420,7 @@ namespace CxjText.utlis
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             String homeRlt = HttpUtils.HttpGetHeader(userInfo.loginUrl,"",userInfo.cookie,headJObject);
-            if(homeRlt == null)
+            if (homeRlt == null)
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -3439,6 +3439,7 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             String codePathName = position + userInfo.tag + ".jpg";
             int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+          
             if (codeNum < 0)
             {
                 userInfo.loginFailTime++;
@@ -3451,6 +3452,7 @@ namespace CxjText.utlis
             }
 
             String codeStrBuf = CodeUtils.getImageCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+
             if (String.IsNullOrEmpty(codeStrBuf))
             {
                 userInfo.loginFailTime++;
@@ -3476,8 +3478,21 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
+            String vocodeInfoUrl = userInfo.loginUrl + "/Account/GetVcodeInfo";
+            String p = "__RequestVerificationToken=" + value;
+            String codeRlt = HttpUtils.HttpPostHeader(vocodeInfoUrl,p, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
+            if (String.IsNullOrEmpty(codeRlt) || !codeRlt.Contains("success")|| !codeRlt.Contains("true")) {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }
+            
             String loginUrl = userInfo.loginUrl + "/Account/Login";
-            String loginP = "username="+userInfo.user+"&passwd="+userInfo.pwd+"&rmNum="+codeStrBuf.ToString()+ "&__RequestVerificationToken=" + value;
+            String loginP = "username=" + userInfo.user + "&passwd=" + FormUtils.GetMD5(userInfo.pwd).ToUpper() +"&rmNum="+codeStrBuf.ToString()+ "&__RequestVerificationToken=" + value;
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl,loginP, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie,headJObject);
             if (String.IsNullOrEmpty(loginRlt) || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("error")) {
                 userInfo.loginFailTime++;
