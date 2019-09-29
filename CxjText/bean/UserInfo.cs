@@ -40,6 +40,8 @@ namespace CxjText.bean
         public String userExp = ""; //user表扩展 
         public JObject expJObject = new JObject();
 
+        public String cookieStr = null; //默认是空
+
         public UserInfo() {
             cookie = new CookieContainer();
         }

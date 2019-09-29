@@ -9,6 +9,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Speech.Synthesis;
+using System.Net;
 
 namespace CxjText
 {
@@ -201,8 +202,8 @@ namespace CxjText
                 if (userInfo != null && !String.IsNullOrEmpty(userInfo.money)) {
                     JObject temp = new JObject();
                     temp["sys"] = userInfo.tag; //系统
-                    if (userInfo.tag.Equals("B") && !String.IsNullOrEmpty(userInfo.userExp) && userInfo.userExp.Equals("1")) {
-                        temp["sys"] = "B_1";
+                    if (!String.IsNullOrEmpty(userInfo.userExp) && userInfo.userExp.Equals("1")) {
+                        temp["sys"] = userInfo.tag+"_1";
                     }
                     temp["money"] = userInfo.money;//钱
                     temp["url"] = userInfo.baseUrl;
@@ -656,7 +657,7 @@ namespace CxjText
                     return;
             }
 
-
+            Console.WriteLine("事件:" + message);
 
             //87分钟事件的处理
             //{"cmd":2,"league":"冰岛女子甲组联赛","state":0,"score1":"1","score2":"1","tm1":"斯洛图尔(女)","tm2":"富佐尼(女)","gametime":"67"}
@@ -1370,7 +1371,7 @@ namespace CxjText
         private void pingbanCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Config.isPingBang = pingbanCheckBox.Checked;
-          //  changeData();
+           // changeData();
 
         }
         
@@ -1404,7 +1405,7 @@ namespace CxjText
         private void changeData() {
             for (int i = 0; i < Config.userList.Count; i++) {
                 UserInfo user = (UserInfo)Config.userList[i];
-                if (!user.tag.Equals("D") && user.status!=2) {
+                if (!user.tag.Equals("D")) {
                     continue;
                 }
                 Thread t = new Thread(new ParameterizedThreadStart(this.changeUserInfoD));
@@ -1427,11 +1428,10 @@ namespace CxjText
             headJobject["Origin"] = user.loginUrl;
             headJobject["X-Requested-With"] = "XMLHttpRequest";
             headJobject["Referer"] = user.loginUrl + "/page/user-center/account/password.html?" + FormUtils.getCurrentTime();
-            /*String p = "userMemo=&bankName=" + WebUtility.UrlEncode("中信银行")
-                + "&bankAddress=" + WebUtility.UrlEncode("广东深圳支行")
-                + "&cardNo=6217710303206346";*/
+          //  String p = "userMemo=&bankName=" + WebUtility.UrlEncode("中国农业银行")
+            //    + "&bankAddress=" + WebUtility.UrlEncode("中国农业银行股份有限公司潮州新洋支行");
           
-           String p = "phone=13580198798";
+            String p = "qq=567438948&isDl=false&hyLevel=1&userMemo=" + WebUtility.UrlEncode("")+ "&userColor="+ WebUtility.UrlEncode("");
             String url = user.dataUrl + "/api/user/modifyUserInfo";
             String rlt = HttpUtils.HttpPostHeader(url,p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJobject);
             MoneyUtils.GetDMoney(user);

@@ -2457,108 +2457,141 @@ namespace CxjText.utlis
             headJObject["Host"] = userInfo.baseUrl;
             headJObject["Origin"] = userInfo.dataUrl;
             headJObject["Referer"] = userInfo.dataUrl + "/views/main.html";
-            String web_system_configUrl = userInfo.dataUrl + "/data/json/web_system_config.json";
-            String configRlt = HttpUtils.HttpGetHeader(web_system_configUrl, "", userInfo.cookie, headJObject);
-            if (String.IsNullOrEmpty(configRlt) || !FormUtils.IsJsonObject(configRlt))
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            JObject configJobject = JObject.Parse(configRlt);
             String rltStr = null;
-            String user_password_type = (String)configJobject["user_password_type"];
-
-            int codeStatus = 0; //0不用验证码  1图片验证码  2滑动验证码
-            String imageUrl = userInfo.loginUrl + "/v/user/loginVerify";
-            String imageRlt = HttpUtils.HttpGetHeader(imageUrl, "", userInfo.cookie, headJObject);
-            if (imageRlt == null) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
-            }
-            if (String.IsNullOrEmpty(imageRlt.Trim()))
+            bool renGongLoginSuccess = false;
+            //判断人工的cookie存在不
+            if (userInfo.cookieStr != null && userInfo.cookieStr.Length > 0)
             {
-                codeStatus = 0;
-            }else if (imageRlt.Trim().Equals("IMAGE")) {
-                codeStatus = 1;
-            } else if(imageRlt.Trim().Equals("T_CAPTCHA")){
-                codeStatus = 2;
-            }
-            if (codeStatus == 1 || codeStatus ==2)  //需要验证码的处理
-            {
-                //这里要判断是否用腾讯的滑动验证码
-              
-                
-                if (codeStatus == 2)
+                if (!userInfo.cookieStr.ToLower().Contains("token"))
                 {
-                    //拖动的登录处理
-                    if (!loginD1(position, userInfo))
+                    renGongLoginSuccess = false;
+                }
+                else {
+                    //创建cookie
+                    userInfo.cookie = new CookieContainer();
+                    userInfo.cookie.Add(new System.Net.Cookie("token", userInfo.cookieStr.Trim().Replace("token=",""), "/", userInfo.baseUrl));
+                    renGongLoginSuccess = true;
+                    JObject jObject1 = new JObject();
+                    jObject1["token"] = "111111";
+                    jObject1["uid"] = "111111";
+                    rltStr = jObject1.ToString();
+                }
+            }
+
+            if (!renGongLoginSuccess) {
+                String web_system_configUrl = userInfo.dataUrl + "/data/json/web_system_config.json";
+                String configRlt = HttpUtils.HttpGetHeader(web_system_configUrl, "", userInfo.cookie, headJObject);
+                if (String.IsNullOrEmpty(configRlt) || !FormUtils.IsJsonObject(configRlt))
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                JObject configJobject = JObject.Parse(configRlt);
+
+                String user_password_type = (String)configJobject["user_password_type"];
+
+                int codeStatus = 0; //0不用验证码  1图片验证码  2滑动验证码
+                String imageUrl = userInfo.loginUrl + "/v/user/loginVerify";
+                String imageRlt = HttpUtils.HttpGetHeader(imageUrl, "", userInfo.cookie, headJObject);
+                if (imageRlt == null)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
+                if (String.IsNullOrEmpty(imageRlt.Trim()))
+                {
+                    codeStatus = 0;
+                }
+                else if (imageRlt.Trim().Equals("IMAGE"))
+                {
+                    codeStatus = 1;
+                }
+                else if (imageRlt.Trim().Equals("T_CAPTCHA"))
+                {
+                    codeStatus = 2;
+                }
+                if (codeStatus == 1 || codeStatus == 2)  //需要验证码的处理
+                {
+                    //这里要判断是否用腾讯的滑动验证码
+
+
+                    if (codeStatus == 2)
                     {
-                        userInfo.loginFailTime++;
-                        userInfo.status = 3;
-                        loginForm.Invoke(new Action(() =>
+                        //拖动的登录处理
+                        if (!loginD1(position, userInfo))
                         {
-                            loginForm.AddToListToUpDate(position);
-                        }));
-                        return;
+                            userInfo.loginFailTime++;
+                            userInfo.status = 3;
+                            loginForm.Invoke(new Action(() =>
+                            {
+                                loginForm.AddToListToUpDate(position);
+                            }));
+                            return;
+                        }
+                        else
+                        {
+                            //登录成功的处理
+                            JObject jObject1 = new JObject();
+                            jObject1["token"] = "111111";
+                            jObject1["uid"] = "111111";
+                            rltStr = jObject1.ToString();
+                        }
                     }
-                    else {
-                        //登录成功的处理
-                        JObject jObject1 = new JObject();
-                        jObject1["token"] = "111111";
-                        jObject1["uid"] = "111111";
-                        rltStr = jObject1.ToString();
-                    }
-                }else {
-                    //有验证码的登录处理
-                    String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
-                    String codePathName = position + userInfo.tag + ".jpg";
-                    int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
-                    if (codeNum < 0)
+                    else
                     {
-                        userInfo.loginFailTime++;
-                        userInfo.status = 3;
-                        loginForm.Invoke(new Action(() => {
-                            loginForm.AddToListToUpDate(position);
-                        }));
-                        return;
+                        //有验证码的登录处理
+                        String codeUrl = userInfo.dataUrl + "/v/vCode?t=" + FormUtils.getCurrentTime();
+                        String codePathName = position + userInfo.tag + ".jpg";
+                        int codeNum = HttpUtils.getImage(codeUrl, codePathName, userInfo.cookie, headJObject); //这里要分系统获取验证码
+                        if (codeNum < 0)
+                        {
+                            userInfo.loginFailTime++;
+                            userInfo.status = 3;
+                            loginForm.Invoke(new Action(() => {
+                                loginForm.AddToListToUpDate(position);
+                            }));
+                            return;
+                        }
+                        String codeStrBuf = CodeUtils.getDaMaCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
+                        if (String.IsNullOrEmpty(codeStrBuf))
+                        {
+                            userInfo.loginFailTime++;
+                            userInfo.status = 3;
+                            loginForm.Invoke(new Action(() => {
+                                loginForm.AddToListToUpDate(position);
+                            }));
+                            return;
+                        }
+                        String loginUrl = userInfo.dataUrl + "/v/user/login";
+                        String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString();
+                        if (user_password_type.Equals("0"))
+                        {
+                            loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=" + codeStrBuf.ToString();
+                        }
+                        rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
                     }
-                    String codeStrBuf = CodeUtils.getDaMaCode(AppDomain.CurrentDomain.BaseDirectory + codePathName);
-                    if (String.IsNullOrEmpty(codeStrBuf))
-                    {
-                        userInfo.loginFailTime++;
-                        userInfo.status = 3;
-                        loginForm.Invoke(new Action(() => {
-                            loginForm.AddToListToUpDate(position);
-                        }));
-                        return;
-                    }
+                }
+                else
+                {
+                    //现在要登录处理
                     String loginUrl = userInfo.dataUrl + "/v/user/login";
-                    String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=" + codeStrBuf.ToString();
+                    String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=";
                     if (user_password_type.Equals("0"))
                     {
-                        loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=" + codeStrBuf.ToString();
+                        loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
                     }
                     rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
                 }
             }
-            else {
-                //现在要登录处理
-                String loginUrl = userInfo.dataUrl + "/v/user/login";
-                String loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + userInfo.pwd + "&valiCode=";
-                if (user_password_type.Equals("0"))
-                {
-                    loginP = "r=" + FormUtils.getCurrentTime() + "&account=" + userInfo.user + "&password=" + FormUtils.GetMD5(userInfo.pwd) + "&valiCode=";
-                }
-                rltStr = HttpUtils.HttpPostHeader(loginUrl, loginP, "application/x-www-form-urlencoded;charset=UTF-8", userInfo.cookie, headJObject);
-            }
+                
 
             if (String.IsNullOrEmpty(rltStr) || !FormUtils.IsJsonObject(rltStr) || !rltStr.Contains("token"))
             {

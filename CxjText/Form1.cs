@@ -205,8 +205,11 @@ namespace CxjText
                 Config.canPutDaTui = (bool)loginObj["canPutDaTui"];//是否有抱大腿功能
                 Config.has40Enbale = (bool)loginObj["has40Enbale"]; //是否有40分钟后的角球的功能
             }
+            Console.WriteLine("1111111111111111");
             //登录云打码账号
             int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
+            Console.WriteLine("2222222222222222222222");
+            Console.WriteLine("uid:"+uid);
             if (uid < 0) {
                 Invoke(new Action(() =>
                 {

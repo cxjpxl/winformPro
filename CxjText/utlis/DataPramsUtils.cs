@@ -2613,15 +2613,28 @@ namespace CxjText.utlis
         public static String getJData(UserInfo userInfo)
         {
             //page是由1开始
-            String getDataUrl = userInfo.dataUrl + "/odds2/d/getodds?sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
-          //  String dataP ="sid=1&pt=4&ubt=am&pn=0&sb=2&dc=null&pid=0";
+
             JObject headJObject = new JObject();
             headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
             headJObject["Origin"] = userInfo.dataUrl;
-            String dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+
             JObject jObject = new JObject();
             JArray jArray = new JArray();
             jObject["list"] = jArray;
+            ///odds5/oddsHost6
+            String dataRlt = HttpUtils.HttpGetHeader(userInfo.dataUrl+ "/odds5/oddsHost6", "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+            
+            if (String.IsNullOrEmpty(dataRlt) && !FormUtils.IsJsonObject(dataRlt) ||!dataRlt.Contains("desktop_url")) {
+                return jObject.ToString();
+            }
+            JObject urlDataJObject = JObject.Parse(dataRlt);
+            String getDataUrl = (String)urlDataJObject["oddsHost"]["desktop_url"];
+
+            getDataUrl = getDataUrl + "/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/null/pid/0";
+       
+
+            dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
+        
 
             if (String.IsNullOrEmpty(dataRlt)
                 || !FormUtils.IsJsonObject(dataRlt)

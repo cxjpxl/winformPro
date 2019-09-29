@@ -87,6 +87,12 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
+                    String cookieStr = null;
+
+                    //系统    账户  密码  网站  数字  cookie(人工)
+                    if (strs.Length > 5 && strs[5] != null) {
+                        cookieStr = strs[5]; //人工的cookie
+                    }
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
                     String loginUrl = dataUrl;//登录的链接地址 
@@ -126,7 +132,7 @@ namespace CxjText.utlis
                     userInfo.updateMoneyTime = FormUtils.getCurrentTime();
                     userInfo.leastMoney = 10;
                     userInfo.userExp = userExp.Trim();
-
+                    userInfo.cookieStr = cookieStr;//cookie  人工
 
                     userInfo.status = loginStatus;
                     userList.Add(userInfo);

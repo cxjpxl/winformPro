@@ -2409,7 +2409,7 @@ namespace CxjText.utlis
             JArray jArray = new JArray();
             jArray.Add(betJObject);
             String dataParams = "acceptHigherOdds=true&betlistStr=" + jArray.ToString() + "&_csrf=" + user.expJObject["csrf"];
-
+            //Console.WriteLine("参数:" + dataParams);
             if (orderJ1(user, dataParams) != null) { //!null 表示下单失败
                 String orderRlt = orderJ1(user, dataParams); //第二次下单
                 if (orderRlt != null) {
