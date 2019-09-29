@@ -239,6 +239,9 @@ namespace CxjText.views
                     case "W":
                         LoginUtils.loginW(this, position);
                         break;
+                    case "J1":
+                        LoginUtils.loginJ1(this, position);
+                        break;
                     default:
                         break;
                 }
@@ -698,6 +701,17 @@ namespace CxjText.views
                             return;
                         }
                         moneyStatus = MoneyUtils.GetWMoney(userInfo);
+                        break;
+                    case "J1":
+                        if (currentTime - userInfo.loginTime >= 60 * 1000 * 40)
+                        {
+                            userInfo.status = 0; //下线
+                            userInfo.cookie = null;
+                            userInfo.uid = "";
+                            GoLogin(position);
+                            return;
+                        }
+                        moneyStatus = MoneyUtils.GetJ1Money(userInfo);
                         break;
                     default:
                         break;

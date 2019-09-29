@@ -318,6 +318,7 @@ namespace CxjText.utlis
                     }
                     break;
                 case "J":
+                case "J1":
                     if (currentTime - userTime >= 5 * 1000)
                     {
                         isUpdate = true;

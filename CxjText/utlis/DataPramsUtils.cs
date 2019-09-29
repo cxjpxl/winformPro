@@ -3986,5 +3986,17 @@ namespace CxjText.utlis
          //   Console.WriteLine("jArray:"+ jArray);
             return jObject.ToString();
         }
+
+
+        /*******************************J1系统获取数据*******************************/
+        public static String getJ1Data(UserInfo userInfo)
+        {
+          JArray jArray = new JArray(); // 存储球赛赛事
+          JObject jObject = new JObject();
+            Console.WriteLine("+入代码");
+          jObject.Add("list", jArray);
+          return jObject.ToString();
+
+        }
     }
 }

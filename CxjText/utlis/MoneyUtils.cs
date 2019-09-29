@@ -791,5 +791,36 @@ namespace CxjText.utlis
             user.money = moneyStr;
             return 1;
         }
+
+        //获取J1的money   1表示还在登录   0获取获取失败  小于0表示登录失效
+        public static int GetJ1Money(UserInfo user)
+        {
+
+            String moneyUrl = user.dataUrl + "/app/member/api/reloadCredit.php?v=" + FormUtils.getCurrentTime();
+            JObject headJObject = new JObject();
+            headJObject["Origin"] = user.loginUrl;
+            headJObject["Referer"] = user.loginUrl;
+            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, "uid="+user.uid, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie, headJObject);
+            if (String.IsNullOrEmpty(moneyRlt) )
+            {
+                return 0;
+            }
+
+            moneyRlt = moneyRlt.Trim();
+
+            if (!FormUtils.IsJsonObject(moneyRlt)) {
+                return 0;
+            }
+
+            JObject moneyJObject = JObject.Parse(moneyRlt);
+            String statusStr = (String)moneyJObject["status"];
+            if (!statusStr.Equals("200")) {
+                return -1;
+            }
+            JObject dataJObject = (JObject)moneyJObject["data"];
+            String moneyStr = (String)dataJObject["monval"] + "";
+            user.money = moneyStr;
+            return 1;
+        }
     }
 }
