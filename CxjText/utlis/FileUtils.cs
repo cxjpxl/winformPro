@@ -96,7 +96,7 @@ namespace CxjText.utlis
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
                     String loginUrl = dataUrl;//登录的链接地址 
-                    if (list.Contains(baseUrl)&&!(tag.Equals("C")|| tag.Equals("J")))
+                    if (list.Contains(baseUrl)&&!(tag.Equals("C")|| tag.Equals("J") || tag.Equals("J1")))
                     { //过滤重复的网址
                         break;
                     }

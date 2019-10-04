@@ -3543,5 +3543,155 @@ namespace CxjText.utlis
 
 
         }
+
+
+
+        //J1下单
+        public static void OrderJ1(JObject jobject, LeftForm leftForm, LoginForm loginForm, RltForm rltForm)
+        {
+           String parmsStr = (String)jobject["rlt"];
+            int index = (int)jobject["position"];
+            String inputTag = (String)jobject["inputTag"]; //显示下单的唯一标识
+            UserInfo user = (UserInfo)Config.userList[index];
+            int money = (int)jobject["money"];
+
+            JObject headJObject = new JObject();
+            String[] parms = parmsStr.Split(',');
+            if (parms.Length < 3)
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败");
+                    }
+                }));
+                return;
+            }
+            for (int i = 0; i < parms.Length; i++)
+            {
+                parms[i] = parms[i].Replace("'", "").Trim();
+            }
+            parms[2] = parms[2].Replace("uid=", "uid=" + user.uid);
+            String betUrl = user.dataUrl + "/app/member/FT_order/FT_order_re.php?"+parms[2]+ "&wtype="+ parms[1];
+            headJObject["Host"] = FileUtils.changeBaseUrl(user.dataUrl);
+            headJObject["Origin"] = user.dataUrl;
+            headJObject["Referer"] = user.dataUrl + "/app/member/select.php?uid="+user.uid+"&rtype=re&showtype=rb&mtype=4";
+            String betRlt = HttpUtils.HttpGetHeader(betUrl, "", user.cookie, headJObject);
+            
+         
+            if (String.IsNullOrEmpty(betRlt) || !betRlt.Contains("LAYOUTFORM") || !betRlt.Contains("post") ||  !betRlt.Contains("Submit"))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "获取订单数据失败");
+                    }
+                }));
+                return;
+            }
+
+
+            //解析数据
+            betRlt = betRlt.Replace("> <input", ">"+"\n"+"<input");
+            String[] strs = betRlt.Split('\n');
+            String orderPrams = "";
+            String orderUrl1 = null;
+            for (int i = 0; i < strs.Length; i++)
+            {
+                String str = strs[i].Trim();
+
+                if (str.Contains("<form") && str.Contains("action=\""))
+                {
+                    int startIndex = str.IndexOf("action=\"");
+                    str = str.Substring(startIndex + 8, str.Length - (startIndex + 8));
+                    startIndex = str.IndexOf("\"");
+                    str = str.Substring(0, startIndex);
+                    orderUrl1 = str.Trim();
+                    continue;
+                }
+
+
+                if (str.IndexOf("<input") == 0 && str.Contains("type=\"hidden\""))
+                { //找到input字段
+                    //获取name的值
+                    int nameIndex = str.IndexOf("name=\"");
+                    String str1 = str.Substring(nameIndex + 6, str.Length - (nameIndex + 6));
+                    nameIndex = str1.IndexOf('"');
+                    String nameKey = str1.Substring(0, nameIndex);
+                    str1 = str1.Substring(nameIndex, str1.Length - nameIndex);
+                    nameIndex = str1.IndexOf("value=\"");
+                    str1 = str1.Substring(nameIndex + 7, str1.Length - (nameIndex + 7));
+                    nameIndex = str1.IndexOf('"');
+                    String valueStr = str1.Substring(0, nameIndex);
+                    orderPrams = orderPrams + nameKey + "=" + valueStr + "&";
+                }
+            }
+
+            if (String.IsNullOrEmpty(orderUrl1))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "动态订单地址失败");
+                    }
+                }));
+                return;
+            }
+
+            orderPrams = orderPrams + "gold=" + money;
+            orderPrams = orderPrams.Replace("uid=" + user.uid + user.uid, "uid=" + user.uid);
+            String orderUlr = user.dataUrl + orderUrl1;
+            String orderRlt = HttpUtils.HttpPostHeader(orderUlr,orderPrams, "application/x-www-form-urlencoded", user.cookie,headJObject);
+           
+            if (String.IsNullOrEmpty(orderRlt) || !orderRlt.Contains("正在确认中") || !orderRlt.Contains("交易成功单号"))
+            {
+                leftForm.Invoke(new Action(() => {
+                    if (rltForm != null)
+                    {
+                        rltForm.RefershLineData(inputTag, "下单失败");
+                    }
+                }));
+                return;
+            }
+
+            //记录
+            leftForm.Invoke(new Action(() => {
+                if (rltForm != null)
+                {
+                    if (jobject["gameMid"] != null && (jobject["isJiaoQiu"] == null || (bool)(jobject["isJiaoQiu"]) == false)) //自动下注
+                    {
+                        addAutoDataAndName(user.baseUrl, (String)jobject["gameMid"], FormUtils.getCurrentTime(), (String)jobject["gameTeam"], user.user);
+                    }
+                    rltForm.RefershLineData(inputTag, "成功");
+                }
+            }));
+
+            //获取钱
+            int moneyStatus = MoneyUtils.GetJ1Money(user);
+            if (moneyStatus == 1)
+            {
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (loginForm != null)
+                    {
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+            else if (moneyStatus == -1)
+            {
+                //交易成功 , 更新UI 并更新钱
+                leftForm.Invoke(new Action(() =>
+                {
+                    if (rltForm != null)
+                    {
+                        user.status = 3; //登录失效
+                        loginForm.AddToListToUpDate(index);
+                    }
+                }));
+            }
+
+
+        }
     }
 }

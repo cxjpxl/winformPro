@@ -491,7 +491,7 @@ namespace CxjText.views
                     if (dataJObject["isJiaoQiu"] == null || (bool)(dataJObject["isJiaoQiu"]) == false)
                     {
                         AutoData autoData = null;
-                        if (user.tag.Equals("C")|| user.tag.Equals("J"))
+                        if (user.tag.Equals("C")|| user.tag.Equals("J") || user.tag.Equals("J1"))
                         {
                             autoData = OrderUtils.autoLists.Find(j => j.gameTeam.Equals(gameTeam) && j.baseUrl.Equals(baseUrl)&&j.userName.Equals(user.user));
                         }
@@ -544,6 +544,7 @@ namespace CxjText.views
                         break;
                     case "H":
                     case "W":
+                    case "J1":
                         orderParmas = rltStr;
                         break;
                     case "O":
@@ -644,7 +645,7 @@ namespace CxjText.views
                     UserInfo userInfo1 = (UserInfo)Config.userList[this.cIndex];
                     jObject["baseUrl"] = userInfo1.baseUrl;
                 }
-                else if (user.tag.Equals("H")|| user.tag.Equals("W"))
+                else if (user.tag.Equals("H")|| user.tag.Equals("W") || user.tag.Equals("J1"))
                 {
                     jObject["money"] = inputMoney;
                 }
@@ -772,6 +773,9 @@ namespace CxjText.views
                         break;
                     case "W":
                         OrderUtils.OrderW(jobject, this, loginForm, rltForm);
+                        break;
+                    case "J1":
+                        OrderUtils.OrderJ1(jobject, this, loginForm, rltForm);
                         break;
                     default:
                         return;

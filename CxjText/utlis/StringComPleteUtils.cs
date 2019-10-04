@@ -180,6 +180,7 @@ namespace CxjText.utlis
                         break;
                     case "H":
                     case "W":
+                    case "J1":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];
@@ -514,6 +515,7 @@ namespace CxjText.utlis
                         break;
                     case "H":
                     case "W":
+                    case "J1":
                         JObject jObjectH = (JObject)jArray[i];
                         lianSai = (String)jObjectH["lianSai"];
                         hStr = (String)jObjectH["nameH"];

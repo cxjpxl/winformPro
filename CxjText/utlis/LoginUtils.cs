@@ -4581,7 +4581,6 @@ namespace CxjText.utlis
             String uidStr = mainRlt.Substring(0, startIndex);
             uidStr = uidStr.Replace("uid=", "").Trim();
             userInfo.uid = uidStr;
-
             //获取money 
             int moneyStatus = MoneyUtils.GetJ1Money(userInfo);
             if (moneyStatus != 1)

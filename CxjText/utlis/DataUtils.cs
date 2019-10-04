@@ -86,6 +86,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c00 = (String)jObjectH["lianSai"];
@@ -165,6 +166,7 @@ namespace CxjText.utlis
                     break;
                 case "H":
                 case "W":
+                case "J1":
                     JObject jObjectH = (JObject)obj;
                     if (jObjectH == null) return false;
                     time = (String)jObjectH["time"];
@@ -382,6 +384,7 @@ namespace CxjText.utlis
                     break;
                 case "H":
                 case "W":
+                case "J1":
                     JObject jObjectH = (JObject)obj;
                     time = (String)jObjectH["time"];
                     break;
@@ -575,6 +578,7 @@ namespace CxjText.utlis
                     break;
                 case "H":
                 case "W":
+                case "J1":
                     JObject jObjectH = (JObject)obj;
 
                     if (jObjectH["userExp"] != null)
@@ -734,6 +738,7 @@ namespace CxjText.utlis
                     break;
                 case "H":
                 case "W":
+                case "J1":
                     JObject jObjectH = (JObject)obj;
                     c02 = (String)jObjectH["nameH"];
                     break;
@@ -818,6 +823,7 @@ namespace CxjText.utlis
                     break;
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c12 = (String)jObjectH["nameG"];
@@ -941,6 +947,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c03 = (String)jObjectH["h_du_y"];
@@ -1175,6 +1182,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c04 = (String)jObjectH["h_rang"];
@@ -1395,6 +1403,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c05 = (String)jObjectH["h_daxiao"];
@@ -1551,6 +1560,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c06 = (String)jObjectH["bh_du_y"];
@@ -1810,6 +1820,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c07 = (String)jObjectH["bh_rang"];
@@ -2045,6 +2056,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c08 = (String)jObjectH["bh_daxiao"];
@@ -2202,6 +2214,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c13 = (String)jObjectH["g_du_y"];
@@ -2447,6 +2460,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c14 = (String)jObjectH["g_rang"];
@@ -2673,6 +2687,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c15 = (String)jObjectH["g_daxiao"];
@@ -2831,6 +2846,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c16 = (String)jObjectH["bg_du_y"];
@@ -3090,6 +3106,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c17 = (String)jObjectH["bg_rang"];
@@ -3325,6 +3342,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c18 = (String)jObjectH["bg_daxiao"];
@@ -3485,6 +3503,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c23 = (String)jObjectH["he_du_y"];
@@ -3623,6 +3642,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         c26 = (String)jObjectH["bhe_du_y"];
@@ -3827,6 +3847,7 @@ namespace CxjText.utlis
                     }
                 case "H":
                 case "W":
+                case "J1":
                     {
                         JObject jObjectH = (JObject)obj;
                         mid = (String)jObjectH["mid"];
