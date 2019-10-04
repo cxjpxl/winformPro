@@ -3987,16 +3987,706 @@ namespace CxjText.utlis
             return jObject.ToString();
         }
 
-
         /*******************************J1系统获取数据*******************************/
         public static String getJ1Data(UserInfo userInfo)
         {
-          JArray jArray = new JArray(); // 存储球赛赛事
-          JObject jObject = new JObject();
-            Console.WriteLine("+入代码");
-          jObject.Add("list", jArray);
-          return jObject.ToString();
+            //page是由0开始
+            // Console.WriteLine("getJ1Data");
+            JArray jArray = new JArray(); // 存储球赛赛事
 
+            //循环获取分页数据
+            // https://www.6668cc.com/app/member/FT_browse/body_var.php?uid=&rtype=re&langx=zh-cn&mtype=4&delay=&league_id=&showtype=rb&g_date=2019-10-02
+            // DateTime.Now.ToString("yyyy年MM月dd日");
+            String dateStr = DateTime.Now.ToString("yyyy-MM-dd");
+            String getDataUrl = userInfo.dataUrl + "/app/member/FT_browse/body_var.php?uid=&rtype=re&langx=zh-cn&mtype=4&delay=&league_id=&showtype=rb&g_date="+ dateStr;
+            JObject headJObject = new JObject();
+            CookieContainer cookie = userInfo.cookie;
+            headJObject = new JObject();
+            //headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+            //https://www.6668cc.com/app/member/select.php?uid=&rtype=re&showtype=rb&mtype=4
+            headJObject["Referer"] = userInfo.dataUrl + "/app/member/select.php?uid=&rtype=re&showtype=rb&mtype=4";
+            int dataPages = 1;
+            String pg_txt = "";
+            for (int page = 1; page <= dataPages; page++)
+            {
+                String url = getDataUrl;
+                url += "&page_no=" + page;
+                String rlt = HttpUtils.HttpGetHeader(url, "", cookie, headJObject);
+                if (String.IsNullOrEmpty(rlt)) break;
+
+                // 解析html
+                //解析html 字符串或者本地html文件  
+                HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(rlt);
+
+                // 找到当前页面所有联赛  
+                HtmlNodeCollection lianSaiNodes = htmlDoc.DocumentNode.SelectNodes("//tr[@class='tr_league']");
+                // 找到当前页面所有比赛 
+                if (lianSaiNodes == null || lianSaiNodes.Count <= 0)
+                {
+                    break;
+                }
+
+                // 处理联赛与比赛
+                int lianSaiTrXPathNum = 0;
+                String lianSaiTrXPath = lianSaiNodes[lianSaiTrXPathNum].XPath;// 获取第一个联赛的的XPATH 
+                // 定义一些共用变量
+                int start = 0, end = 0, trPathNum = 0;
+                String trXPathPrefix = "", trPathNumStr = "", hNodeXPath = "", gNodeXPath = "", heNodeXPath = "", str1 = "";
+                HtmlNode hNode = null, gNode = null, heNode = null;
+                // 处理第一个联赛的第一个比赛
+                str1 = lianSaiTrXPath;
+                start = str1.LastIndexOf("[");
+                end = str1.LastIndexOf("]");
+                trXPathPrefix = str1.Substring(0, start);// 获取联赛的 XPATH 前缀
+                //Console.WriteLine("trXPathPrefix:" + trXPathPrefix);
+                trPathNumStr = str1.Substring(start + 1, end - start - 1);// 获取 tr[num] 中的 num
+                //Console.WriteLine("trPathNumStr:" + trPathNumStr);
+                trPathNum = Int32.Parse(trPathNumStr);//将 tr[num] 中的 num 转变为 int
+                //Console.WriteLine("trPathNum:" + trPathNum);
+                if (trPathNum <= 0)// 第0个一定是标题tr
+                {
+                    break;
+                }
+                // 获取 联赛下的比赛的 xpath
+                trPathNum = trPathNum + 1 + 1;
+                hNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 主队xpath
+                trPathNum = trPathNum + 1;
+                gNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 客队xpath
+                trPathNum = trPathNum + 1;
+                heNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 和xpath
+                // 获取 联赛下的比赛的节点
+                hNode = htmlDoc.DocumentNode.SelectSingleNode((string)hNodeXPath);
+                gNode = htmlDoc.DocumentNode.SelectSingleNode((string)gNodeXPath);
+                heNode = htmlDoc.DocumentNode.SelectSingleNode((string)heNodeXPath);
+                if (hNode == null || gNode == null || heNode == null)
+                {
+                    break;
+                }
+
+                // 将数据解析成指定格式
+                // 解析出每场赛事
+                String lianSaiName = lianSaiNodes[lianSaiTrXPathNum].InnerText.ToString().Trim();
+                while (hNode != null && hNode.ChildNodes.Count > 1 && hNode.InnerHtml.ToString().IndexOf("leg_bar") == -1) // hNode 比赛下主队节点不是联赛
+                {
+                    /***************************时间的解析*********************************/
+                    HtmlDocument hHtmlDoc = new HtmlDocument();
+                    hHtmlDoc.LoadHtml(hNode.InnerHtml.ToString());
+                    HtmlNode timeNode = hHtmlDoc.DocumentNode.SelectSingleNode("//td[@class='rb_time']");//时间
+                    String time = timeNode.InnerText.ToString();
+                    time = time.Replace("\r\n", "").Trim();
+                    /***************************比分的解析*********************************/
+                    HtmlNode bifenNode = hHtmlDoc.DocumentNode.SelectSingleNode("//td[@class='rb_score']");//比分
+                    String bifen = bifenNode.InnerText.ToString();
+                    bifen = bifen.Replace("&nbsp;", "").Replace("\r\n", "").Trim();
+                    time += time + "\n" + bifen;
+                    /************************解析比赛队伍************************************/
+                    HtmlNodeCollection duiwuNodes = hHtmlDoc.DocumentNode.SelectNodes("//span[@class='rb_team_name']");//
+                    String nameH = duiwuNodes[0].InnerText.ToString(); //主队
+                    String nameG = duiwuNodes[1].InnerText.ToString(); //客队
+                    /***************************解析独赢***********************************/
+                    HtmlNode hDuyingNode = hNode.ChildNodes[2];
+                    HtmlNode gDuyingNode = gNode.ChildNodes[0];
+                    HtmlNode heDuyingNode = heNode.ChildNodes[1];
+
+                    String h_du_y = hDuyingNode != null ? hDuyingNode.InnerText.ToString().Trim() : ""; //主队独赢
+                    String g_du_y = gDuyingNode != null ? gDuyingNode.InnerText.ToString().Trim() : ""; //客队独赢
+                    String he_du_y = heDuyingNode != null ? heDuyingNode.InnerText.ToString().Trim() : ""; //和局独赢
+
+
+                    String h_du_y_click = "", mid = "", g_du_y_click = "", he_du_y_click = "";
+                    if (h_du_y != "&nbsp;" && h_du_y != "")
+                    {
+                        str1 = hDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if(mid == "")
+                        {
+                            string[] click_params = h_du_y_click.Split(',');
+                            if (click_params.Length>=2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (g_du_y != "&nbsp;" && g_du_y != "")
+                    {
+                        str1 = gDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = g_du_y_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (he_du_y != "&nbsp;" && he_du_y != "")
+                    {
+                        str1 = heDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        he_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = he_du_y_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    /***************************全场让球*************************************/
+                    HtmlNode hRqNode = hNode.ChildNodes[3];
+                    HtmlNode gRqNode = gNode.ChildNodes[1];
+
+                    HtmlNode hRqKeyNode = hRqNode.ChildNodes[0];
+                    HtmlNode hRqValueNode = hRqNode.ChildNodes[1].ChildNodes[0];
+
+                    HtmlNode gRqKeyNode = gRqNode.ChildNodes[0];
+                    HtmlNode gRqValueNode = gRqNode.ChildNodes[1].ChildNodes[0];
+
+                    String h_rang_key = hRqKeyNode != null ? hRqKeyNode.InnerText.ToString().Trim() : "";
+                    String g_rang_key = gRqKeyNode != null ? gRqKeyNode.InnerText.ToString().Trim() : "";
+                    String h_rang_value = hRqValueNode != null ? hRqValueNode.InnerText.ToString().Trim() : "";
+                    String g_rang_value = gRqValueNode != null ? gRqValueNode.InnerText.ToString().Trim() : "";
+
+                    String h_rang = h_rang_key.Replace(" ", "") + " " + h_rang_value.Replace(" ", "");
+                    String g_rang = g_rang_key.Replace(" ", "") + " " + g_rang_value.Replace(" ", "");
+
+                    String h_rang_click = "", g_rang_click = "";
+                    if (h_rang_value != "&nbsp;" && h_rang_value != "")
+                    {
+                        str1 = hRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = h_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (h_rang_key != "&nbsp;" && h_rang_key != "")
+                    {
+                        str1 = hRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = h_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (g_rang_value != "&nbsp;" && g_rang_value != "")
+                    {
+                        str1 = gRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = g_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (g_rang_key != "&nbsp;" && g_rang_key != "")
+                    {
+                        str1 = gRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = g_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    /*********************************全场大小****************************************/
+                    HtmlNode hDXNode = hNode.ChildNodes[3];
+                    HtmlNode gDXNode = gNode.ChildNodes[2];
+
+                    HtmlNode hDXKeyNode = hDXNode.ChildNodes[0];
+                    HtmlNode hDXValueNode = hDXNode.ChildNodes[1].ChildNodes[0];
+
+                    HtmlNode gDXKeyNode = gDXNode.ChildNodes[0];
+                    HtmlNode gDXValueNode = gDXNode.ChildNodes[1].ChildNodes[0];
+
+                    String h_daxiao_key = hDXKeyNode != null ? hDXKeyNode.InnerText.ToString().Trim() : "";
+                    String g_daxiao_key = gDXKeyNode != null ? gDXKeyNode.InnerText.ToString().Trim() : "";
+                    String h_daxiao_value = hDXValueNode != null ? hDXValueNode.InnerText.ToString().Trim() : "";
+                    String g_daxiao_value = gDXValueNode != null ? gDXValueNode.InnerText.ToString().Trim() : "";
+
+                    String h_daxiao = h_daxiao_key.Replace(" ", "") + " " + h_daxiao_value.Replace(" ", "");
+                    String g_daxiao = g_daxiao_key.Replace(" ", "") + " " + g_daxiao_value.Replace(" ", "");
+
+                    String h_daxiao_click = "", g_daxiao_click = "";
+                    if (h_daxiao_value != "&nbsp;" && h_daxiao_value != "")
+                    {
+                        str1 = hDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = h_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (h_daxiao_key != "&nbsp;" && h_daxiao_key != "")
+                    {
+                        str1 = hDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = h_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (g_daxiao_value != "&nbsp;" && g_daxiao_value != "")
+                    {
+                        str1 = gDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = g_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (g_daxiao_key != "&nbsp;" && g_daxiao_key != "")
+                    {
+                        str1 = gDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = g_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    /***********************半场独赢********************************/
+                    HtmlNode bhDuYingNode = hNode.ChildNodes[5];
+                    HtmlNode bgDuyingNode = gNode.ChildNodes[4];
+                    HtmlNode bheDuyingNode = heNode.ChildNodes[3];
+
+                    String bh_du_y = bhDuYingNode != null ? bhDuYingNode.InnerText.ToString().Trim() : ""; //主队半场独赢
+                    String bg_du_y = bgDuyingNode != null ? bgDuyingNode.InnerText.ToString().Trim() : ""; //客队半场独赢
+                    String bhe_du_y = bheDuyingNode != null ? bheDuyingNode.InnerText.ToString().Trim() : ""; //和局半场独赢
+
+                    String bh_du_y_click = "", bg_du_y_click = "", bhe_du_y_click = "";
+                    if (bh_du_y != "&nbsp;" && bh_du_y != "")
+                    {
+                        str1 = bhDuYingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bh_du_y_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (bg_du_y != "&nbsp;" && bg_du_y != "")
+                    {
+                        str1 = bgDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bg_du_y_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (bhe_du_y != "&nbsp;")
+                    {
+                        str1 = bheDuyingNode.InnerHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bhe_du_y_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bhe_du_y_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    ///***************************半场让球*************************************/
+                    HtmlNode bhRqNode = hNode.ChildNodes[6];
+                    HtmlNode bgRqNode = gNode.ChildNodes[5];
+
+                    HtmlNode bhRqKeyNode = bhRqNode.ChildNodes[0];
+                    HtmlNode bhRqValueNode = bhRqNode.ChildNodes[1].ChildNodes[0];
+
+                    HtmlNode bgRqKeyNode = bgRqNode.ChildNodes[0];
+                    HtmlNode bgRqValueNode = bgRqNode.ChildNodes[1].ChildNodes[0];
+
+                    String bh_rang_key = bhRqKeyNode != null ? bhRqKeyNode.InnerText.ToString().Trim() : "";
+                    String bg_rang_key = bgRqKeyNode != null ? bgRqKeyNode.InnerText.ToString().Trim() : "";
+                    String bh_rang_value = bhRqValueNode != null ? bhRqValueNode.InnerText.ToString().Trim() : "";
+                    String bg_rang_value = bgRqValueNode != null ? bgRqValueNode.InnerText.ToString().Trim() : "";
+
+                    String bh_rang = bh_rang_key.Replace(" ", "") + " " + bh_rang_value.Replace(" ", "");
+                    String bg_rang = bg_rang_key.Replace(" ", "") + " " + bg_rang_value.Replace(" ", "");
+
+                    String bh_rang_click = "", bg_rang_click = "";
+                    if (bh_rang_value != "&nbsp;" && bh_rang_value != "")
+                    {
+                        str1 = bhRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bh_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (bh_rang_key != "&nbsp;" && bh_rang_key != "")
+                    {
+                        str1 = bhRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bh_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (bg_rang_value != "&nbsp;" && bg_rang_value != "")
+                    {
+                        str1 = bgRqValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bg_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (bg_rang_key != "&nbsp;" && bg_rang_key != "")
+                    {
+                        str1 = bgRqKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bg_rang_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    /*********************************半场大小****************************************/
+                    HtmlNode bhDXNode = hNode.ChildNodes[17];
+                    HtmlNode bgDXNode = gNode.ChildNodes[13];
+                    
+                    HtmlNode bhDXKeyNode = bhDXNode.ChildNodes[0];
+                    HtmlNode bhDXValueNode = bhDXNode.ChildNodes[1].ChildNodes[0];
+
+                    HtmlNode bgDXKeyNode = bgDXNode.ChildNodes[0];
+                    HtmlNode bgDXValueNode = bgDXNode.ChildNodes[1].ChildNodes[0];
+
+                    String bh_daxiao_key = bhDXKeyNode != null ? bhDXKeyNode.InnerText.ToString().Trim() : "";
+                    String bg_daxiao_key = bgDXKeyNode != null ? bgDXKeyNode.InnerText.ToString().Trim() : "";
+                    String bh_daxiao_value = bhDXValueNode != null ? bhDXValueNode.InnerText.ToString().Trim() : "";
+                    String bg_daxiao_value = bgDXValueNode != null ? bgDXValueNode.InnerText.ToString().Trim() : "";
+
+                    String bh_daxiao = bh_daxiao_key.Replace(" ", "") + " " + bh_daxiao_value.Replace(" ", "");
+                    String bg_daxiao = bg_daxiao_key.Replace(" ", "") + " " + bg_daxiao_value.Replace(" ", "");
+
+                    String bh_daxiao_click = "", bg_daxiao_click = "";
+                    if (bh_daxiao_value != "&nbsp;" && bh_daxiao_value != "")
+                    {
+                        str1 = bhDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bh_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (bh_daxiao_key != "&nbsp;" && bh_daxiao_key != "")
+                    {
+                        str1 = bhDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bh_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    if (bg_daxiao_value != "&nbsp;" && bg_daxiao_value != "")
+                    {
+                        str1 = bgDXValueNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bg_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    else if (bg_daxiao_key != "&nbsp;" && bg_daxiao_key != "")
+                    {
+                        str1 = bgDXKeyNode.OuterHtml.ToString().Trim();
+                        start = str1.IndexOf("(");
+                        end = str1.IndexOf(")");
+                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                        if (mid == "")
+                        {
+                            string[] click_params = bg_daxiao_click.Split(',');
+                            if (click_params.Length >= 2)
+                            {
+                                start = click_params[2].IndexOf("gid=");
+                                end = click_params[2].IndexOf("&");
+                                mid = click_params[2].Substring(start, end - start - 1);
+                            }
+                        }
+                    }
+                    /****************************数据填充*********************************/
+                    JObject saiShiJObect = new JObject();
+                    saiShiJObect.Add("lianSai", lianSaiName.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("time", time.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("mid", mid.Replace("\"", "").Replace("&nbsp;", "")); //赋值mid
+
+                    saiShiJObect.Add("nameH", nameH.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("nameG", nameG.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_du_y", h_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_du_y", g_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("he_du_y", he_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_du_y_click", h_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_du_y_click", g_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("he_du_y_click", he_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_rang", h_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("g_rang", g_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("h_rang_click", h_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_rang_click", g_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("h_daxiao", h_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_daxiao", g_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("h_daxiao_click", h_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("g_daxiao_click", g_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_du_y", bh_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_du_y", bg_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bhe_du_y", bhe_du_y.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_du_y_click", bh_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_du_y_click", bg_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bhe_du_y_click", bhe_du_y_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_rang", bh_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("bg_rang", bg_rang.Replace("\"", "").Replace("&nbsp;", "").Trim());
+                    saiShiJObect.Add("bh_rang_click", bh_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_rang_click", bg_rang_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    saiShiJObect.Add("bh_daxiao", bh_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_daxiao", bg_daxiao.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bh_daxiao_click", bh_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+                    saiShiJObect.Add("bg_daxiao_click", bg_daxiao_click.Replace("\"", "").Replace("&nbsp;", ""));
+
+                    //解析之后将其给array
+                    jArray.Add(saiShiJObect);
+
+
+                    // 处理下一个比赛
+                    // 判断是否切换联赛
+                    try
+                    {
+                        trPathNum = trPathNum + 1;
+                        hNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 主队xpath
+                        trPathNum = trPathNum + 1;
+                        gNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 客队xpath
+                        trPathNum = trPathNum + 1;
+                        heNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 和xpath
+                                                                            // 获取 联赛下的比赛的节点
+                        hNode = htmlDoc.DocumentNode.SelectSingleNode((string)hNodeXPath);
+                        gNode = htmlDoc.DocumentNode.SelectSingleNode((string)gNodeXPath);
+                        heNode = htmlDoc.DocumentNode.SelectSingleNode((string)heNodeXPath);
+                        if (hNode == null || hNode.ChildNodes.Count < 1 || hNode.InnerHtml.ToString().IndexOf("leg_bar") != -1 || gNode == null || heNode == null)
+                        {// 切换联赛
+                            lianSaiTrXPathNum += 1;
+                            if (lianSaiTrXPathNum >= lianSaiNodes.Count || lianSaiNodes[lianSaiTrXPathNum] == null)
+                            {
+                                break;
+                            }
+                            lianSaiName = lianSaiNodes[lianSaiTrXPathNum].InnerText.ToString().Trim();//更新联赛名称
+                            lianSaiTrXPath = lianSaiNodes[lianSaiTrXPathNum].ParentNode.XPath;// 获取下一个联赛的的XPATH 
+                            str1 = lianSaiTrXPath;
+                            start = str1.LastIndexOf("[");
+                            end = str1.LastIndexOf("]");
+                            trXPathPrefix = str1.Substring(0, start);// 获取联赛的 XPATH 前缀
+                                                                     //  Console.WriteLine("trXPathPrefix:" + trXPathPrefix);
+                            trPathNumStr = str1.Substring(start + 1, end - start - 1);// 获取 tr[num] 中的 num
+                                                                                      //  Console.WriteLine("trPathNumStr:" + trPathNumStr);
+                            trPathNum = Int32.Parse(trPathNumStr);//将 tr[num] 中的 num 转变为 int
+                                                                  //  Console.WriteLine("trPathNum:" + trPathNum);
+                            if (trPathNum <= 0)// 第0个一定是标题tr
+                            {
+                                break;
+                            }
+                            // 获取 联赛下的比赛的 xpath
+                            trPathNum = trPathNum + 1 + 1;
+                            hNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 主队xpath
+                            trPathNum = trPathNum + 1;
+                            gNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 客队xpath
+                            trPathNum = trPathNum + 1;
+                            heNodeXPath = trXPathPrefix + "[" + trPathNum + "]";// 和xpath
+                                                                                // 获取 联赛下的比赛的节点
+                            hNode = htmlDoc.DocumentNode.SelectSingleNode((string)hNodeXPath);
+                            gNode = htmlDoc.DocumentNode.SelectSingleNode((string)gNodeXPath);
+                            heNode = htmlDoc.DocumentNode.SelectSingleNode((string)heNodeXPath);
+                            if (hNode == null || gNode == null || heNode == null)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {// 切换比赛
+                            continue;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("处理切换比赛时出错:" + e.ToString());
+                        break;
+                    }
+                }
+
+
+                // 数据页码处理
+                /*HtmlNodeCollection pageNodes = htmlDoc.DocumentNode.SelectNodes("//span[@id='pg_txt']/span[@class='pageBar']/span");
+                if (pageNodes == null || pageNodes.Count <= 2)
+                {
+                    break;
+                }
+                else
+                {
+                    var pgTxtNode = pageNodes[0];
+                    pg_txt = pgTxtNode.InnerText.Replace("[", "").Replace("]", "");
+                    dataPages = pageNodes.Count - 2;
+                }*/
+                dataPages = dataPages++;//不管有没有下一页，试探性去获取
+
+            }
+
+
+            JObject jObject = new JObject();
+            jObject.Add("list", jArray);
+            return jObject.ToString();
         }
     }
 }
