@@ -4100,15 +4100,18 @@ namespace CxjText.utlis
                         str1 = hDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        h_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if(mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = h_du_y_click.Split(',');
-                            if (click_params.Length>=2)
+                            h_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if(mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = h_du_y_click.Split(',');
+                                if (click_params.Length>=2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4117,32 +4120,39 @@ namespace CxjText.utlis
                         str1 = gDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        g_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = g_du_y_click.Split(',');
-                            if (click_params.Length >= 2)
+                            g_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = g_du_y_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
+
                     }
                     if (he_du_y != "&nbsp;" && he_du_y != "")
                     {
                         str1 = heDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        he_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = he_du_y_click.Split(',');
-                            if (click_params.Length >= 2)
+                            he_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = he_du_y_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4183,15 +4193,18 @@ namespace CxjText.utlis
                         str1 = hRqValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        h_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = h_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            h_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = h_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4200,15 +4213,19 @@ namespace CxjText.utlis
                         str1 = hRqKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        h_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = h_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+
+                            h_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = h_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4217,15 +4234,18 @@ namespace CxjText.utlis
                         str1 = gRqValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        g_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = g_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            g_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = g_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4234,15 +4254,18 @@ namespace CxjText.utlis
                         str1 = gRqKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        g_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = g_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            g_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = g_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4284,15 +4307,18 @@ namespace CxjText.utlis
                         str1 = hDXValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = h_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = h_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4301,15 +4327,18 @@ namespace CxjText.utlis
                         str1 = hDXKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        h_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = h_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            h_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = h_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4318,15 +4347,18 @@ namespace CxjText.utlis
                         str1 = gDXValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = g_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = g_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4335,15 +4367,18 @@ namespace CxjText.utlis
                         str1 = gDXKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        g_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = g_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            g_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = g_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4362,15 +4397,18 @@ namespace CxjText.utlis
                         str1 = bhDuYingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bh_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bh_du_y_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bh_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bh_du_y_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4379,15 +4417,18 @@ namespace CxjText.utlis
                         str1 = bgDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bg_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bg_du_y_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bg_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bg_du_y_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4396,15 +4437,18 @@ namespace CxjText.utlis
                         str1 = bheDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bhe_du_y_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bhe_du_y_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bhe_du_y_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bhe_du_y_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4446,15 +4490,18 @@ namespace CxjText.utlis
                         str1 = bhRqValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bh_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bh_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4463,15 +4510,18 @@ namespace CxjText.utlis
                         str1 = bhRqKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bh_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bh_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bh_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bh_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4480,15 +4530,18 @@ namespace CxjText.utlis
                         str1 = bgRqValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bg_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bg_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4497,15 +4550,18 @@ namespace CxjText.utlis
                         str1 = bgRqKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bg_rang_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bg_rang_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bg_rang_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bg_rang_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4547,15 +4603,18 @@ namespace CxjText.utlis
                         str1 = bhDXValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bh_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bh_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4564,15 +4623,18 @@ namespace CxjText.utlis
                         str1 = bhDXKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bh_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bh_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bh_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4581,15 +4643,18 @@ namespace CxjText.utlis
                         str1 = bgDXValueNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start != -1 && end != -1)
                         {
-                            string[] click_params = bg_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bg_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
@@ -4598,15 +4663,18 @@ namespace CxjText.utlis
                         str1 = bgDXKeyNode.OuterHtml.ToString().Trim();
                         start = str1.IndexOf("(");
                         end = str1.IndexOf(")");
-                        bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
-                        if (mid == "")
+                        if (start!=-1 && end!=-1)
                         {
-                            string[] click_params = bg_daxiao_click.Split(',');
-                            if (click_params.Length >= 2)
+                            bg_daxiao_click = str1.Substring(start + 1, end - start - 1);
+                            if (mid == "")
                             {
-                                start = click_params[2].IndexOf("gid=") + 4;
-                                end = click_params[2].IndexOf("&");
-                                mid = click_params[2].Substring(start, end - start - 1);
+                                string[] click_params = bg_daxiao_click.Split(',');
+                                if (click_params.Length >= 2)
+                                {
+                                    start = click_params[2].IndexOf("gid=") + 4;
+                                    end = click_params[2].IndexOf("&");
+                                    mid = click_params[2].Substring(start, end - start - 1);
+                                }
                             }
                         }
                     }
