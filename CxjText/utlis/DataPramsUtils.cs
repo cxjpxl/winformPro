@@ -4348,8 +4348,8 @@ namespace CxjText.utlis
                         }
                     }
                     /***********************半场独赢********************************/
-                    HtmlNode bhDuYingNode = hNode.ChildNodes[11];
-                    HtmlNode bgDuyingNode = gNode.ChildNodes[7];
+                    HtmlNode bhDuYingNode = hNode.ChildNodes[13];
+                    HtmlNode bgDuyingNode = gNode.ChildNodes[9];
                     HtmlNode bheDuyingNode = heNode.ChildNodes[7];
 
                     String bh_du_y = bhDuYingNode != null ? bhDuYingNode.InnerText.ToString().Trim() : ""; //主队半场独赢
@@ -4409,8 +4409,8 @@ namespace CxjText.utlis
                         }
                     }
                     ///***************************半场让球*************************************/
-                    HtmlNode bhRqNode = hNode.ChildNodes[13];
-                    HtmlNode bgRqNode = gNode.ChildNodes[9];
+                    HtmlNode bhRqNode = hNode.ChildNodes[15];
+                    HtmlNode bgRqNode = gNode.ChildNodes[11];
 
                     HtmlNode bhRqKeyNode = null;
                     HtmlNode bhRqValueNode = null;
@@ -4510,8 +4510,8 @@ namespace CxjText.utlis
                         }
                     }
                     /*********************************半场大小****************************************/
-                    HtmlNode bhDXNode = hNode.ChildNodes[15];
-                    HtmlNode bgDXNode = gNode.ChildNodes[11];
+                    HtmlNode bhDXNode = hNode.ChildNodes[17];
+                    HtmlNode bgDXNode = gNode.ChildNodes[13];
 
                     HtmlNode bhDXKeyNode = null;
                     HtmlNode bhDXValueNode = null;
@@ -4679,7 +4679,7 @@ namespace CxjText.utlis
                                 break;
                             }
                             lianSaiName = lianSaiNodes[lianSaiTrXPathNum].InnerText.ToString().Trim();//更新联赛名称
-                            lianSaiTrXPath = lianSaiNodes[lianSaiTrXPathNum].ParentNode.XPath;// 获取下一个联赛的的XPATH 
+                            lianSaiTrXPath = lianSaiNodes[lianSaiTrXPathNum].XPath;// 获取下一个联赛的的XPATH 
                             str1 = lianSaiTrXPath;
                             start = str1.LastIndexOf("[");
                             end = str1.LastIndexOf("]");
