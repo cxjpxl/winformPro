@@ -4079,15 +4079,15 @@ namespace CxjText.utlis
                     HtmlNode bifenNode = hHtmlDoc.DocumentNode.SelectSingleNode("//td[@class='rb_score']");//比分
                     String bifen = bifenNode.InnerText.ToString();
                     bifen = bifen.Replace("&nbsp;", "").Replace("\r\n", "").Trim();
-                    time += time + "\n" + bifen;
+                    time = time + "\n" + bifen;
                     /************************解析比赛队伍************************************/
                     HtmlNodeCollection duiwuNodes = hHtmlDoc.DocumentNode.SelectNodes("//span[@class='rb_team_name']");//
                     String nameH = duiwuNodes[0].InnerText.ToString(); //主队
                     String nameG = duiwuNodes[1].InnerText.ToString(); //客队
                     /***************************解析独赢***********************************/
-                    HtmlNode hDuyingNode = hNode.ChildNodes[2];
-                    HtmlNode gDuyingNode = gNode.ChildNodes[0];
-                    HtmlNode heDuyingNode = heNode.ChildNodes[1];
+                    HtmlNode hDuyingNode = hNode.ChildNodes[5];
+                    HtmlNode gDuyingNode = gNode.ChildNodes[1];
+                    HtmlNode heDuyingNode = heNode.ChildNodes[3];
 
                     String h_du_y = hDuyingNode != null ? hDuyingNode.InnerText.ToString().Trim() : ""; //主队独赢
                     String g_du_y = gDuyingNode != null ? gDuyingNode.InnerText.ToString().Trim() : ""; //客队独赢
@@ -4106,7 +4106,7 @@ namespace CxjText.utlis
                             string[] click_params = h_du_y_click.Split(',');
                             if (click_params.Length>=2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4123,7 +4123,7 @@ namespace CxjText.utlis
                             string[] click_params = g_du_y_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4140,21 +4140,34 @@ namespace CxjText.utlis
                             string[] click_params = he_du_y_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
                     /***************************全场让球*************************************/
-                    HtmlNode hRqNode = hNode.ChildNodes[3];
-                    HtmlNode gRqNode = gNode.ChildNodes[1];
+                    HtmlNode hRqNode = hNode.ChildNodes[7];
+                    HtmlNode gRqNode = gNode.ChildNodes[3];
 
-                    HtmlNode hRqKeyNode = hRqNode.ChildNodes[0];
-                    HtmlNode hRqValueNode = hRqNode.ChildNodes[1].ChildNodes[0];
-
-                    HtmlNode gRqKeyNode = gRqNode.ChildNodes[0];
-                    HtmlNode gRqValueNode = gRqNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode hRqKeyNode = null;
+                    HtmlNode hRqValueNode = null;
+                    if (hRqNode.ChildNodes.Count>=2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(hRqNode.InnerHtml.ToString());
+                        hRqKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        hRqValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
+                    HtmlNode gRqKeyNode = null;
+                    HtmlNode gRqValueNode = null;
+                    if (gRqNode.ChildNodes.Count>=2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(gRqNode.InnerHtml.ToString());
+                        gRqKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        gRqValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
                     String h_rang_key = hRqKeyNode != null ? hRqKeyNode.InnerText.ToString().Trim() : "";
                     String g_rang_key = gRqKeyNode != null ? gRqKeyNode.InnerText.ToString().Trim() : "";
@@ -4176,7 +4189,7 @@ namespace CxjText.utlis
                             string[] click_params = h_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4193,7 +4206,7 @@ namespace CxjText.utlis
                             string[] click_params = h_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4210,7 +4223,7 @@ namespace CxjText.utlis
                             string[] click_params = g_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4227,21 +4240,35 @@ namespace CxjText.utlis
                             string[] click_params = g_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
                     /*********************************全场大小****************************************/
-                    HtmlNode hDXNode = hNode.ChildNodes[3];
-                    HtmlNode gDXNode = gNode.ChildNodes[2];
+                    HtmlNode hDXNode = hNode.ChildNodes[9];
+                    HtmlNode gDXNode = gNode.ChildNodes[5];
 
-                    HtmlNode hDXKeyNode = hDXNode.ChildNodes[0];
-                    HtmlNode hDXValueNode = hDXNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode hDXKeyNode = null;
+                    HtmlNode hDXValueNode = null;
+                    if (hDXNode.ChildNodes.Count>=2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(hDXNode.InnerHtml.ToString());
+                        hDXKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        hDXValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
-                    HtmlNode gDXKeyNode = gDXNode.ChildNodes[0];
-                    HtmlNode gDXValueNode = gDXNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode gDXKeyNode = null;
+                    HtmlNode gDXValueNode = null;
+                    if (gDXNode.ChildNodes.Count>=2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(gDXNode.InnerHtml.ToString());
+                        gDXKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        gDXValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
                     String h_daxiao_key = hDXKeyNode != null ? hDXKeyNode.InnerText.ToString().Trim() : "";
                     String g_daxiao_key = gDXKeyNode != null ? gDXKeyNode.InnerText.ToString().Trim() : "";
@@ -4263,7 +4290,7 @@ namespace CxjText.utlis
                             string[] click_params = h_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4280,7 +4307,7 @@ namespace CxjText.utlis
                             string[] click_params = h_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4297,7 +4324,7 @@ namespace CxjText.utlis
                             string[] click_params = g_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4314,16 +4341,16 @@ namespace CxjText.utlis
                             string[] click_params = g_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
                     /***********************半场独赢********************************/
-                    HtmlNode bhDuYingNode = hNode.ChildNodes[5];
-                    HtmlNode bgDuyingNode = gNode.ChildNodes[4];
-                    HtmlNode bheDuyingNode = heNode.ChildNodes[3];
+                    HtmlNode bhDuYingNode = hNode.ChildNodes[11];
+                    HtmlNode bgDuyingNode = gNode.ChildNodes[7];
+                    HtmlNode bheDuyingNode = heNode.ChildNodes[7];
 
                     String bh_du_y = bhDuYingNode != null ? bhDuYingNode.InnerText.ToString().Trim() : ""; //主队半场独赢
                     String bg_du_y = bgDuyingNode != null ? bgDuyingNode.InnerText.ToString().Trim() : ""; //客队半场独赢
@@ -4341,7 +4368,7 @@ namespace CxjText.utlis
                             string[] click_params = bh_du_y_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4358,13 +4385,13 @@ namespace CxjText.utlis
                             string[] click_params = bg_du_y_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
-                    if (bhe_du_y != "&nbsp;")
+                    if (bhe_du_y != "&nbsp;" && bhe_du_y != "")
                     {
                         str1 = bheDuyingNode.InnerHtml.ToString().Trim();
                         start = str1.IndexOf("(");
@@ -4375,21 +4402,35 @@ namespace CxjText.utlis
                             string[] click_params = bhe_du_y_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
                     ///***************************半场让球*************************************/
-                    HtmlNode bhRqNode = hNode.ChildNodes[6];
-                    HtmlNode bgRqNode = gNode.ChildNodes[5];
+                    HtmlNode bhRqNode = hNode.ChildNodes[13];
+                    HtmlNode bgRqNode = gNode.ChildNodes[9];
 
-                    HtmlNode bhRqKeyNode = bhRqNode.ChildNodes[0];
-                    HtmlNode bhRqValueNode = bhRqNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode bhRqKeyNode = null;
+                    HtmlNode bhRqValueNode = null;
+                    if (bhRqNode.ChildNodes.Count >= 2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(bhRqNode.InnerHtml.ToString());
+                        bhRqKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        bhRqValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
-                    HtmlNode bgRqKeyNode = bgRqNode.ChildNodes[0];
-                    HtmlNode bgRqValueNode = bgRqNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode bgRqKeyNode = null;
+                    HtmlNode bgRqValueNode = null;
+                    if (bgRqNode.ChildNodes.Count >= 2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(bgRqNode.InnerHtml.ToString());
+                        bgRqKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        bgRqValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
                     String bh_rang_key = bhRqKeyNode != null ? bhRqKeyNode.InnerText.ToString().Trim() : "";
                     String bg_rang_key = bgRqKeyNode != null ? bgRqKeyNode.InnerText.ToString().Trim() : "";
@@ -4411,7 +4452,7 @@ namespace CxjText.utlis
                             string[] click_params = bh_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4428,7 +4469,7 @@ namespace CxjText.utlis
                             string[] click_params = bh_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4445,7 +4486,7 @@ namespace CxjText.utlis
                             string[] click_params = bg_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4462,21 +4503,35 @@ namespace CxjText.utlis
                             string[] click_params = bg_rang_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
                         }
                     }
                     /*********************************半场大小****************************************/
-                    HtmlNode bhDXNode = hNode.ChildNodes[17];
-                    HtmlNode bgDXNode = gNode.ChildNodes[13];
-                    
-                    HtmlNode bhDXKeyNode = bhDXNode.ChildNodes[0];
-                    HtmlNode bhDXValueNode = bhDXNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode bhDXNode = hNode.ChildNodes[15];
+                    HtmlNode bgDXNode = gNode.ChildNodes[11];
 
-                    HtmlNode bgDXKeyNode = bgDXNode.ChildNodes[0];
-                    HtmlNode bgDXValueNode = bgDXNode.ChildNodes[1].ChildNodes[0];
+                    HtmlNode bhDXKeyNode = null;
+                    HtmlNode bhDXValueNode = null;
+                    if (bhDXNode.ChildNodes.Count >= 2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(bhDXNode.InnerHtml.ToString());
+                        bhDXKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        bhDXValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
+
+                    HtmlNode bgDXKeyNode = null;
+                    HtmlNode bgDXValueNode = null;
+                    if (bgDXNode.ChildNodes.Count>=2)
+                    {
+                        HtmlDocument tHtmlDoc = new HtmlDocument();
+                        tHtmlDoc.LoadHtml(bgDXNode.InnerHtml.ToString());
+                        bgDXKeyNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='con']");
+                        bgDXValueNode = tHtmlDoc.DocumentNode.SelectSingleNode("//span[@class='ratio']/a");
+                    }
 
                     String bh_daxiao_key = bhDXKeyNode != null ? bhDXKeyNode.InnerText.ToString().Trim() : "";
                     String bg_daxiao_key = bgDXKeyNode != null ? bgDXKeyNode.InnerText.ToString().Trim() : "";
@@ -4498,7 +4553,7 @@ namespace CxjText.utlis
                             string[] click_params = bh_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4515,7 +4570,7 @@ namespace CxjText.utlis
                             string[] click_params = bh_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4532,7 +4587,7 @@ namespace CxjText.utlis
                             string[] click_params = bg_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
@@ -4549,7 +4604,7 @@ namespace CxjText.utlis
                             string[] click_params = bg_daxiao_click.Split(',');
                             if (click_params.Length >= 2)
                             {
-                                start = click_params[2].IndexOf("gid=");
+                                start = click_params[2].IndexOf("gid=") + 4;
                                 end = click_params[2].IndexOf("&");
                                 mid = click_params[2].Substring(start, end - start - 1);
                             }
