@@ -2630,8 +2630,9 @@ namespace CxjText.utlis
             JObject urlDataJObject = JObject.Parse(dataRlt);
             String getDataUrl = (String)urlDataJObject["oddsHost"]["desktop_url"];
 
-            getDataUrl = getDataUrl + "/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/null/pid/0";
-       
+            //  getDataUrl = getDataUrl + "/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/null/pid/0";
+                       
+            getDataUrl = getDataUrl + "/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
 
             dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
         

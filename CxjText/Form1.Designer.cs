@@ -36,6 +36,7 @@
             this.loginSysBtn = new System.Windows.Forms.Button();
             this.userEdit = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.needCodeBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // userText
@@ -117,11 +118,25 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "账户名";
             // 
+            // needCodeBox
+            // 
+            this.needCodeBox.AutoSize = true;
+            this.needCodeBox.Checked = true;
+            this.needCodeBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.needCodeBox.Location = new System.Drawing.Point(136, 59);
+            this.needCodeBox.Name = "needCodeBox";
+            this.needCodeBox.Size = new System.Drawing.Size(96, 16);
+            this.needCodeBox.TabIndex = 9;
+            this.needCodeBox.Text = "需要云打码？";
+            this.needCodeBox.UseVisualStyleBackColor = true;
+            this.needCodeBox.CheckedChanged += new System.EventHandler(this.needCodeBox_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(495, 277);
+            this.Controls.Add(this.needCodeBox);
             this.Controls.Add(this.userEdit);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.loginSysBtn);
@@ -148,6 +163,7 @@
         private System.Windows.Forms.Button loginSysBtn;
         private System.Windows.Forms.TextBox userEdit;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox needCodeBox;
     }
 }
 

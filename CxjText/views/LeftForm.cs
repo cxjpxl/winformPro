@@ -1569,9 +1569,9 @@ namespace CxjText.views
                        "\n是否主队下注:" + isH +
                        "\n是否半场:" + isBanChang+
                        "类型角球");
-            //判断是2s前保存的队伍
+            //判断是3s前保存的队伍
             String gameTeamStr = nameH + "-" + nameG;
-            if (lastAutoData.gameTeam.Equals(gameTeamStr) && FormUtils.getCurrentTime() - lastAutoData.time < 2000)
+            if (lastAutoData.gameTeam.Equals(gameTeamStr) && FormUtils.getCurrentTime() - lastAutoData.time < 3000)
             {
                 return;
             }

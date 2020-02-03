@@ -62,7 +62,7 @@ namespace CxjText.utlis
 
             JObject rltJObject = JObject.Parse(codeRlt);
             codeStr = (String)rltJObject["code"];
-            if (String.IsNullOrEmpty(codeStr) || codeStr.Trim().Equals(""))
+            if ((String.IsNullOrEmpty(codeStr) || codeStr.Trim().Equals(""))&&Config.needCode)
             {
                 codeStr = getDaMaCode(Imagefilename);//云打码
             }

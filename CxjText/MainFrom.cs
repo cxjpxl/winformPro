@@ -852,11 +852,11 @@ namespace CxjText
                     if (userInfo == null) return;
 
                     String league = (String)jObject["game"]["leagueName"]; //联赛
-                    if (!String.IsNullOrEmpty(league)) {
+                   /* if (!String.IsNullOrEmpty(league)) {
                         if (league.Contains("瑞典") || league.Contains("印度")) {
                             return;
                         }
-                    }
+                    }*/
                     int state = 1;//主客队进球标志 未处理
                     bool isCancel = false;
                     bool isConfirme = false;

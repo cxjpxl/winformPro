@@ -205,52 +205,57 @@ namespace CxjText
                 Config.canPutDaTui = (bool)loginObj["canPutDaTui"];//是否有抱大腿功能
                 Config.has40Enbale = (bool)loginObj["has40Enbale"]; //是否有40分钟后的角球的功能
             }
-            Console.WriteLine("1111111111111111");
-            //登录云打码账号
-            int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
-            Console.WriteLine("2222222222222222222222");
-            Console.WriteLine("uid:"+uid);
-            if (uid < 0) {
-                Invoke(new Action(() =>
+
+
+            if (Config.needCode) {
+                //登录云打码账号
+                int uid = YDMWrapper.YDM_Login(codeUserStr, codePwdStr);
+
+                Console.WriteLine("uid:" + uid);
+                if (uid < 0)
                 {
-                    loginSysBtn.Enabled = true;
-                    loginSysBtn.Text = "登录";
-                    MessageBox.Show("登录云打码账号失败！");
-                }));
-                return;
-            }
-            //获取云代码账号金额
-            int codeMoney = YDMWrapper.YDM_GetBalance(codeUserStr,codePwdStr);
-            if (codeMoney <= 0) {
-                Invoke(new Action(() =>
-                {
-                    loginSysBtn.Enabled = true;
-                    loginSysBtn.Text = "登录";
-                    if (codeMoney == -1007)
+                    Invoke(new Action(() =>
                     {
-                        MessageBox.Show("云打码账户余额不足,请充值！");
-                    }
-                    else {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
                         MessageBox.Show("登录云打码账号失败！");
-                    }
-                    
-                }));
-                return;
-            }
-
-            if (codeMoney < 10) {
-                Invoke(new Action(() =>
+                    }));
+                    return;
+                }
+                //获取云代码账号金额
+                int codeMoney = YDMWrapper.YDM_GetBalance(codeUserStr, codePwdStr);
+                if (codeMoney <= 0)
                 {
-                    loginSysBtn.Enabled = true;
-                    loginSysBtn.Text = "登录";
-                    MessageBox.Show("云打码余额快不足,请充值使用！");
-                }));
-                return;
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        if (codeMoney == -1007)
+                        {
+                            MessageBox.Show("云打码账户余额不足,请充值！");
+                        }
+                        else
+                        {
+                            MessageBox.Show("登录云打码账号失败！");
+                        }
+
+                    }));
+                    return;
+                }
+
+                if (codeMoney < 10)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        loginSysBtn.Enabled = true;
+                        loginSysBtn.Text = "登录";
+                        MessageBox.Show("云打码余额快不足,请充值使用！");
+                    }));
+                    return;
+                }
+
+                Config.codeMoneyStr = codeMoney + "";
             }
-
-            Config.codeMoneyStr = codeMoney + "";
-
-           
             //登录成功
             Invoke(new Action(() =>
             {
@@ -426,6 +431,9 @@ namespace CxjText
             
         }
 
-
+        private void needCodeBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.needCode = needCodeBox.Checked;
+        }
     }
 }

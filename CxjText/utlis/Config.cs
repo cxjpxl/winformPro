@@ -25,7 +25,7 @@ namespace CxjText.utils
         public static bool hasDaTui = false;//有大腿的功能  牛逼的人才是大腿  一般都是不牛逼
         public static bool canPutDaTui = true; //有抱大腿的功能
         public static bool daTuiEnble = false; //大腿模糊算法是否启动
-
+        public static bool needCode = true; //需要云打码
         public static bool hasJinQiuFun = true;//是否有进球的功能
         public static int softFun = 2; //0点 1角  2点+角  3电子 
         public static String vString = "V4.3";
@@ -46,7 +46,7 @@ namespace CxjText.utils
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";
-        public static String codeMoneyStr = "";
+        public static String codeMoneyStr = "--";
 
         public static bool isDeug = false;  //控制打印
         public static void console(String str)

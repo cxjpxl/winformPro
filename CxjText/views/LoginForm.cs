@@ -419,32 +419,37 @@ namespace CxjText.views
         private bool getCodeStatus = false;
         private void getCodeMoney() {
             getCodeStatus = true;
-            String str = "";
-            //获取云代码账号金额
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                if (codeMoney == -1007)
+            if (Config.needCode) {
+                String str = "";
+                //获取云代码账号金额
+                int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+                if (codeMoney <= 0)
                 {
-                    str = "云打码账户余额不足,请充值";
+                    if (codeMoney == -1007)
+                    {
+                        str = "云打码账户余额不足,请充值";
+                    }
+                    else
+                    {
+                        getCodeStatus = false;
+                        return;
+                    }
+
                 }
-                else {
-                    getCodeStatus = false;
-                    return;
+
+                if (codeMoney < 100)
+                {
+                    str = "云打码账户分低于100,请充值";
+                }
+                else
+                {
+                    str = "云打码剩余分:" + codeMoney;
                 }
 
-            }
-
-            if (codeMoney < 100)
-            {
-                str = "云打码账户分低于100,请充值";
-            }
-            else {
-                str = "云打码剩余分:"+codeMoney;
-            }
-
-            if (this.loginFormInterface!=null) {
-                this.loginFormInterface.getCodeMoneyStatus(str);
+                if (this.loginFormInterface != null)
+                {
+                    this.loginFormInterface.getCodeMoneyStatus(str);
+                }
             }
             getCodeStatus = false;
         }

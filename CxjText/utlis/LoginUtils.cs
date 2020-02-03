@@ -128,15 +128,19 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0) {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+            if (Config.needCode) {
+                int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+                if (codeMoney <= 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
             }
+            
 
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
@@ -3126,16 +3130,19 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+            if (Config.needCode) {
+                int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+                if (codeMoney <= 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
             }
+            
 
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
@@ -3439,16 +3446,19 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+            if (Config.needCode) {
+                int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+                if (codeMoney <= 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
             }
+            
 
             userInfo.cookie = new CookieContainer();
             //先访问主页   拿到对应的cook
@@ -3609,16 +3619,19 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
-            if (codeMoney <= 0)
-            {
-                userInfo.loginFailTime++;
-                userInfo.status = 3;
-                loginForm.Invoke(new Action(() => {
-                    loginForm.AddToListToUpDate(position);
-                }));
-                return;
+            if (Config.needCode) {
+                int codeMoney = YDMWrapper.YDM_GetBalance(Config.codeUserStr, Config.codePwdStr);
+                if (codeMoney <= 0)
+                {
+                    userInfo.loginFailTime++;
+                    userInfo.status = 3;
+                    loginForm.Invoke(new Action(() => {
+                        loginForm.AddToListToUpDate(position);
+                    }));
+                    return;
+                }
             }
+            
 
             String codeUrl = userInfo.loginUrl + "/yzm.php?_=0." + FormUtils.getCurrentTime();
             //下载图片
