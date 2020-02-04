@@ -214,13 +214,20 @@ namespace CxjText
                 Console.WriteLine("uid:" + uid);
                 if (uid < 0)
                 {
-                    Invoke(new Action(() =>
+                    try
                     {
-                        loginSysBtn.Enabled = true;
-                        loginSysBtn.Text = "登录";
-                        MessageBox.Show("登录云打码账号失败！");
-                    }));
-                    return;
+                        Invoke(new Action(() =>
+                        {
+                            loginSysBtn.Enabled = true;
+                            loginSysBtn.Text = "登录";
+                            MessageBox.Show("登录云打码账号失败！");
+                        }));
+                        return;
+                    }
+                    catch (Exception e) {
+
+                    }
+                   
                 }
                 //获取云代码账号金额
                 int codeMoney = YDMWrapper.YDM_GetBalance(codeUserStr, codePwdStr);
