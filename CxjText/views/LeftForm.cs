@@ -1013,7 +1013,7 @@ namespace CxjText.views
                                 data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
                             }
 
-                            if (StringComPleteUtils.isPingBanDa07(data))
+                            if (StringComPleteUtils.isPingBanDa07(data,0.7))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = false;
@@ -1061,7 +1061,7 @@ namespace CxjText.views
                                 data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
                             }
 
-                            if (StringComPleteUtils.isPingBanDa07(data))
+                            if (StringComPleteUtils.isPingBanDa07(data,0.7))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = false;
@@ -1111,7 +1111,7 @@ namespace CxjText.views
                                 data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
                             }
 
-                            if (StringComPleteUtils.isPingBanDa07(data))
+                            if (StringComPleteUtils.isPingBanDa07(data,0.7))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = false;
@@ -1157,7 +1157,7 @@ namespace CxjText.views
                                 data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
                             }
 
-                            if (StringComPleteUtils.isPingBanDa07(data))
+                            if (StringComPleteUtils.isPingBanDa07(data,0.7))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = false;
@@ -1204,7 +1204,7 @@ namespace CxjText.views
                         {
                             data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
                         }
-                        if (StringComPleteUtils.isPingBanDa07(data))
+                        if (StringComPleteUtils.isPingBanDa07(data,0.7))
                         {
                             obj = searchArray[i];
                             selectDaXiao = false;
@@ -1253,7 +1253,7 @@ namespace CxjText.views
                                 data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
                             }
 
-                            if (StringComPleteUtils.isPingBanDa07(data))
+                            if (StringComPleteUtils.isPingBanDa07(data,0.7))
                             {
                                 obj = searchArray[i];
                                 selectDaXiao = false;
@@ -1390,6 +1390,171 @@ namespace CxjText.views
             }
 
         }
+
+
+        //危险下注
+        public void weixianXiaZhu(EnventInfo enventInfo)
+        {
+       
+            if (this.cIndex < 0) return;
+            if (this.nameShowGridView == null) return;
+            if (String.IsNullOrEmpty(enventInfo.nameH))
+            {
+                return;
+            }
+            if (enventInfo.T != null && enventInfo.T.Equals("-1"))
+            {
+                enventInfo.bangchangType = 0; //下默认
+            }
+
+            UserInfo userInfo = (UserInfo)Config.userList[this.cIndex];
+            //判断时候要下注   主要返回要下那一队
+            //修改6
+            JObject jObject  = StringComPleteUtils.haveData(enventInfo, this.dataJArray, userInfo);
+            if (jObject == null || dataForm == null || this.dataJArray == null || this.dataJArray.Count == 0) return;
+          
+
+            //这里要做时间的判断
+
+
+
+            bool isH = (bool)jObject["isH"]; //是否主队
+            String nameH = (String)jObject["nameH"];
+            String nameG = (String)jObject["nameG"];
+            String lianSai = (String)jObject["lianSai"];
+
+            //自动下注要处理的算法 搜索出全部的结果出来
+            JArray searchArray = new JArray();
+            if (this.dataJArray == null) return;
+            searchArray = AutoUtils.getGames(this.dataJArray, userInfo, nameH, nameG);
+            //找到所有的球队了
+            if (searchArray.Count == 0) return;
+
+            object obj = null; //要下注的对象
+            //记得判断时间
+            int bangchangInt = DataUtils.renyiTime(searchArray[0], userInfo.tag);
+            if (bangchangInt == -1) return;
+            /**********************处理自动下注开始*****************************/
+
+            //让球的情况处理   
+            if (bangchangInt == 0)
+            {
+
+                for (int i = 0; i < searchArray.Count; i++)
+                {
+                    String data = "";
+                    if (isH)
+                    {
+                        data = DataUtils.get_c07_data(searchArray[i], userInfo.tag); //主队半场让球
+                    }
+                    else
+                    {
+                        data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
+                    }
+
+                    if (StringComPleteUtils.isPingBanDa07(data, 0.5))
+                    {
+                        obj = searchArray[i];
+                        break;
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < searchArray.Count; i++)
+                {
+                    String data = "";
+                    if (isH)
+                    {
+                        data = DataUtils.get_c04_data(searchArray[i], userInfo.tag); //主队全场让球
+                    }
+                    else
+                    {
+                        data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
+                    }
+
+                    if (StringComPleteUtils.isPingBanDa07(data, 0.5))
+                    {
+                        obj = searchArray[i];
+                        break;
+                    }
+                }
+            }
+            
+            /*******************处理自动下注结束********************************/
+
+            if (obj == null)
+            {
+                Console.WriteLine("没有可以下注的条件");
+                return;
+            }
+            String gameMid = DataUtils.getMid(obj, userInfo.tag);
+            if (String.IsNullOrEmpty(gameMid)) return;
+            jObject["mid"] = gameMid;//赋值mid
+            Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
+                       "\n主队:" + nameH +
+                       "\n客队:" + nameG +
+                       "\n是否主队下注:" + isH +
+                       "\n是否半场:" + bangchangInt
+                      );
+
+
+            //判断是5s前保存的队伍
+            String gameTeamStr = nameH + "-" + nameG;
+            if (tempLists == null)
+            {
+                tempLists = new List<AutoData>();
+            }
+
+            AutoData autoTempData = tempLists.Find(j => j.gameTeam.Equals(gameTeamStr));
+            if (autoTempData != null && FormUtils.getCurrentTime() - autoTempData.time < 10000)
+            {
+                return;
+            }
+            else
+            {
+                if (autoTempData != null)
+                {
+                    tempLists.RemoveAll((j => j.gameTeam.Equals(gameTeamStr)));
+                }
+                AutoData myData = new AutoData();
+                myData.gameTeam = gameTeamStr;
+                myData.time = FormUtils.getCurrentTime();
+                tempLists.Add(myData);
+            }
+
+            if (bangchangInt == 0)
+            {
+                if (isH) //主队
+                {
+                    dataForm.OnOrderClick(obj, 0, 7, jObject);
+                    return;
+                }
+                else
+                { //客队
+                    dataForm.OnOrderClick(obj, 1, 7, jObject);
+                    return;
+                }
+            }
+            else if(bangchangInt == 1)
+            {
+                if (isH) //主队
+                {
+                    dataForm.OnOrderClick(obj, 0, 4, jObject);
+                    return;
+                }
+                else
+                { //客队
+                    dataForm.OnOrderClick(obj, 1, 4, jObject);
+                    return;
+                }
+            }
+
+
+
+
+
+        }
+
 
 
         //角球自动下注
@@ -1676,7 +1841,7 @@ namespace CxjText.views
                             data = DataUtils.get_c17_data(searchArray[i], userInfo.tag);//客队半场让球
                         }
 
-                        if (StringComPleteUtils.isPingBanDa07(data))
+                        if (StringComPleteUtils.isPingBanDa07(data,0.7))
                         {
                             obj = searchArray[i];
                             isBanChang = true;
@@ -1727,7 +1892,7 @@ namespace CxjText.views
                             data = DataUtils.get_c14_data(searchArray[i], userInfo.tag); //客队全场让球
                         }
 
-                        if (StringComPleteUtils.isPingBanDa07(data))
+                        if (StringComPleteUtils.isPingBanDa07(data,0.7))
                         {
                             obj = searchArray[i];
                             isBanChang = false;

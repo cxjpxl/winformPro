@@ -490,7 +490,8 @@ namespace CxjText
                         {
                             speakStr = "点球取消";
                         }
-                        else if (info.ToLower().Contains("miss")) {
+                        else if (info.ToLower().Contains("miss"))
+                        {
                             speakStr = "点球失误！";
                         }
 
@@ -498,11 +499,21 @@ namespace CxjText
                         {
                             speakStr = "主队点球";
                         }
-                        else if (info.ToLower().Equals("penalty away")) {
+                        else if (info.ToLower().Equals("penalty away"))
+                        {
                             speakStr = "客队点球";
+                        }else if (info.Equals("danger_free_kick")) {
+                            if (cid.Equals("1031"))
+                            {
+                                speakStr = "主队危险任意球";
+                            }
+                            else {
+                                speakStr = "客队危险任意球";
+                            }
                         }
 
-                    }else if(cid.Equals("142") || cid.Equals("146"))
+                    }
+                    else if (cid.Equals("142") || cid.Equals("146"))
                     {
                         if (info.ToLower().Contains("cancle"))
                         {
@@ -999,6 +1010,7 @@ namespace CxjText
 
             //有改革这里要更改
             speak(cid, enventInfo.info); //语音播报
+
             //事件显示和弹框的处理
             this.Invoke(new Action(() => {
                 String shiDuan = "全场";
@@ -1052,9 +1064,21 @@ namespace CxjText
                         {
                             enventString = "事件:客队点球";
                         }
+                        else if (enventInfo.info.Equals("danger_free_kick"))
+                        {
+                            if (cid.Equals("1031"))
+                            {
+                                enventString = "事件:主队危险任意球";
+                            }
+                            else
+                            {
+                                enventString = "事件:客队危险任意球";
+                            }
+                        }
 
                     }
-                    else if (cid.Equals("142") || cid.Equals("146")) {
+                    else if (cid.Equals("142") || cid.Equals("146"))
+                    {
                         if (enventInfo.info.ToLower().Contains("cancle"))
                         {
                             enventString = "事件:点球取消!";
@@ -1071,16 +1095,14 @@ namespace CxjText
                 }
 
 
-                if (cid.Equals("9926") || cid.Equals("1031")|| cid.Equals("1062")) //主队
+                if (cid.Equals("9926") || cid.Equals("1031") || cid.Equals("1062")) //主队
                 {
                     teamColor = 1;
-
                 }
                 else if (cid.Equals("9927") || cid.Equals("2055") || cid.Equals("2086"))//客队
                 {
                     teamColor = 2;
-                }
-                else {
+                } else {
                     teamColor = 0;
                 }
                 //事件的显示
@@ -1111,6 +1133,46 @@ namespace CxjText
             //有改革要更改
             if (cid.Equals("2055") || cid.Equals("1031") || cid.Equals("888") || cid.Equals("144"))
             {
+
+                //先判断是不是危险任意球
+                if (cid.Equals("2055")||cid.Equals("1031"))
+                {
+                    Console.WriteLine("111111");
+                     if (enventInfo.info.Equals("danger_free_kick"))
+                    {
+                        Console.WriteLine("danger_free_kick");
+                        //主客  下  0盘口   时间在42--44  88后  赔率大于0.5
+                        if (isAuto() && renyiCheckBox.Checked) //勾选自动和任意球才下注
+                        {
+                            if (cid.Equals("1031"))
+                            {
+                                // "事件:主队危险任意球";
+                                this.Invoke(new Action(() =>
+                                {
+                                    Console.WriteLine("主：下注");
+                                   // leftForm.setComplete(enventInfo);
+                                }));
+                            }
+                            else
+                            {
+
+                                // "事件:客队危险任意球"; 
+                                this.Invoke(new Action(() =>
+                                {
+                                    Console.WriteLine("客：下注");
+                                    //  leftForm.setComplete(enventInfo);
+                                }));
+
+                            }
+                            return;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                }
+
+
                 //要下注的情况
                 //先对info做判断  有直接删除然后会return
                 if (enventInfo.info.ToLower().Contains("cancel")|| enventInfo.info.ToLower().Contains("miss"))
@@ -1178,6 +1240,7 @@ namespace CxjText
                         }
                     }));
                 }
+
             }
             else
             {

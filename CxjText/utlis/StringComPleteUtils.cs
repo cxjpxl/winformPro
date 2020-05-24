@@ -1120,7 +1120,7 @@ namespace CxjText.utlis
         }
 
 
-        public static bool isPingBanDa07(String data) {
+        public static bool isPingBanDa07(String data,double rate) {
 
             if (data != null)
             {
@@ -1157,7 +1157,7 @@ namespace CxjText.utlis
                 try
                 {
                     float dataRate = float.Parse(data);
-                    if (dataRate > 0.7)
+                    if (dataRate > rate)
                     {
                         return true;
                     }

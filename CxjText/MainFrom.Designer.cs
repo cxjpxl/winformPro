@@ -69,6 +69,7 @@
             this.shangBcrBtn = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.daTuiText = new System.Windows.Forms.Label();
+            this.renyiCheckBox = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.fitterBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -248,6 +249,7 @@
             // 
             // fitterBox
             // 
+            this.fitterBox.Controls.Add(this.renyiCheckBox);
             this.fitterBox.Controls.Add(this.keNengCheck);
             this.fitterBox.Controls.Add(this.M8checkBox);
             this.fitterBox.Controls.Add(this.NYCheckBox);
@@ -523,6 +525,16 @@
             this.daTuiText.TabIndex = 24;
             this.daTuiText.Text = "大腿";
             // 
+            // renyiCheckBox
+            // 
+            this.renyiCheckBox.AutoSize = true;
+            this.renyiCheckBox.Location = new System.Drawing.Point(163, 150);
+            this.renyiCheckBox.Name = "renyiCheckBox";
+            this.renyiCheckBox.Size = new System.Drawing.Size(48, 16);
+            this.renyiCheckBox.TabIndex = 35;
+            this.renyiCheckBox.Text = "任意";
+            this.renyiCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -596,5 +608,6 @@
         private System.Windows.Forms.CheckBox NYCheckBox;
         private System.Windows.Forms.CheckBox keNengCheck;
         private System.Windows.Forms.Label daTuiText;
+        private System.Windows.Forms.CheckBox renyiCheckBox;
     }
 }

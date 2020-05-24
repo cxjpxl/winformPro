@@ -110,8 +110,183 @@ namespace CxjText.utlis
             return c00;
         }
 
-        //是否可以下角球上半场41分钟
-        public static bool inJiaoQiuTime(object obj, String tag) {
+        //0上半场  1下半场  -1不符合要求
+        public static int renyiTime(object obj, String tag)
+        {
+            String time = "";
+            switch (tag)
+            {
+                case "A":
+                    return -1;
+                case "B":
+                case "N":
+                case "O":
+                    return -1;
+                case "I":
+                    return -1;
+                case "U":
+                    JArray jObjectU = (JArray)obj;
+                    time = (String)jObjectU[1];
+                    if (time == null) return -1;
+                    time = time.Replace(" ", "");
+                    if (time.Contains("42") || time.Contains("43") || time.Contains("44")) {
+                        return 0;
+                    }
+
+                    if (time.Contains("88") || time.Contains("89") || time.Contains("90")
+                        || time.Contains("91")
+                        || time.Contains("92")
+                        || time.Contains("93")
+                        || time.Contains("94")
+                        || time.Contains("95"))
+                    {
+                        return 1;
+                    }
+                    break;
+                case "R":
+                    return -1;
+                case "G":
+                    JObject jObjectG = (JObject)obj;
+                    time = (String)jObjectG["Match_Date"];
+                    time = FormUtils.changeHtml(time);
+                    time = time.Replace(" ", "");
+                    if (time.Contains("42") || time.Contains("43") || time.Contains("44"))
+                    {
+                        return 0;
+                    }
+
+                    if (time.Contains("88") || time.Contains("89") || time.Contains("90")
+                        || time.Contains("91")
+                        || time.Contains("92")
+                        || time.Contains("93")
+                        || time.Contains("94")
+                        || time.Contains("95"))
+                    {
+                        return 1;
+                    }
+                    break;
+                case "K":
+                case "Y":
+                case "C":
+                    JObject jObjectC = (JObject)obj;
+                    time = (String)jObjectC["timer"];
+                    time = FormUtils.changeHtml(time);
+                    if (time != null)
+                    {
+                        time = time.Trim();
+                        if (time.Contains("42") || time.Contains("43") || time.Contains("44"))
+                        {
+                            return 0;
+                        }
+
+                        if (time.Contains("88") || time.Contains("89") || time.Contains("90")
+                            || time.Contains("91")
+                            || time.Contains("92")
+                            || time.Contains("93")
+                            || time.Contains("94")
+                            || time.Contains("95"))
+                        {
+                            return 1;
+                        }
+                    }
+                    return -1;
+                case "F":
+                    return -1;
+                case "D":
+                    JObject jObjectD = (JObject)obj;
+                    time = ((String)jObjectD["retimeset"]).Replace(" ", "");
+                    time = time.Replace(" ", "");
+
+                    if (time.Contains("上42") || time.Contains("上43") || time.Contains("上44"))
+                    {
+                        return 0;
+                    }
+
+                    if (time.Contains("下88") || time.Contains("下89") || time.Contains("下90")
+                        || time.Contains("下91")
+                        || time.Contains("下92")
+                        || time.Contains("下93")
+                        || time.Contains("下94")
+                        || time.Contains("下95"))
+                    {
+                        return 1;
+                    }
+                    break;
+                case "E":
+                    JObject jObjectE = (JObject)obj;
+                    time = ((String)jObjectE["retimeset"]).Replace(" ", "");
+                    time = time.Replace(" ", "");
+                    if (time.Contains("1H^42") || time.Contains("1H^43") || time.Contains("1H^44"))
+                    {
+                        return 0;
+                    }
+                    return -1;
+                case "H":
+                case "W":
+                case "J1":
+                    JObject jObjectH = (JObject)obj;
+                    if (jObjectH == null) return -1;
+                    time = (String)jObjectH["time"];
+                    if (String.IsNullOrEmpty(time)) return -1;
+                    if (time.Contains("42") || time.Contains("43") || time.Contains("44")) return 0;
+                    if (time.Contains("88") || time.Contains("89") || time.Contains("90")
+                            || time.Contains("91")
+                            || time.Contains("92")
+                            || time.Contains("93")
+                            || time.Contains("94")
+                            || time.Contains("95"))
+                    {
+                        return 1;
+                    }
+                    return -1;
+                case "J":
+                    JObject jObjectJ = (JObject)obj;
+                    if (jObjectJ == null) return -1;
+                    time = (String)jObjectJ["gameTime"];
+                    if (String.IsNullOrEmpty(time)) return -1;
+                    time = time.Trim();
+                    if (time.Contains("42:") || time.Contains("43:") || time.Contains("44:")) return 0;
+                    if (time.Contains("88:") || time.Contains("89:") 
+                        || time.Contains("90:")
+                        || time.Contains("91:")
+                        || time.Contains("92:")
+                        || time.Contains("93:")
+                        || time.Contains("94:")
+                        || time.Contains("95:")) return 1;
+                    return -1;
+                case "L":
+                    return -1;
+                case "M":
+                    JObject jObjectM = (JObject)obj;
+                    time = (String)jObjectM["bowlingtime"];
+                    if (time != null)
+                    {
+                        time = time.Trim();
+                        if (time.Contains("42") || time.Contains("43") || time.Contains("44")) return 0;
+
+
+                        if (time.Contains("88") || time.Contains("89") || time.Contains("90")
+                            || time.Contains("91")
+                            || time.Contains("92")
+                            || time.Contains("93")
+                            || time.Contains("94")
+                            || time.Contains("95"))
+                        {
+                            return 1;
+                        }
+                    }
+                    return -1;
+                case "BB1":
+                    return -1;
+                default:
+                    return -1;
+            }
+            return -1;
+        }
+
+
+            //是否可以下角球上半场41分钟
+            public static bool inJiaoQiuTime(object obj, String tag) {
             String time = "";
             switch (tag)
             {

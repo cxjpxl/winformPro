@@ -9,7 +9,7 @@ namespace CxjText.utils
     public class Config
     {
         //F
-        public static String softUserStr = "admin";
+        public static String softUserStr = "";
         public static bool canAutoTwo = false;//自动重复下
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
@@ -31,8 +31,8 @@ namespace CxjText.utils
         public static String vString = "V4.3";
         public static long softTime = -1; //软件使用时间记录
         public static String urls = "www.mkbet6.com";
-        public static String webSocketUrl = "ws://120.24.92.122:8600/";
-        public static String netUrl = "http://120.24.92.122:8500";
+        public static String webSocketUrl = "ws://47.107.254.104:8600/";
+        public static String netUrl = "http://47.107.254.104:8500";
         // public static String webSocketUrl = "ws://192.168.124.109:8600/";
         //  public static String netUrl = "http://192.168.124.109:8500"; 
 
