@@ -1150,7 +1150,7 @@ namespace CxjText
                                 this.Invoke(new Action(() =>
                                 {
                                     Console.WriteLine("主：下注");
-                                   // leftForm.setComplete(enventInfo);
+                                    leftForm.weixianXiaZhu(enventInfo);
                                 }));
                             }
                             else
@@ -1160,7 +1160,7 @@ namespace CxjText
                                 this.Invoke(new Action(() =>
                                 {
                                     Console.WriteLine("客：下注");
-                                    //  leftForm.setComplete(enventInfo);
+                                    leftForm.weixianXiaZhu(enventInfo);
                                 }));
 
                             }

@@ -685,6 +685,23 @@ namespace CxjText.utlis
             }
             return null;
         }
-   
+
+
+        public static Cookie getCookie(UserInfo user, String key)
+        {
+            if (user == null || user.cookie == null) return null;
+            List<Cookie> list = FileUtils.GetAllCookies(user.cookie);
+            if (list == null || list.Count == 0) return null;
+            for (int i = 0; i < list.Count; i++)
+            {
+                Cookie c = list[i];
+                if (c.Name.Equals(key))
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
     }
 }

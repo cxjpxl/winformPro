@@ -51,6 +51,9 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
+                    String cookieStr = null;
+
+
                     //今日1
                     if (tag.Equals("G") && strs.Length > 4 && strs[4] != null)
                     {
@@ -87,12 +90,14 @@ namespace CxjText.utlis
                         userExp = strs[4] + "";
                     }
 
-                    String cookieStr = null;
 
+                    Console.WriteLine("11111");
                     //系统    账户  密码  网站  数字  cookie(人工)
                     if (strs.Length > 5 && strs[5] != null) {
                         cookieStr = strs[5]; //人工的cookie
+                        Console.WriteLine(cookieStr);
                     }
+                    Console.WriteLine("11111");
                     baseUrl = changeBaseUrl(baseUrl);
                     dataUrl = changeDataUrl(dataUrl);
                     String loginUrl = dataUrl;//登录的链接地址 
@@ -212,10 +217,10 @@ namespace CxjText.utlis
                 baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
             }
 
-            if (!baseUrl.Contains("www."))
+           /* if (!baseUrl.Contains("www."))
             {
                 baseUrl = "www." + baseUrl;
-            }
+            }*/
 
             return baseUrl.Trim();
         }
@@ -225,7 +230,7 @@ namespace CxjText.utlis
             {
                 dataUrl = dataUrl.Substring(0, dataUrl.Length - 1);
             }
-            if (!dataUrl.Contains("www."))
+           /* if (!dataUrl.Contains("www."))
             {
                 if (dataUrl.Contains("http://"))
                 {
@@ -234,7 +239,7 @@ namespace CxjText.utlis
                 {
                     dataUrl = "https://" + "www." + dataUrl.Substring(8, dataUrl.Length - 8);
                 }
-            }
+            }*/
             
             return dataUrl.Trim();
         }

@@ -1490,11 +1490,13 @@ namespace CxjText.views
             String gameMid = DataUtils.getMid(obj, userInfo.tag);
             if (String.IsNullOrEmpty(gameMid)) return;
             jObject["mid"] = gameMid;//赋值mid
+            jObject["isJiaoQiu"] = false;
             Console.WriteLine("联赛:" + DataUtils.get_c00_data(obj, userInfo.tag) + "  --" + gameMid +
                        "\n主队:" + nameH +
                        "\n客队:" + nameG +
                        "\n是否主队下注:" + isH +
-                       "\n是否半场:" + bangchangInt
+                       "\n是否半场:" + bangchangInt+
+                       "\n危险任意球"
                       );
 
 

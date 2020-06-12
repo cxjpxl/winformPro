@@ -11,6 +11,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -140,7 +141,7 @@ namespace CxjText.utlis
                     return;
                 }
             }
-            
+
 
             String codeUrl = userInfo.loginUrl + "/member/aspx/verification_code.aspx?_r=" + FormUtils.getCurrentTime();
             //下载图片
@@ -2961,15 +2962,34 @@ namespace CxjText.utlis
         public static bool getCsrf(UserInfo userInfo) {
 
             if (userInfo.cookie == null) {
-                userInfo.cookie = new CookieContainer();
+                return false;
             }
+
+            Console.WriteLine("------------------------");
+            if (userInfo == null || userInfo.cookie == null) return false;
+            List<System.Net.Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
+            if (list == null || list.Count == 0) return false;
+            for (int i = 0; i < list.Count; i++)
+            {
+                System.Net.Cookie c = list[i];
+                Console.WriteLine(c.Name + "   " + c.Value);
+            }
+            Console.WriteLine("------------------------");
             JObject headJObject = new JObject();
-            headJObject["Host"] = userInfo.baseUrl;
+          //  headJObject["Host"] = userInfo.baseUrl;
             headJObject["referer"] = userInfo.loginUrl + "/main.html";
+
             headJObject[":authority"] = userInfo.baseUrl;
+            headJObject[":method"] = "GET";
+            headJObject[":path"] = "/csrf";
             headJObject[":scheme"] = "https";
+            headJObject["sec-fetch-dest"] = "empty";
+            headJObject["sec-fetch-mode"] = "cors";
+            headJObject["sec-fetch-site"] = "same-origin";
+            headJObject["x-requested-with"] = "XMLHttpRequest";
             String csrfUrl = userInfo.loginUrl + "/csrf";
             String csrfRlt = HttpUtils.HttpGetHeader(csrfUrl, "", userInfo.cookie, headJObject);
+            Console.WriteLine(csrfRlt);
             if (String.IsNullOrEmpty(csrfRlt) || !csrfRlt.Contains("_csrf"))
             {
                 return false;
@@ -3023,14 +3043,101 @@ namespace CxjText.utlis
         }
         public static bool loginJ1(UserInfo userInfo, int position) {
             userInfo.cookie = new CookieContainer();
+
+
+            //判断人工的cookie存在不
+            /* if (userInfo.cookieStr != null && userInfo.cookieStr.Length > 0)
+             {
+                 if (!userInfo.cookieStr.ToLower().Contains("clearance"))
+                 {
+
+                 }else
+                 {
+                     //创建cookie
+                     String DomainUrl = userInfo.baseUrl;
+                     if (!DomainUrl.Contains("www")) {
+                         DomainUrl = "."+userInfo.baseUrl;
+                     }
+                     System.Net.Cookie cfCook = new System.Net.Cookie("cf_clearance", userInfo.cookieStr.Trim().Replace("cf_clearance=", ""), "/", DomainUrl);
+                     cfCook.Expires =new DateTime(DateTime.Now.ToUniversalTime().Ticks+840000000000);
+                     cfCook.HttpOnly = true;
+                     userInfo.cookie.Add(cfCook);
+                 }
+             }*/
+
+            ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+            IWebDriver driver = new ChromeDriver(optionsEx);
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(20)); //元素启动的
+            try
+            {
+                bool hasLoad = false;
+                try
+                {
+                    driver.Navigate().GoToUrl(userInfo.dataUrl + "/main.html");
+                    hasLoad = true;
+                    Thread.Sleep(10000);
+                }
+                catch (Exception e)
+                {
+                    if (!hasLoad)
+                    {
+                        driver.Quit();
+                        return false;
+                    }
+                }
+                ICookieJar listCookie = driver.Manage().Cookies;
+                userInfo.cookie = new CookieContainer();
+                for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                {
+                    if (!listCookie.AllCookies[i].Name.Equals("_csrf")) {
+                        System.Net.Cookie cookie = new System.Net.Cookie(
+                       listCookie.AllCookies[i].Name, listCookie.AllCookies[i].Value
+                       , listCookie.AllCookies[i].Path, listCookie.AllCookies[i].Domain);
+                        userInfo.cookie.Add(cookie);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                driver.Quit();
+                return false;
+            }
+            if (driver != null)
+            {
+                driver.Quit();
+            }
+
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
             if (!getCsrf(userInfo)) return false; //这里很重要  要添加cookie
+            headJObject = new JObject();
             String loginUrl = userInfo.loginUrl + "/login";
             headJObject["platform"] = "desktop"; //这个也很重要
             headJObject["Origin"] = userInfo.dataUrl;
+            headJObject["referer"] = userInfo.loginUrl + "/main.html";
+            headJObject[":authority"] = userInfo.baseUrl;
+            headJObject[":method"] = "POST";
+            headJObject[":path"] = "/login";
+            headJObject[":scheme"] = "https";
+            headJObject["sec-fetch-dest"] = "empty";
+            headJObject["sec-fetch-mode"] = "cors";
+            headJObject["sec-fetch-site"] = "same-origin";
+            headJObject["x-requested-with"] = "XMLHttpRequest";
+
             String loginParms = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&_csrf=" + userInfo.expJObject["csrf"] + "&role=player";
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl, loginParms, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
+            Console.WriteLine(loginRlt);
+            if (loginRlt == null || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("SESSIONID")) return false;
+            JObject loginRltJobj = JObject.Parse(loginRlt);
+            String sessionStr = (String)loginRltJobj["SESSIONID"];
+
+            /*登录后cookie 的session为什么不会替换  这个很奇怪*/
+            System.Net.Cookie c1 = FormUtils.getCookie(userInfo, "SESSION");
+            c1.Value = sessionStr;
+            //userInfo.cookie.Add(c1);
+
+
             if (loginRlt == null) return false;
             return true;
         }

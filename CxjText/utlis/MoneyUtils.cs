@@ -584,16 +584,24 @@ namespace CxjText.utlis
             if (!LoginUtils.getCsrf(user)) {
                 return -1;
             }
-            String moneyUrl = user.dataUrl + "/player/getBalanceInfo";
+            String moneyUrl = user.dataUrl + "/player/getGameBalance";
             JObject headJObject = new JObject();
             headJObject["Host"] = user.baseUrl;
-            headJObject["Origin"] = user.dataUrl;
-            String p = "_csrf=" + user.expJObject["csrf"];
-            String moneyRlt = HttpUtils.HttpPostHeader(moneyUrl, p, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
-            if (String.IsNullOrEmpty(moneyRlt) || !moneyRlt.Contains("balance") || !FormUtils.IsJsonArray(moneyRlt)) return 0;
-            JArray jArray = JArray.Parse(moneyRlt);
-            JObject item = (JObject)jArray[0];
-            String money =(String) item["balance"];
+            headJObject["referer"] = user.dataUrl+ "/main.html";
+            headJObject[":method"] = "GET";
+            headJObject[":path"] = "/player/getGameBalance";
+            headJObject[":scheme"] = "https";
+            headJObject["sec-fetch-dest"] = "empty";
+            headJObject["sec-fetch-mode"] = "cors";
+            headJObject["sec-fetch-site"] = "same-origin";
+            headJObject["platform"] = "desktop";
+             // String p = "_csrf=" + user.expJObject["csrf"];
+            String moneyRlt = HttpUtils.HttpGetHeader(moneyUrl, "application/x-www-form-urlencoded; charset=UTF-8", user.cookie,headJObject);
+            //Console.WriteLine(moneyRlt);
+            if (String.IsNullOrEmpty(moneyRlt) || !moneyRlt.Contains("sportBalance") ) return 0;
+
+            JObject item = JObject.Parse(moneyRlt);
+            String money =(String) item["sportBalance"];
             try
             {
                 float.Parse(money);
