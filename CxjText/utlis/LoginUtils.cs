@@ -2969,6 +2969,7 @@ namespace CxjText.utlis
             if (userInfo == null || userInfo.cookie == null) return false;
             List<System.Net.Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
             if (list == null || list.Count == 0) return false;
+            Console.WriteLine("长度:"+list.Count);
             for (int i = 0; i < list.Count; i++)
             {
                 System.Net.Cookie c = list[i];
@@ -2978,13 +2979,12 @@ namespace CxjText.utlis
             }
             Console.WriteLine("------------------------");
             JObject headJObject = new JObject();
-          //  headJObject["Host"] = userInfo.baseUrl;
-            headJObject["referer"] = userInfo.loginUrl + "/main.html";
-
+            //  headJObject["Host"] = userInfo.baseUrl;
             headJObject[":authority"] = userInfo.baseUrl;
             headJObject[":method"] = "GET";
-            headJObject[":path"] = "/csrf";
             headJObject[":scheme"] = "https";
+            headJObject[":path"] = "/csrf";
+            headJObject["referer"] = userInfo.loginUrl + "/main.html";
             headJObject["sec-fetch-dest"] = "empty";
             headJObject["sec-fetch-mode"] = "cors";
             headJObject["sec-fetch-site"] = "same-origin";
@@ -3055,7 +3055,7 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
             long timeTempNum = FormUtils.getCurrentTime() - userInfo.timeNum;
 
-            if (teepClearanceCook == null ||  timeTempNum > 3*60*60*1000) //第一次或者3个小时
+            if (teepClearanceCook == null ||  timeTempNum >1) //第一次或者3个小时
             {
                 ChromeOptionsEx optionsEx = new ChromeOptionsEx();
                 IWebDriver driver = new ChromeDriver(optionsEx);
@@ -3079,24 +3079,48 @@ namespace CxjText.utlis
                     }
                     ICookieJar listCookie = driver.Manage().Cookies;
                     userInfo.cookie = new CookieContainer();
+                    userInfo.cookie.MaxCookieSize = userInfo.cookie.MaxCookieSize + 4096*5;
+                    userInfo.cookie.PerDomainCapacity = 100;
+                    DateTime dt2 = new DateTime();
+                    Console.WriteLine("长度是："+listCookie.AllCookies.Count);
+
                     for (int i = 0; i < listCookie.AllCookies.Count; i++)
                     {
-
+                        if (listCookie.AllCookies[i].Name.Equals("cf_clearance"))
+                        {
+                            dt2 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                            break;
+                        }
+                       
+                    }
+                 
+                    for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                    {
+                            System.Net.Cookie cookie = new System.Net.Cookie();
+                            cookie.Name = listCookie.AllCookies[i].Name;
                         if (!listCookie.AllCookies[i].Name.Equals("_csrf"))
                         {
-                            System.Net.Cookie cookie = new System.Net.Cookie(
-                           listCookie.AllCookies[i].Name, listCookie.AllCookies[i].Value
-                           , listCookie.AllCookies[i].Path, listCookie.AllCookies[i].Domain);
-                            DateTime dt1 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
-                            cookie.Expires = dt1;
-                            userInfo.cookie.Add(cookie);
+                            cookie.Value = listCookie.AllCookies[i].Value;
+                            cookie.Path = listCookie.AllCookies[i].Path;
+                            cookie.Domain = listCookie.AllCookies[i].Domain;
 
+                            if (listCookie.AllCookies[i].Expiry != null)
+                            {
+                                DateTime dt1 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                                cookie.Expires = dt1;
+                            }
+                            else {
+                                cookie.Expires = dt2;
+                            }
+                            userInfo.cookie.Add(cookie);
                         }
                         else {
-                            Console.WriteLine(listCookie.AllCookies[i].Name);
-                            Console.WriteLine(listCookie.AllCookies[i].Value.ToString());
-                            Console.WriteLine(listCookie.AllCookies[i].Path);
-                            Console.WriteLine(listCookie.AllCookies[i].Domain);
+                           /* cookie.Value = listCookie.AllCookies[i].Value+"";
+                            cookie.Path = listCookie.AllCookies[i].Path;
+                            cookie.Domain = listCookie.AllCookies[i].Domain;
+                            DateTime dt1 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                            cookie.Expires = dt1;
+                            userInfo.cookie.Add(cookie);*/
                         }
                     }
                     if (userInfo.cookie != null)
@@ -3127,6 +3151,10 @@ namespace CxjText.utlis
 
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
+
+
+
+
             if (!getCsrf(userInfo)) return false; //这里很重要  要添加cookie
             headJObject = new JObject();
             String loginUrl = userInfo.loginUrl + "/login";
