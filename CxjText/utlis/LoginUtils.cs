@@ -2983,10 +2983,11 @@ namespace CxjText.utlis
             headJObject[":authority"] = userInfo.baseUrl;
             headJObject[":method"] = "GET";
             headJObject[":scheme"] = "https";
+            headJObject["cache-control"]= "max-age=0";
             headJObject[":path"] = "/csrf";
             headJObject["referer"] = userInfo.loginUrl + "/main.html";
-            headJObject["sec-fetch-dest"] = "empty";
-            headJObject["sec-fetch-mode"] = "cors";
+            headJObject["sec-fetch-dest"] = "document";
+            headJObject["sec-fetch-mode"] = "navigate";
             headJObject["sec-fetch-site"] = "same-origin";
             headJObject["x-requested-with"] = "XMLHttpRequest";
             String csrfUrl = userInfo.loginUrl + "/csrf";
@@ -3063,6 +3064,7 @@ namespace CxjText.utlis
                 try
                 {
                     bool hasLoad = false;
+                    
                     try
                     {
                         driver.Navigate().GoToUrl(userInfo.dataUrl + "/main.html");

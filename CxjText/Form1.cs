@@ -27,7 +27,7 @@ namespace CxjText
         private void Form1_Load(object sender, EventArgs e)
         {
 
-
+          
             dataInit();
             speakInit();
             userEdit.Focus();
@@ -77,12 +77,31 @@ namespace CxjText
             }
         }
 
+        private void changeUserAgant() {
+            String CVison = "C_Vison.txt";
+            System.IO.StreamReader st;
+            st = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + CVison, System.Text.Encoding.UTF8);
+            //UTF-8通用编码
+            string vString = st.ReadToEnd();
+            st.Close();
+
+            if (vString == null)
+            {
+                MessageBox.Show("缺少C_Vison.txt");
+                return;
+            }
+
+            Config.userAgent =  vString ;
+            Console.WriteLine(Config.userAgent);
+        }
+
         private void readTxt() {
             String name = "user.json";
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + name))
             {
                 return; 
             }
+
             System.IO.StreamReader st;
             st = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + name, System.Text.Encoding.UTF8);
             //UTF-8通用编码
@@ -275,6 +294,7 @@ namespace CxjText
                     if (Config.softTime>0 && !Config.softUserStr.Equals("admin")) {
                         //MessageBox.Show("到期时间:"+FormUtils.ConvertLongToDateTime(Config.softTime));
                     }
+                    changeUserAgant();
                     MainFrom mainFrom = new MainFrom();
                     mainFrom.Show();
                     this.Hide();
