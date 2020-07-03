@@ -2972,7 +2972,9 @@ namespace CxjText.utlis
             for (int i = 0; i < list.Count; i++)
             {
                 System.Net.Cookie c = list[i];
-                Console.WriteLine(c.Name + "   " + c.Value);
+                Console.WriteLine(c.Name + "   " 
+                    + c.Value + "   "+c.Domain + "  "+c.Path
+                    +"   "+c.Expires);
             }
             Console.WriteLine("------------------------");
             JObject headJObject = new JObject();
@@ -2989,7 +2991,7 @@ namespace CxjText.utlis
             headJObject["x-requested-with"] = "XMLHttpRequest";
             String csrfUrl = userInfo.loginUrl + "/csrf";
             String csrfRlt = HttpUtils.HttpGetHeader(csrfUrl, "", userInfo.cookie, headJObject);
-            Console.WriteLine(csrfRlt);
+         //   Console.WriteLine(csrfRlt);
             if (String.IsNullOrEmpty(csrfRlt) || !csrfRlt.Contains("_csrf"))
             {
                 return false;
@@ -3042,71 +3044,86 @@ namespace CxjText.utlis
             return true;
         }
         public static bool loginJ1(UserInfo userInfo, int position) {
-            userInfo.cookie = new CookieContainer();
 
+            System.Net.Cookie teepClearanceCook = null;
 
             //判断人工的cookie存在不
-            /* if (userInfo.cookieStr != null && userInfo.cookieStr.Length > 0)
-             {
-                 if (!userInfo.cookieStr.ToLower().Contains("clearance"))
-                 {
-
-                 }else
-                 {
-                     //创建cookie
-                     String DomainUrl = userInfo.baseUrl;
-                     if (!DomainUrl.Contains("www")) {
-                         DomainUrl = "."+userInfo.baseUrl;
-                     }
-                     System.Net.Cookie cfCook = new System.Net.Cookie("cf_clearance", userInfo.cookieStr.Trim().Replace("cf_clearance=", ""), "/", DomainUrl);
-                     cfCook.Expires =new DateTime(DateTime.Now.ToUniversalTime().Ticks+840000000000);
-                     cfCook.HttpOnly = true;
-                     userInfo.cookie.Add(cfCook);
-                 }
-             }*/
-
-            ChromeOptionsEx optionsEx = new ChromeOptionsEx();
-            IWebDriver driver = new ChromeDriver(optionsEx);
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(20)); //元素启动的
-            try
+            if (userInfo.cookie != null)
             {
-                bool hasLoad = false;
+                teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
+            }
+            userInfo.cookie = new CookieContainer();
+            long timeTempNum = FormUtils.getCurrentTime() - userInfo.timeNum;
+
+            if (teepClearanceCook == null ||  timeTempNum > 3*60*60*1000) //第一次或者3个小时
+            {
+                ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+                IWebDriver driver = new ChromeDriver(optionsEx);
+                driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2)); //元素启动的
                 try
                 {
-                    driver.Navigate().GoToUrl(userInfo.dataUrl + "/main.html");
-                    hasLoad = true;
-                    Thread.Sleep(10000);
+                    bool hasLoad = false;
+                    try
+                    {
+                        driver.Navigate().GoToUrl(userInfo.dataUrl + "/main.html");
+                        hasLoad = true;
+                        Thread.Sleep(10000);
+                    }
+                    catch (Exception e)
+                    {
+                        if (!hasLoad)
+                        {
+                            driver.Quit();
+                            return false;
+                        }
+                    }
+                    ICookieJar listCookie = driver.Manage().Cookies;
+                    userInfo.cookie = new CookieContainer();
+                    for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                    {
+
+                        if (!listCookie.AllCookies[i].Name.Equals("_csrf"))
+                        {
+                            System.Net.Cookie cookie = new System.Net.Cookie(
+                           listCookie.AllCookies[i].Name, listCookie.AllCookies[i].Value
+                           , listCookie.AllCookies[i].Path, listCookie.AllCookies[i].Domain);
+                            DateTime dt1 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                            cookie.Expires = dt1;
+                            userInfo.cookie.Add(cookie);
+
+                        }
+                        else {
+                            Console.WriteLine(listCookie.AllCookies[i].Name);
+                            Console.WriteLine(listCookie.AllCookies[i].Value.ToString());
+                            Console.WriteLine(listCookie.AllCookies[i].Path);
+                            Console.WriteLine(listCookie.AllCookies[i].Domain);
+                        }
+                    }
+                    if (userInfo.cookie != null)
+                    {
+                        teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
+                        userInfo.timeNum = FormUtils.getCurrentTime();
+                        Console.WriteLine("第一次");
+                    }
                 }
                 catch (Exception e)
                 {
-                    if (!hasLoad)
-                    {
-                        driver.Quit();
-                        return false;
-                    }
+                    Console.WriteLine(e.ToString());
+                    driver.Quit();
+                    return false;
                 }
-                ICookieJar listCookie = driver.Manage().Cookies;
-                userInfo.cookie = new CookieContainer();
-                for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                if (driver != null)
                 {
-                    if (!listCookie.AllCookies[i].Name.Equals("_csrf")) {
-                        System.Net.Cookie cookie = new System.Net.Cookie(
-                       listCookie.AllCookies[i].Name, listCookie.AllCookies[i].Value
-                       , listCookie.AllCookies[i].Path, listCookie.AllCookies[i].Domain);
-                        userInfo.cookie.Add(cookie);
-                    }
+                    driver.Quit();
                 }
+
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                driver.Quit();
-                return false;
+            else {
+                Console.WriteLine("第N次");
+                userInfo.cookie.Add(teepClearanceCook);
             }
-            if (driver != null)
-            {
-                driver.Quit();
-            }
+
+
 
             JObject headJObject = new JObject();
             headJObject["Host"] = userInfo.baseUrl;
@@ -3125,20 +3142,31 @@ namespace CxjText.utlis
             headJObject["sec-fetch-site"] = "same-origin";
             headJObject["x-requested-with"] = "XMLHttpRequest";
 
-            String loginParms = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&_csrf=" + userInfo.expJObject["csrf"] + "&role=player";
+            String loginParms = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&_csrf=" + userInfo.expJObject["csrf"] + "&role=player&smsLogin=false";
+           
+           // return false;
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl, loginParms, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             Console.WriteLine(loginRlt);
             if (loginRlt == null || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("SESSIONID")) return false;
             JObject loginRltJobj = JObject.Parse(loginRlt);
             String sessionStr = (String)loginRltJobj["SESSIONID"];
+            List<System.Net.Cookie> list = FileUtils.GetAllCookies(userInfo.cookie);
 
-            /*登录后cookie 的session为什么不会替换  这个很奇怪*/
-            System.Net.Cookie c1 = FormUtils.getCookie(userInfo, "SESSION");
-            c1.Value = sessionStr;
-            //userInfo.cookie.Add(c1);
+            System.Net.Cookie tempCook = new System.Net.Cookie();
+            userInfo.cookie = new CookieContainer();
+            for (int i = 0; i < list.Count; i++) {
+                System.Net.Cookie cook = list[i];
+                if (!cook.Name.Equals("SESSION"))
+                {
+                    userInfo.cookie.Add(cook);
+                }
+                else {
+                    tempCook = list[i];
+                }
+            }
 
-
-            if (loginRlt == null) return false;
+            tempCook.Value = sessionStr;
+            userInfo.cookie.Add(tempCook);
             return true;
         }
         public static void loginJ(LoginForm loginForm, int position)
@@ -3158,9 +3186,19 @@ namespace CxjText.utlis
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
-                // HttpUtils.httpGet(userInfo.loginUrl + "/logout.php", "", userInfo.cookie);       
+                //判断人工的cookie存在不
+                System.Net.Cookie teepClearanceCook = null;
+                if (userInfo.cookie != null)
+                {
+                    teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
+                }
+
                 userInfo.cookie = null;
                 userInfo.cookie = new CookieContainer();
+                if(teepClearanceCook != null){
+                    userInfo.cookie.Add(teepClearanceCook);
+                    Console.WriteLine("添加Cook");
+                }
                 return;
             }
 

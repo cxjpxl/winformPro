@@ -42,6 +42,8 @@ namespace CxjText.bean
 
         public String cookieStr = null; //默认是空
 
+        public long timeNum = 0;
+
         public UserInfo() {
             cookie = new CookieContainer();
         }

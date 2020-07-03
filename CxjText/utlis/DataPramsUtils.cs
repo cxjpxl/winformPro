@@ -2612,32 +2612,44 @@ namespace CxjText.utlis
 
         public static String getJData(UserInfo userInfo)
         {
-            //page是由1开始
-            JObject headJObject = new JObject();
-            headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
-            headJObject["Origin"] = userInfo.dataUrl;
-            headJObject["referer"] = userInfo.loginUrl + "/sports/landing-switch/today/football?tt="+FormUtils.getCurrentTime();
-            headJObject[":authority"] = userInfo.baseUrl;
-            headJObject[":method"] = "GET";
-            headJObject[":path"] = "/odds5/oddsHost6";
-            headJObject[":scheme"] = "https";
-            headJObject["sec-fetch-dest"] = "empty";
-            headJObject["sec-fetch-mode"] = "cors";
-            headJObject["sec-fetch-site"] = "same-origin";
-            headJObject["x-requested-with"] = "XMLHttpRequest";
+
+            
+            String getDataUrl = "https://adcdnod.hpz6168vip.com/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
+            String dataRlt = "";
             JObject jObject = new JObject();
             JArray jArray = new JArray();
             jObject["list"] = jArray;
-            String dataRlt = HttpUtils.HttpGetHeader(userInfo.dataUrl+ "/odds5/oddsHost6", "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
-            
-            if (String.IsNullOrEmpty(dataRlt) && !FormUtils.IsJsonObject(dataRlt) ||!dataRlt.Contains("desktop_url")) {
-                return jObject.ToString();
+            JObject headJObject = new JObject();
+            if (userInfo.status != 2)
+            {
+
             }
-            JObject urlDataJObject = JObject.Parse(dataRlt);
-            String getDataUrl = (String)urlDataJObject["oddsHost"]["desktop_url"];
+            else {
+                //page是由1开始
+                headJObject["Host"] = FileUtils.changeBaseUrl(userInfo.dataUrl);
+                headJObject["Origin"] = userInfo.dataUrl;
+                headJObject["referer"] = userInfo.loginUrl + "/sports/landing-switch/today/football?tt=" + FormUtils.getCurrentTime();
+                headJObject[":authority"] = userInfo.baseUrl;
+                headJObject[":method"] = "GET";
+                headJObject[":path"] = "/odds5/oddsHost6";
+                headJObject[":scheme"] = "https";
+                headJObject["sec-fetch-dest"] = "empty";
+                headJObject["sec-fetch-mode"] = "cors";
+                headJObject["sec-fetch-site"] = "same-origin";
+                headJObject["x-requested-with"] = "XMLHttpRequest";
+               
+            
+                dataRlt = HttpUtils.HttpGetHeader(userInfo.dataUrl + "/odds5/oddsHost6", "application/x-www-form-urlencoded", userInfo.cookie, headJObject);
 
-
-            headJObject = new JObject();
+                if (String.IsNullOrEmpty(dataRlt) && !FormUtils.IsJsonObject(dataRlt) || !dataRlt.Contains("desktop_url"))
+                {
+                    return jObject.ToString();
+                }
+                JObject urlDataJObject = JObject.Parse(dataRlt);
+                getDataUrl = (String)urlDataJObject["oddsHost"]["desktop_url"];
+                headJObject = new JObject();
+            }
+           
             getDataUrl = getDataUrl + "/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
             dataRlt = HttpUtils.HttpGetHeader(getDataUrl, "application/json; charset=utf-8",null,headJObject );
             if (String.IsNullOrEmpty(dataRlt)

@@ -2279,6 +2279,7 @@ namespace CxjText.utlis
                         betObject["odds1"] = jObject["rangBet"][5];
                         betObject["id"] = jObject["rangBet"][4];
                         betObject["betFormTitle"] = "滚球 让球";
+                        
                         betObject["betFormDetail"] = betObject["homeTeam"];
                         betObject["betFormH"] = betObject["h"];
                         break;
@@ -2321,6 +2322,7 @@ namespace CxjText.utlis
                         betObject["odds1"] = jObject["brangBet"][5];
                         betObject["id"] = jObject["brangBet"][4];
                         betObject["betFormTitle"] = "滚球 让球-上半场";
+                        
                         betObject["betFormDetail"] = betObject["homeTeam"];
                         betObject["betFormH"] = betObject["h"];
                         break;
@@ -2372,6 +2374,7 @@ namespace CxjText.utlis
                         betObject["odds1"] = jObject["rangBet"][7];
                         betObject["id"] = jObject["rangBet"][6];
                         betObject["betFormTitle"] = "滚球 让球";
+                       
                         betObject["betFormDetail"] = betObject["awayTeam"];
                         betObject["betFormH"] = betObject["a"];
                         break;
@@ -2415,6 +2418,7 @@ namespace CxjText.utlis
                         betObject["odds1"] = jObject["brangBet"][7];
                         betObject["id"] = jObject["brangBet"][6];
                         betObject["betFormTitle"] = "滚球 让球-上半场";
+                       
                         betObject["betFormDetail"] = betObject["awayTeam"];
                         betObject["betFormH"] = betObject["a"];
                         break;

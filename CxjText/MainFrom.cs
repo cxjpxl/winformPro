@@ -966,7 +966,7 @@ namespace CxjText
                     jiaoQiuEnventInfo.nameH = hName;
                     jiaoQiuEnventInfo.nameG = gName;
                     jiaoQiuEnventInfo.T = gameTime + "";
-                    jiaoQiuEnventInfo.inputType = 1;//直接是大小球
+                    jiaoQiuEnventInfo.inputType = this.GetCurrUserSelected();;//直接是大小球  0是让球  1的大小
                     jiaoQiuEnventInfo.bangchangType = GetBanChangSelected();
                     jiaoQiuEnventInfo.scoreArray = null; 
                     //角球下注处理
@@ -1269,7 +1269,7 @@ namespace CxjText
             }
         }
 
-        // 获取用户当前选中的下单规则 让球或者大小
+        // 获取用户当前选中的下单规则 让球或者大小  0是让球  1是大小
         public int GetCurrUserSelected()
         {
             if (this.rbRangQiu.Checked)
