@@ -3174,9 +3174,7 @@ namespace CxjText.utlis
             headJObject["x-requested-with"] = "XMLHttpRequest";
 
             String loginParms = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&_csrf=" + userInfo.expJObject["csrf"] + "&role=player&smsLogin=false";
-            Console.WriteLine(loginParms);
-            return false;
-
+             
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl, loginParms, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             Console.WriteLine(loginRlt);
             if (loginRlt == null || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("SESSIONID")) return false;
@@ -3201,6 +3199,8 @@ namespace CxjText.utlis
             userInfo.cookie.Add(tempCook);
             return true;
         }
+        
+
         public static void loginJ(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
