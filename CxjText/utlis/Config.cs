@@ -9,7 +9,7 @@ namespace CxjText.utils
     public class Config
     {
         //F
-        public static String softUserStr = "";
+        public static String softUserStr = "admin";
         public static bool canAutoTwo = true;//自动重复下
         public static int myFun =0; //0是点球  1是事件  2鸿发试玩
         /***********事件用户****************************/
@@ -42,7 +42,7 @@ namespace CxjText.utils
         public static int codeAppId = 4129; //appId
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
         public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36";
-                                         //"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/";
+                                        // "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/";
         //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";

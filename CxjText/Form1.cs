@@ -294,7 +294,7 @@ namespace CxjText
                     if (Config.softTime>0 && !Config.softUserStr.Equals("admin")) {
                         //MessageBox.Show("到期时间:"+FormUtils.ConvertLongToDateTime(Config.softTime));
                     }
-                    changeUserAgant();
+                 //   changeUserAgant();
                     MainFrom mainFrom = new MainFrom();
                     mainFrom.Show();
                     this.Hide();

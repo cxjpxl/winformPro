@@ -2614,7 +2614,8 @@ namespace CxjText.utlis
         {
 
             
-            String getDataUrl = "https://adcdnod.hpz6168vip.com/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
+            String getDataUrl =// "https://adcdnod.hpz6168vip.com/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
+                               "https://carmina.yonghuai5515.com/odds6i/d/getodds/zh-cn/sid/1/pt/4/ubt/am/pn/0/sb/2/dc/-2/pid/0";
             String dataRlt = "";
             JObject jObject = new JObject();
             JArray jArray = new JArray();

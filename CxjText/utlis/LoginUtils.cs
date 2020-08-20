@@ -2986,13 +2986,13 @@ namespace CxjText.utlis
             headJObject["cache-control"]= "max-age=0";
             headJObject[":path"] = "/csrf";
             headJObject["referer"] = userInfo.loginUrl + "/main.html";
-            headJObject["sec-fetch-dest"] = "document";
-            headJObject["sec-fetch-mode"] = "navigate";
+            headJObject["sec-fetch-dest"] = "empty";
+            headJObject["sec-fetch-mode"] = "cors";
             headJObject["sec-fetch-site"] = "same-origin";
             headJObject["x-requested-with"] = "XMLHttpRequest";
             String csrfUrl = userInfo.loginUrl + "/csrf";
             String csrfRlt = HttpUtils.HttpGetHeader(csrfUrl, "", userInfo.cookie, headJObject);
-         //   Console.WriteLine(csrfRlt);
+            Console.WriteLine(csrfRlt);
             if (String.IsNullOrEmpty(csrfRlt) || !csrfRlt.Contains("_csrf"))
             {
                 return false;
@@ -3056,9 +3056,10 @@ namespace CxjText.utlis
             userInfo.cookie = new CookieContainer();
             long timeTempNum = FormUtils.getCurrentTime() - userInfo.timeNum;
 
-            if (teepClearanceCook == null ||  timeTempNum >1) //第一次或者3个小时
+            if (teepClearanceCook == null ||  timeTempNum > 1000 * 60 * 60*3) //第一次或者3个小时
             {
                 ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+                optionsEx.AddArgument("user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
                 IWebDriver driver = new ChromeDriver(optionsEx);
                 driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2)); //元素启动的
                 try
@@ -3173,8 +3174,9 @@ namespace CxjText.utlis
             headJObject["x-requested-with"] = "XMLHttpRequest";
 
             String loginParms = "username=" + userInfo.user + "&password=" + userInfo.pwd + "&_csrf=" + userInfo.expJObject["csrf"] + "&role=player&smsLogin=false";
-           
-           // return false;
+            Console.WriteLine(loginParms);
+            return false;
+
             String loginRlt = HttpUtils.HttpPostHeader(loginUrl, loginParms, "application/x-www-form-urlencoded; charset=UTF-8", userInfo.cookie, headJObject);
             Console.WriteLine(loginRlt);
             if (loginRlt == null || !FormUtils.IsJsonObject(loginRlt) || !loginRlt.Contains("SESSIONID")) return false;
