@@ -43,7 +43,8 @@ namespace CxjText.utils
         public static String codeSerect = "d04c0a85b2b739491d2fd2d95ebeae26";
         public static String userAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36";
                                         // "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/";
-        //打码平台的账户和密码
+                                        
+            //打码平台的账户和密码
         public static String codeUserStr = "";
         public static String codePwdStr = "";
         public static String codeMoneyStr = "--";

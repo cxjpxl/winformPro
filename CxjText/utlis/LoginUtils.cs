@@ -1700,34 +1700,6 @@ namespace CxjText.utlis
             if (twoJObject["uid"] == null) return false;
             userInfo.uid = (String)twoJObject["uid"];
 
-            /* if (String.IsNullOrEmpty(rltStr) || !rltStr.Contains("oldUrl"))
-             {
-                 return false;
-             }
-
-             rltStr = rltStr.Replace("<script>window.location.href='", "");
-             rltStr = rltStr.Replace("';</script>", "").Trim();
-             if (!rltStr.Contains("oldUrl"))
-             {
-                 return false;
-             }
-             headJObject = new JObject();
-             headJObject["Host"] = userInfo.baseUrl;
-             headJObject["Referer"] = userInfo.dataUrl + "/app/member/";
-             // String urls =Config.netUrl+ "/cxj/getCuid?url=" + WebUtility.UrlEncode(rltStr);
-             String uidRlt = HttpUtils.HttpGetHeader(rltStr, "", userInfo.cookie, headJObject);
-             Console.WriteLine(uidRlt);
-             if (String.IsNullOrEmpty(uidRlt) || !uidRlt.Contains("uid") || !uidRlt.Contains("old_url"))
-             {
-                 return false;
-             }
-
-             int uidStart = uidRlt.IndexOf("uid=");
-             uidRlt = uidRlt.Substring(uidStart, uidRlt.Length - uidStart);
-             int start = uidRlt.IndexOf("&");
-             uidRlt = uidRlt.Substring(0, start);
-             String uid = uidRlt.Replace("uid=", "");
-             userInfo.uid = uid;*/
             return true;
         }
 
@@ -1893,7 +1865,7 @@ namespace CxjText.utlis
             if (userInfo.userExp.Equals("J"))
             {
                 //先登录新版本
-                loginStatus = loginJ1(userInfo, position);
+                loginStatus = loginJOne(userInfo, position);
                 if (!loginStatus) {
                     userInfo.loginFailTime++;
                     userInfo.status = 3;
@@ -3044,24 +3016,12 @@ namespace CxjText.utlis
 
             return true;
         }
-        public static bool loginJ1(UserInfo userInfo, int position) {
-
-            System.Net.Cookie teepClearanceCook = null;
-
-            //判断人工的cookie存在不
-            if (userInfo.cookie != null)
-            {
-                teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
-            }
+        public static bool loginJOne(UserInfo userInfo, int position) {
             userInfo.cookie = new CookieContainer();
-            long timeTempNum = FormUtils.getCurrentTime() - userInfo.timeNum;
-
-            if (teepClearanceCook == null ||  timeTempNum > 1000 * 60 * 60*3) //第一次或者3个小时
-            {
-                ChromeOptionsEx optionsEx = new ChromeOptionsEx();
-                optionsEx.AddArgument("user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
-                IWebDriver driver = new ChromeDriver(optionsEx);
-                driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2)); //元素启动的
+            ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+            optionsEx.AddArgument("user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
+            IWebDriver driver = new ChromeDriver(optionsEx);
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2)); //元素启动的
                 try
                 {
                     bool hasLoad = false;
@@ -3126,12 +3086,6 @@ namespace CxjText.utlis
                             userInfo.cookie.Add(cookie);*/
                         }
                     }
-                    if (userInfo.cookie != null)
-                    {
-                        teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
-                        userInfo.timeNum = FormUtils.getCurrentTime();
-                        Console.WriteLine("第一次");
-                    }
                 }
                 catch (Exception e)
                 {
@@ -3144,11 +3098,8 @@ namespace CxjText.utlis
                     driver.Quit();
                 }
 
-            }
-            else {
-                Console.WriteLine("第N次");
-                userInfo.cookie.Add(teepClearanceCook);
-            }
+           
+            
 
 
 
@@ -3199,8 +3150,109 @@ namespace CxjText.utlis
             userInfo.cookie.Add(tempCook);
             return true;
         }
-        
 
+        public static bool loginNewJ(UserInfo userInfo, int position) {
+            userInfo.cookie = new CookieContainer();
+            ChromeOptionsEx optionsEx = new ChromeOptionsEx();
+            optionsEx.AddArgument("user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36");
+            IWebDriver driver = new ChromeDriver(optionsEx);
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(2)); //元素启动的
+            try
+            {
+                bool hasLoad = false;
+
+                try
+                {
+                    driver.Navigate().GoToUrl(userInfo.dataUrl+ "/main.html");
+                    hasLoad = true;
+                    Thread.Sleep(9000);
+                    driver.Manage().Timeouts().SetScriptTimeout(TimeSpan.FromSeconds(5));
+                    //屏幕随便按一下
+                    try
+                    {
+                        driver.FindElement(By.ClassName("center")).Click();
+                        Thread.Sleep(5000);
+                    }
+                    catch (Exception e1)
+                    {
+                        Console.WriteLine(e1.ToString());
+                    }
+                    //找登录按键
+                    
+                    driver.FindElement(By.Id("btnLogin")).Click();
+                    Thread.Sleep(5000);
+                   // driver = driver.SwitchTo().Frame(driver.FindElement(By.Id("normal-login")));
+                    driver.FindElement(By.Id("normal-username")).SendKeys(userInfo.user);
+                    driver.FindElement(By.Id("normal-password")).SendKeys(userInfo.pwd);
+                    Thread.Sleep(2000);
+                    driver.FindElement(By.ClassName("submit-btn")).Click();
+                    Thread.Sleep(5000);
+                }
+                catch (Exception e)
+                {
+                  //  Console.WriteLine(e.ToString());
+                    if (!hasLoad)
+                    {
+                        driver.Quit();
+                        return false;
+                    }
+                }
+                ICookieJar listCookie = driver.Manage().Cookies;
+                userInfo.cookie = new CookieContainer();
+                userInfo.cookie.MaxCookieSize = userInfo.cookie.MaxCookieSize + 4096 * 5;
+                userInfo.cookie.PerDomainCapacity = 100;
+                DateTime dt2 = new DateTime();
+                Console.WriteLine("长度是：" + listCookie.AllCookies.Count);
+
+                for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                {
+                    if (listCookie.AllCookies[i].Name.Equals("SESSION"))
+                    {
+                        dt2 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                        break;
+                    }
+
+                }
+
+                for (int i = 0; i < listCookie.AllCookies.Count; i++)
+                {
+                    System.Net.Cookie cookie = new System.Net.Cookie();
+                    cookie.Name = listCookie.AllCookies[i].Name;
+                    if (!listCookie.AllCookies[i].Name.Equals("_csrf")&& !listCookie.AllCookies[i].Name.Equals("showUpdateNewAnnouncement"))
+                    {
+                        cookie.Value = listCookie.AllCookies[i].Value;
+                        cookie.Path = listCookie.AllCookies[i].Path;
+                        cookie.Domain = listCookie.AllCookies[i].Domain;
+
+                        if (listCookie.AllCookies[i].Expiry != null)
+                        {
+                            DateTime dt1 = Convert.ToDateTime(listCookie.AllCookies[i].Expiry);
+                            cookie.Expires = dt1;
+                        }
+                        else
+                        {
+                            cookie.Expires = dt2;
+                        }
+                        userInfo.cookie.Add(cookie);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                driver.Quit();
+                return false;
+            }
+            if (driver != null)
+            {
+                driver.Quit();
+            }
+            return true;
+        }
         public static void loginJ(LoginForm loginForm, int position)
         {
             UserInfo userInfo = (UserInfo)Config.userList[position];
@@ -3218,19 +3270,6 @@ namespace CxjText.utlis
                 loginForm.Invoke(new Action(() => {
                     loginForm.AddToListToUpDate(position);
                 }));
-                //判断人工的cookie存在不
-                System.Net.Cookie teepClearanceCook = null;
-                if (userInfo.cookie != null)
-                {
-                    teepClearanceCook = FormUtils.getCookie(userInfo, "cf_clearance");
-                }
-
-                userInfo.cookie = null;
-                userInfo.cookie = new CookieContainer();
-                if(teepClearanceCook != null){
-                    userInfo.cookie.Add(teepClearanceCook);
-                    Console.WriteLine("添加Cook");
-                }
                 return;
             }
 
@@ -3240,7 +3279,17 @@ namespace CxjText.utlis
                 loginForm.AddToListToUpDate(position);
             }));
 
-            if (!loginJ1(userInfo, position))
+            /*if (!loginJOne(userInfo, position))
+            {
+                userInfo.loginFailTime++;
+                userInfo.status = 3;
+                loginForm.Invoke(new Action(() => {
+                    loginForm.AddToListToUpDate(position);
+                }));
+                return;
+            }*/
+
+            if (!loginNewJ(userInfo, position))
             {
                 userInfo.loginFailTime++;
                 userInfo.status = 3;
@@ -3249,6 +3298,7 @@ namespace CxjText.utlis
                 }));
                 return;
             }
+
             //获取资金
             int moneyStatus = MoneyUtils.GetJMoney(userInfo);
             if (moneyStatus == 1)
